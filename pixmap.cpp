@@ -16,6 +16,11 @@ Pixmap::Pixmap(glm::vec2 size)
     data.resize((int)(size.x * size.y) * 4, 0);
 }
 
+Pixmap::Pixmap()
+{
+
+}
+
 Pixmap::~Pixmap()
 {
 
