@@ -1,9 +1,9 @@
-TEMPLATE = app
+TEMPLATE = lib
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
-
+CONFIG += dll
 SOURCES += \
     logger.cpp \
     pixmap.cpp \
@@ -14,6 +14,8 @@ SOURCES += \
     json/json_writer.cpp \
     lodepng/lodepng.cpp \
     helper.inl
+
+VERSION = 0.1.0
 
 win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -ljson_linux-gcc-4.8_libmt
