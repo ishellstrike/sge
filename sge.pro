@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
-CONFIG += dll
+CONFIG += staticlib
 SOURCES += \
     logger.cpp \
     pixmap.cpp \
@@ -13,7 +13,11 @@ SOURCES += \
     json/json_value.cpp \
     json/json_writer.cpp \
     lodepng/lodepng.cpp \
-    helper.inl
+    helper.inl \
+    colorextender.cpp \
+    textureatlas.cpp \
+    spritebatch.cpp \
+    prefecences.cpp
 
 VERSION = 0.1.0
 
@@ -41,4 +45,9 @@ HEADERS += \
     json/value.h \
     json/writer.h \
     lodepng/lodepng.h \
+    textureatlas.h \
+    spritebatch.h \
+    singleton.h \
+    prefecences.h \
+    sge.h
 
