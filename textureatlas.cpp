@@ -13,17 +13,17 @@ TextureAtlas::~TextureAtlas()
 
 }
 
-void TextureAtlas::LoadAll(const std::string &a)
+void TextureAtlas::LoadAll()
 {
     std::vector<std::string> files;
-    getFiles(Prefecences::getTexturesDir(), files);
+    getFiles(Prefecences::Instance()->getTexturesDir(), files);
 
     Pixmap atlas(glm::vec2(2048, 2048));
 
     int x = 0, y = 0;
     for(std::string file: files)
     {
-        Pixmap tex(Prefecences::getTexturesDir() + file);
+        Pixmap tex(Prefecences::Instance()->getTexturesDir() + file);
         atlas.Blit(tex, glm::vec2(x * 32, y * 32));
         x++;
         if(x + 1 >= 2048/32)

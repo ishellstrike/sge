@@ -4,11 +4,44 @@
 #include <glm/glm.hpp>
 #include <string>
 
-class Prefecences : public Singleton
+class Prefecences
 {
 public:
-    Prefecences();
-    ~Prefecences();
+protected:
+    static Prefecences *m_instance;
+    Prefecences() {}
+    ~Prefecences() {}
+
+public:
+    static Prefecences* Instance()
+    {
+        static std::mutex mutex;
+        if(!m_instance)
+        {
+            mutex.lock();
+
+            if (!m_instance)
+                m_instance = new Prefecences();
+
+            mutex.unlock();
+        }
+        return m_instance;
+    }
+
+    static void DeleteInstance()
+    {
+        static std::mutex mutex;
+        if(!m_instance)
+        {
+            mutex.lock();
+            if(!m_instance)
+            {
+                m_instance = nullptr;
+                delete m_instance;
+            }
+            mutex.unlock();
+        }
+    }
 
     /*!
      * \brief current window resolution

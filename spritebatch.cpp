@@ -13,8 +13,8 @@ SpriteBatch::SpriteBatch() :
     pos = new glm::vec3[SIZE*4];
     col = new glm::vec4[SIZE*4];
 
-    basic_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::getShadersDir() + "basic.glsl");
-    basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::getShadersDir() + "basic.glsl");
+    basic_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::Instance()->getShadersDir() + "basic.glsl");
+    basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::Instance()->getShadersDir() + "basic.glsl");
     basic_program->Link();
     basic_program->Use();
     basic_program->locateVars("MVP");
@@ -22,8 +22,8 @@ SpriteBatch::SpriteBatch() :
     basic_program->getAttrib();
     glUniform1i(basic_program->vars[1], 0);
 
-    font_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::getShadersDir() + "font.glsl");
-    font_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::getShadersDir() + "font.glsl");
+    font_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::Instance()->getShadersDir() + "font.glsl");
+    font_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::Instance()->getShadersDir() + "font.glsl");
     font_program->Link();
     font_program->Use();
     font_program->locateVars("MVP");
@@ -31,8 +31,8 @@ SpriteBatch::SpriteBatch() :
     font_program->getAttrib();
     glUniform1i(font_program->vars[1], 0);
 
-    color_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::getShadersDir() + "color.glsl");
-    color_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::getShadersDir() + "color.glsl");
+    color_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::Instance()->getShadersDir() + "color.glsl");
+    color_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::Instance()->getShadersDir() + "color.glsl");
     color_program->Link();
     color_program->Use();
     color_program->locateVars("MVP");
@@ -70,8 +70,8 @@ void SpriteBatch::initFreeType()
     }
     else
         LOG(fatal) << "FT init OK";
-    char fontPath[] = Prefecences::getFontsDir() + "Inconsolata.otf";
-    if(FT_New_Face(ft, fontPath, 0, &m_ftFace))
+    std::string fontPath = Prefecences::Instance()->getFontsDir() + "Inconsolata.otf";
+    if(FT_New_Face(ft, fontPath.c_str(), 0, &m_ftFace))
     {
         LOG(fatal) << "Could not open font " << fontPath;
         return;

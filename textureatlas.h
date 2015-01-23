@@ -1,7 +1,7 @@
 #ifndef TEXTUREATLAS_H
 #define TEXTUREATLAS_H
 #include <string>
-#include "jtexture.h"
+#include "texture.h"
 
 class TextureAtlas
 {
@@ -10,7 +10,7 @@ public:
     ~TextureAtlas();
     Texture tex;
 
-    void LoadAll(const std::string &a);
+    void LoadAll();
 };
 
 #endif // TEXTUREATLAS_H

@@ -1,12 +1,3 @@
 #include "prefecences.h"
 
-Prefecences::Prefecences()
-{
-
-}
-
-Prefecences::~Prefecences()
-{
-
-}
-
+Prefecences * Prefecences::m_instance = nullptr;

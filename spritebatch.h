@@ -1,15 +1,14 @@
 #ifndef SPRITEBATCH_H
 #define SPRITEBATCH_H
-#include "jtexture.h"
+#include "texture.h"
 #include <string>
 #include <memory>
-#include "jargshader.h"
+#include "shader.h"
 
 #include <GL/glew.h>
 
-#include <freetype2/ft2build.h>
+#include <ft2build.h>
 #include FT_FREETYPE_H
-#include <freetype2/config/ftheader.h>
 
 #define SIZE 10000
 class SpriteBatch

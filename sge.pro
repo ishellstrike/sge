@@ -17,7 +17,13 @@ SOURCES += \
     colorextender.cpp \
     textureatlas.cpp \
     spritebatch.cpp \
-    prefecences.cpp
+    prefecences.cpp \
+    gamewindow.cpp \
+    gametimer.cpp \
+    fpscounter.cpp \
+    keyboard.cpp \
+    mouse.cpp \
+    singleton.cpp
 
 VERSION = 0.1.0
 
@@ -49,5 +55,10 @@ HEADERS += \
     spritebatch.h \
     singleton.h \
     prefecences.h \
-    sge.h
+    sge.h \
+    gamewindow.h \
+    gametimer.h \
+    fpscounter.h \
+    keyboard.h \
+    mouse.h
 
