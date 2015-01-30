@@ -71,9 +71,3 @@ HEADERS += \
     utfcpp/utf8/core.h \
     utfcpp/utf8/unchecked.h
 
-DISTFILES += \
-    data/fonts/DejaVuSansMono.ttf \
-    data/shaders/basic.glsl \
-    data/shaders/color.glsl \
-    data/shaders/font.glsl
-

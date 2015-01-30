@@ -1,5 +1,6 @@
 #include "font.h"
 #include "logger.h"
+#include "utf8.h"
 
 Font::Font() :
     font(std::make_shared<Texture>())
@@ -43,10 +44,15 @@ void Font::renderAtlas()
     float x_max = 0;
     const char32_t *p;
     FT_GlyphSlot ftGlyph = m_ftFace->glyph;
-    std::u32string text(  U" `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,"
-                          U"./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?\\|"
-                          U"йцукенгшщзхъфывапролджэячсмитьбю"
-                          U"ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123");
+    std::string  text8(    " `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,"
+                          "./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?\\|"
+                          "йцукенгшщзхъфывапролджэячсмитьбю"
+                          "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123");
+
+    std::u32string text;
+
+    utf8::utf8to32(text8.begin(), text8.end(), std::back_inserter(text));
+
     int px=0, py=0;
 
     glBindTexture(GL_TEXTURE_2D, font->textureId);
