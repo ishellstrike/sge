@@ -13,6 +13,9 @@
 #include "fpscounter.h"
 #include "gametimer.h"
 #include "textureatlas.h"
+#include "font.h"
+#include "mesh.h"
+#include "icosahedron.h"
 
 class GameWindow {
 
@@ -21,9 +24,6 @@ class GameWindow {
     void BaseDraw();
 
 public:
-    virtual void Draw() = 0;
-    virtual void Update() = 0;
-    virtual void Init() = 0;
     void Mainloop();
 
     GameTimer gt;
@@ -37,14 +37,18 @@ public:
     GLFWwindow *window = nullptr;
     TextureAtlas atlas;
 
-    glm::mat4 view, proj, model;
+    glm::mat4 view = glm::mat4(1), proj = glm::mat4(1), model = glm::mat4(1);
     static GameWindow *wi;
 
     GameWindow();
     ~GameWindow();
 
-    std::shared_ptr<JargShader> basic, font;
+    std::shared_ptr<BasicJargShader> basic;
     std::shared_ptr<SpriteBatch> batch;
+
+    Mesh m;
+
+    std::shared_ptr<Font> f12;
 };
 
 #endif // GAMEWINDOW_H

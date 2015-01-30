@@ -108,16 +108,30 @@ bool GameWindow::BaseInit()
 
     batch = std::make_shared<SpriteBatch>();
 
+    f12 = std::make_shared<Font>();
+    f12->initFreeType(12);
+    f12->renderAtlas();
+
     atlas.LoadAll();
 
-    Init();
+    basic = std::make_shared<BasicJargShader>();
+    basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
+    basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
+    basic->Link();
+    basic->Use();
+    basic->getAttrib();
+    basic->locateVars("transform.model");
+    basic->locateVars("transform.viewProjection");
+
+    m = Icosahedron::getMesh();
+    m.shader = basic;
+    m.Bind();
+
 }
 
 void GameWindow::BaseUpdate()
 {
     glfwPollEvents();
-
-    Update();
 
     Mouse::resetDelta();
 }
@@ -127,7 +141,13 @@ void GameWindow::BaseDraw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0, 0, 0, 1);
 
-    Draw();
+
+    m.Render(glm::mat4(1), proj);
+
+    batch->setUniform(proj * model);
+    batch->drawRect({100,100}, {100,100}, Color::CornflowerBlue);
+    batch->renderText("sdfsdfsdf", 100, 100, f12.get(), Color::White);
+    batch->render();
 
     glfwSwapBuffers(window);
     gt.Update(glfwGetTime());

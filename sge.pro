@@ -1,9 +1,9 @@
-TEMPLATE = lib
+TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
-CONFIG += staticlib
+
 SOURCES += \
     logger.cpp \
     pixmap.cpp \
@@ -27,7 +27,13 @@ SOURCES += \
     font.cpp \
     json/json_internalarray.inl \
     json/json_internalmap.inl \
-    json/json_valueiterator.inl
+    json/json_valueiterator.inl \
+    main.cpp \
+    mesh.cpp \
+    material.cpp \
+    basicjargshader.cpp \
+    vpnt.cpp \
+    icosahedron.cpp
 
 VERSION = 0.1.0
 
@@ -69,5 +75,18 @@ HEADERS += \
     utfcpp/utf8.h \
     utfcpp/utf8/checked.h \
     utfcpp/utf8/core.h \
-    utfcpp/utf8/unchecked.h
+    utfcpp/utf8/unchecked.h \
+    mesh.h \
+    material.h \
+    basicjargshader.h \
+    vpnt.h \
+    icosahedron.h
+
+DISTFILES += \
+    data/fonts/DejaVuSansMono.ttf \
+    data/shaders/basic.glsl \
+    data/shaders/color.glsl \
+    data/shaders/font.glsl \
+    data/textures/cone1.png \
+    data/shaders/minimal.glsl
 
