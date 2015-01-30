@@ -23,7 +23,11 @@ SOURCES += \
     fpscounter.cpp \
     keyboard.cpp \
     mouse.cpp \
-    singleton.cpp
+    singleton.cpp \
+    font.cpp \
+    json/json_internalarray.inl \
+    json/json_internalmap.inl \
+    json/json_valueiterator.inl
 
 VERSION = 0.1.0
 
@@ -60,5 +64,16 @@ HEADERS += \
     gametimer.h \
     fpscounter.h \
     keyboard.h \
-    mouse.h
+    mouse.h \
+    font.h \
+    utfcpp/utf8.h \
+    utfcpp/utf8/checked.h \
+    utfcpp/utf8/core.h \
+    utfcpp/utf8/unchecked.h
+
+DISTFILES += \
+    data/fonts/DejaVuSansMono.ttf \
+    data/shaders/basic.glsl \
+    data/shaders/color.glsl \
+    data/shaders/font.glsl
 

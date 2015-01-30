@@ -1,20 +1,26 @@
 #include "spritebatch.h"
 #include "logger.h"
-#include "prefecences.h"
+#include <locale>
+#include <utfcpp/utf8.h>
+
+typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
 //#include <unistd.h>
 
-SpriteBatch::SpriteBatch() :
-    font(std::make_shared<Texture>()),
-    fontatlas(std::make_shared<Texture>())
+SpriteBatch::SpriteBatch()
 {
     index = new GLuint[SIZE*6];
     uv = new glm::vec2[SIZE*4];
     pos = new glm::vec3[SIZE*4];
     col = new glm::vec4[SIZE*4];
 
-    basic_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::Instance()->getShadersDir() + "basic.glsl");
-    basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::Instance()->getShadersDir() + "basic.glsl");
+    //char buf[255];
+    //getcwd(buf, 255);
+
+    //LOG(info) << buf;
+
+    basic_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/basic.glsl");
+    basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/basic.glsl");
     basic_program->Link();
     basic_program->Use();
     basic_program->locateVars("MVP");
@@ -22,8 +28,8 @@ SpriteBatch::SpriteBatch() :
     basic_program->getAttrib();
     glUniform1i(basic_program->vars[1], 0);
 
-    font_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::Instance()->getShadersDir() + "font.glsl");
-    font_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::Instance()->getShadersDir() + "font.glsl");
+    font_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/font.glsl");
+    font_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/font.glsl");
     font_program->Link();
     font_program->Use();
     font_program->locateVars("MVP");
@@ -31,8 +37,8 @@ SpriteBatch::SpriteBatch() :
     font_program->getAttrib();
     glUniform1i(font_program->vars[1], 0);
 
-    color_program->loadShaderFromSource(GL_VERTEX_SHADER, Prefecences::Instance()->getShadersDir() + "color.glsl");
-    color_program->loadShaderFromSource(GL_FRAGMENT_SHADER, Prefecences::Instance()->getShadersDir() + "color.glsl");
+    color_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/color.glsl");
+    color_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/color.glsl");
     color_program->Link();
     color_program->Use();
     color_program->locateVars("MVP");
@@ -43,11 +49,6 @@ SpriteBatch::SpriteBatch() :
     glUseProgram(0);
 
     glGenBuffers(4, m_vbo);
-
-
-    font->IdOnly();
-
-    fontatlas->Empty(glm::vec2(512, 512));
 }
 
 SpriteBatch::~SpriteBatch()
@@ -60,125 +61,38 @@ SpriteBatch::~SpriteBatch()
     glDeleteBuffers(4, m_vbo);
 }
 
-void SpriteBatch::initFreeType()
-{
-    FT_Library ft;
-    if(FT_Init_FreeType(&ft))
-    {
-        LOG(fatal) << "could not init free type library.";
-        return;
-    }
-    else
-        LOG(fatal) << "FT init OK";
-    std::string fontPath = Prefecences::Instance()->getFontsDir() + "Inconsolata.otf";
-    if(FT_New_Face(ft, fontPath.c_str(), 0, &m_ftFace))
-    {
-        LOG(fatal) << "Could not open font " << fontPath;
-        return;
-    }
-    else
-        LOG(info) << "FT face OK";
-
-    FT_Set_Pixel_Sizes(m_ftFace, 0, 48);
-}
-
 void SpriteBatch::setUniform(const glm::mat4 &uni)
 {
     uniform = uni;
 }
 
 
-//in experiments mode
-glm::vec2 SpriteBatch::renderText(const char *text, float x, float y, float sx, float sy, const glm::vec4 &col_)
+glm::vec2 SpriteBatch::renderText(const std::string &text, float x, float y, Font *font, const glm::vec4 &col_)
 {
     float x_start = x;
     float y_start = y;
     float x_max = 0;
-    const char *p;
-    FT_GlyphSlot ftGlyph = m_ftFace->glyph;
+    float y_max = 0;
+    const char32_t *p;
 
-    for(p = text; *p; p++)
+    std::locale loc (std::locale(), new cvt);
+
+    std::u32string text32;
+    utf8::utf8to32(text.begin(), text.end(), std::back_inserter(text32));
+
+    for(p = &text32[0]; *p; p++)
     {
-        glBindTexture(GL_TEXTURE_2D, font->textureId);
+        CharInfo cc = font->chars[*p];
         if(*p == '\n')
         {
-            y+=ftGlyph->bitmap.rows;
+            y+=y_max;
             x=x_start;
             continue;
         }
-        if(FT_Load_Char(m_ftFace, *p, FT_LOAD_RENDER))
-        {
-            LOG(error) << "Could not load character " << *p;
-            continue;
-        }
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, ftGlyph->bitmap.width,
-                     ftGlyph->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE,
-                     ftGlyph->bitmap.buffer);
 
-        float w = ftGlyph->bitmap.width * sx;
-        float h = ftGlyph->bitmap.rows * sy;
-        float x2 = x + ftGlyph->bitmap_left * sx;
-        float y2 = y + 20 - ftGlyph->bitmap_top * sy;
+        drawQuadText(glm::vec2(x, y), cc, *font->font, col_);
 
-        drawQuadText(glm::vec2(x2, y2), glm::vec2(w, h), *font, col_);
-        render();
-
-        x += (ftGlyph->advance.x >> 6) * sx;
-        y += (ftGlyph->advance.y >> 6) * sy;
-        x_max = glm::max(x, x_max);
-    }
-    return glm::vec2(x_max - x_start, y - y_start);
-}
-
-glm::vec2 SpriteBatch::renderAtlas()
-{
-    float x = 0, sx = 1;
-    float y = 0, sy = 1;
-    float x_start = x;
-    float y_start = y;
-    float x_max = 0;
-    const char *p;
-    FT_GlyphSlot ftGlyph = m_ftFace->glyph;
-    char text[] = "`1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?\\|";
-
-    for(p = text; *p; p++)
-    {
-        glBindTexture(GL_TEXTURE_2D, font->textureId);
-        if(*p == '\n')
-        {
-            y+=ftGlyph->bitmap.rows;
-            x=x_start;
-            continue;
-        }
-        if(FT_Load_Char(m_ftFace, *p, FT_LOAD_RENDER))
-        {
-            LOG(error) << "Could not load character" << *p;
-            continue;
-        }
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, ftGlyph->bitmap.width,
-                     ftGlyph->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE,
-                     ftGlyph->bitmap.buffer);
-
-        float w = ftGlyph->bitmap.width * sx;
-        float h = ftGlyph->bitmap.rows * sy;
-        float x2 = x + ftGlyph->bitmap_left * sx;
-        float y2 = y + 20 - ftGlyph->bitmap_top * sy;
-
-        drawQuadText(glm::vec2(x2, y2), glm::vec2(w, h), *font, glm::vec4(1,1,1,1));
-        render();
-
-        x += (ftGlyph->advance.x >> 6) * sx;
-        y += (ftGlyph->advance.y >> 6) * sy;
+        x += cc.advance.x;
         x_max = glm::max(x, x_max);
     }
     return glm::vec2(x_max - x_start, y - y_start);
@@ -219,7 +133,7 @@ void SpriteBatch::drawRect(const glm::vec2 &loc, const glm::vec2 &size, const gl
     cur++;
 }
 
-void SpriteBatch::drawQuadText(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &color)
+void SpriteBatch::drawQuadText(const glm::vec2 &loc, const CharInfo &inf, const Texture &tex, const glm::vec4 &color)
 {
     if(current_program != font_program)
     {
@@ -236,20 +150,20 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const glm::vec2 &size, cons
     if(cur >= SIZE - 1)
         render();
 
-    pos[cur*4]     = glm::vec3(loc.x,          loc.y,          0);
-    pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y,          0);
-    pos[cur*4 + 2] = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
-    pos[cur*4 + 3] = glm::vec3(loc.x,          loc.y + size.y, 0);
+    pos[cur*4]     = glm::vec3(loc.x, loc.y - inf.bearing.y, 0);
+    pos[cur*4 + 1] = glm::vec3(loc.x + inf.size.x*FDIM, loc.y - inf.bearing.y, 0);
+    pos[cur*4 + 2] = glm::vec3(loc.x + inf.size.x*FDIM, loc.y + inf.size.y*FDIM - inf.bearing.y, 0);
+    pos[cur*4 + 3] = glm::vec3(loc.x, loc.y + inf.size.y*FDIM - inf.bearing.y, 0);
 
     col[cur*4]     = color;
     col[cur*4 + 1] = color;
     col[cur*4 + 2] = color;
     col[cur*4 + 3] = color;
 
-    uv[cur*4]      = glm::vec2(0, 0);
-    uv[cur*4 + 1]  = glm::vec2(1, 0);
-    uv[cur*4 + 2]  = glm::vec2(1, 1);
-    uv[cur*4 + 3]  = glm::vec2(0, 1);
+    uv[cur*4]      = glm::vec2(inf.pos.x,              inf.pos.y);
+    uv[cur*4 + 1]  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y);
+    uv[cur*4 + 2]  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y + inf.size.y);
+    uv[cur*4 + 3]  = glm::vec2(inf.pos.x,              inf.pos.y + inf.size.y);
 
     index[cur*6]     = cur*4;
     index[cur*6 + 1] = cur*4 + 1;

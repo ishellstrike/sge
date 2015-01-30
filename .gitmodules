@@ -4,3 +4,6 @@
 [submodule "lodepng"]
 	path = lodepng
 	url = https://github.com/ishellstrike/lodepng
+[submodule "utfcpp"]
+	path = utfcpp
+	url = https://github.com/ishellstrike/utfcpp.git

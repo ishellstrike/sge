@@ -16,14 +16,14 @@
 
 class GameWindow {
 
-    bool Init();
-
+    bool BaseInit();
     void BaseUpdate();
     void BaseDraw();
 
 public:
     virtual void Draw() = 0;
     virtual void Update() = 0;
+    virtual void Init() = 0;
     void Mainloop();
 
     GameTimer gt;

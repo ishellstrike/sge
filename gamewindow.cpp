@@ -27,7 +27,7 @@ GameWindow::~GameWindow()
 
 
 
-bool GameWindow::Init()
+bool GameWindow::BaseInit()
 {
     LOG(info) << "Jarg initialization start";
     glfwSetErrorCallback([](int a,const char* description){LOG(error) << description;});
@@ -107,9 +107,10 @@ bool GameWindow::Init()
     });
 
     batch = std::make_shared<SpriteBatch>();
-    batch->initFreeType();
 
     atlas.LoadAll();
+
+    Init();
 }
 
 void GameWindow::BaseUpdate()
@@ -124,11 +125,9 @@ void GameWindow::BaseUpdate()
 void GameWindow::BaseDraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1, 2, 3, 1);
+    glClearColor(0, 0, 0, 1);
 
     Draw();
-
-    batch->render();
 
     glfwSwapBuffers(window);
     gt.Update(glfwGetTime());
@@ -137,7 +136,7 @@ void GameWindow::BaseDraw()
 
 void GameWindow::Mainloop()
 {
-    Init();
+    BaseInit();
     while(!glfwWindowShouldClose(window))
     {
         BaseUpdate();

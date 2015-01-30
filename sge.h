@@ -21,6 +21,7 @@ See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
 #include "shader.h"
 #include "texture.h"
 #include "colorextender.h"
+#include "font.h"
 
 #endif // SGE_H
 
