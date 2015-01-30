@@ -10,6 +10,7 @@
 #include <thread>
 #include <chrono>
 #include "helper.inl"
+#include "cube.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -122,16 +123,31 @@ bool GameWindow::BaseInit()
     basic->getAttrib();
     basic->locateVars("transform.model");
     basic->locateVars("transform.viewProjection");
+    basic->locateVars("material.texture");
+    basic->locateVars("transform.viewPosition");
+    basic->locateVars("transform.normal");
+    glUniform1i(basic->vars[2], 0);
+    glUniformMatrix4fv(basic->vars[3],  1, GL_FALSE,  &glm::translate(glm::mat4(1), glm::vec3(2.f,2.f,2.f))[0][0]);
 
-    m = Icosahedron::getMesh();
+    m = Cube::getMesh();
     m.shader = basic;
     m.Bind();
 
+    std::shared_ptr<Material> mat = std::make_shared<Material>();
+    std::shared_ptr<Texture> texx = std::make_shared<Texture>();
+    texx->Load("data/tex/derevo.png", true, true);
+    std::shared_ptr<Texture> texxx = std::make_shared<Texture>();
+    texxx->Load("data/tex/aaa.png", true, true);
+    mat->texture = texx;
+    mat->normal = texxx;
+    m.material = mat;
 }
 
 void GameWindow::BaseUpdate()
 {
     glfwPollEvents();
+
+    m.World = glm::rotate(m.World, 0.01f, glm::vec3(0.f,1.f,0.f));
 
     Mouse::resetDelta();
 }
@@ -139,11 +155,13 @@ void GameWindow::BaseUpdate()
 void GameWindow::BaseDraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0, 0, 0, 1);
+    glClearColor(1, 0, 0, 1);
 
 
-    m.Render(glm::mat4(1), proj);
+    glEnable(GL_DEPTH_TEST);
+    m.Render(glm::mat4(1), proj_per * view);
 
+    glDisable(GL_DEPTH_TEST);
     batch->setUniform(proj * model);
     batch->drawRect({100,100}, {100,100}, Color::CornflowerBlue);
     batch->renderText("sdfsdfsdf", 100, 100, f12.get(), Color::White);
@@ -171,8 +189,11 @@ void GameWindow::Resize(int w, int h)
         h = 1;
     Prefecences::Instance()->resolution = glm::vec2(w, h);
     glViewport(0, 0, w, h);
-    GameWindow::wi->proj = glm::mat4(1.f);
     GameWindow::wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
+    GameWindow::wi->proj_per = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
+    GameWindow::wi->view = glm::mat4(1);
+    GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
+
     GameWindow::wi->model = glm::mat4(1.f);
 }
 

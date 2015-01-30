@@ -33,7 +33,8 @@ SOURCES += \
     material.cpp \
     basicjargshader.cpp \
     vpnt.cpp \
-    icosahedron.cpp
+    icosahedron.cpp \
+    cube.cpp
 
 VERSION = 0.1.0
 
@@ -80,7 +81,8 @@ HEADERS += \
     material.h \
     basicjargshader.h \
     vpnt.h \
-    icosahedron.h
+    icosahedron.h \
+    cube.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

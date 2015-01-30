@@ -159,7 +159,7 @@ bool Mesh::loadOBJ(std::string path)
 
 void Mesh::Bind(int type /* = 0 */)
 {
-    assert(shader); //"need shader to bind"
+    assert(shader && "need shader to bind");
 
     if(Verteces.size() == 0){
         return;
@@ -223,16 +223,18 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     if(Verteces.size() == 0){
         return;
     }
+    assert(shader && "no shader");
     if(shader != nullptr) {
         shader->Use();
         if(shader->vars.size() > 0) {
             auto mult = Model*World;
             glUniformMatrix4fv(shader->vars[0], 1, GL_FALSE, &mult[0][0]);
             glUniformMatrix4fv(shader->vars[1], 1, GL_FALSE, &proj[0][0]);
-            //glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
-            //glUniformMatrix3fv(shader->vars[2], 1, GL_FALSE, &normal[0][0]);
+            glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
+            glUniformMatrix3fv(shader->vars[4], 1, GL_FALSE, &normal[0][0]);
         }
 
+        assert(material && "no material");
         if(material != nullptr) {
             if(shader->ambient_location != -1)
                 glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);

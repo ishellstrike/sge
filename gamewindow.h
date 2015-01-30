@@ -15,7 +15,6 @@
 #include "textureatlas.h"
 #include "font.h"
 #include "mesh.h"
-#include "icosahedron.h"
 
 class GameWindow {
 
@@ -37,7 +36,7 @@ public:
     GLFWwindow *window = nullptr;
     TextureAtlas atlas;
 
-    glm::mat4 view = glm::mat4(1), proj = glm::mat4(1), model = glm::mat4(1);
+    glm::mat4 view = glm::mat4(1), proj = glm::mat4(1), proj_per = glm::mat4(1), model = glm::mat4(1);
     static GameWindow *wi;
 
     GameWindow();
