@@ -63,18 +63,18 @@ Mesh Icosahedron::getMesh()
         currentAngle += segmentAngle;
     }
 
-    m->Verteces.resize(VERTEXCOUNT);
-    m->Indeces.resize(INDEXCOUNT);
+    m->Vertices.resize(VERTEXCOUNT);
+    m->Indices.resize(INDEXCOUNT);
 
     for (int i=0; i < VERTEXCOUNT; i++)
     {
-        m->Verteces[i].Position = v[i];
-        m->Verteces[i].Uv =  glm::vec2(rand()%100/100.0,rand()%100/100.0);
+        m->Vertices[i].Position = v[i];
+        m->Vertices[i].Uv =  glm::vec2(rand()%100/100.0,rand()%100/100.0);
     }
 
     for (int i=0; i < INDEXCOUNT; i++)
     {
-        m->Indeces[i] = __indeces[i];
+        m->Indices[i] = __indeces[i];
     }
 
     Icosahedron::sm_mesh = m;

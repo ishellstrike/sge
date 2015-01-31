@@ -120,8 +120,15 @@ void JargShader::getAttrib()
     uvAttrib = glGetAttribLocation(program, "texcoord");
     colAttrib = glGetAttribLocation(program, "color");
     normAttrib = glGetAttribLocation(program, "normal");
+    tangentAttrib = glGetAttribLocation(program, "tangent");
+    binormalAttrib = glGetAttribLocation(program, "binormal");
 
-    LOG(info) << "pos = " << posAttrib << "; col = " << colAttrib << "; uv = " << uvAttrib << "; norm = " << normAttrib << ";";
+    LOG(info) << "pos = " << posAttrib <<
+                 "; col = " << colAttrib <<
+                 "; uv = " << uvAttrib <<
+                 "; norm = " << normAttrib <<
+                 "; tan = " << tangentAttrib <<
+                 "; bi = " << binormalAttrib << ";";
 }
 
 void JargShader::PushGlobalHeader(const std::string &source, const char *newParameter)

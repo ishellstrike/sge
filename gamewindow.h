@@ -45,7 +45,7 @@ public:
     std::shared_ptr<BasicJargShader> basic;
     std::shared_ptr<SpriteBatch> batch;
 
-    Mesh m;
+    Mesh *m;
 
     std::shared_ptr<Font> f12;
 };

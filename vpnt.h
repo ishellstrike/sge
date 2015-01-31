@@ -25,17 +25,34 @@ public:
     VertexPositionTexture operator / (float a){ VertexPositionTexture b; b.Position = Position / a; b.Uv = Uv / a; return b; }
 };
 
-struct VPNT{
+/**
+ * @brief The VPNTBT struct. Vertex position normal tangent binormal texture
+ */
+struct VPNTBT{
 public:
     glm::vec3 Position;
-    glm::vec2 Uv;
     glm::vec3 Normal;
-    VPNT(glm::vec3 norm, glm::vec3, glm::vec2 uv);
-    VPNT();
-    ~VPNT();
+    glm::vec3 Tangent;
+    glm::vec3 Binormal;
+    glm::vec2 Uv;
+    VPNTBT(glm::vec3 norm, glm::vec3 pos, glm::vec2 uv);
+    VPNTBT();
+    ~VPNTBT();
 
-    VPNT operator + (VPNT a){ VPNT b; b.Position = Position + a.Position; b.Uv = a.Uv + Uv; b.Normal = Normal + a.Normal; return b; }
-    VPNT operator / (float a){ VPNT b; b.Position = Position / a; b.Uv = Uv / a; b.Normal = Normal / a; return b; }
+    VPNTBT operator + (VPNTBT a){ VPNTBT b;
+                                  b.Position = Position + a.Position;
+                                  b.Uv = a.Uv + Uv;
+                                  b.Normal = Normal + a.Normal;
+                                  b.Tangent = Tangent + a.Tangent;
+                                  b.Binormal = Binormal + a.Binormal;
+                                  return b; }
+    VPNTBT operator / (float a){ VPNTBT b;
+                                 b.Position = Position / a;
+                                 b.Uv = Uv / a;
+                                 b.Normal = Normal / a;
+                                 b.Tangent = Tangent / a;
+                                 b.Binormal = Binormal / a;
+                                 return b; }
 };
 
 struct VertexPositionColor{

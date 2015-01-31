@@ -11,6 +11,8 @@
 #include <chrono>
 #include "helper.inl"
 #include "cube.h"
+#include "icosahedron.h"
+#include "SphereTesselator.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -31,6 +33,7 @@ GameWindow::~GameWindow()
 bool GameWindow::BaseInit()
 {
     LOG(info) << "Jarg initialization start";
+    LOG(info) << "User-preferred locale setting is " << std::locale("").name().c_str();
     glfwSetErrorCallback([](int a,const char* description){LOG(error) << description;});
     int glfwErrorCode = glfwInit();
     if (!glfwErrorCode)
@@ -121,17 +124,21 @@ bool GameWindow::BaseInit()
     basic->Link();
     basic->Use();
     basic->getAttrib();
-    basic->locateVars("transform.model");
-    basic->locateVars("transform.viewProjection");
+    basic->locateVars("transformmodel");
+    basic->locateVars("transformviewProjection");
     basic->locateVars("material.texture");
-    basic->locateVars("transform.viewPosition");
-    basic->locateVars("transform.normal");
+    basic->locateVars("transformviewPosition");
+    basic->locateVars("transformnormal");
+    basic->locateVars("transformlightPosition");
     glUniform1i(basic->vars[2], 0);
     glUniformMatrix4fv(basic->vars[3],  1, GL_FALSE,  &glm::translate(glm::mat4(1), glm::vec3(2.f,2.f,2.f))[0][0]);
 
-    m = Cube::getMesh();
-    m.shader = basic;
-    m.Bind();
+    m = Tesselator::SphereTesselate(6, Cube::getMesh());
+    m->shader = basic;
+    m->Unindex();
+    m->computeNormal();
+    m->CalcTB();
+    m->Bind();
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
     std::shared_ptr<Texture> texx = std::make_shared<Texture>();
@@ -140,14 +147,14 @@ bool GameWindow::BaseInit()
     texxx->Load("data/tex/aaa.png", true, true);
     mat->texture = texx;
     mat->normal = texxx;
-    m.material = mat;
+    m->material = mat;
 }
 
 void GameWindow::BaseUpdate()
 {
     glfwPollEvents();
 
-    m.World = glm::rotate(m.World, 0.01f, glm::vec3(0.f,1.f,0.f));
+    m->World = glm::rotate(m->World, (float)gt.elapsed, glm::vec3(0.f,1.f,0.f));
 
     Mouse::resetDelta();
 }
@@ -155,16 +162,49 @@ void GameWindow::BaseUpdate()
 void GameWindow::BaseDraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1, 0, 0, 1);
+    glClearColor(0, 0, 0, 1);
 
 
     glEnable(GL_DEPTH_TEST);
-    m.Render(glm::mat4(1), proj_per * view);
+    m->Render(glm::mat4(1), proj_per * view);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf((const GLfloat*)&proj_per[0][0]);
+    glMatrixMode(GL_MODELVIEW);
+    glm::mat4 MV = view * m->World;
+    glLoadMatrixf((const GLfloat*)&MV[0][0]);
+    glUseProgram(0);
+//    glBegin(GL_LINES);
+//    for(int i=0;i<m->Indices.size();i++)
+//    {
+//        glColor3f(1,0,0);
+//        glm::vec3 p = m->Vertices[m->Indices[i]].Position;
+//        glVertex3fv(&p.x);
+//        glm::vec3 o = glm::normalize(m->Vertices[m->Indices[i]].Normal);
+//        p+=o*0.1f;
+//        glVertex3fv(&p.x);
+
+
+//        glColor3f(0,1,0);
+//        p = m->Vertices[m->Indices[i]].Position;
+//        glVertex3fv(&p.x);
+//        o = glm::normalize(m->Vertices[m->Indices[i]].Tangent);
+//        p+=o*0.1f;
+//        glVertex3fv(&p.x);
+
+//        glColor3f(0,0,1);
+//        p = m->Vertices[m->Indices[i]].Position;
+//        glVertex3fv(&p.x);
+//        o = glm::normalize(m->Vertices[m->Indices[i]].Binormal);
+//        p+=o*0.1f;
+//        glVertex3fv(&p.x);
+//    }
+//    glEnd();
 
     glDisable(GL_DEPTH_TEST);
     batch->setUniform(proj * model);
     batch->drawRect({100,100}, {100,100}, Color::CornflowerBlue);
-    batch->renderText("sdfsdfsdf", 100, 100, f12.get(), Color::White);
+    batch->renderText(std::to_string(fps.GetCount()), 100, 100, f12.get(), Color::White);
     batch->render();
 
     glfwSwapBuffers(window);
@@ -179,7 +219,7 @@ void GameWindow::Mainloop()
     {
         BaseUpdate();
         BaseDraw();
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 }
 
@@ -190,7 +230,7 @@ void GameWindow::Resize(int w, int h)
     Prefecences::Instance()->resolution = glm::vec2(w, h);
     glViewport(0, 0, w, h);
     GameWindow::wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
-    GameWindow::wi->proj_per = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
+    GameWindow::wi->proj_per = glm::perspective(45.0f, w /(float) h, 0.1f, 100.f);
     GameWindow::wi->view = glm::mat4(1);
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 

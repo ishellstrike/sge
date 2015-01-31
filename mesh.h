@@ -17,7 +17,7 @@ class Mesh
 public:
     Mesh(void);
     ~Mesh(void);
-    void Create(std::vector<VPNT> verteces, std::vector<GLuint> indeces);
+    void Create(std::vector<VPNTBT> verteces, std::vector<GLuint> indeces);
     void Bind(int type = 0);
     void Render(const glm::mat4 &proj, bool patches = false);
     void Render(const glm::mat4 &Model, const glm::mat4 &proj, bool patches = false);
@@ -30,12 +30,13 @@ public:
     //void RenderBounding(Batched &sb, mat4 Model);
     glm::vec3 minBound, maxBound;
 
-    std::vector<VPNT> Verteces;
-    std::vector<GLuint> Indeces;
+    std::vector<VPNTBT> Vertices;
+    std::vector<GLuint> Indices;
     std::shared_ptr<BasicJargShader> shader;
     std::shared_ptr<Material> material;
     glm::mat4 World;
     std::string id;
+    void CalcTB();
 private:
     GLuint m_vao;
     GLuint* m_vbo;

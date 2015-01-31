@@ -11,14 +11,14 @@ VertexPositionTexture::~VertexPositionTexture()
 {
 }
 
-VPNT::VPNT(glm::vec3 norm, glm::vec3 pos , glm::vec2 uv) : Position(pos), Normal(norm), Uv(uv)
+VPNTBT::VPNTBT(glm::vec3 norm, glm::vec3 pos , glm::vec2 uv) : Position(pos), Normal(norm), Uv(uv)
 {
 }
 
-VPNT::VPNT() : Position(), Normal(), Uv()
+VPNTBT::VPNTBT() : Position(), Normal(), Uv()
 {
 }
 
-VPNT::~VPNT()
+VPNTBT::~VPNTBT()
 {
 }

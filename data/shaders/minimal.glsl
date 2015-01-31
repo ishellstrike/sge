@@ -24,26 +24,52 @@ uniform struct Material
 
 #ifdef _VERTEX_
 attribute vec3 position;
-attribute vec2 texcoord;
-attribute vec3 normal;
 attribute vec4 color;
-varying vec2 texcoordout;
-varying vec3 viewDir;
-varying vec4 normalout;
+attribute vec3 normal;
+attribute vec3 tangent;
+attribute vec3 binormal;
+attribute vec2 texcoord;
 
-uniform struct Transform
-{
-        mat4 model;
-        mat4 viewProjection;
-        mat3 normal;
-        vec3 viewPosition;
-} transform;
+varying vec2 texcoordout;
+varying vec3 lightVec;
+varying vec3 halfVec;
+varying vec3 eyeVec;
+
+uniform mat4 transformmodel;
+uniform mat4 transformviewProjection;
+uniform mat3 transformnormal;
+uniform vec3 transformviewPosition;
+uniform vec3 transformlightPosition;
 
 void main(void)
 {
-    vec4 vertex = transform.model * vec4(position, 1.0);
-    viewDir  = normalize(transform.viewPosition - vertex.xyz);
-    gl_Position = transform.viewProjection * vertex;
+    //t basis
+    vec3 n = normalize (transformnormal * normal);
+    vec3 t = normalize (transformnormal * tangent);
+    vec3 b = normalize (transformnormal * binormal);
+
+    vec4 vertex = transformmodel *  vec4(position, 1);
+    vec4 vertexPosition = transformviewProjection * vertex;
+    vec3 lightDir = normalize(transformlightPosition - vec3(vertexPosition));
+
+    vec3 v;
+    v.x = dot (lightDir, t);
+    v.y = dot (lightDir, b);
+    v.z = dot (lightDir, n);
+    lightVec = normalize (v);
+
+    v.x = dot (vec3(vertexPosition), t);
+    v.y = dot (vec3(vertexPosition), b);
+    v.z = dot (vec3(vertexPosition), n);
+    eyeVec = normalize (v);
+
+    vec3 halfVector = normalize(vec3(vertexPosition) + lightDir);
+    v.x = dot (halfVector, t);
+    v.y = dot (halfVector, b);
+    v.z = dot (halfVector, n);
+    halfVec = v ;
+
+    gl_Position = vertexPosition;
     texcoordout = texcoord;
 }
 #endif
@@ -51,12 +77,44 @@ void main(void)
 #ifdef _FRAGMENT_
 const float cutoff = 0.9f;
 varying vec2 texcoordout;
-varying vec3 viewDir;
-varying vec4 normalout;
+varying vec3 lightVec;
+varying vec3 halfVec;
+varying vec3 eyeVec;
 
 void main(void)
 {
-    vec3 a = texture2D(material.texture, texcoordout).xyz * dot(texture2D(material.normal, texcoordout).xyz, -viewDir);
-    gl_FragColor = vec4(a, 1);
+    // lookup normal from normal map, move from [0,1] to  [-1, 1] range, normalize
+    vec3 normal = 2.0 * texture2D (material.normal, texcoordout).rgb - 1.0;
+    normal = normalize (normal);
+
+    // compute diffuse lighting
+    float lamberFactor= max (dot (lightVec, normal), 0.0) ;
+    vec4 diffuseMaterial;
+    vec4 diffuseLight;
+
+    // compute specular lighting
+    vec4 specularMaterial ;
+    vec4 specularLight ;
+    float shininess;
+
+    // compute ambient
+    vec4 ambientLight = vec4(0.1,0.1,0.1,1);
+
+    if (lamberFactor > 0.0)
+    {
+            diffuseMaterial = texture2D (material.texture, texcoordout);
+            diffuseLight  = vec4(0.4,0.4,0.4,1);
+
+            // In doom3, specular value comes from a texture
+            specularMaterial =  vec4(1.0)  ;
+            specularLight = vec4(1,1,1,1);
+            shininess = pow (max (dot (halfVec, normal), 0.0), 2.0);
+
+            gl_FragColor =	diffuseMaterial * diffuseLight * lamberFactor;
+            gl_FragColor +=	specularMaterial * specularLight * shininess;
+
+    }
+
+    gl_FragColor +=	ambientLight;
 }
 #endif

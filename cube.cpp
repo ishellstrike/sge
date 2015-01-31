@@ -33,26 +33,26 @@ const Mesh Cube::getMesh()
     }
 
     Mesh* m = new Mesh();
-    m->Indeces.resize(INDEXCOUNT);
-    m->Verteces.resize(VERTEXCOUNT);
+    m->Indices.resize(INDEXCOUNT);
+    m->Vertices.resize(VERTEXCOUNT);
     for(unsigned int i = 0; i < 6; i++)
     {
-        m->Verteces[i*4].Position = __vertexPositions[i * 4 + 0];
-        m->Verteces[i*4].Uv = glm::vec2(1,1);
+        m->Vertices[i*4].Position = __vertexPositions[i * 4 + 0];
+        m->Vertices[i*4].Uv = glm::vec2(1,1);
 
-        m->Verteces[i*4 + 1].Position = __vertexPositions[i * 4 + 1];
-        m->Verteces[i*4 + 1].Uv = glm::vec2(1,0);
+        m->Vertices[i*4 + 1].Position = __vertexPositions[i * 4 + 1];
+        m->Vertices[i*4 + 1].Uv = glm::vec2(1,0);
 
-        m->Verteces[i*4 + 2].Position = __vertexPositions[i * 4 + 2];
-        m->Verteces[i*4 + 2].Uv = glm::vec2(0,0);
+        m->Vertices[i*4 + 2].Position = __vertexPositions[i * 4 + 2];
+        m->Vertices[i*4 + 2].Uv = glm::vec2(0,0);
 
-        m->Verteces[i*4 + 3].Position = __vertexPositions[i * 4 + 3];
-        m->Verteces[i*4 + 3].Uv = glm::vec2(0,1);
+        m->Vertices[i*4 + 3].Position = __vertexPositions[i * 4 + 3];
+        m->Vertices[i*4 + 3].Uv = glm::vec2(0,1);
     }
 
     for (int i =0; i< INDEXCOUNT; i++)
     {
-        m->Indeces.push_back(__vertexIndex[i]);
+        m->Indices.push_back(__vertexIndex[i]);
     }
 
     sm_mesh = std::shared_ptr<Mesh>(m);

@@ -21,7 +21,7 @@ public:
     std::vector<GLint> shaders_;
     std::string global_header;
 
-    GLint posAttrib, colAttrib, uvAttrib, normAttrib;
+    GLint posAttrib, colAttrib, uvAttrib, normAttrib, tangentAttrib, binormalAttrib;
 
     void getAttrib();
 };

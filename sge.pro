@@ -34,7 +34,8 @@ SOURCES += \
     basicjargshader.cpp \
     vpnt.cpp \
     icosahedron.cpp \
-    cube.cpp
+    cube.cpp \
+    SphereTesselator.cpp
 
 VERSION = 0.1.0
 
@@ -82,7 +83,9 @@ HEADERS += \
     basicjargshader.h \
     vpnt.h \
     icosahedron.h \
-    cube.h
+    cube.h \
+    tangentcalc.h \
+    SphereTesselator.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

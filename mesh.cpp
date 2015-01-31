@@ -32,13 +32,109 @@ Mesh::~Mesh(void)
 
 void Mesh::Unindex()
 {
-    Verteces.resize(Indeces.size());
-    auto temp = std::vector<VPNT>(Verteces);
-    for(int i=0; i<Indeces.size();i++){
-        Verteces[i] = temp[Indeces[i]];
-        Indeces[i] = i;
+    Vertices.resize(Indices.size());
+    auto temp = std::vector<VPNTBT>(Vertices);
+    for(int i=0; i<Indices.size();i++){
+        Vertices[i] = temp[Indices[i]];
+        Indices[i] = i;
     }
 } 
+
+void CalcTangentBasis(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3,
+                      const glm::vec2 &t1, const glm::vec2 &t2, const glm::vec2 &t3,
+                      glm::vec3 &tangent, glm::vec3 &binormal )
+{
+  glm::vec3 e1  = p2 - p1;
+  glm::vec3 e2  = p3 - p1;
+  glm::vec2 et1 = t2 - t1;
+  glm::vec2 et2 = t3 - t1;
+  tangent   = glm::vec3(0.0f);
+  binormal  = glm::vec3(0.0f);
+  float tmp = 0.0;
+  if (glm::abs(et1.x*et2.y - et1.y*et2.x)<0.0001f)
+    tmp = 1.0f;
+  else
+    tmp = 1.0 / (et1.x*et2.y - et1.y*et2.x);
+  tangent  = (e1 * et2.y - e2 * et1.y) * tmp;
+  binormal = (e2 * et1.x - e1 * et2.x) * tmp;
+  tangent = glm::normalize(tangent);
+  binormal = glm::normalize(binormal);
+}
+
+
+void Mesh::CalcTB()
+{
+  for (unsigned int i=0; i < Vertices.size(); i++)
+  {
+    Vertices[i].Tangent = glm::vec3(0.0f);
+    Vertices[i].Binormal = glm::vec3(0.0f);
+  }
+  for (unsigned int i=0; i < (Vertices.size() / 3);i++)
+  {
+    unsigned int a = Indices[i * 3 + 0];
+    unsigned int b = Indices[i * 3 + 1];
+    unsigned int c = Indices[i * 3 + 2];
+
+    glm::vec3 bin, tan;
+    CalcTangentBasis ( Vertices[a].Position,
+                       Vertices[b].Position,
+                       Vertices[c].Position,
+                       Vertices[a].Uv,
+                       Vertices[b].Uv,
+                       Vertices[c].Uv,
+                       tan, bin);
+
+    Vertices[a].Tangent  += tan;
+    Vertices[b].Tangent  += tan;
+    Vertices[c].Tangent  += tan;
+
+    Vertices[a].Binormal += bin;
+    Vertices[b].Binormal += bin;
+    Vertices[c].Binormal += bin;
+  }
+
+  for (unsigned int i=0; i < Vertices.size();i++)
+  {
+    Vertices[i].Tangent = glm::normalize(Vertices[i].Tangent);
+    Vertices[i].Binormal = glm::normalize(Vertices[i].Binormal);
+
+    glm::vec3 tmpT = Vertices[i].Tangent;
+    glm::vec3 tmpB = Vertices[i].Binormal;
+    glm::vec3 tmpN = Vertices[i].Normal;
+
+    glm::vec3 newT = tmpT - ((glm::cross(tmpN, tmpT)) * tmpN);
+    glm::vec3 newB = tmpB - ((glm::cross(tmpN, tmpB)) * tmpN) - ((glm::cross(newT, tmpB))*newT);
+    newT = glm::normalize(newT);
+    newB = glm::normalize(newB);
+    Vertices[i].Tangent  = newT;
+    Vertices[i].Binormal = newB;
+
+    float lenT = newT.length ();
+    float lenB = newB.length ();
+
+    if (lenT <= 0.0001 || lenB <= 0.0001)
+    {
+      if (lenT > 0.5)
+        Vertices[i].Binormal = glm::cross(tmpN, Vertices[i].Tangent);
+      else if (lenB > 0.5)
+        Vertices[i].Tangent  = glm::cross(Vertices[i].Binormal, tmpN);
+      else
+      {
+        glm::vec3 xAxis (1.0, 0.0, 0.0);
+        glm::vec3 yAxis (0.0, 1.0, 0.0);
+        glm::vec3 startAxis;
+        if ((glm::dot(xAxis, tmpN)) < (glm::dot(yAxis, tmpN)))
+          startAxis = xAxis;
+        else
+          startAxis = yAxis;
+        Vertices[i].Tangent  = glm::cross(tmpN, startAxis);
+        Vertices[i].Binormal = glm::cross(tmpN, Vertices[i].Tangent);
+      }
+    }
+    else if ((glm::dot(Vertices[i].Binormal, Vertices[i].Tangent))> 0.9999)
+      Vertices[i].Binormal = glm::cross(tmpN, Vertices[i].Tangent);
+  }
+}
 
 
 //************************************
@@ -46,43 +142,43 @@ void Mesh::Unindex()
 //************************************
 void Mesh::computeNormal()
 {
-    for(int i=0; i<Verteces.size();i+=3){
-        glm::vec3 const & a = Verteces[i].Position;
-        glm::vec3 const & b = Verteces[i+1].Position;
-        glm::vec3 const & c = Verteces[i+2].Position;
+    for(int i=0; i<Vertices.size();i+=3){
+        glm::vec3 const & a = Vertices[i].Position;
+        glm::vec3 const & b = Vertices[i+1].Position;
+        glm::vec3 const & c = Vertices[i+2].Position;
         auto t = glm::normalize(glm::cross(c - a, b - a));
-        Verteces[i].Normal = Verteces[i+1].Normal = Verteces[i+2].Normal = t;
+        Vertices[i].Normal = Vertices[i+1].Normal = Vertices[i+2].Normal = t;
     }
 } 
 
 void Mesh::MergeVerteces()
 {
-    for (int i=0;i<Verteces.size();i++)
+    for (int i=0;i<Vertices.size();i++)
     {
-        auto n = Verteces[i].Normal;
+        auto n = Vertices[i].Normal;
         float nn = 1.0f;
         std::vector<int> same;
-        for (int j=i;j<Verteces.size();j++)
+        for (int j=i;j<Vertices.size();j++)
         {
-            if(Verteces[i].Position == Verteces[j].Position){
-                n += Verteces[j].Normal;
+            if(Vertices[i].Position == Vertices[j].Position){
+                n += Vertices[j].Normal;
                 nn++;
                 same.push_back(j);
             }
         }
         n /= nn;
-        Verteces[i].Normal = n;
+        Vertices[i].Normal = n;
         if(same.size() > 0)
             for(int j=0; j<same.size(); j++){
-                Verteces[same[j]].Normal = n;
+                Vertices[same[j]].Normal = n;
             }
     }
 }
 
-void Mesh::Create(std::vector<VPNT> v, std::vector<GLuint> i)
+void Mesh::Create(std::vector<VPNTBT> v, std::vector<GLuint> i)
 {
-    Verteces.assign(v.begin(), v.end());
-    Indeces.assign(i.begin(), i.end());
+    Vertices.assign(v.begin(), v.end());
+    Indices.assign(i.begin(), i.end());
 }
 
 bool Mesh::loadOBJ(std::string path)
@@ -136,10 +232,10 @@ bool Mesh::loadOBJ(std::string path)
         }
     }
 
-    Verteces.clear();
-    Verteces.resize(vertexIndices.size());
+    Vertices.clear();
+    Vertices.resize(vertexIndices.size());
     for( unsigned int i=0; i<vertexIndices.size(); i++ ){
-        Verteces[i] = VPNT(temp_normals[normalIndices[i]-1], temp_vertices[vertexIndices[i]-1], temp_uvs[uvIndices[i]-1]);
+        Vertices[i] = VPNTBT(temp_normals[normalIndices[i]-1], temp_vertices[vertexIndices[i]-1], temp_uvs[uvIndices[i]-1]);
     }
     /*for( unsigned int i=0; i<vertexIndices.size(); i++ ){
     unsigned int vertexIndex = vertexIndices[i];
@@ -150,10 +246,10 @@ bool Mesh::loadOBJ(std::string path)
     glm::vec2 uv = temp_uvs[ uvIndex-1 ];
     Verteces[i] = VertexPositionTexture(vertex, normal, uv);
     }*/
-    Indeces.clear();
-    Indeces.resize(vertexIndices.size());
+    Indices.clear();
+    Indices.resize(vertexIndices.size());
     for(int i=0;i<vertexIndices.size();i++){
-        Indeces[i] = i;
+        Indices[i] = i;
     }
 }
 
@@ -161,7 +257,7 @@ void Mesh::Bind(int type /* = 0 */)
 {
     assert(shader && "need shader to bind");
 
-    if(Verteces.size() == 0){
+    if(Vertices.size() == 0){
         return;
     }
     auto bindtype = type == 0 ? GL_STATIC_DRAW : GL_STREAM_DRAW;
@@ -188,19 +284,23 @@ void Mesh::Bind(int type /* = 0 */)
     } else {
         glBindVertexArray(m_vao);
     }
-    GLuint stride = sizeof(VPNT);
+    GLuint stride = sizeof(VPNTBT);
     GLuint offset = 0;
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(VPNT)*Verteces.size(), &Verteces[0], bindtype);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(VPNTBT)*Vertices.size(), &Vertices[0], bindtype);
     glEnableVertexAttribArray(shader->posAttrib);
     glVertexAttribPointer(shader->posAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
+    glEnableVertexAttribArray(shader->normAttrib);
+    glVertexAttribPointer(shader->normAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
+    glEnableVertexAttribArray(shader->tangentAttrib);
+    glVertexAttribPointer(shader->tangentAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
+    glEnableVertexAttribArray(shader->binormalAttrib);
+    glVertexAttribPointer(shader->binormalAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
     glEnableVertexAttribArray(shader->uvAttrib);
     glVertexAttribPointer(shader->uvAttrib, 2, GL_FLOAT, GL_FALSE, stride, (void*)(offset));  offset += sizeof(glm::vec2);
-    glEnableVertexAttribArray(shader->normAttrib);
-    glVertexAttribPointer(shader->normAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indeces.size(), &Indeces[0], bindtype);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indices.size(), &Indices[0], bindtype);
 
     OPENGL_CHECK_ERRORS();
 }
@@ -220,7 +320,7 @@ void Mesh::Render(const glm::mat4 &proj, bool patches /* = false*/)
 
 inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool patches /* = false*/)
 {
-    if(Verteces.size() == 0){
+    if(Vertices.size() == 0){
         return;
     }
     assert(shader && "no shader");
@@ -232,6 +332,7 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
             glUniformMatrix4fv(shader->vars[1], 1, GL_FALSE, &proj[0][0]);
             glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
             glUniformMatrix3fv(shader->vars[4], 1, GL_FALSE, &normal[0][0]);
+            glUniform3fv(shader->vars[5], 1, &glm::vec3(10,10,10)[0]);
         }
 
         assert(material && "no material");
@@ -267,41 +368,41 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     }
     glBindVertexArray(m_vao);
     if(!patches) {
-        glDrawElements(GL_TRIANGLES, Indeces.size(), GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, NULL);
     } else
     {
         glPatchParameteri(GL_PATCH_VERTICES, 4);
-        glDrawElements(GL_PATCHES, Indeces.size(), GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_PATCHES, Indices.size(), GL_UNSIGNED_INT, NULL);
     }
     glBindVertexArray(0);
 }
 
 void Mesh::Combine(Mesh* com)
 {	
-    GLuint lastIndex = Verteces.size();
+    GLuint lastIndex = Vertices.size();
 
-    int t = Verteces.size();
-    Verteces.resize(Verteces.size() + com->Verteces.size());
-    for (int i =0; i < com->Verteces.size();i++)
+    int t = Vertices.size();
+    Vertices.resize(Vertices.size() + com->Vertices.size());
+    for (int i =0; i < com->Vertices.size();i++)
     {
-        Verteces[t] = com->Verteces[i];
+        Vertices[t] = com->Vertices[i];
         t++;
     }
 
-    t = Indeces.size();
-    Indeces.resize(Indeces.size() + com->Indeces.size());
-    for (int i =0; i < com->Indeces.size();i++)
+    t = Indices.size();
+    Indices.resize(Indices.size() + com->Indices.size());
+    for (int i =0; i < com->Indices.size();i++)
     {
-        Indeces[t] = com->Indeces[i] + lastIndex;
+        Indices[t] = com->Indices[i] + lastIndex;
         t++;
     }
 }
 
 void Mesh::BuildBounding()
 {
-    if(Verteces.size() > 0){
-        maxBound = minBound = Verteces[0].Position;
-        for(auto i: Verteces){
+    if(Vertices.size() > 0){
+        maxBound = minBound = Vertices[0].Position;
+        for(auto i: Vertices){
             if(i.Position.x > maxBound.x){
                 maxBound.x = i.Position.x;
             }
