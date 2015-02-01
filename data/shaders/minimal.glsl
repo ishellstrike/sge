@@ -11,16 +11,13 @@
 #define VERT_COLOR 3
 #define FRAG_OUTPUT0 0
 
-uniform struct Material
-{
-        sampler2D texture;
-        sampler2D normal;
-        vec4  ambient;
-        vec4  diffuse;
-        vec4  specular;
-        vec4  emission;
-        float shininess;
-} material;
+uniform sampler2D material_texture;
+uniform sampler2D material_normal;
+uniform vec4  material_ambient;
+uniform vec4  material_diffuse;
+uniform vec4  material_specular;
+uniform vec4  material_emission;
+uniform float material_shininess;
 
 #ifdef _VERTEX_
 attribute vec3 position;
@@ -35,22 +32,22 @@ varying vec3 lightVec;
 varying vec3 halfVec;
 varying vec3 eyeVec;
 
-uniform mat4 transformmodel;
-uniform mat4 transformviewProjection;
-uniform mat3 transformnormal;
-uniform vec3 transformviewPosition;
-uniform vec3 transformlightPosition;
+uniform mat4 transform_M; // model matrix
+uniform mat4 transform_VP; // view * projection matrix
+uniform mat3 transform_N; // normal matrix
+uniform vec3 transform_viewPos;
+uniform vec3 transform_lightPos;
 
 void main(void)
 {
     //t basis
-    vec3 n = normalize (transformnormal * normal);
-    vec3 t = normalize (transformnormal * tangent);
-    vec3 b = normalize (transformnormal * binormal);
+    vec3 n = normalize (transform_N * normal);
+    vec3 t = normalize (transform_N * tangent);
+    vec3 b = normalize (transform_N * binormal);
 
-    vec4 vertex = transformmodel *  vec4(position, 1);
-    vec4 vertexPosition = transformviewProjection * vertex;
-    vec3 lightDir = normalize(transformlightPosition - vec3(vertexPosition));
+    vec4 vertex = transform_M *  vec4(position, 1);
+    vec4 vertexPosition = transform_VP * vertex;
+    vec3 lightDir = normalize(transform_lightPos - vec3(vertexPosition));
 
     vec3 v;
     v.x = dot (lightDir, t);
@@ -84,7 +81,7 @@ varying vec3 eyeVec;
 void main(void)
 {
     // lookup normal from normal map, move from [0,1] to  [-1, 1] range, normalize
-    vec3 normal = 2.0 * texture2D (material.normal, texcoordout).rgb - 1.0;
+    vec3 normal = 2.0 * texture2D (material_normal, texcoordout).rgb - 1.0;
     normal = normalize (normal);
 
     // compute diffuse lighting
@@ -102,7 +99,7 @@ void main(void)
 
     if (lamberFactor > 0.0)
     {
-            diffuseMaterial = texture2D (material.texture, texcoordout);
+            diffuseMaterial = texture2D (material_texture, texcoordout);
             diffuseLight  = vec4(0.4,0.4,0.4,1);
 
             // In doom3, specular value comes from a texture

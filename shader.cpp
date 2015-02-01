@@ -40,7 +40,7 @@ void JargShader::Use() const
     glUseProgram(program);
 }
 
-GLint JargShader::locateVars(const std::string &s)
+GLint JargShader::locateVar(const std::string &s)
 {
     GLint a = glGetUniformLocation(program, s.c_str());
     if(a >= 0)
@@ -114,8 +114,9 @@ bool JargShader::Link() {
     return true;
 }
 
-void JargShader::getAttrib()
+void JargShader::Afterlink()
 {
+    Use();
     posAttrib = glGetAttribLocation(program, "position");
     uvAttrib = glGetAttribLocation(program, "texcoord");
     colAttrib = glGetAttribLocation(program, "color");

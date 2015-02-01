@@ -12,7 +12,7 @@ public:
     std::string name;
     std::vector<int> vars;
     void Use() const;
-    GLint locateVars(const std::string &s);
+    GLint locateVar(const std::string &s);
     void PushGlobalHeader(const std::string &s, const char *newParameter = "#version 210");
     void loadShaderFromSource(GLenum type, const std::string &source);
     bool Link();
@@ -23,6 +23,8 @@ public:
 
     GLint posAttrib, colAttrib, uvAttrib, normAttrib, tangentAttrib, binormalAttrib;
 
-    void getAttrib();
+    void Afterlink();
+private:
+    GLint locate(const std::string &s);
 };
 #endif // JargShader_h__
