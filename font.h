@@ -9,7 +9,7 @@
 #include <freetype2/ft2build.h>
 #include FT_FREETYPE_H
 #include <freetype2/config/ftheader.h>
-#define FDIM 1024
+#define FDIM 256
 
 struct CharInfo
 {

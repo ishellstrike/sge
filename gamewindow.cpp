@@ -196,7 +196,7 @@ void GameWindow::BaseDraw()
     glDisable(GL_DEPTH_TEST);
     batch->setUniform(proj * model);
     batch->drawRect({100,100}, {100,100}, Color::CornflowerBlue);
-    batch->renderText(std::to_string(fps.GetCount()), 100, 100, f12.get(), Color::White);
+    batch->drawText(std::to_string(fps.GetCount()), 100, 100, f12.get(), Color::White);
     batch->render();
 
     glfwSwapBuffers(window);

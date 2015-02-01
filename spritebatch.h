@@ -35,7 +35,7 @@ public:
 
     void setUniform(const glm::mat4 &uni);
 
-    glm::vec2 renderText(const std::string &text, float x, float y, Font *font, const glm::vec4 &col_);
+    glm::vec2 drawText(const std::string &text, float x, float y, Font *font, const glm::vec4 &col_);
 
     void render();
     void drawRect(const glm::vec2 &loc, const glm::vec2 &size, const glm::vec4 &_col);

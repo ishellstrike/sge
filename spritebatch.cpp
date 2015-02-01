@@ -67,7 +67,7 @@ void SpriteBatch::setUniform(const glm::mat4 &uni)
 }
 
 
-glm::vec2 SpriteBatch::renderText(const std::string &text, float x, float y, Font *font, const glm::vec4 &col_)
+glm::vec2 SpriteBatch::drawText(const std::string &text, float x, float y, Font *font, const glm::vec4 &col_)
 {
     float x_start = x;
     float y_start = y;
@@ -150,17 +150,17 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const CharInfo &inf, const 
     if(cur >= SIZE - 1)
         render();
 
-    pos[cur*4]     = glm::vec3(loc.x, loc.y - inf.bearing.y, 0);
-    pos[cur*4 + 1] = glm::vec3(loc.x + inf.size.x*FDIM, loc.y - inf.bearing.y, 0);
-    pos[cur*4 + 2] = glm::vec3(loc.x + inf.size.x*FDIM, loc.y + inf.size.y*FDIM - inf.bearing.y, 0);
-    pos[cur*4 + 3] = glm::vec3(loc.x, loc.y + inf.size.y*FDIM - inf.bearing.y, 0);
+    pos[cur*4]     = glm::vec3(loc.x + inf.bearing.x,                   loc.y - inf.bearing.y, 0);
+    pos[cur*4 + 1] = glm::vec3(loc.x + inf.bearing.x + inf.size.x*FDIM, loc.y - inf.bearing.y, 0);
+    pos[cur*4 + 2] = glm::vec3(loc.x + inf.bearing.x + inf.size.x*FDIM, loc.y - inf.bearing.y + inf.size.y*FDIM, 0);
+    pos[cur*4 + 3] = glm::vec3(loc.x + inf.bearing.x,                   loc.y - inf.bearing.y + inf.size.y*FDIM, 0);
 
     col[cur*4]     = color;
     col[cur*4 + 1] = color;
     col[cur*4 + 2] = color;
     col[cur*4 + 3] = color;
 
-    uv[cur*4]      = glm::vec2(inf.pos.x,              inf.pos.y);
+    uv[cur*4 + 0]  = glm::vec2(inf.pos.x,              inf.pos.y);
     uv[cur*4 + 1]  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y);
     uv[cur*4 + 2]  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y + inf.size.y);
     uv[cur*4 + 3]  = glm::vec2(inf.pos.x,              inf.pos.y + inf.size.y);

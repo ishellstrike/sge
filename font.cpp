@@ -15,6 +15,7 @@ Font::~Font()
 
 void Font::initFreeType(int size)
 {
+    LOG(info) << "FT " << size << " start";
     if(FT_Init_FreeType(&ft))
     {
         LOG(fatal) << "could not init free type library.";
@@ -44,10 +45,10 @@ void Font::renderAtlas()
     float x_max = 0;
     const char32_t *p;
     FT_GlyphSlot ftGlyph = m_ftFace->glyph;
-    std::string  text8(    " `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,"
-                          "./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?\\|"
-                          "йцукенгшщзхъфывапролджэячсмитьбю"
-                          "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123");
+    std::string  text8(" `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,"
+                       "./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?\\|"
+                       "йцукенгшщзхъфывапролджэячсмитьбю"
+                       "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123");
 
     std::u32string text;
 
@@ -81,7 +82,7 @@ void Font::renderAtlas()
         if(px > FDIM)
         {
             px = 0;
-            py += 100;
+            py += 20;
         }
 
         CharInfo ci;

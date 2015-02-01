@@ -12,16 +12,17 @@ See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include "gamewindow.h"
 #include "mouse.h"
 #include "keyboard.h"
 #include "gametimer.h"
+#include "fpscounter.h"
 #include "pixmap.h"
 #include "logger.h"
 #include "shader.h"
 #include "texture.h"
 #include "colorextender.h"
 #include "font.h"
+#include "prefecences.h"
 
 #endif // SGE_H
 

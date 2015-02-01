@@ -4,6 +4,9 @@
 #include <glm/glm.hpp>
 #include <string>
 
+#define RESX ((int)Prefecences::Instance()->resolution.x)
+#define RESY ((int)Prefecences::Instance()->resolution.y)
+
 class Prefecences
 {
 public:
