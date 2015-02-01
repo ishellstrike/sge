@@ -1,20 +1,23 @@
 #include "mouse.h"
 #include <glm/glm.hpp>
 
-GLFWwindow *Mouse::sm_window;
+GLFWwindow *Mouse::sm_window = nullptr;
 
-double Mouse::sm_xpos;
-double Mouse::sm_ypos;
+double Mouse::sm_xpos = 0;
+double Mouse::sm_ypos = 0;
 
-double Mouse::sm_dxpos;
-double Mouse::sm_dypos;
+double Mouse::sm_dxpos = 0;
+double Mouse::sm_dypos = 0;
 
-unsigned int Mouse::sm_windowWidth;
-unsigned int Mouse::sm_windowHeight;
+unsigned int Mouse::sm_windowWidth = 0;
+unsigned int Mouse::sm_windowHeight = 0;
 
-bool Mouse::sm_stateFixedMousePos;
-bool Mouse::sm_isCursorClientArea;
-bool Mouse::sm_isWindowFocused;
+bool Mouse::sm_stateFixedMousePos = false;
+bool Mouse::sm_isCursorClientArea = false;
+bool Mouse::sm_isWindowFocused = false;
+
+double Mouse::offset = 0;
+double Mouse::last_offset = 0;
 
 void Mouse::Initialize(GLFWwindow *win )
 {
@@ -39,6 +42,7 @@ void Mouse::SetButton( int button, int state ,int c )
 }
 
 void Mouse::Scroll(double a){
+    offset += a;
 }
 
 void Mouse::SetCursorPos( double x, double y )
@@ -133,6 +137,17 @@ void Mouse::CursorClientArea( int entered )
 void Mouse::resetDelta(){
     sm_deltaypos = 0;
     sm_deltaxpos = 0;
+    last_offset = offset;
+}
+
+bool Mouse::isWheelUp()
+{
+    return offset > last_offset;
+}
+
+bool Mouse::isWheelDown()
+{
+    return offset < last_offset;
 }
 
 void Mouse::WindowFocus( int focused )

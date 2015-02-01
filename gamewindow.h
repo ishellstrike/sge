@@ -17,13 +17,11 @@
 #include "mesh.h"
 
 class GameWindow {
-
+public:
+    void Mainloop();
     bool BaseInit();
     void BaseUpdate();
     void BaseDraw();
-
-public:
-    void Mainloop();
 
     GameTimer gt;
     FPSCounter fps;

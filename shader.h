@@ -13,7 +13,7 @@ public:
     std::vector<int> vars;
     void Use() const;
     GLint locateVars(const std::string &s);
-    void PushGlobalHeader(const std::string &s, const char *newParameter = "#version 210");
+    void PushGlobalHeader(const std::string &s, const char *newParameter = "#version 120");
     void loadShaderFromSource(GLenum type, const std::string &source);
     bool Link();
     GLint program;

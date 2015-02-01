@@ -41,3 +41,5 @@ void TextureAtlas::LoadAll()
     LOG(info) << "texatlas load texture";
 }
 
+Texture TextureAtlas::tex;
+

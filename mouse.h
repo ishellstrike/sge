@@ -25,6 +25,9 @@ private:
     static unsigned int sm_windowWidth;
     static unsigned int sm_windowHeight;
 
+    static double offset;
+    static double last_offset;
+
     static bool sm_stateFixedMousePos;
     static bool sm_isCursorClientArea;
     static bool sm_isWindowFocused;
@@ -63,6 +66,8 @@ public:
     static void resetDelta();
     static bool IsRightDown();
     static bool IsLeftDown();
+    static bool isWheelDown();
+    static bool isWheelUp();
 };
 
 
