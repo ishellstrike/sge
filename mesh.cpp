@@ -323,50 +323,49 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     if(Vertices.size() == 0){
         return;
     }
-    assert(shader && "no shader");
-    if(shader != nullptr) {
-        shader->Use();
-        if(shader->vars.size() > 0) {
-            auto mult = Model*World;
-            glUniformMatrix4fv(shader->vars[0], 1, GL_FALSE, &mult[0][0]);
-            glUniformMatrix4fv(shader->vars[1], 1, GL_FALSE, &proj[0][0]);
-            glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
-            glUniformMatrix3fv(shader->vars[4], 1, GL_FALSE, &normal[0][0]);
-            glUniform3fv(shader->vars[5], 1, &glm::vec3(10,10,10)[0]);
-        }
+    if(!shader)
+        throw std::logic_error("null shader");
+    if(!material)
+        throw std::logic_error("null material");
 
-        assert(material && "no material");
-        if(material != nullptr) {
-            if(shader->ambient_location != -1)
-                glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);
-            if(shader->diffuse_location != -1)
-                glUniform4fv(shader->diffuse_location,   1, &material->diffuse[0]);
-            if(shader->specular_location != -1)
-                glUniform4fv(shader->specular_location,  1, &material->specular[0]);
-            if(shader->emission_location != -1)
-                glUniform4fv(shader->emission_location,  1, &material->emission[0]);																			  
-            if(shader->shininess_location != -1)
-                glUniform1fv(shader->shininess_location, 1, &material->shininess);
+    shader->Use();
+    auto mult = Model*World;
+    glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &mult[0][0]);
+    glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &proj[0][0]);
+    glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
+    glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
+    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(10,10,10)[0]);
 
-            if(shader->texture_location != -1)
-                glUniform1i(shader->texture_location, 0);
-            if(shader->normal_location != -1)
-                glUniform1i(shader->normal_location, 1);
+    if(shader->ambient_location != -1)
+        glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);
+    if(shader->diffuse_location != -1)
+        glUniform4fv(shader->diffuse_location,   1, &material->diffuse[0]);
+    if(shader->specular_location != -1)
+        glUniform4fv(shader->specular_location,  1, &material->specular[0]);
+    if(shader->emission_location != -1)
+        glUniform4fv(shader->emission_location,  1, &material->emission[0]);
+    if(shader->shininess_location != -1)
+        glUniform1fv(shader->shininess_location, 1, &material->shininess);
 
-            if(material->texture != nullptr) {
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, material->texture->textureId);
-            }
-            if(material->normal != nullptr) {
-                glActiveTexture(GL_TEXTURE1);
-                glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
-                glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 1);
-            } else {
-                glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 0);
-            }
-        }
+    if(shader->texture_location != -1)
+        glUniform1i(shader->texture_location, 0);
+    if(shader->normal_location != -1)
+        glUniform1i(shader->normal_location, 1);
+
+    if(material->texture != nullptr) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, material->texture->textureId);
     }
+    if(material->normal != nullptr) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
+        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 1);
+    } else {
+        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 0);
+    }
+
     glBindVertexArray(m_vao);
+
     if(!patches) {
         glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, NULL);
     } else

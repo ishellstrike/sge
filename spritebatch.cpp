@@ -23,26 +23,26 @@ SpriteBatch::SpriteBatch()
     basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/basic.glsl");
     basic_program->Link();
     basic_program->Use();
-    basic_program->locateVars("MVP");
-    basic_program->locateVars("colorTexture");
-    basic_program->getAttrib();
+    basic_program->locateVar("MVP");
+    basic_program->locateVar("colorTexture");
+    basic_program->Afterlink();
     glUniform1i(basic_program->vars[1], 0);
 
     font_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/font.glsl");
     font_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/font.glsl");
     font_program->Link();
     font_program->Use();
-    font_program->locateVars("MVP");
-    font_program->locateVars("colorTexture");
-    font_program->getAttrib();
+    font_program->locateVar("MVP");
+    font_program->locateVar("colorTexture");
+    font_program->Afterlink();
     glUniform1i(font_program->vars[1], 0);
 
     color_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/color.glsl");
     color_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/color.glsl");
     color_program->Link();
     color_program->Use();
-    color_program->locateVars("MVP");
-    color_program->getAttrib();
+    color_program->locateVar("MVP");
+    color_program->Afterlink();
 
     current_program = basic_program;
 

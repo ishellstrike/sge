@@ -123,15 +123,7 @@ bool GameWindow::BaseInit()
     basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
     basic->Link();
     basic->Use();
-    basic->getAttrib();
-    basic->locateVars("transformmodel");
-    basic->locateVars("transformviewProjection");
-    basic->locateVars("material.texture");
-    basic->locateVars("transformviewPosition");
-    basic->locateVars("transformnormal");
-    basic->locateVars("transformlightPosition");
-    glUniform1i(basic->vars[2], 0);
-    glUniformMatrix4fv(basic->vars[3],  1, GL_FALSE,  &glm::translate(glm::mat4(1), glm::vec3(2.f,2.f,2.f))[0][0]);
+    basic->Afterlink();
 
     m = Tesselator::SphereTesselate(6, Cube::getMesh());
     m->shader = basic;

@@ -37,6 +37,7 @@ public:
     glm::mat4 World;
     std::string id;
     void CalcTB();
+    void matf();
 private:
     GLuint m_vao;
     GLuint* m_vbo;
