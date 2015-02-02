@@ -1,6 +1,6 @@
 #include "font.h"
 #include "logger.h"
-#include "utf8.h"
+#include "utfcpp/utf8.h"
 
 Font::Font() :
     font(std::make_shared<Texture>())

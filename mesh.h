@@ -3,7 +3,7 @@
 #define Mesh_h__
 
 #include "vpnt.h"
-#include <Gl/glew.h>
+#include <GL/glew.h>
 #include <vector>
 #include "basicjargshader.h"
 #include "texture.h"

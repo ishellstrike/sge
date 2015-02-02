@@ -1,7 +1,7 @@
 #include "spritebatch.h"
 #include "logger.h"
 #include <locale>
-#include "utf8.h"
+#include "utfcpp/utf8.h"
 
 typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
