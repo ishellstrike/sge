@@ -9,6 +9,7 @@
 #include <stdarg.h>
 #include <math.h>
 #include "colorextender.h"
+#include "string.h"
 
 #ifdef NDEBUG
 #define OPENGL_CHECK_ERRORS() \
@@ -64,6 +65,12 @@ inline double triangular(double min, double max) {
         return min + sqrt(U * (max - min) * (mean - min));
     else
         return max - sqrt((1 - U) * (max - min) * (max - mean));
+}
+
+template < typename _Ty >
+inline _Ty fade( _Ty t )
+{
+    return t * t * t * ( t * ( t * 6 - 15 ) + 10 );
 }
 
 inline double triangular() {

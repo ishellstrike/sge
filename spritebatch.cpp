@@ -85,7 +85,7 @@ glm::vec2 SpriteBatch::drawText(const std::string &text, float x, float y, Font 
         CharInfo cc = font->chars[*p];
         if(*p == '\n')
         {
-            y+=y_max;
+            y+=cc.advance.y + 10;
             x=x_start;
             continue;
         }

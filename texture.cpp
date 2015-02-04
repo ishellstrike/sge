@@ -66,6 +66,7 @@ void Texture::Empty(const glm::vec2 &size, GLuint dim /*= GL_TEXTURE_2D*/, GLuin
 
 void Texture::IdOnly()
 {
+    assert(!textureId);
     name = "id only";
     glGenTextures(1, &textureId);
 }

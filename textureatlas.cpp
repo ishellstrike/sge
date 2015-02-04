@@ -37,9 +37,9 @@ void TextureAtlas::LoadAll()
     }
     LOG(info) << "texatlas load " << i << " pixmaps";
 
-    tex.Load(atlas);
+    tex->Load(atlas);
     LOG(info) << "texatlas load texture";
 }
 
-Texture TextureAtlas::tex;
+std::shared_ptr<Texture> TextureAtlas::tex = std::make_shared<Texture>();
 

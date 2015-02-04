@@ -1,5 +1,6 @@
 #include "mouse.h"
 #include <glm/glm.hpp>
+#include "sge/prefecences.h"
 
 GLFWwindow *Mouse::sm_window = nullptr;
 
@@ -18,6 +19,7 @@ bool Mouse::sm_isWindowFocused = false;
 
 double Mouse::offset = 0;
 double Mouse::last_offset = 0;
+
 
 void Mouse::Initialize(GLFWwindow *win )
 {
@@ -65,8 +67,8 @@ void Mouse::SetCursorPos( double x, double y )
 
     if(sm_stateFixedMousePos)
     {
-        sm_xpos = double(sm_windowWidth) / 2.0;
-        sm_ypos = double(sm_windowHeight) / 2.0;
+        sm_xpos = double(RESX) / 2.0;
+        sm_ypos = double(RESY) / 2.0;
         glfwSetCursorPos(sm_window, sm_xpos, sm_ypos);
     }
     else
@@ -106,8 +108,8 @@ void Mouse::SetFixedPosState( bool state )
     sm_stateFixedMousePos = state;
     if(sm_stateFixedMousePos)
     {
-        sm_xpos = double(sm_windowWidth) / 2.0;
-        sm_ypos = double(sm_windowHeight) / 2.0;
+        sm_xpos = double(RESX) / 2.0;
+        sm_ypos = double(RESY) / 2.0;
         sm_dxpos = 0.0;
         sm_dypos = 0.0;
         glfwSetCursorPos(sm_window, sm_xpos, sm_ypos);
@@ -137,7 +139,7 @@ void Mouse::CursorClientArea( int entered )
 void Mouse::resetDelta(){
     sm_deltaypos = 0;
     sm_deltaxpos = 0;
-    last_offset = offset;
+    //last_offset = offset;
 }
 
 bool Mouse::isWheelUp()

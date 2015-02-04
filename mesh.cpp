@@ -262,7 +262,7 @@ void Mesh::Bind(int type /* = 0 */)
     }
     auto bindtype = type == 0 ? GL_STATIC_DRAW : GL_STREAM_DRAW;
 
-    if(m_vbo) {
+    if(m_vbo) { // rebind
         glBindVertexArray(0);
         glDisableVertexAttribArray(shader->posAttrib);
         glDisableVertexAttribArray(shader->uvAttrib);
@@ -334,7 +334,7 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &proj[0][0]);
     glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
     glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
-    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(10,10,10)[0]);
+    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(1000,-1000,-1000)[0]);
 
     if(shader->ambient_location != -1)
         glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);

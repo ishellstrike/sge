@@ -36,6 +36,7 @@ public:
     glm::vec3 Binormal;
     glm::vec2 Uv;
     VPNTBT(glm::vec3 norm, glm::vec3 pos, glm::vec2 uv);
+    VPNTBT(glm::vec3 pos, glm::vec2 uv);
     VPNTBT();
     ~VPNTBT();
 

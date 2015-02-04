@@ -223,7 +223,6 @@ void GameWindow::Resize(int w, int h)
     glViewport(0, 0, w, h);
     GameWindow::wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
     GameWindow::wi->proj_per = glm::perspective(45.0f, w /(float) h, 0.1f, 100.f);
-    GameWindow::wi->view = glm::mat4(1);
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     GameWindow::wi->model = glm::mat4(1.f);

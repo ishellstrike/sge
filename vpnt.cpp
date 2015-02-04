@@ -15,6 +15,10 @@ VPNTBT::VPNTBT(glm::vec3 norm, glm::vec3 pos , glm::vec2 uv) : Position(pos), No
 {
 }
 
+VPNTBT::VPNTBT(glm::vec3 pos , glm::vec2 uv) : Position(pos), Uv(uv)
+{
+}
+
 VPNTBT::VPNTBT() : Position(), Normal(), Uv()
 {
 }
