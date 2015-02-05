@@ -27,6 +27,7 @@ void TextureAtlas::LoadAll()
     {
         Pixmap tex(Prefecences::Instance()->getTexturesDir() + file);
         atlas.Blit(tex, glm::vec2(x * 32, y * 32));
+        refs[file] = i;
         x++;
         if(x + 1 >= 2048/32)
         {
@@ -42,4 +43,5 @@ void TextureAtlas::LoadAll()
 }
 
 std::shared_ptr<Texture> TextureAtlas::tex = std::make_shared<Texture>();
+std::unordered_map<std::string, int> TextureAtlas::refs;
 

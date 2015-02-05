@@ -11,18 +11,44 @@ VertexPositionTexture::~VertexPositionTexture()
 {
 }
 
-VPNTBT::VPNTBT(glm::vec3 norm, glm::vec3 pos , glm::vec2 uv) : Position(pos), Normal(norm), Uv(uv)
+VertPosNormTanBiTex::VertPosNormTanBiTex(glm::vec3 norm, glm::vec3 pos , glm::vec2 uv) : Position(pos), Normal(norm), Uv(uv)
 {
 }
 
-VPNTBT::VPNTBT(glm::vec3 pos , glm::vec2 uv) : Position(pos), Uv(uv)
+VertPosNormTanBiTex::VertPosNormTanBiTex(glm::vec3 pos , glm::vec2 uv) : Position(pos), Uv(uv)
 {
 }
 
-VPNTBT::VPNTBT() : Position(), Normal(), Uv()
+VertPosNormTanBiTex::VertPosNormTanBiTex() : Position(), Normal(), Uv()
 {
 }
 
-VPNTBT::~VPNTBT()
+VertPosNormTanBiTex::~VertPosNormTanBiTex()
 {
+}
+
+
+VertPosMininormTex::VertPosMininormTex(unsigned char norm, glm::vec3 pos, glm::vec2 uv) :
+    Normal(norm),
+    Position(pos),
+    Uv(uv)
+{
+
+}
+
+VertPosMininormTex::VertPosMininormTex(glm::vec3 pos, glm::vec2 uv) :
+    Position(pos),
+    Uv(uv)
+{
+
+}
+
+VertPosMininormTex::VertPosMininormTex()
+{
+
+}
+
+VertPosMininormTex::~VertPosMininormTex()
+{
+
 }

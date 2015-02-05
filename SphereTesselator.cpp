@@ -54,11 +54,11 @@ Mesh* Tesselator::SphereSubTesselate(const Mesh& mesh)
     int off = 0;
     for (int i =0; i< mesh.Indices.size() -2; i+= 3)
     {
-        VPNTBT t;
+        VertPosNormTanBiTex t;
 
-        VPNTBT v0 = mesh.Vertices[mesh.Indices[i]];
-        VPNTBT v1 = mesh.Vertices[mesh.Indices[i+1]];
-        VPNTBT v2 = mesh.Vertices[mesh.Indices[i+2]];
+        VertPosNormTanBiTex v0 = mesh.Vertices[mesh.Indices[i]];
+        VertPosNormTanBiTex v1 = mesh.Vertices[mesh.Indices[i+1]];
+        VertPosNormTanBiTex v2 = mesh.Vertices[mesh.Indices[i+2]];
 
         t = v0;
         t.Position = glm::normalize(t.Position);
@@ -116,7 +116,7 @@ Mesh* Tesselator::SubTesselate(const Mesh& mesh)
     int off = 0;
     for (int i =0; i< mesh.Indices.size() -2; i+= 3)
     {
-        VPNTBT t;
+        VertPosNormTanBiTex t;
 
         m->Vertices.push_back(mesh.Vertices[mesh.Indices[i]]);
         m->Vertices.push_back(mesh.Vertices[mesh.Indices[i+1]]);

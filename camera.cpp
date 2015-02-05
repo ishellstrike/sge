@@ -68,7 +68,7 @@ void Camera::SetPosition(glm::vec3 pos) {
 
 void Camera::SetLookAt(glm::vec3 pos) {
     look_at = pos;
-    rotation_quaternion = glm::quat_cast(glm::lookAt(position, pos, glm::vec3(0,0,-1)));
+    rotation_quaternion = glm::quat_cast(glm::lookAt(position, pos, glm::vec3(0,0,1)));
 }
 void Camera::SetFOV(double fov) {
     field_of_view = fov;
@@ -91,22 +91,22 @@ void Camera::Move(CameraDirection dir, GameTimer *gt) {
     if (camera_mode == FREE) {
         switch (dir) {
         case UP:
-           position_delta += glm::vec3(0, -camera_scale, 0) * rotation_quaternion * (float) gt->elapsed * 5.f;
+           position_delta += glm::vec3(0, -camera_scale, 0) * rotation_quaternion * (float) gt->elapsed;
             break;
         case DOWN:
-            position_delta += glm::vec3(0, camera_scale, 0) * rotation_quaternion * (float) gt->elapsed * 5.f;
+            position_delta += glm::vec3(0, camera_scale, 0) * rotation_quaternion * (float) gt->elapsed;
             break;
         case LEFT:
-           position_delta += glm::vec3(-camera_scale, 0, 0) * rotation_quaternion * (float) gt->elapsed * 5.f;
+           position_delta += glm::vec3(-camera_scale, 0, 0) * rotation_quaternion * (float) gt->elapsed;
             break;
         case RIGHT:
-           position_delta += glm::vec3(camera_scale, 0, 0) * rotation_quaternion * (float) gt->elapsed * 5.f;
+           position_delta += glm::vec3(camera_scale, 0, 0) * rotation_quaternion * (float) gt->elapsed;
             break;
         case FORWARD:
-            position_delta += glm::vec3(0, 0, -camera_scale) * rotation_quaternion * (float) gt->elapsed * 5.f;
+            position_delta += glm::vec3(0, 0, -camera_scale) * rotation_quaternion * (float) gt->elapsed;
             break;
         case BACK:
-           position_delta += glm::vec3(0, 0, camera_scale) * rotation_quaternion * (float) gt->elapsed * 5.f;
+           position_delta += glm::vec3(0, 0, camera_scale) * rotation_quaternion * (float) gt->elapsed;
             break;
         }
     }

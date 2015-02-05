@@ -22,10 +22,12 @@ Mesh::~Mesh(void)
     if(m_vbo) {
         glDeleteBuffers(2, m_vbo);
         glBindVertexArray(0);
-        glDeleteVertexArrays(1, &m_vao);
+        glDeleteVertexArrays(1, m_vao);
 
         delete[] m_vbo;
         m_vbo = nullptr;
+        delete[] m_vao;
+        m_vao = nullptr;
         OPENGL_CHECK_ERRORS();
     }
 }
@@ -33,7 +35,7 @@ Mesh::~Mesh(void)
 void Mesh::Unindex()
 {
     Vertices.resize(Indices.size());
-    auto temp = std::vector<VPNTBT>(Vertices);
+    auto temp = std::vector<VertPosNormTanBiTex>(Vertices);
     for(int i=0; i<Indices.size();i++){
         Vertices[i] = temp[Indices[i]];
         Indices[i] = i;
@@ -175,7 +177,7 @@ void Mesh::MergeVerteces()
     }
 }
 
-void Mesh::Create(std::vector<VPNTBT> v, std::vector<GLuint> i)
+void Mesh::Create(std::vector<VertPosNormTanBiTex> v, std::vector<GLuint> i)
 {
     Vertices.assign(v.begin(), v.end());
     Indices.assign(i.begin(), i.end());
@@ -235,7 +237,7 @@ bool Mesh::loadOBJ(std::string path)
     Vertices.clear();
     Vertices.resize(vertexIndices.size());
     for( unsigned int i=0; i<vertexIndices.size(); i++ ){
-        Vertices[i] = VPNTBT(temp_normals[normalIndices[i]-1], temp_vertices[vertexIndices[i]-1], temp_uvs[uvIndices[i]-1]);
+        Vertices[i] = VertPosNormTanBiTex(temp_normals[normalIndices[i]-1], temp_vertices[vertexIndices[i]-1], temp_uvs[uvIndices[i]-1]);
     }
     /*for( unsigned int i=0; i<vertexIndices.size(); i++ ){
     unsigned int vertexIndex = vertexIndices[i];
@@ -269,25 +271,26 @@ void Mesh::Bind(int type /* = 0 */)
         glDisableVertexAttribArray(shader->normAttrib);
 
         glDeleteBuffers(2, m_vbo);
-        glDeleteVertexArrays(1, &m_vao);
+        glDeleteVertexArrays(1, m_vao);
         m_vao = 0;
     }
 
-    if(m_vao == 0){
-        glGenVertexArrays(1, &m_vao);
-        glBindVertexArray(m_vao);
+    if(m_vao == nullptr){
+        m_vao = new GLuint[1];
+        glGenVertexArrays(1, m_vao);
+        glBindVertexArray(*m_vao);
         if(m_vbo){
             delete[] m_vbo;
         }
         m_vbo = new GLuint[2];
         glGenBuffers(2, m_vbo);
     } else {
-        glBindVertexArray(m_vao);
+        glBindVertexArray(*m_vao);
     }
-    GLuint stride = sizeof(VPNTBT);
+    GLuint stride = sizeof(VertPosNormTanBiTex);
     GLuint offset = 0;
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(VPNTBT)*Vertices.size(), &Vertices[0], bindtype);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(VertPosNormTanBiTex)*Vertices.size(), &Vertices[0], bindtype);
     glEnableVertexAttribArray(shader->posAttrib);
     glVertexAttribPointer(shader->posAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
     glEnableVertexAttribArray(shader->normAttrib);
@@ -301,6 +304,8 @@ void Mesh::Bind(int type /* = 0 */)
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indices.size(), &Indices[0], bindtype);
+
+    loaded = Indices.size();
 
     OPENGL_CHECK_ERRORS();
 }
@@ -320,7 +325,7 @@ void Mesh::Render(const glm::mat4 &proj, bool patches /* = false*/)
 
 inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool patches /* = false*/)
 {
-    if(Vertices.size() == 0){
+    if(Vertices.size() == 0 && !loaded){
         return;
     }
     if(!shader)
@@ -364,14 +369,14 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
         glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 0);
     }
 
-    glBindVertexArray(m_vao);
+    glBindVertexArray(*m_vao);
 
     if(!patches) {
-        glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_TRIANGLES, loaded, GL_UNSIGNED_INT, NULL);
     } else
     {
         glPatchParameteri(GL_PATCH_VERTICES, 4);
-        glDrawElements(GL_PATCHES, Indices.size(), GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_PATCHES, loaded, GL_UNSIGNED_INT, NULL);
     }
     glBindVertexArray(0);
 }
@@ -424,4 +429,14 @@ void Mesh::BuildBounding()
             }
         }
     }
+}
+
+void Mesh::ForgetBind()
+{
+    Bind();
+    loaded = Indices.size();
+    Indices.clear();
+    Indices.shrink_to_fit();
+    Vertices.clear();
+    Vertices.shrink_to_fit();
 }

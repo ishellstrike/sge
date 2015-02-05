@@ -17,7 +17,7 @@ class Mesh
 public:
     Mesh(void);
     ~Mesh(void);
-    void Create(std::vector<VPNTBT> verteces, std::vector<GLuint> indeces);
+    void Create(std::vector<VertPosNormTanBiTex> verteces, std::vector<GLuint> indeces);
     void Bind(int type = 0);
     void Render(const glm::mat4 &proj, bool patches = false);
     void Render(const glm::mat4 &Model, const glm::mat4 &proj, bool patches = false);
@@ -27,10 +27,14 @@ public:
     void Unindex();
     void MergeVerteces();
     void BuildBounding();
+
+    /** Bind + remove local
+     */
+    void ForgetBind();
     //void RenderBounding(Batched &sb, mat4 Model);
     glm::vec3 minBound, maxBound;
 
-    std::vector<VPNTBT> Vertices;
+    std::vector<VertPosNormTanBiTex> Vertices;
     std::vector<GLuint> Indices;
     std::shared_ptr<BasicJargShader> shader;
     std::shared_ptr<Material> material;
@@ -38,9 +42,10 @@ public:
     std::string id;
     void CalcTB();
     void matf();
+    int loaded;
 private:
-    GLuint m_vao;
-    GLuint* m_vbo;
+    GLuint *m_vao = nullptr;
+    GLuint *m_vbo;
 };
 #endif // Mesh_h__
 
