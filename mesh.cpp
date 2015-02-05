@@ -337,20 +337,20 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     auto mult = Model*World;
     glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &mult[0][0]);
     glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &proj[0][0]);
-    glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
-    glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
-    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(1000,-1000,-1000)[0]);
+    //glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
+    //glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
+    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(100000,234560,9850)[0]);
 
-    if(shader->ambient_location != -1)
-        glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);
-    if(shader->diffuse_location != -1)
-        glUniform4fv(shader->diffuse_location,   1, &material->diffuse[0]);
-    if(shader->specular_location != -1)
-        glUniform4fv(shader->specular_location,  1, &material->specular[0]);
-    if(shader->emission_location != -1)
-        glUniform4fv(shader->emission_location,  1, &material->emission[0]);
-    if(shader->shininess_location != -1)
-        glUniform1fv(shader->shininess_location, 1, &material->shininess);
+    //    if(shader->ambient_location != -1)
+    //        glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);
+    //    if(shader->diffuse_location != -1)
+    //        glUniform4fv(shader->diffuse_location,   1, &material->diffuse[0]);
+    //    if(shader->specular_location != -1)
+    //        glUniform4fv(shader->specular_location,  1, &material->specular[0]);
+    //    if(shader->emission_location != -1)
+    //        glUniform4fv(shader->emission_location,  1, &material->emission[0]);
+    //    if(shader->shininess_location != -1)
+    //        glUniform1fv(shader->shininess_location, 1, &material->shininess);
 
     if(shader->texture_location != -1)
         glUniform1i(shader->texture_location, 0);
@@ -378,7 +378,7 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
         glPatchParameteri(GL_PATCH_VERTICES, 4);
         glDrawElements(GL_PATCHES, loaded, GL_UNSIGNED_INT, NULL);
     }
-    glBindVertexArray(0);
+    //glBindVertexArray(0);
 }
 
 void Mesh::Combine(Mesh* com)

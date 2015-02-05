@@ -29,7 +29,7 @@ void TextureAtlas::LoadAll()
         atlas.Blit(tex, glm::vec2(x * 32, y * 32));
         refs[file] = i;
         x++;
-        if(x + 1 >= 2048/32)
+        if(x >= 2048/32)
         {
             x = 0;
             y++;
@@ -38,7 +38,7 @@ void TextureAtlas::LoadAll()
     }
     LOG(info) << "texatlas load " << i << " pixmaps";
 
-    tex->Load(atlas);
+    tex->Load(atlas, false, true);
     LOG(info) << "texatlas load texture";
 }
 
