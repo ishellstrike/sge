@@ -64,17 +64,17 @@ static const int perm[] = {
     138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215,
     61, 156, 180};
 
-inline float dot3( glm::vec3 g, float x, float y, float z )
+inline float dot3(const glm::vec3 &g, float x, float y, float z )
 {
     return g[0] * x + g[1] * y + g[2] * z;
 }
 
-inline float dot4 ( glm::vec4 g, float x, float y, float z, float w )
+inline float dot4 (const glm::vec4 &g, float x, float y, float z, float w )
 {
     return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
 }
 
-inline float dot2 ( glm::vec3 g, float x, float y )
+inline float dot2 (const glm::vec3 &g, float x, float y )
 {
     return g[0] * x + g[1] * y;
 }

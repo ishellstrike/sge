@@ -34,8 +34,8 @@ Mesh::~Mesh(void)
 
 void Mesh::Unindex()
 {
-    Vertices.resize(Indices.size());
-    auto temp = std::vector<VertPosNormTanBiTex>(Vertices);
+    auto temp = std::move(Vertices);
+    Vertices.resize(Indices.size()); 
     for(int i=0; i<Indices.size();i++){
         Vertices[i] = temp[Indices[i]];
         Indices[i] = i;
@@ -361,13 +361,13 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, material->texture->textureId);
     }
-    if(material->normal != nullptr) {
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
-        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 1);
-    } else {
-        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 0);
-    }
+//    if(material->normal != nullptr) {
+//        glActiveTexture(GL_TEXTURE1);
+//        glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
+//        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 1);
+//    } else {
+//        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 0);
+//    }
 
     glBindVertexArray(*m_vao);
 
@@ -378,7 +378,7 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
         glPatchParameteri(GL_PATCH_VERTICES, 4);
         glDrawElements(GL_PATCHES, loaded, GL_UNSIGNED_INT, NULL);
     }
-    //glBindVertexArray(0);
+    glBindVertexArray(0);
 }
 
 void Mesh::Combine(Mesh* com)

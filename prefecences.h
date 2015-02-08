@@ -52,7 +52,7 @@ public:
     glm::vec2 resolution = glm::vec2(800, 600);
 
     /*!
-     * \brief data_dir
+     * \brief data dir
      */
     std::string data_dir = "data/";
 
@@ -70,7 +70,7 @@ public:
     }
 
     /*!
-     * \brief shaders_data_subdir
+     * \brief shaders data subdir
      */
     std::string shaders_data_subdir = "shaders/";
     /*!
@@ -83,7 +83,7 @@ public:
     }
 
     /*!
-     * \brief shaders_data_subdir
+     * \brief shaders data subdir
      */
     std::string fonts_data_subdir = "fonts/";
     /*!
@@ -93,6 +93,19 @@ public:
     std::string getFontsDir()
     {
         return data_dir + fonts_data_subdir;
+    }
+
+    /*!
+     * \brief json data subdir
+     */
+    std::string json_data_subdir = "json/";
+    /*!
+     * \brief getJsonDir
+     * \return json directory name
+     */
+    std::string getJsonDir()
+    {
+        return data_dir + json_data_subdir;
     }
 };
 

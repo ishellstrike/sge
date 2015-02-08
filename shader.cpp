@@ -57,7 +57,7 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
     name = source;
     std::string part_name;
     if(!has_header){
-        ss << "#version 120" << std::endl;
+        ss << GLSLVER << std::endl;
     }
     if(type == GL_FRAGMENT_SHADER) {
         part_name = "#define _FRAGMENT_";
@@ -138,7 +138,7 @@ void JargShader::PushGlobalHeader(const std::string &source, const char *newPara
     name = source;
     std::string part_name;
     if(!has_header) {
-        ss << "#version 120" << std::endl;
+        ss << newParameter << std::endl;
     } else {
         ss << global_header;
     }

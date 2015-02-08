@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <GL/glew.h>
+#define GLSLVER "#version 330 core"
 
 class JargShader{
 public:
@@ -13,7 +14,7 @@ public:
     std::vector<int> vars;
     void Use() const;
     GLint locateVar(const std::string &s);
-    void PushGlobalHeader(const std::string &s, const char *newParameter = "#version 120");
+    void PushGlobalHeader(const std::string &s, const char *newParameter = GLSLVER);
     void loadShaderFromSource(GLenum type, const std::string &source);
     bool Link();
     GLint program;

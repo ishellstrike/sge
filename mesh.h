@@ -45,7 +45,7 @@ public:
     int loaded;
 private:
     GLuint *m_vao = nullptr;
-    GLuint *m_vbo;
+    GLuint *m_vbo = nullptr;
 };
 #endif // Mesh_h__
 
