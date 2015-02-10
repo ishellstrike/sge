@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <GL/glew.h>
-#define GLSLVER "#version 330 core"
+#define GLSLVER "#version 120"
 
 class JargShader{
 public:
