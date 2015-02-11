@@ -8,15 +8,20 @@
 #include "gametimer.h"
 
 
-enum CameraType {
-    ORTHO, FREE
-};
-enum CameraDirection {
-    UP, DOWN, LEFT, RIGHT, FORWARD, BACK
-};
-
 class Camera {
 public:
+    enum CameraType {
+        ORTHO, FREE
+    };
+    enum CameraDirection {
+        UP, DOWN, LEFT, RIGHT, FORWARD, BACK
+    };
+    enum FrustrumPlane {
+        RIGHT_PLANE, LEFT_PLANE, BOTTOM_PLANE, TOP_PLANE, BACK_PLANE, FRONT_PLANE
+    };
+
+    float m_clipMatrix[16];
+    float m_frustum[6][4];
     Camera();
     ~Camera();
 
@@ -97,6 +102,8 @@ public:
     glm::mat4 model;
     glm::mat4 MVP;
 
+    void CalculateFrustum(const glm::mat4 &projectionMatrix, const glm::mat4 &modelViewMatrix);
+    bool BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max);
 };
 const glm::mat4 OrthoProjection(float left, float right, float bottom, float top, float zNear, float zFar);
 #endif // Camera_h_

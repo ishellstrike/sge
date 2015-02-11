@@ -339,7 +339,7 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &proj[0][0]);
     //glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
     //glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
-    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(100000,234560,9850)[0]);
+    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(100000,234560,98500)[0]);
 
     //    if(shader->ambient_location != -1)
     //        glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);

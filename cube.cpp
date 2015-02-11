@@ -35,7 +35,7 @@ const Mesh Cube::getMesh()
     Mesh* m = new Mesh();
     m->Indices.resize(INDEXCOUNT);
     m->Vertices.resize(VERTEXCOUNT);
-    for(unsigned int i = 0; i < 6; i++)
+    for(unsigned int i = 0; i < 6; ++i)
     {
         m->Vertices[i*4].Position = __vertexPositions[i * 4 + 0];
         m->Vertices[i*4].Uv = glm::vec2(1,1);
@@ -50,7 +50,7 @@ const Mesh Cube::getMesh()
         m->Vertices[i*4 + 3].Uv = glm::vec2(0,1);
     }
 
-    for (int i =0; i< INDEXCOUNT; i++)
+    for (int i =0; i< INDEXCOUNT; ++i)
     {
         m->Indices.push_back(__vertexIndex[i]);
     }

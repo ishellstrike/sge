@@ -34,11 +34,11 @@ void TextureAtlas::LoadAll()
             x = 0;
             y++;
         }
-        i++;
+        ++i;
     }
     LOG(info) << "texatlas load " << i << " pixmaps";
 
-    tex->Load(atlas, false, true);
+    tex->Load(atlas, false, false);
     LOG(info) << "texatlas load texture";
 }
 

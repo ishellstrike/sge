@@ -38,7 +38,7 @@ void Pixmap::Blit(const Pixmap &source, const glm::vec2 &pos)
         throw std::out_of_range("target pixmap not enough large");
     }
 
-    for(unsigned i = 0; i < source.height; i++)
+    for(unsigned i = 0; i < source.height; ++i)
         memcpy(&data[(height * (i + (int) pos.y) + (int) pos.x)*4],
                &source.data[(source.height * i)*4],
                sizeof(unsigned char) * 4 * source.width);

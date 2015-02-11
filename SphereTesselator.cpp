@@ -4,7 +4,7 @@
 Mesh* Tesselator::Tesselate(int iters, const Mesh& mesh)
 {
     Mesh* m = new Mesh(mesh);
-    for (int i = 0; i< iters; i++)
+    for (int i = 0; i< iters; ++i)
     {
         auto temp = SubTesselate(*m);
         delete m;
@@ -16,7 +16,7 @@ Mesh* Tesselator::Tesselate(int iters, const Mesh& mesh)
 Mesh* Tesselator::SphereTesselate(int iters, const Mesh& mesh)
 {
     Mesh* m = new Mesh(mesh);
-    for (int i = 0; i< iters; i++)
+    for (int i = 0; i< iters; ++i)
     {
         auto temp = SphereSubTesselate(*m);
         delete m;

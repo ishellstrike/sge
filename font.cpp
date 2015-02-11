@@ -45,10 +45,10 @@ void Font::renderAtlas()
     float x_max = 0;
     const char32_t *p;
     FT_GlyphSlot ftGlyph = m_ftFace->glyph;
-    std::string  text8(" `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,"
-                       "./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?\\|"
-                       "йцукенгшщзхъфывапролджэячсмитьбю"
-                       "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123");
+    std::string  text8(R"xxx( `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,
+                       ./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?\|
+                       йцукенгшщзхъфывапролджэячсмитьбю
+                       ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123)xxx");
 
     std::u32string text;
 

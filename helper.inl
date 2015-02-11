@@ -166,4 +166,13 @@ namespace std
     inline std::string to_string(const glm::mat4& a){
         return string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}", a[0][0], a[1][0], a[2][0], a[3][0], a[0][1], a[1][1], a[2][1], a[3][1], a[0][2], a[1][2], a[2][2], a[3][2], a[0][3], a[1][3], a[2][3], a[3][3]);
     }
+    inline std::string to_string(const float a[6][4]){
+        return string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}",
+                             a[0][0], a[0][1], a[0][2], a[0][3],
+                             a[1][0], a[1][1], a[1][2], a[1][3],
+                             a[2][0], a[2][1], a[2][2], a[2][3],
+                             a[3][0], a[3][1], a[3][2], a[3][3],
+                             a[4][0], a[4][1], a[4][2], a[4][3],
+                             a[5][0], a[5][1], a[5][2], a[5][3]);
+    }
 }

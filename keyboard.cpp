@@ -5,7 +5,7 @@ int Keyboard::sm_keys[GLFW_KEY_LAST];
 
 void Keyboard::Initialize()
 {
-    for(unsigned int i = 0; i < GLFW_KEY_LAST; i++)
+    for(unsigned int i = 0; i < GLFW_KEY_LAST; ++i)
     {
         sm_keys[i] = GLFW_RELEASE;
     }

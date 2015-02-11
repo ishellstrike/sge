@@ -47,7 +47,7 @@ Mesh Icosahedron::getMesh()
     v[0] = glm::vec3(0, 0.5, 0);
     v[11] = glm::vec3(0, -0.5, 0);
 
-    for (int i=1; i<6; i++)
+    for (int i=1; i<6; ++i)
     {
         v[i] = glm::vec3(0.5 * sin(currentAngle) * cos(magicAngle),
             0.5 * sin(magicAngle),
@@ -55,7 +55,7 @@ Mesh Icosahedron::getMesh()
         currentAngle += segmentAngle;
     }
     currentAngle = M_PI * 36 / 180;
-    for (int i=6; i<11; i++)
+    for (int i=6; i<11; ++i)
     {
         v[i] = glm::vec3(0.5 * sin(currentAngle) * cos(-magicAngle),
             0.5 * sin(-magicAngle),
@@ -66,13 +66,13 @@ Mesh Icosahedron::getMesh()
     m->Vertices.resize(VERTEXCOUNT);
     m->Indices.resize(INDEXCOUNT);
 
-    for (int i=0; i < VERTEXCOUNT; i++)
+    for (int i=0; i < VERTEXCOUNT; ++i)
     {
         m->Vertices[i].Position = v[i];
         m->Vertices[i].Uv =  glm::vec2(rand()%100/100.0,rand()%100/100.0);
     }
 
-    for (int i=0; i < INDEXCOUNT; i++)
+    for (int i=0; i < INDEXCOUNT; ++i)
     {
         m->Indices[i] = __indeces[i];
     }
