@@ -3,7 +3,7 @@
 #include <ctime>
 #include <memory>
 #include <thread>
-#include "helper.inl"
+#include "helper.h"
 
 Log::Log(int type, const char *file, int line) :
     o_stream(std::cout.rdbuf()),

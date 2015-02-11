@@ -2,7 +2,7 @@
 #define FIELSYSTEM
 #include "logger.h"
 #include <vector>
-#include "helper.inl"
+#include "helper.h"
 
 #ifdef _WIN32
     #include <windows.h>

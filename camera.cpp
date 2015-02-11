@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_transform.inl>
 #include <glm/gtx/quaternion.hpp>
 #include <string>
-#include "helper.inl"
+#include "helper.h"
 #include <glm/gtc/quaternion.hpp>
 
 Camera::Camera() {
@@ -21,7 +21,7 @@ Camera::Camera() {
     auto windowWidth = 1;
     auto windowHeight = 1;
     aspect = float(windowWidth) / float(windowHeight);
-camera_heading = camera_pitch = 0;
+    camera_heading = camera_pitch = 0;
 }
 Camera::~Camera() {
 }
@@ -52,14 +52,6 @@ void Camera::Update() {
     direction = glm::vec3(view[0][0],view[0][1],view[0][2]);
     model = glm::mat4(1.0f);
     MVP = projection * view * model;
-    //glLoadMatrixf(glm::value_ptr(MVP));
-}
-
-//Setting Functions
-void Camera::SetMode(CameraType cam_mode) {
-    camera_mode = cam_mode;
-    up = glm::vec3(0.0, 1.0, 0.0);
-    rotation_quaternion = glm::quat(1.0, 0.0, 0.0, 0.0);
 }
 
 void Camera::SetPosition(glm::vec3 pos) {
@@ -78,7 +70,6 @@ void Camera::SetViewport(int loc_x, int loc_y, int width, int height) {
     viewport_y = loc_y;
     window_width = width;
     window_height = height;
-    //need to use doubles division here, it will not work otherwise and it is possible to get a zero aspect ratio with integer rounding
     aspect = double(width) / double(height);
     ;
 }
@@ -112,7 +103,6 @@ void Camera::Move(CameraDirection dir, GameTimer *gt) {
     }
 }
 void Camera::ChangePitch(float degrees) {
-    //Check bounds with the max pitch rate so that we aren't moving too fast
     if (degrees < -max_pitch_rate) {
         degrees = -max_pitch_rate;
     } else if (degrees > max_pitch_rate) {
@@ -120,7 +110,6 @@ void Camera::ChangePitch(float degrees) {
     }
     camera_pitch += degrees;
 
-    //Check bounds for the camera pitch
     if (camera_pitch > 360.0f) {
         camera_pitch -= 360.0f;
     } else if (camera_pitch < -360.0f) {
@@ -128,20 +117,16 @@ void Camera::ChangePitch(float degrees) {
     }
 }
 void Camera::ChangeHeading(float degrees) {
-    //Check bounds with the max heading rate so that we aren't moving too fast
     if (degrees < -max_heading_rate) {
         degrees = -max_heading_rate;
     } else if (degrees > max_heading_rate) {
         degrees = max_heading_rate;
     }
-    //This controls how the heading is changed if the camera is pointed straight up or down
-    //The heading delta direction changes
     if (camera_pitch > 90 && camera_pitch < 270 || (camera_pitch < -90 && camera_pitch > -270)) {
         camera_heading -= degrees;
     } else {
         camera_heading += degrees;
     }
-    //Check bounds for the camera heading
     if (camera_heading > 360.0f) {
         camera_heading -= 360.0f;
     } else if (camera_heading < -360.0f) {
@@ -149,31 +134,11 @@ void Camera::ChangeHeading(float degrees) {
     }
 }
 void Camera::Move2D(int x, int y, GameTimer *gt) {
-    //compute the mouse delta from the previous mouse position
     glm::vec3 mouse_delta = glm::vec3(x, y, 0) * 3.0F;
-    //if the camera is moving, meaning that the mouse was clicked and dragged, change the pitch and heading
     if (move_camera) {
         ChangeHeading(0.08f * gt->elapsed * mouse_delta.x);
         ChangePitch(0.08f * gt->elapsed * mouse_delta.y);
     }
-    //mouse_position = glm::vec3(x, y, 0);
-}
-
-void Camera::SetPos(int button, int state, int x, int y) {
-    //if (button == 3 && state == GLUT_DOWN) {
-    // position_delta += up * .05f;
-    //} else if (button == 4 && state == GLUT_DOWN) {
-    // position_delta -= up * .05f;
-    //} else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-    // move_camera = true;
-    //} else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-    // move_camera = false;
-    //}
-    //mouse_position = glm::vec3(x, y, 0);
-}
-
-Camera::CameraType Camera::GetMode() {
-    return camera_mode;
 }
 
 void Camera::GetViewport(int &loc_x, int &loc_y, int &width, int &height) {
@@ -203,8 +168,9 @@ std::string Camera::getFullDebugDescription()
 }
 
 void NormalizePlane(float frustum[6][4], int side) {
-    float magnitude = ( float )sqrt( ( frustum[side][0] * frustum[side][0] ) + ( frustum[side][1] * frustum[side][1] )
-                                        + ( frustum[side][2] * frustum[side][2] ) );
+    float magnitude = (float)sqrt((frustum[side][0] * frustum[side][0]) +
+                                  (frustum[side][1] * frustum[side][1]) +
+                                  (frustum[side][2] * frustum[side][2]));
     frustum[side][0] /= magnitude;
     frustum[side][1] /= magnitude;
     frustum[side][2] /= magnitude;
@@ -275,13 +241,13 @@ void Camera::CalculateFrustum( const glm::mat4 &projectionMatrix, const glm::mat
 bool Camera::BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max) {
     for(int i = 0; i < 6; i++) {
         if((m_frustum[i][0] * min.x + m_frustum[i][1] * min.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
-            (m_frustum[i][0] * max.x + m_frustum[i][1] * min.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
-            (m_frustum[i][0] * min.x + m_frustum[i][1] * max.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
-            (m_frustum[i][0] * max.x + m_frustum[i][1] * max.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
-            (m_frustum[i][0] * min.x + m_frustum[i][1] * min.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F) &&
-            (m_frustum[i][0] * max.x + m_frustum[i][1] * min.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F) &&
-            (m_frustum[i][0] * min.x + m_frustum[i][1] * max.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F) &&
-            (m_frustum[i][0] * max.x + m_frustum[i][1] * max.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F))
+           (m_frustum[i][0] * max.x + m_frustum[i][1] * min.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
+           (m_frustum[i][0] * min.x + m_frustum[i][1] * max.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
+           (m_frustum[i][0] * max.x + m_frustum[i][1] * max.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
+           (m_frustum[i][0] * min.x + m_frustum[i][1] * min.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F) &&
+           (m_frustum[i][0] * max.x + m_frustum[i][1] * min.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F) &&
+           (m_frustum[i][0] * min.x + m_frustum[i][1] * max.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F) &&
+           (m_frustum[i][0] * max.x + m_frustum[i][1] * max.y + m_frustum[i][2] * max.z + m_frustum[i][3] <= 0.0F))
         {
               return false;
         }
@@ -292,23 +258,4 @@ bool Camera::BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max) {
 glm::mat4 Camera::VP() const
 {
     return projection*view;
-}
-
-glm::mat4 Camera::GetOrthoProjection()
-{
-    auto orthoProjection = glm::ortho(0.0f, (float)window_width, (float)window_height, 0.0f, 0.1f, 100.0f);
-    return orthoProjection;
-}
-
-const glm::mat4 OrthoProjection(float left, float right,
-                           float bottom, float top, float zNear, float zFar)
-{
-    const float tx = - (right + left) / (right - left),
-        ty = - (top + bottom) / (top - bottom),
-        tz = - (zFar + zNear) / (zFar - zNear);
-
-    return glm::mat4(2 / (right - left), 0, 0, tx,
-        0, 2 / (top - bottom), 0, ty,
-        0, 0, -2 / (zFar - zNear), tz,
-        0, 0, 0, 1);
 }

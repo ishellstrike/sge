@@ -1,6 +1,6 @@
 #include "ClassicNoise.h"
 #include <glm/glm.hpp>
-#include "helper.inl"
+#include "helper.h"
 
 #define v3 glm::vec3
 #define v4 glm::vec4

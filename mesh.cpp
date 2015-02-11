@@ -2,7 +2,7 @@
 #include <vector>
 #include <math.h>
 #include "spritebatch.h"
-#include "helper.inl"
+#include "helper.h"
 #include "logger.h"
 
 Mesh::Mesh(void) :

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include "logger.h"
-#include "helper.inl"
+#include "helper.h"
 
 #define printLog(obj){int infologLength = 0; \
     char infoLog[1024]; \

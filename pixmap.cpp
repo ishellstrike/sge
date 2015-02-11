@@ -1,7 +1,7 @@
 #include "pixmap.h"
 #include "lodepng/lodepng.h"
 #include "logger.h"
-#include "helper.inl"
+#include "helper.h"
 
 Pixmap::Pixmap(const std::string &a)
 {

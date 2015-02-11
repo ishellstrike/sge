@@ -144,6 +144,56 @@ inline std::string to_traf_string(double traf){
     return string_format("%i B", (int)traf);
 }
 
+namespace glm {
+    struct ray {
+        ray() {}
+        ray(glm::vec3 p, glm::vec3 d) : pos(p), dir(d) {}
+        ray(const ray &r) : pos(r.pos), dir(r.dir) {}
+        ray &operator =(const ray &r) {if (this != &other) {pos = r.pos; dir = r.dir;} return *this;}
+        ~ray() {}
+
+        glm::vec3 pos;
+        glm::vec3 dir;
+    };
+
+    ray normalize(const ray &x)
+    {
+        return ray(x.pos, normalize(x.dir));
+    }
+
+    bool Box::intersect(const Ray &r, float t0, float t1) const
+    {
+        float tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+        tmin = (bounds[r.sign[0]].x() - r.origin.x()) * r.inv_direction.x();
+        tmax = (bounds[1-r.sign[0]].x() - r.origin.x()) * r.inv_direction.x();
+        tymin = (bounds[r.sign[1]].y() - r.origin.y()) * r.inv_direction.y();
+        tymax = (bounds[1-r.sign[1]].y() - r.origin.y()) * r.inv_direction.y();
+
+        if ((tmin > tymax) || (tymin > tmax))
+            return false;
+
+        if (tymin > tmin)
+            tmin = tymin;
+        if (tymax < tmax)
+            tmax = tymax;
+
+        tzmin = (bounds[r.sign[2]].z() - r.origin.z()) * r.inv_direction.z();
+        tzmax = (bounds[1-r.sign[2]].z() - r.origin.z()) * r.inv_direction.z();
+
+        if ((tmin > tzmax) || (tzmin > tmax))
+            return false;
+
+        if (tzmin > tmin)
+            tmin = tzmin;
+        if (tzmax < tmax)
+            tmax = tzmax;
+
+        return ((tmin < t1) && (tmax > t0));
+    }
+
+}
+
 namespace std
 {
     inline std::string to_string(const glm::vec2& a){
@@ -161,10 +211,17 @@ namespace std
     }
 
     inline std::string to_string(const glm::mat3& a){
-        return string_format("{%g, %g, %g}\n{%g, %g, %g}\n{%g, %g, %g}", a[0][0], a[1][0], a[2][0], a[0][1], a[1][1], a[2][1], a[0][2], a[1][2], a[2][2]);
+        return string_format("{%g, %g, %g}\n{%g, %g, %g}\n{%g, %g, %g}",
+                             a[0][0], a[1][0], a[2][0],
+                             a[0][1], a[1][1], a[2][1],
+                             a[0][2], a[1][2], a[2][2]);
     }
     inline std::string to_string(const glm::mat4& a){
-        return string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}", a[0][0], a[1][0], a[2][0], a[3][0], a[0][1], a[1][1], a[2][1], a[3][1], a[0][2], a[1][2], a[2][2], a[3][2], a[0][3], a[1][3], a[2][3], a[3][3]);
+        return string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}",
+                             a[0][0], a[1][0], a[2][0], a[3][0],
+                             a[0][1], a[1][1], a[2][1], a[3][1],
+                             a[0][2], a[1][2], a[2][2], a[3][2],
+                             a[0][3], a[1][3], a[2][3], a[3][3]);
     }
     inline std::string to_string(const float a[6][4]){
         return string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}",
