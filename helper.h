@@ -1,4 +1,6 @@
 #pragma once
+#ifndef HELPER_INLINE
+#define HELPER_INLINE
 #define _USE_MATH_DEFINES
 #define GLM_FORCE_RADIANS
 #define GLM_SWIZZLE
@@ -149,18 +151,16 @@ namespace glm {
         ray() {}
         ray(glm::vec3 p, glm::vec3 d) : pos(p), dir(d) {}
         ray(const ray &r) : pos(r.pos), dir(r.dir) {}
-        ray &operator =(const ray &r) {if (this != &other) {pos = r.pos; dir = r.dir;} return *this;}
+        ray &operator =(const ray &r) {if (this != &r) {pos = r.pos; dir = r.dir;} return *this;}
         ~ray() {}
 
         glm::vec3 pos;
         glm::vec3 dir;
     };
 
-    ray normalize(const ray &x)
-    {
-        return ray(x.pos, normalize(x.dir));
-    }
+    ray normalize(const ray &x);
 
+/*
     bool Box::intersect(const Ray &r, float t0, float t1) const
     {
         float tmin, tmax, tymin, tymax, tzmin, tzmax;
@@ -191,8 +191,9 @@ namespace glm {
 
         return ((tmin < t1) && (tmax > t0));
     }
-
+*/
 }
+
 
 namespace std
 {
@@ -233,3 +234,5 @@ namespace std
                              a[5][0], a[5][1], a[5][2], a[5][3]);
     }
 }
+
+#endif //HELPER_INLINE
