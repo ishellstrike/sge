@@ -16,7 +16,7 @@ Camera::Camera() {
     max_pitch_rate = 5;
     max_heading_rate = 5;
     move_camera = true;
-    near_clip = 0.01f;
+    near_clip = 0.1f;
     far_clip = 1000;
     auto windowWidth = 1;
     auto windowHeight = 1;
@@ -71,7 +71,7 @@ void Camera::SetViewport(int loc_x, int loc_y, int width, int height) {
     window_width = width;
     window_height = height;
     aspect = double(width) / double(height);
-    ;
+    viewport = glm::vec4(loc_x, loc_y, width, height);
 }
 void Camera::SetClipping(double near_clip_distance, double far_clip_distance) {
     near_clip = near_clip_distance;

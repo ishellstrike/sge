@@ -49,11 +49,11 @@ public:
     std::string getFullDebugDescription();
     CameraType camera_mode;
 
-    int viewport_x;
-    int viewport_y;
-
     int window_width;
     int window_height;
+    int viewport_x;
+    int viewport_y;
+    glm::vec4 viewport;
 
     double aspect;
     double field_of_view;

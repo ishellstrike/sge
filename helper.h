@@ -1,6 +1,7 @@
 #pragma once
 #ifndef HELPER_INLINE
 #define HELPER_INLINE
+
 #define _USE_MATH_DEFINES
 #define GLM_FORCE_RADIANS
 #define GLM_SWIZZLE
@@ -149,51 +150,21 @@ inline std::string to_traf_string(double traf){
 namespace glm {
     struct ray {
         ray() {}
-        ray(glm::vec3 p, glm::vec3 d) : pos(p), dir(d) {}
-        ray(const ray &r) : pos(r.pos), dir(r.dir) {}
-        ray &operator =(const ray &r) {if (this != &r) {pos = r.pos; dir = r.dir;} return *this;}
+        ray(glm::vec3 p, glm::vec3 d) : origin(p), dir(d) {precompute();}
+        ray(const glm::ray &r) : origin(r.origin), dir(r.dir) {precompute();}
+        ray &operator =(const glm::ray &r) {if (this != &r) {origin = r.origin; dir = r.dir; precompute();}  return *this;}
         ~ray() {}
+        void precompute();
 
-        glm::vec3 pos;
+        glm::vec3 origin;
         glm::vec3 dir;
+        glm::vec3 inv;
+        int sign[3];
     };
 
-    ray normalize(const ray &x);
-
-/*
-    bool Box::intersect(const Ray &r, float t0, float t1) const
-    {
-        float tmin, tmax, tymin, tymax, tzmin, tzmax;
-
-        tmin = (bounds[r.sign[0]].x() - r.origin.x()) * r.inv_direction.x();
-        tmax = (bounds[1-r.sign[0]].x() - r.origin.x()) * r.inv_direction.x();
-        tymin = (bounds[r.sign[1]].y() - r.origin.y()) * r.inv_direction.y();
-        tymax = (bounds[1-r.sign[1]].y() - r.origin.y()) * r.inv_direction.y();
-
-        if ((tmin > tymax) || (tymin > tmax))
-            return false;
-
-        if (tymin > tmin)
-            tmin = tymin;
-        if (tymax < tmax)
-            tmax = tymax;
-
-        tzmin = (bounds[r.sign[2]].z() - r.origin.z()) * r.inv_direction.z();
-        tzmax = (bounds[1-r.sign[2]].z() - r.origin.z()) * r.inv_direction.z();
-
-        if ((tmin > tzmax) || (tzmin > tmax))
-            return false;
-
-        if (tzmin > tmin)
-            tmin = tzmin;
-        if (tzmax < tmax)
-            tmax = tzmax;
-
-        return ((tmin < t1) && (tmax > t0));
-    }
-*/
+    glm::ray normalize(const glm::ray &x);
+    bool intersect(const glm::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max);
 }
-
 
 namespace std
 {
