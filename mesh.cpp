@@ -5,15 +5,17 @@
 #include "helper.h"
 #include "logger.h"
 
-Mesh::Mesh(void) :
-    World(glm::mat4(1.0f)),
-    shader(nullptr),
-    material(nullptr),
-    m_vao(0),
-    m_vbo(nullptr),
-    minBound(0),
-    maxBound(0)
+Mesh::Mesh(void)
 {
+}
+
+Mesh::Mesh(const Mesh &m) :
+    World(m.World),
+    shader(m.shader),
+    material(m.material)
+{
+    Vertices = m.Vertices;
+    Indices = m.Indices;
 }
 
 

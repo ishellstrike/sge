@@ -26,10 +26,10 @@ static const GLuint __vertexIndex[INDEXCOUNT] =
     20,23,22, 22,21,20 // right
 };
 
-const Mesh Cube::getMesh()
+const Mesh *Cube::getMesh()
 {
     if(sm_mesh != nullptr){
-        return *sm_mesh;
+        return sm_mesh.get();
     }
 
     Mesh* m = new Mesh();
@@ -56,7 +56,7 @@ const Mesh Cube::getMesh()
     }
 
     sm_mesh = std::shared_ptr<Mesh>(m);
-    return *sm_mesh;
+    return sm_mesh.get();
 }
 
 std::shared_ptr<Mesh> Cube::sm_mesh;

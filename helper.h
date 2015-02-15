@@ -24,6 +24,8 @@
 #define OPENGL_CHECK_ERRORS() ((void)0)
 #endif // NDEBUG
 
+#define HasValue(value) if(value) value
+
 inline glm::vec4 lerp(glm::vec4 &a, glm::vec4 &b, float a_percent){
     return a_percent * a + (1.0f - a_percent) * b;
 }

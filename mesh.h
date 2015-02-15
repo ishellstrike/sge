@@ -16,6 +16,7 @@ class Mesh
 {
 public:
     Mesh(void);
+    Mesh(const Mesh &m);
     ~Mesh(void);
     void Create(std::vector<VertPosNormTanBiTex> verteces, std::vector<GLuint> indeces);
     void Bind(int type = 0);
@@ -38,11 +39,11 @@ public:
     std::vector<GLuint> Indices;
     std::shared_ptr<BasicJargShader> shader;
     std::shared_ptr<Material> material;
-    glm::mat4 World;
-    std::string id;
+    glm::mat4 World = glm::mat4(1);
+    std::string id = "";
     void CalcTB();
     void matf();
-    int loaded;
+    int loaded = false;
 private:
     GLuint *m_vao = nullptr;
     GLuint *m_vbo = nullptr;

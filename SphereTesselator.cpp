@@ -1,4 +1,4 @@
-#include "SphereTesselator.h"
+#include "spheretesselator.h"
 #include "mesh.h"
 
 Mesh* Tesselator::Tesselate(int iters, const Mesh& mesh)

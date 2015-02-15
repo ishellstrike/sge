@@ -6,7 +6,7 @@
 #include "mesh.h"
 #include "vpnt.h"
 #include "material.h"
-#include "SphereTesselator.h"
+#include "spheretesselator.h"
 
 #endif // SGE_GEOMETRY
 
