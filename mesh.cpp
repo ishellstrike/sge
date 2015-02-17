@@ -34,6 +34,11 @@ Mesh::~Mesh(void)
     }
 }
 
+/*!
+ * \brief Mesh::Unindex
+ *
+ * Create unique vertex for each index
+ */
 void Mesh::Unindex()
 {
     auto temp = std::move(Vertices);
@@ -44,6 +49,20 @@ void Mesh::Unindex()
     }
 } 
 
+
+/*!
+ * \brief CalcTangentBasis
+ * \param p1
+ * \param p2
+ * \param p3
+ * \param t1
+ * \param t2
+ * \param t3
+ * \param tangent out value
+ * \param binormal out value
+ *
+ * Build tangent and binormal
+ */
 void CalcTangentBasis(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3,
                       const glm::vec2 &t1, const glm::vec2 &t2, const glm::vec2 &t3,
                       glm::vec3 &tangent, glm::vec3 &binormal )
@@ -65,7 +84,12 @@ void CalcTangentBasis(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 
   binormal = glm::normalize(binormal);
 }
 
-
+/*!
+ * \brief Mesh::CalcTB
+ *
+ * Calculate tangents and binormals for mesh
+ * needs normals
+ */
 void Mesh::CalcTB()
 {
   for (unsigned int i=0; i < Vertices.size(); i++)
@@ -141,9 +165,11 @@ void Mesh::CalcTB()
 }
 
 
-//************************************
-// needs unindexed model
-//************************************
+/*!
+ * \brief Mesh::computeNormal
+ *
+ * needs unindexed model
+ */
 void Mesh::computeNormal()
 {
     for(int i=0; i<Vertices.size();i+=3){
@@ -155,6 +181,11 @@ void Mesh::computeNormal()
     }
 } 
 
+/*!
+ * \brief Mesh::MergeVerteces
+ *
+ * Merge same vertices and combine their normals
+ */
 void Mesh::MergeVerteces()
 {
     for (int i=0;i<Vertices.size();i++)
@@ -185,6 +216,13 @@ void Mesh::Create(std::vector<VertPosNormTanBiTex> v, std::vector<GLuint> i)
     Indices.assign(i.begin(), i.end());
 }
 
+/*!
+ * \brief Mesh::loadOBJ
+ * \param path
+ * \return sucess
+ *
+ * Limited .obj parser
+ */
 bool Mesh::loadOBJ(std::string path)
 {
     std::vector< GLuint > vertexIndices, uvIndices, normalIndices;
@@ -266,7 +304,7 @@ void Mesh::Bind(int type /* = 0 */)
     }
     auto bindtype = type == 0 ? GL_STATIC_DRAW : GL_STREAM_DRAW;
 
-    if(m_vbo) { // rebind
+    if(m_vbo != nullptr) { // rebind
         glBindVertexArray(0);
         glDisableVertexAttribArray(shader->posAttrib);
         glDisableVertexAttribArray(shader->uvAttrib);
@@ -310,6 +348,16 @@ void Mesh::Bind(int type /* = 0 */)
     loaded = Indices.size();
 
     OPENGL_CHECK_ERRORS();
+}
+
+void Mesh::ForgetBind()
+{
+    Bind();
+    loaded = Indices.size();
+    Indices.clear();
+    Indices.shrink_to_fit();
+    Vertices.clear();
+    Vertices.shrink_to_fit();
 }
 
 void Mesh::Render(const glm::mat4 &proj, bool patches /* = false*/)
@@ -431,14 +479,4 @@ void Mesh::BuildBounding()
             }
         }
     }
-}
-
-void Mesh::ForgetBind()
-{
-    Bind();
-    loaded = Indices.size();
-    Indices.clear();
-    Indices.shrink_to_fit();
-    Vertices.clear();
-    Vertices.shrink_to_fit();
 }

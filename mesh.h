@@ -12,6 +12,13 @@
 #include <memory>
 #include "spritebatch.h"
 
+
+/*!
+ * \brief The Mesh class
+ *
+ * Represent simplest renderable object
+ * contains personal #Material and #BasicJargShader
+ */
 class Mesh
 {
 public:

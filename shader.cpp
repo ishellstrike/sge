@@ -35,11 +35,21 @@ JargShader::~JargShader(void)
     LOG(info) << string_format("Deleting program %i", program);
 }
 
+/*!
+ * \brief JargShader::Use
+ */
 void JargShader::Use() const
 {
     glUseProgram(program);
 }
 
+/*!
+ * \brief JargShader::locateVar
+ * \param s
+ * \return ogl id
+ *
+ * search uniform and store it location in #vars
+ */
 GLint JargShader::locateVar(const std::string &s)
 {
     GLint a = glGetUniformLocation(program, s.c_str());
@@ -51,6 +61,13 @@ GLint JargShader::locateVar(const std::string &s)
     return a;
 }
 
+/*!
+ * \brief JargShader::loadShaderFromSource
+ * \param type shader type
+ * \param source
+ *
+ * load typed shader from text file
+ */
 void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
 
     std::stringstream ss;
@@ -106,6 +123,12 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
     shaders_.push_back(id);
 }
 
+/*!
+ * \brief JargShader::Link
+ * \return success
+ *
+ * link compiled shaders to program
+ */
 bool JargShader::Link() {
     glLinkProgram(program);
     LOG(info) << "Program " << std::to_string(program) << " linking";
@@ -114,6 +137,12 @@ bool JargShader::Link() {
     return true;
 }
 
+/*!
+ * \brief JargShader::Afterlink
+ *
+ * search basic uniforms
+ * uniforms uses in #Mesh class
+ */
 void JargShader::Afterlink()
 {
     Use();
@@ -132,13 +161,21 @@ void JargShader::Afterlink()
                  "; bi = " << binormalAttrib << ";";
 }
 
-void JargShader::PushGlobalHeader(const std::string &source, const char *newParameter)
+/*!
+ * \brief JargShader::PushGlobalHeader
+ * \param source
+ * \param version version string (e.g. "#version 330 core"
+ *
+ * rewrite standart version string and set shader header for each shader
+ * can used for adding typical constants and functions to shaders
+ */
+void JargShader::PushGlobalHeader(const std::string &source, const char *version)
 {
     std::stringstream ss;
     name = source;
     std::string part_name;
     if(!has_header) {
-        ss << newParameter << std::endl;
+        ss << version << std::endl;
     } else {
         ss << global_header;
     }
