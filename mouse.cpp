@@ -207,5 +207,6 @@ double Mouse::sm_lastypos;
 double Mouse::sm_lastxpos;
 double Mouse::sm_deltaypos;
 double Mouse::sm_deltaxpos;
+Mouse::STATE Mouse::state = Mouse::STATE_MOUSE;
 int Mouse::sm_buttons[10];
 

@@ -2,6 +2,8 @@
 #include "logger.h"
 #include <locale>
 #include "utfcpp/utf8.h"
+#include "prefecences.h"
+#include <GL/glew.h>
 
 typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
@@ -66,35 +68,88 @@ void SpriteBatch::setUniform(const glm::mat4 &uni)
     uniform = uni;
 }
 
+/*!
+ * \brief SpriteBatch::drawText
+ * \param text
+ * \param pos
+ * \param font
+ * \param col_
+ * \param align
+ *
+ * Прямая отрисовка текста (Align == ALIGN_LEFT)
+ */
+void SpriteBatch::drawText(const std::string &text, const glm::vec2 &pos,
+                           Font *font, const glm::vec4 &col_)
+{
+    std::u32string text32;
+    utf8::utf8to32(text.begin(), text.end(), std::back_inserter(text32));
 
-glm::vec2 SpriteBatch::drawText(const std::string &text, float x, float y, Font *font, const glm::vec4 &col_)
+    glm::vec2 a = drawText(text32, pos.x, pos.y, font, col_, true);
+    drawText(text32, pos.x, pos.y + font->spacing, font, col_);
+}
+
+/*!
+ * \brief SpriteBatch::drawText
+ * \param text
+ * \param pos
+ * \param size
+ * \param font
+ * \param col_
+ * \param align
+ *
+ * Отрисовка текста в ограничивающем прямоугольнике
+ */
+void SpriteBatch::drawText(const std::string &text, const glm::vec2 &pos, const glm::vec2 &size,
+                           Font *font, const glm::vec4 &col_, ALIGN align)
+{
+    std::u32string text32;
+    utf8::utf8to32(text.begin(), text.end(), std::back_inserter(text32));
+
+    glm::vec2 a = drawText(text32, pos.x, pos.y, font, col_, true);
+    glm::vec2 half(0);
+
+    switch (align) {
+    case ALIGN_CENTER:
+        half = pos + size / 2.f;
+        half -= a / 2.f;
+        drawText(text32, half.x, half.y + font->spacing, font, col_);
+        break;
+    case ALIGN_HOR_CENTER:
+        half = pos + size / 2.f;
+        half -= a / 2.f;
+        drawText(text32, half.x, pos.y + font->spacing, font, col_);
+        break;
+    default: //LEFT
+        drawText(text32, pos.x, pos.y + font->spacing, font, col_);
+        break;
+    }
+}
+
+glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
+                                Font *font, const glm::vec4 &col_, bool no_draw)
 {
     float x_start = x;
     float y_start = y;
     float x_max = 0;
-    float y_max = 0;
     const char32_t *p;
-
-    std::locale loc (std::locale(), new cvt);
-
-    std::u32string text32;
-    utf8::utf8to32(text.begin(), text.end(), std::back_inserter(text32));
 
     for(p = &text32[0]; *p; p++)
     {
         CharInfo cc = font->chars[*p];
         if(*p == '\n')
         {
-            y+=cc.advance.y + 10;
-            x=x_start;
+            y += font->spacing;
+            x = x_start;
             continue;
         }
 
-        drawQuadText(glm::vec2(x, y), cc, *font->font, col_);
+        if(!no_draw)
+            drawQuadText(glm::vec2(x, y), cc, *font->font, col_);
 
         x += cc.advance.x;
         x_max = glm::max(x, x_max);
     }
+    y += font->spacing;
     return glm::vec2(x_max - x_start, y - y_start);
 }
 
@@ -278,9 +333,9 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
     glm::vec2 e = end;
 
 
-    pos[cur*4]     = glm::vec3(s.x,         s.y,     0);
+    pos[cur*4]     = glm::vec3(s.x,         s.y + 2,     0);
     pos[cur*4 + 1] = glm::vec3(s.x + width, s.y,     0);
-    pos[cur*4 + 2] = glm::vec3(e.x + width, e.y + 1, 0);
+    pos[cur*4 + 2] = glm::vec3(e.x + width, e.y + 2, 0);
     pos[cur*4 + 3] = glm::vec3(e.x,         e.y,     0);
 
     col[cur*4]     = color;
@@ -335,4 +390,22 @@ void SpriteBatch::render()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     cur = 0;
+}
+
+void SpriteBatch::reduceScissor(glm::vec2 loc, glm::vec2 size)
+{
+    loc = scis_min = glm::max(loc, scis_min);
+    size = scis_size = glm::min(size, scis_size);
+
+    render();
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(loc.x, RESY - (loc.y + size.y), size.x, size.y);
+}
+
+void SpriteBatch::resetScissor()
+{
+    render();
+    glDisable(GL_SCISSOR_TEST);
+    scis_min = {0,0};
+    scis_size = {RESX, RESY};
 }

@@ -35,6 +35,14 @@ private:
 
 public:
 
+    enum STATE
+    {
+        STATE_MOUSE,
+        STATE_RESIZE
+    };
+
+    static STATE state;
+
     static void CursorClientArea(int entered);
     static void SetButton(int a, int b, int c);
     static void SetCursorPos(double xpos, double ypos);

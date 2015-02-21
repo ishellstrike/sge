@@ -1,5 +1,4 @@
 #include "camera.h"
-#include <GL/glew.h>
 #include <glm/gtc/matrix_transform.inl>
 #include <glm/gtx/quaternion.hpp>
 #include <string>

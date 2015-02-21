@@ -34,6 +34,8 @@ void Font::initFreeType(int size)
 
     FT_Select_Charmap(m_ftFace, ft_encoding_unicode);
     FT_Set_Pixel_Sizes(m_ftFace, 0, size);
+
+    spacing = m_ftFace->size->metrics.height >> 6;
 }
 
 void Font::renderAtlas()

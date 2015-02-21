@@ -14,7 +14,7 @@
 #include "colorextender.h"
 #include "string.h"
 
-#ifdef NDEBUG
+#ifdef NNNDEBUG
 #define OPENGL_CHECK_ERRORS() \
     while( unsigned int openGLError = glGetError()) \
     { \
@@ -22,7 +22,7 @@
     };
 #else
 #define OPENGL_CHECK_ERRORS() ((void)0)
-#endif // NDEBUG
+#endif // NNNDEBUG
 
 #define HasValue(value) if(value) value
 

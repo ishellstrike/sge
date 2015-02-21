@@ -33,6 +33,7 @@ public:
     FT_Face m_ftFace;
     void initFreeType(int size);
     void renderAtlas();
+    unsigned short spacing;
 };
 
 #endif // FONT_H
