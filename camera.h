@@ -73,7 +73,7 @@ public:
     glm::vec3 look_at;
     glm::vec3 direction;
 
-    glm::vec3 up;
+    glm::vec3 up, right;
     glm::quat rotation_quaternion;
     glm::vec3 mouse_position;
 

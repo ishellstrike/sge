@@ -15,14 +15,24 @@ enum BufferType
 
 struct VertexPositionTexture{
 public:
-    glm::vec3 Position;
-    glm::vec2 Uv;
-    VertexPositionTexture(glm::vec3 v, glm::vec3 p , glm::vec2 u);
+    glm::vec3 position;
+    glm::vec2 uv;
+    VertexPositionTexture(glm::vec3 __v, glm::vec3 __p , glm::vec2 __u);
     VertexPositionTexture();
     ~VertexPositionTexture();
 
-    VertexPositionTexture operator + (VertexPositionTexture a){ VertexPositionTexture b; b.Position = Position + a.Position; b.Uv = a.Uv + Uv; return b; }
-    VertexPositionTexture operator / (float a){ VertexPositionTexture b; b.Position = Position / a; b.Uv = Uv / a; return b; }
+    VertexPositionTexture operator + (VertexPositionTexture __a)
+    {
+        VertexPositionTexture b;
+        b.position = position + __a.position;
+        b.uv = __a.uv + uv; return b;
+    }
+    VertexPositionTexture operator / (float __a)
+    {
+        VertexPositionTexture b;
+        b.position = position / __a;
+        b.uv = uv / __a; return b;
+    }
 };
 
 /**
@@ -30,30 +40,37 @@ public:
  */
 struct VertPosNormTanBiTex{
 public:
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    glm::vec3 Tangent;
-    glm::vec3 Binormal;
-    glm::vec2 Uv;
-    VertPosNormTanBiTex(glm::vec3 norm, glm::vec3 pos, glm::vec2 uv);
-    VertPosNormTanBiTex(glm::vec3 pos, glm::vec2 uv);
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec3 tangent;
+    glm::vec3 binormal;
+    glm::vec2 uv;
+    VertPosNormTanBiTex(glm::vec3 __norm, glm::vec3 __pos, glm::vec2 __uv);
+    VertPosNormTanBiTex(glm::vec3 __pos, glm::vec2 __uv);
     VertPosNormTanBiTex();
     ~VertPosNormTanBiTex();
 
-    VertPosNormTanBiTex operator + (VertPosNormTanBiTex a){ VertPosNormTanBiTex b;
-                                  b.Position = Position + a.Position;
-                                  b.Uv = a.Uv + Uv;
-                                  b.Normal = Normal + a.Normal;
-                                  b.Tangent = Tangent + a.Tangent;
-                                  b.Binormal = Binormal + a.Binormal;
-                                  return b; }
-    VertPosNormTanBiTex operator / (float a){ VertPosNormTanBiTex b;
-                                 b.Position = Position / a;
-                                 b.Uv = Uv / a;
-                                 b.Normal = Normal / a;
-                                 b.Tangent = Tangent / a;
-                                 b.Binormal = Binormal / a;
-                                 return b; }
+    VertPosNormTanBiTex operator + (VertPosNormTanBiTex __a)
+    {
+        VertPosNormTanBiTex b;
+        b.position = position + __a.position;
+        b.uv = __a.uv + uv;
+        b.normal = normal + __a.normal;
+        b.tangent = tangent + __a.tangent;
+        b.binormal = binormal + __a.binormal;
+        return b;
+    }
+
+    VertPosNormTanBiTex operator / (float __a)
+    {
+        VertPosNormTanBiTex b;
+        b.position = position / __a;
+        b.uv = uv / __a;
+        b.normal = normal / __a;
+        b.tangent = tangent / __a;
+        b.binormal = binormal / __a;
+        return b;
+    }
 };
 
 /**
@@ -61,22 +78,29 @@ public:
  */
 struct VertPosMininormTex{
 public:
-    glm::vec3 Position;
-    unsigned char Normal;
-    glm::vec2 Uv;
-    VertPosMininormTex(unsigned char norm, glm::vec3 pos, glm::vec2 uv);
-    VertPosMininormTex(glm::vec3 pos, glm::vec2 uv);
+    glm::vec3 position;
+    unsigned char normal;
+    glm::vec2 uv;
+    VertPosMininormTex(unsigned char __norm, glm::vec3 __pos, glm::vec2 __uv);
+    VertPosMininormTex(glm::vec3 __pos, glm::vec2 __uv);
     VertPosMininormTex();
     ~VertPosMininormTex();
 
-    VertPosMininormTex operator + (VertPosMininormTex a){ VertPosMininormTex b;
-                                  b.Position = Position + a.Position;
-                                  b.Uv = a.Uv + Uv;
-                                  return b; }
-    VertPosMininormTex operator / (float a){ VertPosMininormTex b;
-                                 b.Position = Position / a;
-                                 b.Uv = Uv / a;
-                                 return b; }
+    VertPosMininormTex operator + (VertPosMininormTex __a)
+    {
+        VertPosMininormTex b;
+        b.position = position + __a.position;
+        b.uv = __a.uv + uv;
+        return b;
+    }
+
+    VertPosMininormTex operator / (float __a)
+    {
+        VertPosMininormTex b;
+       b.position = position / __a;
+       b.uv = uv / __a;
+       return b;
+    }
 };
 
 struct VertexPositionColor{

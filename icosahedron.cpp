@@ -68,8 +68,8 @@ Mesh Icosahedron::getMesh()
 
     for (int i=0; i < VERTEXCOUNT; ++i)
     {
-        m->Vertices[i].Position = v[i];
-        m->Vertices[i].Uv =  glm::vec2(rand()%100/100.0,rand()%100/100.0);
+        m->Vertices[i].position = v[i];
+        m->Vertices[i].uv =  glm::vec2(rand()%100/100.0,rand()%100/100.0);
     }
 
     for (int i=0; i < INDEXCOUNT; ++i)

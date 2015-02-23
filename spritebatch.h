@@ -51,9 +51,10 @@ public:
     void drawText(const std::string &text, const glm::vec2 &pos, const glm::vec2 &size, Font *font, const glm::vec4 &col_, ALIGN align);
     void reduceScissor(glm::vec2 loc, glm::vec2 size);
     void resetScissor();
+    glm::vec2 measureText(const std::string &text, Font *font);
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
                        Font *font, const glm::vec4 &col_, bool no_draw = false);
-    void drawQuadText(const glm::vec2 &loc, const CharInfo &inf, const Texture &tex, const glm::vec4 &color);
+    void drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, const Texture &tex, const glm::vec4 &color);
 };
 #endif // SPRITEBATCH_H

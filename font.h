@@ -10,19 +10,18 @@
 #include FT_FREETYPE_H
 #include <freetype2/config/ftheader.h>
 #define FDIM 256
-
-struct CharInfo
-{
-    glm::vec2 pos;
-    glm::vec2 size;
-    glm::vec2 advance;
-    glm::vec2 bearing;
-};
-
-
 class Font
 {
 public:
+
+    struct CharInfo
+    {
+        glm::vec2 pos;
+        glm::vec2 size;
+        glm::vec2 advance;
+        glm::vec2 bearing;
+    };
+
     Font();
     ~Font();
 

@@ -94,8 +94,8 @@ void Mesh::CalcTB()
 {
   for (unsigned int i=0; i < Vertices.size(); i++)
   {
-    Vertices[i].Tangent = glm::vec3(0.0f);
-    Vertices[i].Binormal = glm::vec3(0.0f);
+    Vertices[i].tangent = glm::vec3(0.0f);
+    Vertices[i].binormal = glm::vec3(0.0f);
   }
   for (unsigned int i=0; i < (Vertices.size() / 3);i++)
   {
@@ -104,38 +104,38 @@ void Mesh::CalcTB()
     unsigned int c = Indices[i * 3 + 2];
 
     glm::vec3 bin, tan;
-    CalcTangentBasis ( Vertices[a].Position,
-                       Vertices[b].Position,
-                       Vertices[c].Position,
-                       Vertices[a].Uv,
-                       Vertices[b].Uv,
-                       Vertices[c].Uv,
+    CalcTangentBasis ( Vertices[a].position,
+                       Vertices[b].position,
+                       Vertices[c].position,
+                       Vertices[a].uv,
+                       Vertices[b].uv,
+                       Vertices[c].uv,
                        tan, bin);
 
-    Vertices[a].Tangent  += tan;
-    Vertices[b].Tangent  += tan;
-    Vertices[c].Tangent  += tan;
+    Vertices[a].tangent  += tan;
+    Vertices[b].tangent  += tan;
+    Vertices[c].tangent  += tan;
 
-    Vertices[a].Binormal += bin;
-    Vertices[b].Binormal += bin;
-    Vertices[c].Binormal += bin;
+    Vertices[a].binormal += bin;
+    Vertices[b].binormal += bin;
+    Vertices[c].binormal += bin;
   }
 
   for (unsigned int i=0; i < Vertices.size();i++)
   {
-    Vertices[i].Tangent = glm::normalize(Vertices[i].Tangent);
-    Vertices[i].Binormal = glm::normalize(Vertices[i].Binormal);
+    Vertices[i].tangent = glm::normalize(Vertices[i].tangent);
+    Vertices[i].binormal = glm::normalize(Vertices[i].binormal);
 
-    glm::vec3 tmpT = Vertices[i].Tangent;
-    glm::vec3 tmpB = Vertices[i].Binormal;
-    glm::vec3 tmpN = Vertices[i].Normal;
+    glm::vec3 tmpT = Vertices[i].tangent;
+    glm::vec3 tmpB = Vertices[i].binormal;
+    glm::vec3 tmpN = Vertices[i].normal;
 
     glm::vec3 newT = tmpT - ((glm::cross(tmpN, tmpT)) * tmpN);
     glm::vec3 newB = tmpB - ((glm::cross(tmpN, tmpB)) * tmpN) - ((glm::cross(newT, tmpB))*newT);
     newT = glm::normalize(newT);
     newB = glm::normalize(newB);
-    Vertices[i].Tangent  = newT;
-    Vertices[i].Binormal = newB;
+    Vertices[i].tangent  = newT;
+    Vertices[i].binormal = newB;
 
     float lenT = newT.length ();
     float lenB = newB.length ();
@@ -143,9 +143,9 @@ void Mesh::CalcTB()
     if (lenT <= 0.0001 || lenB <= 0.0001)
     {
       if (lenT > 0.5)
-        Vertices[i].Binormal = glm::cross(tmpN, Vertices[i].Tangent);
+        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
       else if (lenB > 0.5)
-        Vertices[i].Tangent  = glm::cross(Vertices[i].Binormal, tmpN);
+        Vertices[i].tangent  = glm::cross(Vertices[i].binormal, tmpN);
       else
       {
         glm::vec3 xAxis (1.0, 0.0, 0.0);
@@ -155,12 +155,12 @@ void Mesh::CalcTB()
           startAxis = xAxis;
         else
           startAxis = yAxis;
-        Vertices[i].Tangent  = glm::cross(tmpN, startAxis);
-        Vertices[i].Binormal = glm::cross(tmpN, Vertices[i].Tangent);
+        Vertices[i].tangent  = glm::cross(tmpN, startAxis);
+        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
       }
     }
-    else if ((glm::dot(Vertices[i].Binormal, Vertices[i].Tangent))> 0.9999)
-      Vertices[i].Binormal = glm::cross(tmpN, Vertices[i].Tangent);
+    else if ((glm::dot(Vertices[i].binormal, Vertices[i].tangent))> 0.9999)
+      Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
   }
 }
 
@@ -173,11 +173,11 @@ void Mesh::CalcTB()
 void Mesh::computeNormal()
 {
     for(int i=0; i<Vertices.size();i+=3){
-        glm::vec3 const & a = Vertices[i].Position;
-        glm::vec3 const & b = Vertices[i+1].Position;
-        glm::vec3 const & c = Vertices[i+2].Position;
+        glm::vec3 const & a = Vertices[i].position;
+        glm::vec3 const & b = Vertices[i+1].position;
+        glm::vec3 const & c = Vertices[i+2].position;
         auto t = glm::normalize(glm::cross(c - a, b - a));
-        Vertices[i].Normal = Vertices[i+1].Normal = Vertices[i+2].Normal = t;
+        Vertices[i].normal = Vertices[i+1].normal = Vertices[i+2].normal = t;
     }
 } 
 
@@ -190,22 +190,22 @@ void Mesh::MergeVerteces()
 {
     for (int i=0;i<Vertices.size();i++)
     {
-        auto n = Vertices[i].Normal;
+        auto n = Vertices[i].normal;
         float nn = 1.0f;
         std::vector<int> same;
         for (int j=i;j<Vertices.size();j++)
         {
-            if(Vertices[i].Position == Vertices[j].Position){
-                n += Vertices[j].Normal;
+            if(Vertices[i].position == Vertices[j].position){
+                n += Vertices[j].normal;
                 nn++;
                 same.push_back(j);
             }
         }
         n /= nn;
-        Vertices[i].Normal = n;
+        Vertices[i].normal = n;
         if(same.size() > 0)
             for(int j=0; j<same.size(); j++){
-                Vertices[same[j]].Normal = n;
+                Vertices[same[j]].normal = n;
             }
     }
 }
@@ -455,27 +455,27 @@ void Mesh::Combine(Mesh* com)
 void Mesh::BuildBounding()
 {
     if(Vertices.size() > 0){
-        maxBound = minBound = Vertices[0].Position;
+        maxBound = minBound = Vertices[0].position;
         for(auto i: Vertices){
-            if(i.Position.x > maxBound.x){
-                maxBound.x = i.Position.x;
+            if(i.position.x > maxBound.x){
+                maxBound.x = i.position.x;
             }
-            if(i.Position.x < minBound.x){
-                minBound.x = i.Position.x;
-            }
-
-            if(i.Position.z > maxBound.z){
-                maxBound.z = i.Position.z;
-            }
-            if(i.Position.z < minBound.z){
-                minBound.z = i.Position.z;
+            if(i.position.x < minBound.x){
+                minBound.x = i.position.x;
             }
 
-            if(i.Position.y > maxBound.y){
-                maxBound.y = i.Position.y;
+            if(i.position.z > maxBound.z){
+                maxBound.z = i.position.z;
             }
-            if(i.Position.y < minBound.y){
-                minBound.y = i.Position.y;
+            if(i.position.z < minBound.z){
+                minBound.z = i.position.z;
+            }
+
+            if(i.position.y > maxBound.y){
+                maxBound.y = i.position.y;
+            }
+            if(i.position.y < minBound.y){
+                minBound.y = i.position.y;
             }
         }
     }

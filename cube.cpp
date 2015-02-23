@@ -37,17 +37,17 @@ const Mesh *Cube::getMesh()
     m->Vertices.resize(VERTEXCOUNT);
     for(unsigned int i = 0; i < 6; ++i)
     {
-        m->Vertices[i*4].Position = __vertexPositions[i * 4 + 0];
-        m->Vertices[i*4].Uv = glm::vec2(1,1);
+        m->Vertices[i*4].position = __vertexPositions[i * 4 + 0];
+        m->Vertices[i*4].uv = glm::vec2(1,1);
 
-        m->Vertices[i*4 + 1].Position = __vertexPositions[i * 4 + 1];
-        m->Vertices[i*4 + 1].Uv = glm::vec2(1,0);
+        m->Vertices[i*4 + 1].position = __vertexPositions[i * 4 + 1];
+        m->Vertices[i*4 + 1].uv = glm::vec2(1,0);
 
-        m->Vertices[i*4 + 2].Position = __vertexPositions[i * 4 + 2];
-        m->Vertices[i*4 + 2].Uv = glm::vec2(0,0);
+        m->Vertices[i*4 + 2].position = __vertexPositions[i * 4 + 2];
+        m->Vertices[i*4 + 2].uv = glm::vec2(0,0);
 
-        m->Vertices[i*4 + 3].Position = __vertexPositions[i * 4 + 3];
-        m->Vertices[i*4 + 3].Uv = glm::vec2(0,1);
+        m->Vertices[i*4 + 3].position = __vertexPositions[i * 4 + 3];
+        m->Vertices[i*4 + 3].uv = glm::vec2(0,1);
     }
 
     for (int i =0; i< INDEXCOUNT; ++i)

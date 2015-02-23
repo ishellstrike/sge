@@ -43,12 +43,12 @@ public:
 
     static STATE state;
 
-    static void CursorClientArea(int entered);
+    static void cursorClientArea(int entered);
     static void SetButton(int a, int b, int c);
     static void SetCursorPos(double xpos, double ypos);
-    static void WindowFocus(int focused);
+    static void windowFocus(int focused);
 
-    static void Initialize( GLFWwindow *win );
+    static void initialize( GLFWwindow *win );
 
     static void SetFixedPosState( bool state);
 
@@ -57,22 +57,22 @@ public:
         return sm_stateFixedMousePos;
     }
 
-    static void SetWindowSize(unsigned int width, unsigned int height);
+    static void setWindowSize(unsigned int width, unsigned int height);
 
-    static void GetCursorPos(double &xpos, double &ypos);
-    static glm::vec2 GetCursorPos();
-    static glm::vec2 GetCursorLastPos();
-    static glm::vec2 GetCursorDelta();
+    static void getCursorPos(double &xpos, double &ypos);
+    static glm::vec2 getCursorPos();
+    static glm::vec2 getCursorLastPos();
+    static glm::vec2 getCursorDelta();
 
-    static double IsMoveCursorX();
-    static double IsMoveCursorY();
+    static double isMoveCursorX();
+    static double isMoveCursorY();
 
     static void Scroll(double a);
 
-    static bool IsRightPressed();
-    static bool IsLeftPressed();
+    static bool isRightPressed();
+    static bool isLeftPressed();
     static void resetDelta();
-    static bool IsRightDown();
+    static bool isRightDown();
     static bool IsLeftDown();
     static bool isWheelDown();
     static bool isWheelUp();

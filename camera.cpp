@@ -47,8 +47,11 @@ void Camera::Update() {
     position_delta = position_delta * .8f;
 
     view = glm::translate(glm::mat4_cast(rotation_quaternion), -position);//glm::lookAt(position, look_at, up);
+
     up = glm::vec3(view[1][0],view[1][1],view[1][2]);
-    direction = glm::vec3(view[0][0],view[0][1],view[0][2]);
+    right = glm::vec3(view[0][0],view[0][1],view[0][2]);
+    direction = glm::vec3(view[2][0],view[2][1],view[2][2]);
+
     model = glm::mat4(1.0f);
     MVP = projection * view * model;
 }

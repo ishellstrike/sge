@@ -21,7 +21,7 @@ double Mouse::offset = 0;
 double Mouse::last_offset = 0;
 
 
-void Mouse::Initialize(GLFWwindow *win )
+void Mouse::initialize(GLFWwindow *win )
 {
     sm_window = win;
     sm_xpos = 1.0;
@@ -78,27 +78,27 @@ void Mouse::SetCursorPos( double x, double y )
     }
 }
 
-double Mouse::IsMoveCursorX()
+double Mouse::isMoveCursorX()
 {
     double dx = sm_dxpos;
     sm_dxpos = 0.0;
     return dx;
 }
 
-double Mouse::IsMoveCursorY()
+double Mouse::isMoveCursorY()
 {
     double dy = sm_dypos;
     sm_dypos = 0.0;
     return dy;
 }
 
-void Mouse::GetCursorPos( double &x, double &y )
+void Mouse::getCursorPos( double &x, double &y )
 {
     x = sm_xpos;
     y = sm_ypos;
 }
 
-glm::vec2 Mouse::GetCursorPos()
+glm::vec2 Mouse::getCursorPos()
 {
     return glm::vec2(sm_xpos, sm_ypos);
 }
@@ -116,13 +116,13 @@ void Mouse::SetFixedPosState( bool state )
     }
 }
 
-void Mouse::SetWindowSize( unsigned int width, unsigned int height )
+void Mouse::setWindowSize( unsigned int width, unsigned int height )
 {
     sm_windowWidth = width;
     sm_windowHeight = height;
 }
 
-void Mouse::CursorClientArea( int entered )
+void Mouse::cursorClientArea( int entered )
 {
     if(entered == GL_TRUE)
     {
@@ -139,7 +139,7 @@ void Mouse::CursorClientArea( int entered )
 void Mouse::resetDelta(){
     sm_deltaypos = 0;
     sm_deltaxpos = 0;
-    //last_offset = offset;
+    last_offset = offset;
 }
 
 bool Mouse::isWheelUp()
@@ -152,7 +152,7 @@ bool Mouse::isWheelDown()
     return offset < last_offset;
 }
 
-void Mouse::WindowFocus( int focused )
+void Mouse::windowFocus( int focused )
 {
     if(focused == GL_TRUE)
     {
@@ -165,7 +165,7 @@ void Mouse::WindowFocus( int focused )
     }
 }
 
-bool Mouse::IsRightPressed()
+bool Mouse::isRightPressed()
 {
     if(sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS) {
         sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] = GLFW_REPEAT;
@@ -179,12 +179,12 @@ bool Mouse::IsLeftDown()
     return sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS || sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_REPEAT;
 }
 
-bool Mouse::IsRightDown()
+bool Mouse::isRightDown()
 {
     return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS || sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_REPEAT;
 }
 
-bool Mouse::IsLeftPressed()
+bool Mouse::isLeftPressed()
 {
     if(sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS) {
         sm_buttons[GLFW_MOUSE_BUTTON_LEFT] = GLFW_REPEAT;
@@ -193,12 +193,12 @@ bool Mouse::IsLeftPressed()
     return false;
 }
 
-glm::vec2 Mouse::GetCursorDelta()
+glm::vec2 Mouse::getCursorDelta()
 {
     return glm::vec2(sm_deltaxpos, sm_deltaypos);
 }
 
-glm::vec2 Mouse::GetCursorLastPos()
+glm::vec2 Mouse::getCursorLastPos()
 {
     return glm::vec2(sm_lastxpos, sm_lastypos);
 }

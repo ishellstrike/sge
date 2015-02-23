@@ -125,6 +125,13 @@ void SpriteBatch::drawText(const std::string &text, const glm::vec2 &pos, const 
     }
 }
 
+glm::vec2 SpriteBatch::measureText(const std::string &text, Font *font)
+{
+    std::u32string text32;
+    utf8::utf8to32(text.begin(), text.end(), std::back_inserter(text32));
+    return drawText(text32, 0, 0, font, glm::vec4(0), true);
+}
+
 glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
                                 Font *font, const glm::vec4 &col_, bool no_draw)
 {
@@ -135,7 +142,7 @@ glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
 
     for(p = &text32[0]; *p; p++)
     {
-        CharInfo cc = font->chars[*p];
+        Font::CharInfo cc = font->chars[*p];
         if(*p == '\n')
         {
             y += font->spacing;
@@ -188,7 +195,7 @@ void SpriteBatch::drawRect(const glm::vec2 &loc, const glm::vec2 &size, const gl
     cur++;
 }
 
-void SpriteBatch::drawQuadText(const glm::vec2 &loc, const CharInfo &inf, const Texture &tex, const glm::vec4 &color)
+void SpriteBatch::drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, const Texture &tex, const glm::vec4 &color)
 {
     if(current_program != font_program)
     {
