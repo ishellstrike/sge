@@ -140,6 +140,10 @@ void Mouse::resetDelta(){
     sm_deltaypos = 0;
     sm_deltaxpos = 0;
     last_offset = offset;
+    if(sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS)
+        sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] = GLFW_REPEAT;
+    if(sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS)
+        sm_buttons[GLFW_MOUSE_BUTTON_LEFT] = GLFW_REPEAT;
 }
 
 bool Mouse::isWheelUp()
@@ -167,11 +171,7 @@ void Mouse::windowFocus( int focused )
 
 bool Mouse::isRightPressed()
 {
-    if(sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS) {
-        sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] = GLFW_REPEAT;
-        return true;
-    }
-    return false;
+    return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS;
 }
 
 bool Mouse::IsLeftDown()
@@ -186,11 +186,7 @@ bool Mouse::isRightDown()
 
 bool Mouse::isLeftPressed()
 {
-    if(sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS) {
-        sm_buttons[GLFW_MOUSE_BUTTON_LEFT] = GLFW_REPEAT;
-        return true;
-    }
-    return false;
+    return sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS;
 }
 
 glm::vec2 Mouse::getCursorDelta()

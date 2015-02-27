@@ -26,6 +26,16 @@
 
 #define HasValue(value) if(value) value
 
+inline void get_uvs(unsigned int apos, float &q, float &w, float &qq, float &ww)
+{
+    qq = 32 / 2048.f;
+    ww = 32 / 2048.f;
+    int inrow = 2048 / 32;
+    q = (apos % inrow) * qq;
+    w = (apos / inrow) * ww;
+    qq += q; ww += w;
+}
+
 inline glm::vec4 lerp(glm::vec4 &a, glm::vec4 &b, float a_percent){
     return a_percent * a + (1.0f - a_percent) * b;
 }
