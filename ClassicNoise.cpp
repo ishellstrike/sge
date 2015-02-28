@@ -136,6 +136,10 @@ float noise ( float x, float y, float z )
     return nxyz;
 }
 
+float normalized_simplexnoise( float xin, float yin )
+{
+    return (simplexnoise(xin, yin) + 1) / 2.f;
+}
 
 float simplexnoise( float xin, float yin )
 {

@@ -257,7 +257,9 @@ bool Mesh::loadOBJ(std::string path)
         }else if ( strcmp( lineHeader, "f" ) == 0 ){
             std::string vertex1, vertex2, vertex3;
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+                                                                       &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+                                                                       &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
             if (matches != 9){
                 LOG(error) << "Model ruined";
                 return false;
@@ -389,7 +391,7 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &proj[0][0]);
     //glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
     //glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
-    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(100000,234560,98500)[0]);
+    glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(200000,234560,9850000)[0]);
 
     //    if(shader->ambient_location != -1)
     //        glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);

@@ -10,81 +10,49 @@
 
 class Camera {
 public:
-    enum CameraType {
-        ORTHO, FREE
-    };
-    enum CameraDirection {
-        UP, DOWN, LEFT, RIGHT, FORWARD, BACK
-    };
     enum FrustrumPlane {
         RIGHT_PLANE, LEFT_PLANE, BOTTOM_PLANE, TOP_PLANE, BACK_PLANE, FRONT_PLANE
     };
-
     float m_clipMatrix[16];
     float m_frustum[6][4];
+
+    Camera(float aspectRatio, float fieldOfView, glm::vec3 lookAt, glm::vec3 up, float nearPlane, float farPlane);
+    Camera(float aspectRation, glm::vec3 lookAt);
     Camera();
-    ~Camera();
 
-    void Reset();
-    void Update();
+    glm::vec3 Up, Forward, Backward, Left, Right;
+    bool projectionMatrixDirty = true, viewMatrixDirty = true;
+    glm::mat4 projection = glm::mat4(1), view = glm::mat4(1), model = glm::mat4(1), MVP = glm::mat4(1), VP = glm::mat4(1);
 
-    void Move(CameraDirection dir, GameTimer *gt);
-    void ChangePitch(float degrees);
-    void ChangeHeading(float degrees);
-
-    void Move2D(int x, int y, GameTimer *gt);
-
-    void SetPosition(glm::vec3 pos);
-    void SetLookAt(glm::vec3 pos);
-    void SetFOV(double fov);
-    void SetViewport(int loc_x, int loc_y, int width, int height);
-    void SetClipping(double near_clip_distance, double far_clip_distance);
-
-    void SetDistance(double cam_dist);
-
-    void GetViewport(int &loc_x, int &loc_y, int &width, int &height);
-    void GetMatricies(glm::mat4 &P, glm::mat4 &V, glm::mat4 &M) const;
-    glm::mat4 VP() const;
-    glm::mat4 GetOrthoProjection();
-    std::string getFullDebugDescription();
-    CameraType camera_mode;
-
-    int window_width;
-    int window_height;
-    int viewport_x;
-    int viewport_y;
+    float MinPitch = 0.001f;
+    float MaxPitch = glm::half_pi<float>() - 0.3f;
+    float pitch = 0.001f;
     glm::vec4 viewport;
 
-    double aspect;
-    double field_of_view;
-    double near_clip;
-    double far_clip;
+    float yaw = 0, roll = 0;
 
-    float camera_scale;
-    float camera_heading;
-    float camera_pitch;
+    float fieldOfView;
+    float aspectRatio;
 
-    float max_pitch_rate;
-    float max_heading_rate;
-    bool move_camera;
+    float nearPlane;
+    float farPlane;
+
+    float MinZoom = 5;
+    float MaxZoom = 100;
+    float zoom = 30;
 
     glm::vec3 position;
-    glm::vec3 position_delta;
-    glm::vec3 look_at;
-    glm::vec3 direction;
-
-    glm::vec3 up, right;
-    glm::quat rotation_quaternion;
-    glm::vec3 mouse_position;
-
-    glm::mat4 projection;
-    glm::mat4 view;
-    glm::mat4 model;
-    glm::mat4 MVP;
-
+    glm::vec3 lookAt;
 
     void CalculateFrustum(const glm::mat4 &projectionMatrix, const glm::mat4 &modelViewMatrix);
     bool BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max);
+    void Update();
+    void ReCreateViewMatrix();
+    void ReCreateProjectionMatrix();
+    void SetPosition(const glm::vec3 &_p);
+    void SetLookAt(const glm::vec3 &_p);
+    std::string getFullDebugDescription();
+    void SetViewport(const glm::vec4 &_p);
+    void Reset();
 };
-const glm::mat4 OrthoProjection(float left, float right, float bottom, float top, float zNear, float zFar);
 #endif // Camera_h_

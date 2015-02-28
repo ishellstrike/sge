@@ -1,172 +1,119 @@
 #include "camera.h"
 #include <glm/gtc/matrix_transform.inl>
+#include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <string>
 #include "helper.h"
 #include <glm/gtc/quaternion.hpp>
+#include "prefecences.h"
 
-Camera::Camera() {
-    camera_mode = FREE;
-    up = glm::vec3(0.0, 1.0, 0.0);
-    field_of_view = 45;
-    rotation_quaternion = glm::quat(1.0, 0.0, 0.0, 0.0);
-    position_delta = glm::vec3(0.0, 0.0, 0.0);
-    camera_scale = .5f;
-    max_pitch_rate = 5;
-    max_heading_rate = 5;
-    move_camera = true;
-    near_clip = 0.1f;
-    far_clip = 1000;
-    auto windowWidth = 1;
-    auto windowHeight = 1;
-    aspect = float(windowWidth) / float(windowHeight);
-    camera_heading = camera_pitch = 0;
-}
-Camera::~Camera() {
+Camera::Camera(float __aspectRation, glm::vec3 __lookAt) :
+    aspectRatio(__aspectRation),
+    fieldOfView(glm::quarter_pi<float>()),
+    lookAt(__lookAt),
+    Up(glm::vec3(0,0,1)),
+    nearPlane(0.1f),
+    farPlane(1000)
+{
+
 }
 
-void Camera::Reset() {
-    up = glm::vec3(0.0, 1.0, 0.0);
+Camera::Camera() :
+       aspectRatio(4/3.f),
+       fieldOfView(glm::quarter_pi<float>()),
+       lookAt(glm::vec3(0,0,0)),
+       Up(glm::vec3(0,0,1)),
+       nearPlane(0.1f),
+       farPlane(1000)
+{
+
 }
 
-void Camera::Update() {
-    auto yawq = glm::angleAxis(camera_pitch, glm::vec3(1,0,0));
-    auto pitchq = glm::angleAxis(camera_heading, glm::vec3(0,1,0));
-
-    projection = glm::perspective(field_of_view, aspect, near_clip, far_clip);
-
-    rotation_quaternion = pitchq * yawq * rotation_quaternion;
-    rotation_quaternion = glm::normalize(rotation_quaternion);
-
-    position += position_delta;
-    look_at = position + direction;
-
-
-    camera_heading *= .5;
-    camera_pitch *= .5;
-    position_delta = position_delta * .8f;
-
-    view = glm::translate(glm::mat4_cast(rotation_quaternion), -position);//glm::lookAt(position, look_at, up);
-
-    up = glm::vec3(view[1][0],view[1][1],view[1][2]);
-    right = glm::vec3(view[0][0],view[0][1],view[0][2]);
-    direction = glm::vec3(view[2][0],view[2][1],view[2][2]);
-
-    model = glm::mat4(1.0f);
-    MVP = projection * view * model;
+Camera::Camera(float __aspectRatio, float __fieldOfView, glm::vec3 __lookAt, glm::vec3 __up, float __nearPlane, float __farPlane) :
+    aspectRatio(__aspectRatio),
+    fieldOfView(__fieldOfView),
+    lookAt(__lookAt),
+    Up(__up),
+    nearPlane(__nearPlane),
+    farPlane(__farPlane)
+{
 }
 
-void Camera::SetPosition(glm::vec3 pos) {
-    position = pos;
+void Camera::ReCreateViewMatrix() {
+    glm::mat4 rot = glm::yawPitchRoll(0.f, pitch, 0.f) * glm::eulerAngleZ(yaw - glm::pi<float>());
+//    Forward = glm::vec3(0,0,1) * rot;
+//    Backward = glm::vec3.Transform(glm::vec3.Down, rot);
+//    Left = glm::vec3.Transform(glm::vec3.Left, rot);
+//    Right = glm::vec3.Transform(glm::vec3.Right, rot);
+//    Up = glm::vec3.Transform(glm::vec3.Backward, rot);
+
+
+    position = glm::vec3(rot * glm::vec4(0.f, 0.f, 1.f, 1.f));
+
+    position *= zoom;
+    position += lookAt;
+
+    //Calculate a new viewmatrix
+    view = glm::lookAt(position, lookAt, glm::vec3(0.f,0.f,1.f));
+    viewMatrixDirty = false;
 }
 
-void Camera::SetLookAt(glm::vec3 pos) {
-    look_at = pos;
-    rotation_quaternion = glm::quat_cast(glm::lookAt(position, pos, glm::vec3(0,0,1)));
-}
-void Camera::SetFOV(double fov) {
-    field_of_view = fov;
-}
-void Camera::SetViewport(int loc_x, int loc_y, int width, int height) {
-    viewport_x = loc_x;
-    viewport_y = loc_y;
-    window_width = width;
-    window_height = height;
-    aspect = double(width) / double(height);
-    viewport = glm::vec4(loc_x, loc_y, width, height);
-}
-void Camera::SetClipping(double near_clip_distance, double far_clip_distance) {
-    near_clip = near_clip_distance;
-    far_clip = far_clip_distance;
+void Camera::ReCreateProjectionMatrix()
+{
+    projection = glm::perspectiveFov(fieldOfView, Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y, nearPlane, farPlane);
+    projectionMatrixDirty = false;
 }
 
-void Camera::Move(CameraDirection dir, GameTimer *gt) {
-    if (camera_mode == FREE) {
-        switch (dir) {
-        case UP:
-           position_delta += glm::vec3(0, -camera_scale, 0) * rotation_quaternion * (float) gt->elapsed;
-            break;
-        case DOWN:
-            position_delta += glm::vec3(0, camera_scale, 0) * rotation_quaternion * (float) gt->elapsed;
-            break;
-        case LEFT:
-           position_delta += glm::vec3(-camera_scale, 0, 0) * rotation_quaternion * (float) gt->elapsed;
-            break;
-        case RIGHT:
-           position_delta += glm::vec3(camera_scale, 0, 0) * rotation_quaternion * (float) gt->elapsed;
-            break;
-        case FORWARD:
-            position_delta += glm::vec3(0, 0, -camera_scale) * rotation_quaternion * (float) gt->elapsed;
-            break;
-        case BACK:
-           position_delta += glm::vec3(0, 0, camera_scale) * rotation_quaternion * (float) gt->elapsed;
-            break;
-        }
-    }
-}
-void Camera::ChangePitch(float degrees) {
-    if (degrees < -max_pitch_rate) {
-        degrees = -max_pitch_rate;
-    } else if (degrees > max_pitch_rate) {
-        degrees = max_pitch_rate;
-    }
-    camera_pitch += degrees;
-
-    if (camera_pitch > 360.0f) {
-        camera_pitch -= 360.0f;
-    } else if (camera_pitch < -360.0f) {
-        camera_pitch += 360.0f;
-    }
-}
-void Camera::ChangeHeading(float degrees) {
-    if (degrees < -max_heading_rate) {
-        degrees = -max_heading_rate;
-    } else if (degrees > max_heading_rate) {
-        degrees = max_heading_rate;
-    }
-    if (camera_pitch > 90 && camera_pitch < 270 || (camera_pitch < -90 && camera_pitch > -270)) {
-        camera_heading -= degrees;
-    } else {
-        camera_heading += degrees;
-    }
-    if (camera_heading > 360.0f) {
-        camera_heading -= 360.0f;
-    } else if (camera_heading < -360.0f) {
-        camera_heading += 360.0f;
-    }
-}
-void Camera::Move2D(int x, int y, GameTimer *gt) {
-    glm::vec3 mouse_delta = glm::vec3(x, y, 0) * 3.0F;
-    if (move_camera) {
-        ChangeHeading(0.08f * gt->elapsed * mouse_delta.x);
-        ChangePitch(0.08f * gt->elapsed * mouse_delta.y);
-    }
+void Camera::SetPosition(const glm::vec3 &_p)
+{
+    position = _p;
+    viewMatrixDirty = true;
 }
 
-void Camera::GetViewport(int &loc_x, int &loc_y, int &width, int &height) {
-    loc_x = viewport_x;
-    loc_y = viewport_y;
-    width = window_width;
-    height = window_height;
-}
-
-void Camera::GetMatricies(glm::mat4 &P, glm::mat4 &V, glm::mat4 &M) const {
-    P = projection;
-    V = view;
-    M = model;
+void Camera::SetLookAt(const glm::vec3 &_p)
+{
+    lookAt = _p;
+    viewMatrixDirty = true;
 }
 
 std::string Camera::getFullDebugDescription()
 {
-    return string_format("CAMERA\n%s\nheading = %s pitch = %s\nup = %s\ndir = %s\ncross = %s\n\n"
-                         "%s",
-        std::to_string(view).c_str(),
-        std::to_string(camera_heading).c_str(),
-        std::to_string(camera_pitch).c_str(),
-        std::to_string(up).c_str(),
-        std::to_string(direction).c_str(),
-        std::to_string(glm::cross(direction, up)).c_str(),
-        std::to_string(m_frustum).c_str());
+    return std::to_string(m_frustum);
+}
+
+void Camera::SetViewport(const glm::vec4 &_p)
+{
+    viewport = _p;
+}
+
+void Camera::Reset()
+{
+    yaw = 0;
+    pitch = 0.001f;
+    zoom = 30;
+    viewMatrixDirty = true;
+}
+
+void Camera::Update()
+{
+    bool mvp_recalc = false;
+    pitch = glm::clamp(pitch, MinPitch, MaxPitch);
+    if(projectionMatrixDirty)
+    {
+        ReCreateProjectionMatrix();
+        mvp_recalc = true;
+    }
+    if(viewMatrixDirty)
+    {
+        ReCreateViewMatrix();
+        mvp_recalc = true;
+    }
+
+    if(mvp_recalc)
+    {
+        MVP = projection * view * model;
+        VP = projection*view;
+    }
 }
 
 void NormalizePlane(float frustum[6][4], int side) {
@@ -255,9 +202,4 @@ bool Camera::BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max) {
         }
     }
     return true;
-}
-
-glm::mat4 Camera::VP() const
-{
-    return projection*view;
 }

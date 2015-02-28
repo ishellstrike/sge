@@ -132,7 +132,7 @@ glm::vec2 SpriteBatch::measureText(const std::string &text, Font *font)
     return drawText(text32, 0, 0, font, glm::vec4(0), true);
 }
 
-glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
+glm::vec2 SpriteBatch::drawText(const std::u32string &text32, int x, int y,
                                 Font *font, const glm::vec4 &col_, bool no_draw)
 {
     float x_start = x;
@@ -154,7 +154,7 @@ glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
             drawQuadText(glm::vec2(x, y), cc, *font->font, col_);
 
         x += cc.advance.x;
-        x_max = glm::max(x, x_max);
+        x_max = glm::max(static_cast<float>(x), x_max);
     }
     y += font->spacing;
     return glm::vec2(x_max - x_start, y - y_start);

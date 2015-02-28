@@ -1,5 +1,5 @@
-#ifndef FIELSYSTEM
-#define FIELSYSTEM
+#ifndef FIELSYSTEM_H
+#define FIELSYSTEM_H
 #include "logger.h"
 #include <vector>
 #include "helper.h"
@@ -7,7 +7,7 @@
 #ifdef _WIN32
     #include <windows.h>
 
-    void getFiles(const std::string &dir, std::vector<std::string> &files)
+    inline void getFiles(const std::string &dir, std::vector<std::string> &files)
     {
         files.clear();
         WIN32_FIND_DATA f;
@@ -35,7 +35,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-    void getFiles(const std::string &dir, std::vector<std::string> &files)
+    inline void getFiles(const std::string &dir, std::vector<std::string> &files)
     {
         files.clear();
         DIR *direct = opendir(("./"+dir).c_str());
@@ -56,5 +56,5 @@
     }
 #endif
 
-#endif // FIELSYSTEM
+#endif // FIELSYSTEM_H
 

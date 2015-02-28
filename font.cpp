@@ -50,7 +50,7 @@ void Font::renderAtlas()
     std::string  text8(R"xxx( `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,
                        ./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?\|
                        йцукенгшщзхъфывапролджэячсмитьбю
-                       ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123)xxx");
+                       ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123@)xxx");
 
     std::u32string text;
 

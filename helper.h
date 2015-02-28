@@ -160,21 +160,47 @@ inline std::string to_traf_string(double traf){
 }
 
 namespace glm {
+
+    /*!
+     * \brief Описывает луч
+     */
     struct ray {
         ray() {}
         ray(glm::vec3 p, glm::vec3 d) : origin(p), dir(d) {precompute();}
         ray(const glm::ray &r) : origin(r.origin), dir(r.dir) {precompute();}
         ray &operator =(const glm::ray &r) {if (this != &r) {origin = r.origin; dir = r.dir; precompute();}  return *this;}
         ~ray() {}
+
+        /*!
+         * \brief Нормализует направление и предрасчитывает обратное направление и массив sign[]
+         */
         void precompute();
 
-        glm::vec3 origin;
-        glm::vec3 dir;
-        glm::vec3 inv;
-        int sign[3];
+        glm::vec3 origin; /*< Точка начала луча*/
+        glm::vec3 dir; /*< Направление луча*/
+        glm::vec3 inv; /*< Инвертированное направление луча*/
+        int sign[3]; /*< dir[i] < 0 (используется для оптипизации)*/
     };
 
+    /*!
+     * \brief Приведение длины вектора направления к единице
+     * \param x Луч
+     * \return Нормализованный луч
+     */
     glm::ray normalize(const glm::ray &x);
+
+    /*!
+     * \brief Проверяет пересечение луча с ограничивающим паралелемипедом в определенном участе луча
+     *
+     * \param r Луч
+     * \param t0 Ближняя граница отсечения по лучу
+     * \param t1 Дальняя граница отсечения по лучу
+     * \param min Минимальная точка ограничивающего паралелепипеда
+     * \param max Максимальная точка ограничивающего паралелепипеда
+     * \return true, в случае пересечение и false в обратном случае
+     *
+     * @note t1 > t0, max[i] > min[i]
+     */
     bool intersect(const glm::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max);
 }
 

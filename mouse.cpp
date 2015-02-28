@@ -144,11 +144,18 @@ void Mouse::resetDelta(){
         sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] = GLFW_REPEAT;
     if(sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS)
         sm_buttons[GLFW_MOUSE_BUTTON_LEFT] = GLFW_REPEAT;
+    if(sm_buttons[GLFW_MOUSE_BUTTON_MIDDLE] == GLFW_PRESS)
+        sm_buttons[GLFW_MOUSE_BUTTON_MIDDLE] = GLFW_REPEAT;
 }
 
 bool Mouse::isWheelUp()
 {
     return offset > last_offset;
+}
+
+bool Mouse::isMiddleDown()
+{
+    return sm_buttons[GLFW_MOUSE_BUTTON_MIDDLE] == GLFW_PRESS || sm_buttons[GLFW_MOUSE_BUTTON_MIDDLE] == GLFW_REPEAT;
 }
 
 bool Mouse::isWheelDown()

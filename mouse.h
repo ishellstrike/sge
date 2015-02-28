@@ -76,6 +76,7 @@ public:
     static bool IsLeftDown();
     static bool isWheelDown();
     static bool isWheelUp();
+    static bool isMiddleDown();
 };
 
 

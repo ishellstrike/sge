@@ -53,7 +53,7 @@ public:
     void resetScissor();
     glm::vec2 measureText(const std::string &text, Font *font);
 private:
-    glm::vec2 drawText(const std::u32string &text32, float x, float y,
+    glm::vec2 drawText(const std::u32string &text32, int x, int y,
                        Font *font, const glm::vec4 &col_, bool no_draw = false);
     void drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, const Texture &tex, const glm::vec4 &color);
 };

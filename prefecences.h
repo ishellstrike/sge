@@ -4,8 +4,8 @@
 #include <glm/glm.hpp>
 #include <string>
 
-#define RESX ((int)Prefecences::Instance()->resolution.x)
-#define RESY ((int)Prefecences::Instance()->resolution.y)
+#define RESX (static_cast<int>(Prefecences::Instance()->resolution.x))
+#define RESY (static_cast<int>(Prefecences::Instance()->resolution.y))
 
 class Prefecences
 {
@@ -64,7 +64,7 @@ public:
      * \brief getTexturesDir
      * \return textures directory name
      */
-    std::string getTexturesDir()
+    const std::string getTexturesDir() const
     {
         return data_dir + texture_data_subdir;
     }
@@ -77,7 +77,7 @@ public:
      * \brief getShadersDir
      * \return shaders directory name
      */
-    std::string getShadersDir()
+    const std::string getShadersDir() const
     {
         return data_dir + shaders_data_subdir;
     }
@@ -90,7 +90,7 @@ public:
      * \brief getFontsDir
      * \return fonts directory name
      */
-    std::string getFontsDir()
+    const std::string getFontsDir() const
     {
         return data_dir + fonts_data_subdir;
     }
@@ -103,7 +103,7 @@ public:
      * \brief getJsonDir
      * \return json directory name
      */
-    std::string getJsonDir()
+    const std::string getJsonDir() const
     {
         return data_dir + json_data_subdir;
     }
