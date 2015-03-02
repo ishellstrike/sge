@@ -38,7 +38,7 @@ void TextureAtlas::LoadAll()
     }
     LOG(info) << "texatlas load " << i << " pixmaps";
 
-    tex->Load(atlas, false, true);
+    tex->Load(atlas, false, false);
     LOG(info) << "texatlas load texture";
 }
 

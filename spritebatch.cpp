@@ -340,7 +340,7 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
     glm::vec2 e = end;
 
 
-    pos[cur*4]     = glm::vec3(s.x,         s.y + 2,     0);
+    pos[cur*4]     = glm::vec3(s.x,         s.y + 2, 0);
     pos[cur*4 + 1] = glm::vec3(s.x + width, s.y,     0);
     pos[cur*4 + 2] = glm::vec3(e.x + width, e.y + 2, 0);
     pos[cur*4 + 3] = glm::vec3(e.x,         e.y,     0);
