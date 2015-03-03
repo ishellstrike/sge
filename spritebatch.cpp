@@ -339,11 +339,21 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
     glm::vec2 s = start;
     glm::vec2 e = end;
 
+    float len = glm::length(s - e);
+    float phi = atan2(s.y - e.y, s.x - e.x);
 
-    pos[cur*4]     = glm::vec3(s.x,         s.y + 2, 0);
-    pos[cur*4 + 1] = glm::vec3(s.x + width, s.y,     0);
-    pos[cur*4 + 2] = glm::vec3(e.x + width, e.y + 2, 0);
-    pos[cur*4 + 3] = glm::vec3(e.x,         e.y,     0);
+    glm::mat2 rot = glm::mat2();
+    rot[0][0] = glm::cos(phi); rot[0][1] = -glm::sin(phi);
+    rot[1][0] = glm::sin(phi); rot[1][1] = glm::cos(phi);
+    glm::vec2 p[4] = {glm::vec2(0, 0), glm::vec2(-len, 0), glm::vec2(0, -width), glm::vec2(-len, -width)};
+    for(int i = 0; i < 4; i++)
+        p[i] = p[i] * rot + s;
+
+
+    pos[cur*4]     = glm::vec3(p[0].x, p[0].y, 0);
+    pos[cur*4 + 1] = glm::vec3(p[1].x, p[1].y, 0);
+    pos[cur*4 + 2] = glm::vec3(p[2].x, p[2].y, 0);
+    pos[cur*4 + 3] = glm::vec3(p[3].x, p[3].y, 0);
 
     col[cur*4]     = color;
     col[cur*4 + 1] = color;
@@ -357,10 +367,10 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
 
     index[cur*6]     = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
-    index[cur*6 + 2] = cur*4 + 3;
+    index[cur*6 + 2] = cur*4 + 2;
     index[cur*6 + 3] = cur*4 + 1;
-    index[cur*6 + 4] = cur*4 + 2;
-    index[cur*6 + 5] = cur*4 + 3;
+    index[cur*6 + 4] = cur*4 + 3;
+    index[cur*6 + 5] = cur*4 + 2;
 
     cur++;
 }
