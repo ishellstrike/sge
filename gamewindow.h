@@ -15,6 +15,7 @@
 #include "textureatlas.h"
 #include "font.h"
 #include "mesh.h"
+#include "camera.h"
 
 class GameWindow {
 public:
@@ -43,7 +44,9 @@ public:
     std::shared_ptr<BasicJargShader> basic;
     std::shared_ptr<SpriteBatch> batch;
 
-    Mesh *m;
+    std::shared_ptr<Mesh> m;
+    bool wire = true;
+    Camera cam;
 
     std::shared_ptr<Font> f12;
 };

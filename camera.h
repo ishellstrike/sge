@@ -1,4 +1,3 @@
-#pragma once
 #ifndef Camera_h__
 #define Camera_h__
 

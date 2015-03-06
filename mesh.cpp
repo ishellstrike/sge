@@ -380,6 +380,8 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool pat
     if(Vertices.size() == 0 && !loaded){
         return;
     }
+    if(!m_vao || !m_vbo)
+        return;
     if(!shader)
         throw std::logic_error("null shader");
     if(!material)

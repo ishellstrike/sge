@@ -1,6 +1,6 @@
 #include "mouse.h"
 #include <glm/glm.hpp>
-#include "sge/prefecences.h"
+#include "prefecences.h"
 
 GLFWwindow *Mouse::sm_window = nullptr;
 

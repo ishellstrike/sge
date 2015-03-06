@@ -13,7 +13,6 @@ SOURCES += \
     json/json_value.cpp \
     json/json_writer.cpp \
     lodepng/lodepng.cpp \
-    helper.inl \
     colorextender.cpp \
     textureatlas.cpp \
     spritebatch.cpp \
@@ -35,7 +34,11 @@ SOURCES += \
     vpnt.cpp \
     icosahedron.cpp \
     cube.cpp \
-    SphereTesselator.cpp
+    SphereTesselator.cpp \
+    voronoi/Voronoi.cpp \
+    voronoi/geometry.cpp \
+    ClassicNoise.cpp \
+    camera.cpp
 
 VERSION = 0.1.0
 
@@ -85,7 +88,14 @@ HEADERS += \
     icosahedron.h \
     cube.h \
     tangentcalc.h \
-    SphereTesselator.h
+    SphereTesselator.h \
+    utfcpp/utf8.h \
+    helper.h \
+    voronoi/geometry.h \
+    voronoi/Lloyd.h \
+    voronoi/Voronoi.h \
+    ClassicNoise.h \
+    camera.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

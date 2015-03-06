@@ -1,7 +1,7 @@
 #include "spheretesselator.h"
 #include "mesh.h"
 
-Mesh* Tesselator::Tesselate(int iters, const Mesh& mesh)
+Mesh* Tesselator::Tesselate(int iters, Mesh &mesh)
 {
     Mesh* m = new Mesh(mesh);
     for (int i = 0; i< iters; ++i)
@@ -13,17 +13,12 @@ Mesh* Tesselator::Tesselate(int iters, const Mesh& mesh)
     return m;
 }
 
-Mesh* Tesselator::SphereTesselate(int iters, const Mesh& mesh)
+void Tesselator::SphereTesselate(int iters, std::shared_ptr<Mesh> &mesh)
 {
-    Mesh* m = new Mesh(mesh);
     for (int i = 0; i< iters; ++i)
     {
-        auto temp = SphereSubTesselate(*m);
-        delete m;
-        m = temp;
-        temp = nullptr;
+        SphereSubTesselate(mesh);
     }
-    return m;
 }
 
 static const int Seed = 123;
@@ -47,18 +42,18 @@ inline float SmoothedNoise2D(float x, float y) {
     return corners + sides + center;
 }
 
-Mesh* Tesselator::SphereSubTesselate(const Mesh& mesh)
+void Tesselator::SphereSubTesselate(std::shared_ptr<Mesh> &mesh)
 {
-    Mesh* m = new Mesh();
+    std::shared_ptr<Mesh> m = std::make_shared<Mesh>();
 
     int off = 0;
-    for (int i =0; i< mesh.Indices.size() -2; i+= 3)
+    for (int i =0; i< mesh->Indices.size() -2; i+= 3)
     {
         VertPosNormTanBiTex t;
 
-        VertPosNormTanBiTex v0 = mesh.Vertices[mesh.Indices[i]];
-        VertPosNormTanBiTex v1 = mesh.Vertices[mesh.Indices[i+1]];
-        VertPosNormTanBiTex v2 = mesh.Vertices[mesh.Indices[i+2]];
+        VertPosNormTanBiTex v0 = mesh->Vertices[mesh->Indices[i]];
+        VertPosNormTanBiTex v1 = mesh->Vertices[mesh->Indices[i+1]];
+        VertPosNormTanBiTex v2 = mesh->Vertices[mesh->Indices[i+2]];
 
         t = v0;
         t.position = glm::normalize(t.position);
@@ -106,7 +101,7 @@ Mesh* Tesselator::SphereSubTesselate(const Mesh& mesh)
 
         off+=6;
     }
-    return m;
+    mesh = m;
 }
 
 Mesh* Tesselator::SubTesselate(const Mesh& mesh)

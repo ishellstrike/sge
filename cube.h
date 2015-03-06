@@ -4,7 +4,13 @@
 class Cube
 {
 public:
-    static const Mesh *getMesh();
+    /*!
+     * \brief меш куба
+     * \return меш
+     *
+     * Получение копии меша, содержащего геометрию куба 1х1х1 без нормалей, тангентов, бинормалей
+     */
+    static std::shared_ptr<Mesh> getMesh();
 private:
     static std::shared_ptr<Mesh> sm_mesh;
 };

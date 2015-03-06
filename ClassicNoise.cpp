@@ -79,7 +79,7 @@ inline float dot2 (const glm::vec3 &g, float x, float y )
     return g[0] * x + g[1] * y;
 }
 
-float noise ( float x, float y, float z )
+float Noise::noise ( float x, float y, float z )
 {
     int X = floor(x);
     int Y = floor(y);
@@ -136,12 +136,12 @@ float noise ( float x, float y, float z )
     return nxyz;
 }
 
-float normalized_simplexnoise( float xin, float yin )
+float Noise::normalized_simplexnoise( float xin, float yin )
 {
     return (simplexnoise(xin, yin) + 1) / 2.f;
 }
 
-float simplexnoise( float xin, float yin )
+float Noise::simplexnoise( float xin, float yin )
 {
     float n0, n1, n2; // Noise contributions from the three corners
     // Skew the input space to determine which simplex cell we're in
@@ -211,7 +211,7 @@ float simplexnoise( float xin, float yin )
     return 70.0 * ( n0 + n1 + n2 );
 }
 // 3D simplex noise
-float simplexnoise( float xin, float yin, float zin )
+float Noise::simplexnoise( float xin, float yin, float zin )
 {
     float n0, n1, n2, n3; // Noise contributions from the four corners
     // Skew the input space to determine which simplex cell we're in
@@ -327,7 +327,7 @@ float simplexnoise( float xin, float yin, float zin )
     return 32.0 * ( n0 + n1 + n2 + n3 );
 }
 // 4D simplex noise
-float simplexnoise( float x, float y, float z, float w )
+float Noise::simplexnoise( float x, float y, float z, float w )
 {
     // The skewing and unskewing factors are hairy again for the 4D case
     const float F4 = ( sqrt( 5.0 ) - 1.0 ) / 4.0;
