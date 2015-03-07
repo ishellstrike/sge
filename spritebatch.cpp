@@ -4,6 +4,7 @@
 #include "utfcpp/utf8.h"
 #include "prefecences.h"
 #include <GL/glew.h>
+#include "colorextender.h"
 
 typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
@@ -345,6 +346,9 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
     glm::mat2 rot = glm::mat2();
     rot[0][0] = glm::cos(phi); rot[0][1] = -glm::sin(phi);
     rot[1][0] = glm::sin(phi); rot[1][1] = glm::cos(phi);
+    // |\ |
+    // | \|
+    //  p
     glm::vec2 p[4] = {glm::vec2(0, 0), glm::vec2(-len, 0), glm::vec2(0, -width), glm::vec2(-len, -width)};
     for(int i = 0; i < 4; i++)
         p[i] = p[i] * rot + s;
@@ -373,6 +377,112 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
     index[cur*6 + 5] = cur*4 + 2;
 
     cur++;
+}
+
+void SpriteBatch::drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color)
+{
+    if(cur >= SIZE - 4)
+        render();
+    if(current_program != color_program)
+    {
+        render();
+        current_program = color_program;
+        current_program->Use();
+    }
+
+    glm::vec2 s = start;
+    glm::vec2 e = end;
+
+    float len = glm::length(s - e);
+    float phi = atan2(s.y - e.y, s.x - e.x);
+
+    glm::mat2 rot = glm::mat2();
+    rot[0][0] = glm::cos(phi); rot[0][1] = -glm::sin(phi);
+    rot[1][0] = glm::sin(phi); rot[1][1] = glm::cos(phi);
+
+    float p = 4;
+
+    // |\ |\ |\ |
+    // | \| \| \|
+    //  r  c  l
+    glm::vec2 p_left[4]   = {glm::vec2(0, 0),            glm::vec2(-len, 0),        glm::vec2(0, -width/p),   glm::vec2(-len, -width/p)};
+    glm::vec2 p_center[4] = {glm::vec2(0, -width/p),   glm::vec2(-len, -width/p),   glm::vec2(0, -width/p*3), glm::vec2(-len, -width/p*3)};
+    glm::vec2 p_right[4]  = {glm::vec2(0, -width/p*3), glm::vec2(-len, -width/p*3), glm::vec2(0, -width),     glm::vec2(-len, -width)};
+    for(int i = 0; i < 4; i++)
+    {
+        p_left[i]   = p_left[i]   * rot + s;
+        p_center[i] = p_center[i] * rot + s;
+        p_right[i]  = p_right[i]  * rot + s;
+    }
+
+    glm::vec4 tr = Color::Clear;
+
+
+    pos[cur*4]     = glm::vec3(p_left[0].x, p_left[0].y, 0);
+    pos[cur*4 + 1] = glm::vec3(p_left[1].x, p_left[1].y, 0);
+    pos[cur*4 + 2] = glm::vec3(p_left[2].x, p_left[2].y, 0);
+    pos[cur*4 + 3] = glm::vec3(p_left[3].x, p_left[3].y, 0);
+
+    pos[cur*4 + 4] = glm::vec3(p_center[0].x, p_center[0].y, 0);
+    pos[cur*4 + 5] = glm::vec3(p_center[1].x, p_center[1].y, 0);
+    pos[cur*4 + 6] = glm::vec3(p_center[2].x, p_center[2].y, 0);
+    pos[cur*4 + 7] = glm::vec3(p_center[3].x, p_center[3].y, 0);
+
+    pos[cur*4 + 8]  = glm::vec3(p_right[0].x, p_right[0].y, 0);
+    pos[cur*4 + 9]  = glm::vec3(p_right[1].x, p_right[1].y, 0);
+    pos[cur*4 + 10] = glm::vec3(p_right[2].x, p_right[2].y, 0);
+    pos[cur*4 + 11] = glm::vec3(p_right[3].x, p_right[3].y, 0);
+
+    col[cur*4 + 0] = tr;
+    col[cur*4 + 1] = tr;
+    col[cur*4 + 2] = color;
+    col[cur*4 + 3] = color;
+
+    col[cur*4 + 4] = color;
+    col[cur*4 + 5] = color;
+    col[cur*4 + 6] = color;
+    col[cur*4 + 7] = color;
+
+    col[cur*4 + 8]  = color;
+    col[cur*4 + 9]  = color;
+    col[cur*4 + 10] = tr;
+    col[cur*4 + 11] = tr;
+
+    uv[cur*4]      = glm::vec2(0, 0);
+    uv[cur*4 + 1]  = glm::vec2(1, 0);
+    uv[cur*4 + 2]  = glm::vec2(1, 1);
+    uv[cur*4 + 3]  = glm::vec2(0, 1);
+    uv[cur*4 + 4]  = glm::vec2(0, 0);
+    uv[cur*4 + 5]  = glm::vec2(1, 0);
+    uv[cur*4 + 6]  = glm::vec2(1, 1);
+    uv[cur*4 + 7]  = glm::vec2(0, 1);
+    uv[cur*4 + 8]  = glm::vec2(0, 0);
+    uv[cur*4 + 9]  = glm::vec2(1, 0);
+    uv[cur*4 + 10]  = glm::vec2(1, 1);
+    uv[cur*4 + 11]  = glm::vec2(0, 1);
+
+    index[cur*6]     = cur*4;
+    index[cur*6 + 1] = cur*4 + 1;
+    index[cur*6 + 2] = cur*4 + 2;
+    index[cur*6 + 3] = cur*4 + 1;
+    index[cur*6 + 4] = cur*4 + 3;
+    index[cur*6 + 5] = cur*4 + 2;
+
+    index[cur*6 + 6] = cur*4     + 4;
+    index[cur*6 + 7] = cur*4 + 1 + 4;
+    index[cur*6 + 8] = cur*4 + 2 + 4;
+    index[cur*6 + 9] = cur*4 + 1 + 4;
+    index[cur*6 + 10] = cur*4 + 3 + 4;
+    index[cur*6 + 11] = cur*4 + 2 + 4;
+
+    index[cur*6 + 12] = cur*4     + 8;
+    index[cur*6 + 13] = cur*4 + 1 + 8;
+    index[cur*6 + 14] = cur*4 + 2 + 8;
+    index[cur*6 + 15] = cur*4 + 1 + 8;
+    index[cur*6 + 16] = cur*4 + 3 + 8;
+    index[cur*6 + 17] = cur*4 + 2 + 8;
+
+    cur+=3;
 }
 
 void SpriteBatch::render()

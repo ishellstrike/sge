@@ -2,7 +2,7 @@
 #ifndef SphereTesselator_h__
 #define SphereTesselator_h__
 
-#include "mesh.h"
+#include "geometry/mesh.h"
 class Tesselator
 {
 public:

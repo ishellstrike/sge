@@ -5,12 +5,12 @@
 #include "vpnt.h"
 #include <GL/glew.h>
 #include <vector>
-#include "basicjargshader.h"
-#include "texture.h"
+#include "../basicjargshader.h"
+#include "../texture.h"
 #include <string>
-#include "material.h"
+#include "../material.h"
 #include <memory>
-#include "spritebatch.h"
+#include "../spritebatch.h"
 
 
 /*!

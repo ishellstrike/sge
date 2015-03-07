@@ -2,7 +2,7 @@
 #ifndef VertexPositionTexture_h__
 #define VertexPositionTexture_h__
 
-#include "colorextender.h"
+#include "../colorextender.h"
 #include <glm/glm.hpp>
 
 enum BufferType

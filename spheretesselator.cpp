@@ -1,5 +1,4 @@
 #include "spheretesselator.h"
-#include "mesh.h"
 
 Mesh* Tesselator::Tesselate(int iters, Mesh &mesh)
 {

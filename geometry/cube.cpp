@@ -1,19 +1,19 @@
 #include "cube.h"
 #include <GL/glew.h>
 #include "mesh.h"
-#include "colorextender.h"
+#include "../colorextender.h"
 
 #define VERTEXCOUNT 24
 #define INDEXCOUNT 36
 
 static const glm::vec3 __vertexPositions[VERTEXCOUNT] =
 {	
-    glm::vec3(-0.5, -0.5, -0.5), glm::vec3(-0.5, 0.5, -0.5), glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.5, -0.5, -0.5), // front
-    glm::vec3(0.5, -0.5,0.5), glm::vec3(0.5, 0.5,0.5), glm::vec3(-0.5, 0.5,0.5), glm::vec3(-0.5, -0.5,0.5), // back
-    glm::vec3(-0.5, 0.5, -0.5), glm::vec3(-0.5, 0.5,0.5), glm::vec3(0.5, 0.5,0.5), glm::vec3(0.5, 0.5, -0.5), // top
-    glm::vec3(-0.5, -0.5,0.5), glm::vec3(-0.5, -0.5, -0.5), glm::vec3(0.5, -0.5, -0.5), glm::vec3(0.5, -0.5,0.5), // bottom
-    glm::vec3(-0.5, -0.5,0.5), glm::vec3(-0.5, 0.5,0.5), glm::vec3(-0.5, 0.5, -0.5), glm::vec3(-0.5, -0.5, -0.5), // left
-    glm::vec3(0.5, -0.5, -0.5), glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.5, 0.5,0.5), glm::vec3(0.5, -0.5,0.5) // right
+    glm::vec3(-0.5, -0.5, -0.5), glm::vec3(-0.5, 0.5, -0.5),  glm::vec3(0.5, 0.5, -0.5),  glm::vec3(0.5, -0.5, -0.5), // front
+    glm::vec3(0.5, -0.5,0.5),    glm::vec3(0.5, 0.5,0.5),     glm::vec3(-0.5, 0.5,0.5),   glm::vec3(-0.5, -0.5,0.5), // back
+    glm::vec3(-0.5, 0.5, -0.5),  glm::vec3(-0.5, 0.5,0.5),    glm::vec3(0.5, 0.5,0.5),    glm::vec3(0.5, 0.5, -0.5), // top
+    glm::vec3(-0.5, -0.5,0.5),   glm::vec3(-0.5, -0.5, -0.5), glm::vec3(0.5, -0.5, -0.5), glm::vec3(0.5, -0.5,0.5), // bottom
+    glm::vec3(-0.5, -0.5,0.5),   glm::vec3(-0.5, 0.5,0.5),    glm::vec3(-0.5, 0.5, -0.5), glm::vec3(-0.5, -0.5, -0.5), // left
+    glm::vec3(0.5, -0.5, -0.5),  glm::vec3(0.5, 0.5, -0.5),   glm::vec3(0.5, 0.5,0.5),    glm::vec3(0.5, -0.5,0.5) // right
 };
 
 static const GLuint __vertexIndex[INDEXCOUNT] =

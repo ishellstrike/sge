@@ -52,6 +52,7 @@ public:
     void reduceScissor(glm::vec2 loc, glm::vec2 size);
     void resetScissor();
     glm::vec2 measureText(const std::string &text, Font *font);
+    void drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
 private:
     glm::vec2 drawText(const std::u32string &text32, int x, int y,
                        Font *font, const glm::vec4 &col_, bool no_draw = false);

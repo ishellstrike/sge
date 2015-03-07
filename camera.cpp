@@ -7,11 +7,9 @@
 #include <glm/gtc/quaternion.hpp>
 #include "prefecences.h"
 
-Camera::Camera(float __aspectRation, glm::vec3 __lookAt) :
-    aspectRatio(__aspectRation),
+Camera::Camera(glm::vec3 __lookAt) :
     fieldOfView(glm::quarter_pi<float>()),
     lookAt(__lookAt),
-    Up(glm::vec3(0,0,1)),
     nearPlane(0.1f),
     farPlane(1000)
 {
@@ -19,21 +17,17 @@ Camera::Camera(float __aspectRation, glm::vec3 __lookAt) :
 }
 
 Camera::Camera() :
-       aspectRatio(4/3.f),
        fieldOfView(glm::quarter_pi<float>()),
        lookAt(glm::vec3(0,0,0)),
-       Up(glm::vec3(0,0,1)),
        nearPlane(0.1f),
        farPlane(1000)
 {
 
 }
 
-Camera::Camera(float __aspectRatio, float __fieldOfView, glm::vec3 __lookAt, glm::vec3 __up, float __nearPlane, float __farPlane) :
-    aspectRatio(__aspectRatio),
+Camera::Camera(float __fieldOfView, glm::vec3 __lookAt, glm::vec3 __up, float __nearPlane, float __farPlane) :
     fieldOfView(__fieldOfView),
     lookAt(__lookAt),
-    Up(__up),
     nearPlane(__nearPlane),
     farPlane(__farPlane)
 {
@@ -93,6 +87,88 @@ void Camera::Reset()
     zoom = 30;
     viewMatrixDirty = true;
 }
+const glm::mat4 &Camera::getProjection() const
+{
+    return projection;
+}
+const glm::mat4 &Camera::getView() const
+{
+    return view;
+}
+const glm::mat4 &Camera::getModel() const
+{
+    return model;
+}
+const glm::mat4 &Camera::getMVP() const
+{
+    return MVP;
+}
+const glm::mat4 &Camera::getVP() const
+{
+    return VP;
+}
+
+const glm::vec3 &Camera::getLookAt() const
+{
+    return lookAt;
+}
+void Camera::setLookAt(const glm::vec3 &value)
+{
+    lookAt = value;
+    viewMatrixDirty = true;
+}
+
+const glm::vec3 &Camera::getPosition() const
+{
+    return position;
+}
+void Camera::setPosition(const glm::vec3 &value)
+{
+    position = value;
+    viewMatrixDirty = true;
+}
+
+float Camera::getPitch() const
+{
+    return pitch;
+}
+void Camera::setPitch(float value)
+{
+    pitch = value;
+    viewMatrixDirty = true;
+}
+
+float Camera::getYaw() const
+{
+    return yaw;
+}
+void Camera::setYaw(float value)
+{
+    yaw = value;
+    viewMatrixDirty = true;
+}
+
+float Camera::getRoll() const
+{
+    return roll;
+}
+
+void Camera::setRoll(float value)
+{
+    roll = value;
+    viewMatrixDirty = true;
+}
+
+const glm::vec4 &Camera::getViewport() const
+{
+    return viewport;
+}
+void Camera::setViewport(const glm::vec4 &value)
+{
+    viewport = value;
+    projectionMatrixDirty = true;
+}
+
 
 void Camera::Update()
 {
@@ -126,9 +202,9 @@ void NormalizePlane(float frustum[6][4], int side) {
     frustum[side][3] /= magnitude;
 }
 
-void Camera::CalculateFrustum( const glm::mat4 &projectionMatrix, const glm::mat4 &modelViewMatrix) {
-    const glm::mat4 &MV = modelViewMatrix;
-    const glm::mat4 &P = projectionMatrix;
+void Camera::CalculateFrustum() {
+    const glm::mat4 &MV = view * model;
+    const glm::mat4 &P = projection;
 
     m_clipMatrix[0]  = (MV[0][0] * P[0][0]) + (MV[0][1] * P[1][0]) + (MV[0][2] * P[2][0]) + (MV[0][3] * P[3][0]);
     m_clipMatrix[1]  = (MV[0][0] * P[0][1]) + (MV[0][1] * P[1][1]) + (MV[0][2] * P[2][1]) + (MV[0][3] * P[3][1]);
