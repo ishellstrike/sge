@@ -28,17 +28,17 @@ SOURCES += \
     json/json_internalmap.inl \
     json/json_valueiterator.inl \
     main.cpp \
-    mesh.cpp \
     material.cpp \
     basicjargshader.cpp \
     vpnt.cpp \
-    icosahedron.cpp \
-    cube.cpp \
     SphereTesselator.cpp \
     voronoi/Voronoi.cpp \
     voronoi/geometry.cpp \
     ClassicNoise.cpp \
-    camera.cpp
+    camera.cpp \
+    geometry/cube.cpp \
+    geometry/icosahedron.cpp \
+    geometry/mesh.cpp
 
 VERSION = 0.1.0
 
@@ -81,12 +81,9 @@ HEADERS += \
     utfcpp/utf8/checked.h \
     utfcpp/utf8/core.h \
     utfcpp/utf8/unchecked.h \
-    mesh.h \
     material.h \
     basicjargshader.h \
     vpnt.h \
-    icosahedron.h \
-    cube.h \
     tangentcalc.h \
     SphereTesselator.h \
     utfcpp/utf8.h \
@@ -95,7 +92,10 @@ HEADERS += \
     voronoi/Lloyd.h \
     voronoi/Voronoi.h \
     ClassicNoise.h \
-    camera.h
+    camera.h \
+    geometry/icosahedron.h \
+    geometry/cube.h \
+    geometry/mesh.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
