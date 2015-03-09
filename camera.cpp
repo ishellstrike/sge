@@ -34,12 +34,11 @@ Camera::Camera(float __fieldOfView, glm::vec3 __lookAt, glm::vec3 __up, float __
 }
 
 void Camera::ReCreateViewMatrix() {
-    glm::mat4 rot = glm::yawPitchRoll(0.f, pitch, 0.f) * glm::eulerAngleZ(yaw - glm::pi<float>());
-//    Forward = glm::vec3(0,0,1) * rot;
-//    Backward = glm::vec3.Transform(glm::vec3.Down, rot);
-//    Left = glm::vec3.Transform(glm::vec3.Left, rot);
-//    Right = glm::vec3.Transform(glm::vec3.Right, rot);
-//    Up = glm::vec3.Transform(glm::vec3.Backward, rot);
+    glm::mat4 rot = glm::eulerAngleZ(yaw - glm::pi<float>()) * glm::yawPitchRoll(0.f, pitch, 0.f);
+    Forward = glm::vec3(glm::vec4(0,-1,0,0) * glm::eulerAngleZ(-yaw));
+    Backward = glm::vec3(glm::vec4(0,1,0,0) * glm::eulerAngleZ(-yaw));
+    Right = glm::vec3(glm::vec4(-1,0,0,0) * glm::eulerAngleZ(-yaw));
+    Left = glm::vec3(glm::vec4(1,0,0,0) * glm::eulerAngleZ(-yaw));
 
 
     position = glm::vec3(rot * glm::vec4(0.f, 0.f, 1.f, 1.f));
@@ -78,6 +77,7 @@ std::string Camera::getFullDebugDescription()
 void Camera::SetViewport(const glm::vec4 &_p)
 {
     viewport = _p;
+    projectionMatrixDirty = true;
 }
 
 void Camera::Reset()

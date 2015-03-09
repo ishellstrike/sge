@@ -1,5 +1,6 @@
 #ifndef COLORSCHEME_H
 #define COLORSCHEME_H
+#define GLM_SWIZZLE
 #include <glm/glm.hpp>
 #include "colorextender.h"
 

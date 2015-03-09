@@ -13,6 +13,7 @@
 #include <math.h>
 #include "colorextender.h"
 #include "string.h"
+#include <vector>
 
 #ifdef NNNDEBUG
 #define OPENGL_CHECK_ERRORS() \
@@ -25,6 +26,17 @@
 #endif // NNNDEBUG
 
 #define HasValue(value) if(value) value
+
+/*!
+ * \brief 3d версия алгоритме Брезенхема
+ * \param p1 начало отрезка
+ * \param p2 конец отрезка
+ * \param out_points[out] единичные кубы пространства, пересекающиеся с отрезком
+ *
+ * Трассировка пересечения заданного отрезка с кубами 1х1х1, на которое виртуально делится все пространство
+ */
+void Bresencham3D(const glm::vec3 &p1, const glm::vec3 &p2, std::vector<glm::vec3> &out_points);
+
 
 inline void get_uvs(unsigned int apos, float &q, float &w, float &qq, float &ww)
 {

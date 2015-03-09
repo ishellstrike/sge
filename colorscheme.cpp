@@ -1,10 +1,8 @@
 #include "colorscheme.h"
 
-
-
 ColorScheme ColorScheme::Basic()
 {
-    return ColorScheme::FromColor(Color::Gray);
+    return ColorScheme::FromColor(glm::vec4(Color::Gray.xyz(), 0.8f));
 }
 
 ColorScheme ColorScheme::FromColor(const glm::vec4 &col)

@@ -28,4 +28,4 @@ std::shared_ptr<Mesh> Quad::getMesh()
     return std::make_shared<Mesh>(*sm_mesh);
 }
 
-std::shared_ptr<Mesh> Quad::getMesh();
+std::shared_ptr<Mesh> Quad::sm_mesh;

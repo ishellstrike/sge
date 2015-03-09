@@ -188,7 +188,7 @@ bool Mouse::IsLeftDown()
 
 bool Mouse::isRightDown()
 {
-    return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS || sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_REPEAT;
+    return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS || sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_REPEAT;
 }
 
 bool Mouse::isLeftPressed()
