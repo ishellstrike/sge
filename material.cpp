@@ -11,14 +11,3 @@ Material::Material(void) :
     normal(nullptr)
 {
 }
-
-
-PointLight::PointLight(void) :
-    ambient(0),
-    diffuse(0),
-    specular(0),
-    position(0),
-    attenuation(0)
-{
-
-}

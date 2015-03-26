@@ -14,7 +14,7 @@
 #include "gametimer.h"
 #include "textureatlas.h"
 #include "font.h"
-#include "mesh.h"
+#include "geometry/mesh.h"
 #include "camera.h"
 
 class GameWindow {
