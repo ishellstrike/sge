@@ -5,7 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <string>
 #include "gametimer.h"
-
+#include "helper.h"
 
 class Camera {
 public:
@@ -48,7 +48,10 @@ public:
     const glm::vec4 &getViewport() const;
     void setViewport(const glm::vec4 &value);
 
-        glm::vec3 Up, Forward, Backward, Left, Right;
+    glm::vec3 Up, Forward, Backward, Left, Right;
+
+    glm::vec2 Project(const glm::vec3 pos);
+    glm::ray unProject(const glm::vec2 pos);
 
 private:
     float MinPitch = 0.001f;

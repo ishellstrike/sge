@@ -169,6 +169,23 @@ void Camera::setViewport(const glm::vec4 &value)
     projectionMatrixDirty = true;
 }
 
+glm::vec2 Camera::Project(const glm::vec3 pos)
+{
+    glm::vec3 v = glm::project(pos, getModel() * getView(), getProjection(), getViewport());
+    //v /= v.z;
+    return glm::vec2(v.x, RESY - v.y);
+}
+
+glm::ray Camera::unProject(const glm::vec2 pos)
+{
+    glm::vec3 near = glm::unProject(glm::vec3(pos.x, RESY-pos.y, 0.f),  getModel() * getView(), getProjection(),
+                                    getViewport());
+    glm::vec3 far = glm::unProject(glm::vec3(pos.x, RESY-pos.y, 1.f),  getModel() * getView(), getProjection(),
+                                    getViewport());
+    glm::ray ray(near, far - near);
+    return ray;
+}
+
 
 void Camera::Update()
 {
