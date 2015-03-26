@@ -5,7 +5,8 @@
 #include <stdarg.h>
 #include <memory>
 
-enum {
+enum LogLevel {
+    verbose,
     info,
     error,
     fatal
@@ -17,21 +18,28 @@ enum {
 
 class Log
 {
-public:
-    Log(int type, const char *file, int line);
-    ~Log();
-
     int m_type;
 
     std::ostream o_stream;
 
+public:
+    Log(int type, const char *file, int line);
+    ~Log();
+
     template<typename T>
     Log &operator <<(const T &a)
     {
+        if(m_type < max_level)
+        {
+            return *this;
+        }
+
         o_stream << a;
 
         return *this;
     }
+
+    static LogLevel max_level;
 };
 
 #endif // LOGGER_H

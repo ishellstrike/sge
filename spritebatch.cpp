@@ -405,7 +405,7 @@ void SpriteBatch::drawAALine(const glm::vec2 &start, const glm::vec2 &end, float
     // |\ |\ |\ |
     // | \| \| \|
     //  r  c  l
-    glm::vec2 p_left[4]   = {glm::vec2(0, 0),            glm::vec2(-len, 0),        glm::vec2(0, -width/p),   glm::vec2(-len, -width/p)};
+    glm::vec2 p_left[4]   = {glm::vec2(0, 0),          glm::vec2(-len, 0),          glm::vec2(0, -width/p),   glm::vec2(-len, -width/p)};
     glm::vec2 p_center[4] = {glm::vec2(0, -width/p),   glm::vec2(-len, -width/p),   glm::vec2(0, -width/p*3), glm::vec2(-len, -width/p*3)};
     glm::vec2 p_right[4]  = {glm::vec2(0, -width/p*3), glm::vec2(-len, -width/p*3), glm::vec2(0, -width),     glm::vec2(-len, -width)};
     for(int i = 0; i < 4; i++)

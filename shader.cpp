@@ -13,9 +13,9 @@
 else \
     glGetProgramInfoLog(obj, 1024, &infologLength, infoLog); \
     if (infologLength > 0) { \
-    LOG(info) << infoLog; \
+    LOG(verbose) << infoLog; \
     } else { \
-    LOG(info) << "     no errors"; \
+    LOG(verbose) << "     no errors"; \
     } }
 
 JargShader::JargShader() :
@@ -28,11 +28,11 @@ JargShader::~JargShader(void)
 {
     while(!shaders_.empty()) {
         glDeleteShader(shaders_.back());
-        LOG(info) << "Deleting shader " << std::to_string(shaders_.back());
+        LOG(verbose) << "Deleting shader " << std::to_string(shaders_.back());
         shaders_.pop_back();
     }
     glDeleteProgram(program);
-    LOG(info) << string_format("Deleting program %i", program);
+    LOG(verbose) << string_format("Deleting program %i", program);
 }
 
 /*!
@@ -54,9 +54,9 @@ GLint JargShader::locateVar(const std::string &s)
 {
     GLint a = glGetUniformLocation(program, s.c_str());
     if(a >= 0)
-        LOG(info) << s << " located in " << a;
+        LOG(verbose) << s << " located in " << a;
     else
-        LOG(fatal) << s << " missed";
+        LOG(verbose) << s << " missed";
     vars.push_back(a);
     return a;
 }
@@ -108,7 +108,7 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
         }
         file.close();
     } else {
-        LOG(error) << string_format("%s %s", "Failed to open file ", source.c_str());
+        LOG(fatal) << string_format("%s %s", "Failed to open file ", source.c_str());
         return;
     }
     std::string str = ss.str();
@@ -117,7 +117,7 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
     GLuint id = glCreateShader(type);
     glShaderSource(id, 1, (const char **)&data, &length);
     glCompileShader(id);
-    LOG(info) << source << " file " << part_name;
+    LOG(verbose) << source << " file " << part_name;
     printLog(id);
     glAttachShader(program, id);
     shaders_.push_back(id);
@@ -131,9 +131,9 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
  */
 bool JargShader::Link() {
     glLinkProgram(program);
-    LOG(info) << "Program " << std::to_string(program) << " linking";
+    LOG(verbose) << "Program " << std::to_string(program) << " linking";
     printLog(program);
-    LOG(info) << "--------------------";
+    LOG(verbose) << "--------------------";
     return true;
 }
 
@@ -153,7 +153,7 @@ void JargShader::Afterlink()
     tangentAttrib = glGetAttribLocation(program, "tangent");
     binormalAttrib = glGetAttribLocation(program, "binormal");
 
-    LOG(info) << "pos = " << posAttrib <<
+    LOG(verbose) << "pos = " << posAttrib <<
                  "; col = " << colAttrib <<
                  "; uv = " << uvAttrib <<
                  "; norm = " << normAttrib <<
@@ -188,7 +188,7 @@ void JargShader::PushGlobalHeader(const std::string &source, const char *version
         }
         file.close();
     } else {
-        LOG(error) << string_format("%s %s", "Failed to open file ", source.c_str());
+        LOG(fatal) << string_format("%s %s", "Failed to open file ", source.c_str());
         return;
     }
     global_header = ss.str();

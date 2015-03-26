@@ -18,7 +18,7 @@ void TextureAtlas::LoadAll()
 {
     std::vector<std::string> files;
     getFiles(Prefecences::Instance()->getTexturesDir(), files);
-    LOG(info) << "texatlas found " << files.size() << " files";
+    LOG(verbose) << "texatlas found " << files.size() << " files";
 
     Pixmap atlas(glm::vec2(2048, 2048));
 
@@ -36,10 +36,10 @@ void TextureAtlas::LoadAll()
         }
         ++i;
     }
-    LOG(info) << "texatlas load " << i << " pixmaps";
+    LOG(verbose) << "texatlas load " << i << " pixmaps";
 
     tex->Load(atlas, false, false);
-    LOG(info) << "texatlas load texture";
+    LOG(verbose) << "texatlas load texture";
 }
 
 std::shared_ptr<Texture> TextureAtlas::tex = std::make_shared<Texture>();

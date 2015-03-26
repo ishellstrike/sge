@@ -15,14 +15,14 @@ Font::~Font()
 
 void Font::initFreeType(int size)
 {
-    LOG(info) << "FT " << size << " start";
+    LOG(verbose) << "FT " << size << " start";
     if(FT_Init_FreeType(&ft))
     {
         LOG(fatal) << "could not init free type library.";
         return;
     }
     else
-        LOG(fatal) << "FT " << size << " init OK";
+        LOG(verbose) << "FT " << size << " init OK";
     char fontPath[] = "data/fonts/DejaVuSansMono.ttf";
     if(FT_New_Face(ft, fontPath, 0, &m_ftFace))
     {
@@ -30,7 +30,7 @@ void Font::initFreeType(int size)
         return;
     }
     else
-        LOG(info) << "FT " << size << " face OK";
+        LOG(verbose) << "FT " << size << " face OK";
 
     FT_Select_Charmap(m_ftFace, ft_encoding_unicode);
     FT_Set_Pixel_Sizes(m_ftFace, 0, size);
@@ -40,11 +40,9 @@ void Font::initFreeType(int size)
 
 void Font::renderAtlas()
 {
-    float x = 0, sx = 1;
-    float y = 0, sy = 1;
+    float x = 0;
+    float y = 0;
     float x_start = x;
-    float y_start = y;
-    float x_max = 0;
     const char32_t *p;
     FT_GlyphSlot ftGlyph = m_ftFace->glyph;
     std::string  text8(R"xxx( `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,
