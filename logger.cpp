@@ -44,7 +44,14 @@ Log::~Log()
     {
     }
     else
-    o_stream << std::endl;
+    {
+        o_stream << std::endl;
+    }
+
+    if(m_type == fatal)
+    {
+        throw;
+    }
 }
 
 LogLevel Log::max_level = info;

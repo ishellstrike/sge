@@ -73,29 +73,35 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
     std::stringstream ss;
     name = source;
     std::string part_name;
+
     if(!has_header){
         ss << GLSLVER << std::endl;
     }
-    if(type == GL_FRAGMENT_SHADER) {
+
+    switch(type)
+    {
+    case GL_FRAGMENT_SHADER:
         part_name = "#define _FRAGMENT_";
-        ss << part_name << std::endl;
-    }
-    else if(type == GL_VERTEX_SHADER) {
+        break;
+    case GL_VERTEX_SHADER:
         part_name = "#define _VERTEX_";
-        ss << part_name << std::endl;
-    }
-    else if(type == GL_GEOMETRY_SHADER) {
+        break;
+    case GL_GEOMETRY_SHADER:
         part_name = "#define _GEOMETRY_";
-        ss << part_name << std::endl;
-    }
-    else if(type == GL_TESS_EVALUATION_SHADER) {
+        break;
+    case GL_TESS_EVALUATION_SHADER:
         part_name = "#define _TESSEVAL_";
-        ss << part_name << std::endl;
-    }
-    else if(type == GL_TESS_CONTROL_SHADER) {
+        break;
+    case GL_TESS_CONTROL_SHADER:
         part_name = "#define _TESSCONTROL_";
-        ss << part_name << std::endl;
+        break;
+    default:
+        part_name = "";
+        break;
     }
+
+    ss << part_name << std::endl;
+
     if(has_header) {
         ss << global_header;
     }
