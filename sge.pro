@@ -47,6 +47,8 @@ win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
 
+unix|win32: LIBS += -lOpenCL
+
 win32:INCLUDEPATH += $$PWD/3rdparty/include
 win32:DEPENDPATH += $$PWD/3rdparty/include
 
@@ -107,4 +109,3 @@ DISTFILES += \
     data/shaders/font.glsl \
     data/textures/cone1.png \
     data/shaders/minimal.glsl
-

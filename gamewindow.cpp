@@ -17,6 +17,7 @@
 #include <algorithm>
 #include "ClassicNoise.h"
 #include "voronoi/Lloyd.h"
+#include <CL/cl.hpp>
 
 #define MAJOR 2
 #define MINOR 1
@@ -168,6 +169,14 @@ bool GameWindow::BaseInit()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    std::vector<cl::Platform> platforms;
+    cl::Platform::get(&platforms);
+
+//    for(cl::Platform p : platforms)
+//    {
+//        // LOG(info) << p.cl_type << "founded";
+//    }
+
     Keyboard::Initialize();
     glfwSetKeyCallback(window, [](GLFWwindow *win, int key, int scancode, int action, int mods){
         Keyboard::SetKey(key, scancode, action, mods);
@@ -230,8 +239,8 @@ bool GameWindow::BaseInit()
     //m->CalcTB();
     //m->f
     m->Bind();
-    auto far = m->FarestPoint() / 2;
-    cam.setZoom(far);
+    auto far2 = m->FarestPoint() / 2;
+    cam.setZoom(far2);
 }
 
 void GameWindow::BaseUpdate()
@@ -261,6 +270,16 @@ void GameWindow::BaseUpdate()
        cam.setPitch( cam.getPitch() + Mouse::getCursorDelta().y / 100.f);
    }
 
+   if(Mouse::isWheelUp())
+   {
+       cam.setZoom(cam.getZoom() + 1);
+   }
+
+   if(Mouse::isWheelDown())
+   {
+       cam.setZoom(cam.getZoom() - 1);
+   }
+
     Mouse::resetDelta();
 }
 
@@ -274,13 +293,24 @@ void GameWindow::BaseDraw()
     m->Render(cam.getMVP());
     cam.Update();
 
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadMatrixf((const GLfloat*)&cam.getProjection()[0][0]);
-//    glMatrixMode(GL_MODELVIEW);
-//    glm::mat4 MV = cam.getView() * m->World;
-//    glLoadMatrixf((const GLfloat*)&MV[0][0]);
-//    glUseProgram(0);
-//    glBegin(GL_LINES);
+   glMatrixMode(GL_PROJECTION);
+   glLoadMatrixf((const GLfloat*)&cam.getProjection()[0][0]);
+   glMatrixMode(GL_MODELVIEW);
+   glm::mat4 MV = cam.getView() * m->World;
+   glLoadMatrixf((const GLfloat*)&MV[0][0]);
+   glUseProgram(0);
+   glBegin(GL_LINES);
+   for(int i=-10;i<=10;i++)
+       for(int j=-10;j<=10;j++)
+   {
+       float z = cam.getZoom() / 3;
+       glColor3f(0.8,0.8,0.8);
+       glVertex3f((i  )*z,(j  )*z,0);
+       glVertex3f((i  )*z,(j+1)*z,0);
+       glVertex3f((i  )*z,(j  )*z,0);
+       glVertex3f((i+1)*z,(j  )*z,0);
+   }
+   glEnd();
 //    for(int i=0;i<m->Indices.size();i++)
 //    {
 //        glColor3f(1,0,0);
