@@ -51,6 +51,8 @@ public:
     void CalcTB();
     void matf();
     int loaded = false;
+    void loadSTL(const std::string &path);
+    float FarestPoint();
 private:
     GLuint *m_vao = nullptr;
     GLuint *m_vbo = nullptr;

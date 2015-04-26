@@ -45,6 +45,9 @@ public:
     float getRoll() const;
     void setRoll(float value);
 
+    float getZoom() const;
+    void setZoom(float value);
+
     const glm::vec4 &getViewport() const;
     void setViewport(const glm::vec4 &value);
 

@@ -9,8 +9,8 @@
 #include "textureatlas.h"
 #include <thread>
 #include <chrono>
-#include "cube.h"
-#include "icosahedron.h"
+#include "geometry/cube.h"
+#include "geometry/icosahedron.h"
 #include "SphereTesselator.h"
 #include "helper.h"
 #include "voronoi/Voronoi.h"
@@ -202,9 +202,8 @@ bool GameWindow::BaseInit()
 
     atlas.LoadAll();
 
-    cam.SetPosition({1,1,1});
+    cam.SetPosition({50,50,50});
     cam.SetLookAt({0,0,0});
-    cam.MaxPitch = glm::two_pi<float>();
 
     basic = std::make_shared<BasicJargShader>();
     basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
@@ -217,106 +216,6 @@ bool GameWindow::BaseInit()
     //Tesselator::SphereTesselate(4, m);
     m->shader = basic;
 
-
-    glm::vec2 size = {40,40};
-    std::vector<glm::vec2> mListSite = Generate(1000, size);
-
-    for(int i = 0; i < 44; i++)
-        mListSite = Lloyd(mListSite, size);
-
-    std::vector<std::vector<unsigned int> > listVertex;
-
-    for(unsigned int i = 0; i < 1; ++i)
-    {
-      // Строим диаграмму
-      Voronoi voronoi(mListSite, size);
-      voronoi();
-
-      listVertex.clear();
-      listVertex.resize(mListSite.size());
-      mListSite.clear();
-
-      // Строим список вершин для каждой точки.
-      auto edges = voronoi.GetEdges();
-
-      for(auto it = edges.begin(); it != edges.end(); ++it)
-      {
-        const Voronoi::Edge &edge = (*it);
-
-        if(std::find(listVertex[edge.site1].begin(), listVertex[edge.site1].end(), edge.vertex1) ==
-           listVertex[edge.site1].end())
-        {
-          listVertex[edge.site1].push_back(edge.vertex1);
-        }
-        if(std::find(listVertex[edge.site1].begin(), listVertex[edge.site1].end(), edge.vertex2) ==
-           listVertex[edge.site1].end())
-        {
-          listVertex[edge.site1].push_back(edge.vertex2);
-        }
-        if(std::find(listVertex[edge.site2].begin(), listVertex[edge.site2].end(), edge.vertex1) ==
-           listVertex[edge.site2].end())
-        {
-          listVertex[edge.site2].push_back(edge.vertex1);
-        }
-        if(std::find(listVertex[edge.site2].begin(), listVertex[edge.site2].end(), edge.vertex2) ==
-           listVertex[edge.site2].end())
-        {
-          listVertex[edge.site2].push_back(edge.vertex2);
-        }
-      }
-
-
-      auto vertex = voronoi.GetVertex();
-      std::vector<float> height;
-      height.resize(vertex.size());
-      for(int i = 0; i < vertex.size(); i++)
-      {
-          height[i] = rand()%100 / 100.f;
-      }
-      // Вычисляем новые значения точек.
-      for(unsigned int j = 0; j < listVertex.size(); ++j)
-      {
-        auto const &poligon = listVertex[j];
-        if(poligon.empty()) {
-            continue;
-        }
-        glm::vec2 point;
-        int count = 0;
-        int start = m->Vertices.size();
-        std::vector<glm::vec2> verteces;
-        for(auto jt = poligon.begin(); jt != poligon.end(); ++jt)
-        {
-          point += vertex[*jt];
-          verteces.push_back(vertex[*jt]);
-          count++;
-        }
-        verteces = SortPointCcw(verteces);
-        for(int i = 0; i < verteces.size(); i++){
-            m->Vertices.push_back(VertPosNormTanBiTex({verteces[i].x - size.x / 2,
-                                                       //Noise::simplexnoise(verteces[i].x,verteces[i].y) +
-                                                       //Noise::simplexnoise(verteces[i].x/16.f, verteces[i].y/16.f)*3,
-                                                       0,
-                                                       verteces[i].y - size.y / 2}
-                                                      ,{verteces[i].x / size.x, verteces[i].y / size.y}));
-        }
-        if(count >= 3)
-        {
-            for(int n = 1; n < count -1; n++)
-            {
-                m->Indices.push_back(start);
-                m->Indices.push_back(start + n);
-                m->Indices.push_back(start + n + 1);
-            }
-        }
-
-        mListSite.push_back(point / static_cast<float>(poligon.size()));
-      }
-    }
-
-    m->Bind();
-    m->Unindex();
-    m->computeNormal();
-
     std::shared_ptr<Material> mat = std::make_shared<Material>();
     std::shared_ptr<Texture> texx = std::make_shared<Texture>();
     texx->Load("data/tex/derevo.png", true, true);
@@ -325,6 +224,14 @@ bool GameWindow::BaseInit()
     mat->texture = texx;
     mat->normal = texxx;
     m->material = mat;
+
+    m->loadSTL("untitled.stl");
+    //m->computeNormal();
+    //m->CalcTB();
+    //m->f
+    m->Bind();
+    auto far = m->FarestPoint() / 2;
+    cam.setZoom(far);
 }
 
 void GameWindow::BaseUpdate()
@@ -340,7 +247,7 @@ void GameWindow::BaseUpdate()
     if (Keyboard::isKeyDown(GLFW_KEY_LEFT_ALT))
    {
    Mouse::SetFixedPosState(true);
-   cam.pitch += Mouse::getCursorDelta().y / 1000.f;
+   //cam.pitch += Mouse::getCursorDelta().y / 1000.f;
    }
    else
    Mouse::SetFixedPosState(false);
@@ -350,8 +257,8 @@ void GameWindow::BaseUpdate()
    }
    if (Mouse::isRightDown() || Keyboard::isKeyDown(GLFW_KEY_LEFT_ALT))
    {
-   cam.yaw += Mouse::getCursorDelta().x / 1000.f;
-   cam.viewMatrixDirty = true;
+       cam.setYaw( cam.getYaw() + Mouse::getCursorDelta().x / 100.f);
+       cam.setPitch( cam.getPitch() + Mouse::getCursorDelta().y / 100.f);
    }
 
     Mouse::resetDelta();
@@ -364,13 +271,13 @@ void GameWindow::BaseDraw()
 
 
     glEnable(GL_DEPTH_TEST);
-    m->Render(cam.VP);
+    m->Render(cam.getMVP());
     cam.Update();
 
 //    glMatrixMode(GL_PROJECTION);
-//    glLoadMatrixf((const GLfloat*)&cam.projection[0][0]);
+//    glLoadMatrixf((const GLfloat*)&cam.getProjection()[0][0]);
 //    glMatrixMode(GL_MODELVIEW);
-//    glm::mat4 MV = cam.view * m->World;
+//    glm::mat4 MV = cam.getView() * m->World;
 //    glLoadMatrixf((const GLfloat*)&MV[0][0]);
 //    glUseProgram(0);
 //    glBegin(GL_LINES);

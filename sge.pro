@@ -30,7 +30,6 @@ SOURCES += \
     main.cpp \
     material.cpp \
     basicjargshader.cpp \
-    vpnt.cpp \
     SphereTesselator.cpp \
     voronoi/Voronoi.cpp \
     voronoi/geometry.cpp \
@@ -38,7 +37,9 @@ SOURCES += \
     camera.cpp \
     geometry/cube.cpp \
     geometry/icosahedron.cpp \
-    geometry/mesh.cpp
+    geometry/mesh.cpp \
+    geometry/quad.cpp \
+    geometry/vpnt.cpp
 
 VERSION = 0.1.0
 
@@ -83,7 +84,6 @@ HEADERS += \
     utfcpp/utf8/unchecked.h \
     material.h \
     basicjargshader.h \
-    vpnt.h \
     tangentcalc.h \
     SphereTesselator.h \
     utfcpp/utf8.h \
@@ -95,7 +95,10 @@ HEADERS += \
     camera.h \
     geometry/icosahedron.h \
     geometry/cube.h \
-    geometry/mesh.h
+    geometry/mesh.h \
+    geometry/geometry.hpp \
+    geometry/quad.h \
+    geometry/vpnt.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

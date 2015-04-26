@@ -14,6 +14,7 @@
 #include "colorextender.h"
 #include "string.h"
 #include <vector>
+#include <sstream>
 
 #ifdef NNNDEBUG
 #define OPENGL_CHECK_ERRORS() \
@@ -37,6 +38,21 @@
  */
 void Bresencham3D(const glm::vec3 &p1, const glm::vec3 &p2, std::vector<glm::vec3> &out_points);
 
+inline std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+
+inline std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
+}
 
 inline void get_uvs(unsigned int apos, float &q, float &w, float &qq, float &ww)
 {
@@ -177,16 +193,33 @@ namespace glm {
      * \brief Описывает луч
      */
     struct ray {
-        ray() {}
-        ray(glm::vec3 p, glm::vec3 d) : origin(p), dir(d) {precompute();}
-        ray(const glm::ray &r) : origin(r.origin), dir(r.dir) {precompute();}
-        ray &operator =(const glm::ray &r) {if (this != &r) {origin = r.origin; dir = r.dir; precompute();}  return *this;}
-        ~ray() {}
 
         /*!
          * \brief Нормализует направление и предрасчитывает обратное направление и массив sign[]
          */
         void precompute();
+
+        ray() {}
+        ray(glm::vec3 p, glm::vec3 d) : origin(p), dir(d) { dir = normalize(dir);
+                                                            inv = glm::vec3(1/dir.x, 1/dir.y, 1/dir.z);
+                                                            sign[0] = inv.x < 0;
+                                                            sign[1] = inv.y < 0;
+                                                            sign[2] = inv.z < 0;
+                                                          }
+        ray(const glm::ray &r) : origin(r.origin), dir(r.dir) { dir = normalize(dir);
+                                                                inv = glm::vec3(1/dir.x, 1/dir.y, 1/dir.z);
+                                                                sign[0] = inv.x < 0;
+                                                                sign[1] = inv.y < 0;
+                                                                sign[2] = inv.z < 0;
+                                                              }
+        ray &operator =(const glm::ray &r) {if (this != &r) {
+                origin = r.origin; dir = r.dir; dir = normalize(dir);
+                inv = glm::vec3(1/dir.x, 1/dir.y, 1/dir.z);
+                sign[0] = inv.x < 0;
+                sign[1] = inv.y < 0;
+                sign[2] = inv.z < 0;}  return *this;
+                                           }
+        ~ray() {}
 
         glm::vec3 origin; /*< Точка начала луча*/
         glm::vec3 dir; /*< Направление луча*/

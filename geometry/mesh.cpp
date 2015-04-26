@@ -4,6 +4,8 @@
 #include "../spritebatch.h"
 #include "../helper.h"
 #include "../logger.h"
+#include <fstream>
+#include <sstream>
 
 Mesh::Mesh(void)
 {
@@ -455,6 +457,148 @@ void Mesh::Combine(Mesh* com)
         t++;
     }
 }
+
+void Mesh::loadSTL(const std::string &patch) {
+            VertPosNormTanBiTex vertex1;
+            VertPosNormTanBiTex vertex2;
+            VertPosNormTanBiTex vertex3;
+            int phase = -1; //0 normal, 1 nothing, 2 3 4 vertex, 5 6 nothing
+            int type = -1; //0 ascii, 1 binary
+            Vertices.clear();
+            Indices.clear();
+
+            std::ifstream file;
+            file.open(patch);
+
+            std::string lh;
+            std::getline(file, lh);
+            if (lh.find("solid") != std::string::npos) {
+                type = 0;
+            }
+            else {
+                type = 1;
+            }
+
+            if (type == 0) {
+                while (!file.eof()) {
+                    std::string lineHeader;
+                    std::getline(file, lineHeader);
+
+                    if (lineHeader.find("facet normal ") != std::string::npos) {
+                        phase = 0;
+                    }
+
+                    switch (phase) {
+                        case 0:
+                            sscanf(lineHeader.c_str(), "facet normal %g %g %g", &vertex1.normal.x, &vertex1.normal.y, &vertex1.normal.z);
+                            break;
+                        case 2:
+                            sscanf(lineHeader.c_str(), "vertex %g %g %g", &vertex1.position.x, &vertex1.position.y, &vertex1.position.z);
+                            break;
+                        case 3:
+                            sscanf(lineHeader.c_str(), "vertex %g %g %g", &vertex2.position.x, &vertex2.position.y, &vertex2.position.z);
+                            break;
+                        case 4:
+                            sscanf(lineHeader.c_str(), "vertex %g %g %g", &vertex3.position.x, &vertex3.position.y, &vertex3.position.z);
+                            vertex3.normal = vertex1.normal;
+                            vertex2.normal = vertex1.normal;
+                            Vertices.push_back(vertex1);
+                            Vertices.push_back(vertex2);
+                            Vertices.push_back(vertex3);
+                            break;
+                    }
+                    phase++;
+                }
+                file.close();
+            }
+            else {
+//                var bfile = File.OpenRead(path);
+//                bfile.Read(new byte[80], 0, 80); //80b header
+//                var reader32 = new byte[4];
+//                bfile.Read(reader32, 0, 4);
+//                uint ntri = BitConverter.ToUInt32(reader32, 0);
+//                for (int i = 0; i < ntri; i++) {
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex1.Normal.X = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex1.Normal.Y = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex1.Normal.Z = BitConverter.ToSingle(reader32, 0);
+
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex1.Position.X = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex1.Position.Y = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex1.Position.Z = BitConverter.ToSingle(reader32, 0);
+
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex2.Position.X = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex2.Position.Y = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex2.Position.Z = BitConverter.ToSingle(reader32, 0);
+//                    vertex2.Normal = vertex1.Normal;
+
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex3.Position.X = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex3.Position.Y = BitConverter.ToSingle(reader32, 0);
+//                    bfile.Read(reader32, 0, 4);
+//                    vertex3.Position.Z = BitConverter.ToSingle(reader32, 0);
+//                    vertex3.Normal = vertex1.Normal;
+
+//                    Verteces.Add(vertex1);
+//                    Verteces.Add(vertex2);
+//                    Verteces.Add(vertex3);
+
+//                    bfile.Read(reader32, 0, 2);
+//                }
+//                bfile.Close();
+            }
+
+            for (int i = 0; i < Vertices.size(); i++) {
+                Indices.push_back(i);
+            }
+        }
+
+        float Mesh::FarestPoint() {
+            float max = 0;
+            for (int i = 0; i < Vertices.size(); i++) {
+                auto t = glm::length(Vertices[i].position);
+                if (max < t) {
+                    max = t;
+                }
+            }
+            return max;
+        }
+
+//        public bool saveSTL(string path) {
+//            if (File.Exists(path)) {
+//                File.Delete(path);
+//            }
+//            FileStream file = File.OpenWrite(path);
+//            StreamWriter sr = new StreamWriter(file);
+
+//            sr.WriteLine("solid {0}", path);
+//            for (int i = 0; i < Verteces.Count; i += 3)
+//            {
+
+//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "facet normal", Verteces[i].Normal.X, Verteces[i].Normal.Y, Verteces[i].Normal.Z));
+//                sr.WriteLine(string.Format(ifp, "{0}", "outer loop"));
+//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "vertex", Verteces[i].Position.X, Verteces[i].Position.Y, Verteces[i].Position.Z));
+//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "vertex", Verteces[i + 1].Position.X, Verteces[i + 1].Position.Y, Verteces[i + 1].Position.Z));
+//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "vertex", Verteces[i + 2].Position.X, Verteces[i + 2].Position.Y, Verteces[i + 2].Position.Z));
+//                sr.WriteLine(string.Format(ifp, "{0}", "endloop"));
+//                sr.WriteLine(string.Format(ifp, "{0}", "endfacet"));
+//            }
+//            sr.WriteLine("endsolid {0}", path);
+
+//            sr.Flush();
+//            sr.Close();
+//            file.Close();
+//            return true;
+//        }
 
 void Mesh::BuildBounding()
 {

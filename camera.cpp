@@ -159,6 +159,17 @@ void Camera::setRoll(float value)
     viewMatrixDirty = true;
 }
 
+float Camera::getZoom() const
+{
+    return zoom;
+}
+
+void Camera::setZoom(float value)
+{
+    zoom = value;
+    viewMatrixDirty = true;
+}
+
 const glm::vec4 &Camera::getViewport() const
 {
     return viewport;
