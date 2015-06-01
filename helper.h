@@ -128,32 +128,33 @@ inline double triangular() {
         return max - sqrt((1 - U) * (max - min) * (max - mean));
 }
 
-inline bool inLimsV(glm::vec2 param1, glm::vec2 wpos, glm::vec2 size)
+inline bool inLimsVec2(glm::vec2 point, glm::vec2 area_begin, glm::vec2 area_end)
 {
-    return param1.x >= wpos.x && param1.y >= wpos.y && param1.x <= size.x && param1.y <= size.y;
+    return point.x >= area_begin.x && point.y >= area_begin.y && point.x <= area_end.x && point.y <= area_end.y;
 }
 
 template<class _Ty>
-inline bool inLims(_Ty param1, _Ty wpos, _Ty size)
+inline bool inLims(_Ty value, _Ty range_begin, _Ty range_end)
 {
-    return param1 >= wpos && param1 <= size;
+    return value >= range_begin && value <= range_end;
 }
 
 inline char keyToChar(int key, bool shift){
     int r = 0;
     if(inLims(key, 48, 57)){
         r = '0'+key-48;
-    }
+    } else
     if(inLims(key, 65, 90)){
         r = 'a'+key-65;
     }
 
-    if(shift)
+    if(shift) {
         return toupper(r);
+    }
     return r;
 }
 
-inline std::string string_format(const std::string fmt_str, ...) {
+inline std::string string_format(const std::string &fmt_str, ...) {
     int n = ((int)fmt_str.size()) * 2;
     std::string str;
     std::unique_ptr<char[]> formatted;

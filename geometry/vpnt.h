@@ -21,13 +21,13 @@ public:
     VertexPositionTexture();
     ~VertexPositionTexture();
 
-    VertexPositionTexture operator + (VertexPositionTexture __a)
+    VertexPositionTexture operator + (VertexPositionTexture __a) const
     {
         VertexPositionTexture b;
         b.position = position + __a.position;
         b.uv = __a.uv + uv; return b;
     }
-    VertexPositionTexture operator / (float __a)
+    VertexPositionTexture operator / (float __a) const
     {
         VertexPositionTexture b;
         b.position = position / __a;
@@ -50,7 +50,7 @@ public:
     VertPosNormTanBiTex();
     ~VertPosNormTanBiTex();
 
-    VertPosNormTanBiTex operator + (VertPosNormTanBiTex __a)
+    VertPosNormTanBiTex operator + (VertPosNormTanBiTex __a) const
     {
         VertPosNormTanBiTex b;
         b.position = position + __a.position;
@@ -61,7 +61,7 @@ public:
         return b;
     }
 
-    VertPosNormTanBiTex operator / (float __a)
+    VertPosNormTanBiTex operator / (float __a) const
     {
         VertPosNormTanBiTex b;
         b.position = position / __a;
@@ -86,7 +86,7 @@ public:
     VertPosMininormTex();
     ~VertPosMininormTex();
 
-    VertPosMininormTex operator + (VertPosMininormTex __a)
+    VertPosMininormTex operator + (VertPosMininormTex __a) const
     {
         VertPosMininormTex b;
         b.position = position + __a.position;
@@ -94,7 +94,7 @@ public:
         return b;
     }
 
-    VertPosMininormTex operator / (float __a)
+    VertPosMininormTex operator / (float __a) const
     {
         VertPosMininormTex b;
        b.position = position / __a;
