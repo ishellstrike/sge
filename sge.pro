@@ -39,7 +39,8 @@ SOURCES += \
     geometry/icosahedron.cpp \
     geometry/mesh.cpp \
     geometry/quad.cpp \
-    geometry/vpnt.cpp
+    geometry/vpnt.cpp \
+    geometry/model.cpp
 
 VERSION = 0.1.0
 
@@ -100,7 +101,8 @@ HEADERS += \
     geometry/mesh.h \
     geometry/geometry.hpp \
     geometry/quad.h \
-    geometry/vpnt.h
+    geometry/vpnt.h \
+    geometry/model.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

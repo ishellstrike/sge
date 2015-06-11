@@ -225,7 +225,7 @@ void Mesh::Create(std::vector<VertPosNormTanBiTex> v, std::vector<GLuint> i)
  *
  * Limited .obj parser
  */
-bool Mesh::loadOBJ(std::string path)
+bool Mesh::loadOBJ(const std::string &path)
 {
     std::vector< GLuint > vertexIndices, uvIndices, normalIndices;
     std::vector< glm::vec3 > temp_vertices;
@@ -239,7 +239,7 @@ bool Mesh::loadOBJ(std::string path)
     }
 
     while( 1 ){
-        char lineHeader[128];
+        char lineHeader[512];
         int res = fscanf(file, "%s", lineHeader);
         if (res == EOF)
             break;
@@ -257,24 +257,44 @@ bool Mesh::loadOBJ(std::string path)
             fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
             temp_normals.push_back(normal);
         }else if ( strcmp( lineHeader, "f" ) == 0 ){
-            std::string vertex1, vertex2, vertex3;
-            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-                                                                       &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-                                                                       &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-            if (matches != 9){
-                LOG(error) << "Model ruined";
-                return false;
+            unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+                                                                                &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+                                                                                &vertexIndex[2], &uvIndex[2], &normalIndex[2],
+                                                                                &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
+            if (matches > 9){
+                vertexIndices.push_back(vertexIndex[0]);
+                vertexIndices.push_back(vertexIndex[1]);
+                vertexIndices.push_back(vertexIndex[3]);
+                vertexIndices.push_back(vertexIndex[1]);
+                vertexIndices.push_back(vertexIndex[2]);
+                vertexIndices.push_back(vertexIndex[3]);
+                uvIndices    .push_back(uvIndex[0]);
+                uvIndices    .push_back(uvIndex[1]);
+                uvIndices    .push_back(uvIndex[3]);
+                uvIndices    .push_back(uvIndex[1]);
+                uvIndices    .push_back(uvIndex[2]);
+                uvIndices    .push_back(uvIndex[3]);
+                normalIndices.push_back(normalIndex[0]);
+                normalIndices.push_back(normalIndex[1]);
+                normalIndices.push_back(normalIndex[3]);
+                normalIndices.push_back(normalIndex[1]);
+                normalIndices.push_back(normalIndex[2]);
+                normalIndices.push_back(normalIndex[3]);
+            } else {
+                vertexIndices.push_back(vertexIndex[0]);
+                vertexIndices.push_back(vertexIndex[1]);
+                vertexIndices.push_back(vertexIndex[2]);
+                uvIndices    .push_back(uvIndex[0]);
+                uvIndices    .push_back(uvIndex[1]);
+                uvIndices    .push_back(uvIndex[2]);
+                normalIndices.push_back(normalIndex[0]);
+                normalIndices.push_back(normalIndex[1]);
+                normalIndices.push_back(normalIndex[2]);
             }
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
-            uvIndices    .push_back(uvIndex[0]);
-            uvIndices    .push_back(uvIndex[1]);
-            uvIndices    .push_back(uvIndex[2]);
-            normalIndices.push_back(normalIndex[0]);
-            normalIndices.push_back(normalIndex[1]);
-            normalIndices.push_back(normalIndex[2]);
+            if(matches < 6) {
+                LOG(fatal) << "Model ruined";
+            }
         }
     }
 
@@ -297,6 +317,11 @@ bool Mesh::loadOBJ(std::string path)
     for(int i=0;i<vertexIndices.size();i++){
         Indices[i] = i;
     }
+}
+
+bool Mesh::loadMTL(const std::string &path)
+{
+    return 0;
 }
 
 void Mesh::Bind(int type /* = 0 */)
@@ -368,14 +393,6 @@ void Mesh::Render(const glm::mat4 &proj, bool patches /* = false*/)
 {
     Render(glm::mat4(1), proj, patches);
 }
-
-//void Mesh::RenderBounding(Batched &sb, mat4 Model)
-//{
-   // auto tempmax = vec3(vec4(maxBound, 1.f) * Model * World);
-    //auto tempmin = vec3(vec4(minBound, 1.f) * Model * World);
-
-   // sb.DrawCube3d(tempmax, tempmin, Colors::Green);
-//}
 
 inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &proj, bool patches /* = false*/)
 {

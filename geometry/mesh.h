@@ -30,7 +30,7 @@ public:
     void Render(const glm::mat4 &proj, bool patches = false);
     void Render(const glm::mat4 &Model, const glm::mat4 &proj, bool patches = false);
     void Combine(Mesh* com);
-    bool loadOBJ(std::string path);
+    bool loadOBJ(const std::string &path);
     void computeNormal();
     void Unindex();
     void MergeVerteces();
@@ -53,6 +53,7 @@ public:
     int loaded = false;
     void loadSTL(const std::string &path);
     float FarestPoint();
+    bool loadMTL(const std::string &path);
 private:
     GLuint *m_vao = nullptr;
     GLuint *m_vbo = nullptr;

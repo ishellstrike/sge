@@ -11,7 +11,7 @@ Camera::Camera(glm::vec3 __lookAt) :
     fieldOfView(glm::quarter_pi<float>()),
     lookAt(__lookAt),
     nearPlane(0.1f),
-    farPlane(1000)
+    farPlane(10000)
 {
 
 }
@@ -20,7 +20,7 @@ Camera::Camera() :
        fieldOfView(glm::quarter_pi<float>()),
        lookAt(glm::vec3(0,0,0)),
        nearPlane(0.1f),
-       farPlane(1000)
+       farPlane(10000)
 {
 
 }
@@ -33,22 +33,54 @@ Camera::Camera(float __fieldOfView, glm::vec3 __lookAt, glm::vec3 __up, float __
 {
 }
 
-void Camera::ReCreateViewMatrix() {
-    glm::mat4 rot = glm::eulerAngleZ(yaw - glm::pi<float>()) * glm::yawPitchRoll(0.f, pitch, 0.f);
-    Forward = glm::vec3(glm::vec4(0,-1,0,0) * glm::eulerAngleZ(-yaw));
-    Backward = glm::vec3(glm::vec4(0,1,0,0) * glm::eulerAngleZ(-yaw));
-    Right = glm::vec3(glm::vec4(-1,0,0,0) * glm::eulerAngleZ(-yaw));
-    Left = glm::vec3(glm::vec4(1,0,0,0) * glm::eulerAngleZ(-yaw));
+void Camera::ReCreateViewMatrix(const GameTimer &gt) {
+    auto yawq = glm::angleAxis(yaw, glm::vec3(0,1,0));
+    auto pitchq = glm::angleAxis(pitch, glm::vec3(1,0,0));
+    auto rollq = glm::angleAxis(roll, glm::vec3(0,0,1));
+
+    rotation_quaternion = rollq * pitchq * yawq * rotation_quaternion;
+    rotation_quaternion = normalize(rotation_quaternion);
+
+    position += camera_position_delta;
+    camera_look_at = position + camera_direction;
 
 
-    position = glm::vec3(rot * glm::vec4(0.f, 0.f, 1.f, 1.f));
+    yaw *= 0;
+    pitch *= 0;
+    roll *= 0;
+    camera_position_delta = camera_position_delta * 0.f;
 
-    position *= zoom;
-    position += lookAt;
+    view = translate(mat4_cast(rotation_quaternion), -position);//glm::lookAt(position, look_at, up);
+    camera_up = glm::vec3(view[1][0],view[1][1],view[1][2]);
+    camera_direction = glm::vec3(view[0][0],view[0][1],view[0][2]);
+    MVP = projection * view * model;
 
-    //Calculate a new viewmatrix
-    view = glm::lookAt(position, lookAt, glm::vec3(0.f,0.f,1.f));
-    viewMatrixDirty = false;
+    if(camera_position_delta.x + camera_position_delta.y + camera_position_delta.z + pitch + yaw < 0.01)
+        viewMatrixDirty = false;
+}
+
+void Camera::Move(CameraDirection dir) {
+    switch (dir) {
+    case UP:
+       camera_position_delta += glm::vec3(0, -camera_scale, 0) * rotation_quaternion;
+        break;
+    case DOWN:
+        camera_position_delta += glm::vec3(0, camera_scale, 0) * rotation_quaternion;
+        break;
+    case LEFT:
+       camera_position_delta += glm::vec3(-camera_scale, 0, 0) * rotation_quaternion;
+        break;
+    case RIGHT:
+       camera_position_delta += glm::vec3(camera_scale, 0, 0) * rotation_quaternion;
+        break;
+    case FORWARD:
+        camera_position_delta += glm::vec3(0, 0, -camera_scale) * rotation_quaternion;
+        break;
+    case BACK:
+       camera_position_delta += glm::vec3(0, 0, camera_scale) * rotation_quaternion;
+        break;
+    }
+    viewMatrixDirty = true;
 }
 
 void Camera::ReCreateProjectionMatrix()
@@ -132,19 +164,51 @@ float Camera::getPitch() const
 {
     return pitch;
 }
-void Camera::setPitch(float value)
+void Camera::setPitch(float degrees)
 {
-    pitch = value;
-    viewMatrixDirty = true;
+    if(degrees == 0) return;
+    degrees = degrees/1000.f;
+
+    if (degrees < -max_pitch_rate) {
+        degrees = -max_pitch_rate;
+    } else if (degrees > max_pitch_rate) {
+        degrees = max_pitch_rate;
+    }
+    pitch += degrees;
+
+    if (pitch > glm::two_pi<float>()) {
+        pitch -= glm::two_pi<float>();
+    } else if (pitch < -glm::two_pi<float>()) {
+        pitch += glm::two_pi<float>();
+    }
 }
 
 float Camera::getYaw() const
 {
     return yaw;
 }
-void Camera::setYaw(float value)
+void Camera::setYaw(float degrees)
 {
-    yaw = value;
+    if(degrees == 0) return;
+    degrees = degrees/1000.f;
+    if (degrees < -max_yaw_rate) {
+        degrees = -max_yaw_rate;
+    } else if (degrees > max_yaw_rate) {
+        degrees = max_yaw_rate;
+    }
+
+    if (pitch > glm::half_pi<float>() && pitch < glm::three_over_two_pi<float>() ||
+            (pitch < -glm::half_pi<float>() && pitch > -glm::three_over_two_pi<float>())) {
+        yaw -= degrees;
+    } else {
+        yaw += degrees;
+    }
+
+    if (yaw > glm::two_pi<float>()) {
+        yaw -= glm::two_pi<float>();
+    } else if (yaw < -glm::two_pi<float>()) {
+        yaw += glm::two_pi<float>();
+    }
     viewMatrixDirty = true;
 }
 
@@ -198,10 +262,9 @@ glm::ray Camera::unProject(const glm::vec2 pos)
 }
 
 
-void Camera::Update()
+void Camera::Update(const GameTimer &gt)
 {
     bool mvp_recalc = false;
-    pitch = glm::clamp(pitch, MinPitch, MaxPitch);
     if(projectionMatrixDirty)
     {
         ReCreateProjectionMatrix();
@@ -209,7 +272,7 @@ void Camera::Update()
     }
     if(viewMatrixDirty)
     {
-        ReCreateViewMatrix();
+        ReCreateViewMatrix(gt);
         mvp_recalc = true;
     }
 

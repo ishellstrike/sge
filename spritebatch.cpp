@@ -489,6 +489,7 @@ void SpriteBatch::render()
 {
     if(cur == 0)
         return;
+    glDisable(GL_CULL_FACE);
     current_program->Use();
     glUniformMatrix4fv(current_program->vars[0], 1, GL_FALSE, &uniform[0][0]);
 
@@ -515,6 +516,7 @@ void SpriteBatch::render()
 
     glDrawElements(GL_TRIANGLES, cur*6, GL_UNSIGNED_INT, NULL);
     glBindTexture(GL_TEXTURE_2D, 0);
+    glEnable(GL_CULL_FACE);
 
     cur = 0;
 }

@@ -17,7 +17,6 @@
 #include <algorithm>
 #include "ClassicNoise.h"
 #include "voronoi/Lloyd.h"
-#include <CL/cl.hpp>
 
 #define MAJOR 2
 #define MINOR 1
@@ -169,14 +168,6 @@ bool GameWindow::BaseInit()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    std::vector<cl::Platform> platforms;
-    cl::Platform::get(&platforms);
-
-//    for(cl::Platform p : platforms)
-//    {
-//        // LOG(info) << p.cl_type << "founded";
-//    }
-
     Keyboard::Initialize();
     glfwSetKeyCallback(window, [](GLFWwindow *win, int key, int scancode, int action, int mods){
         Keyboard::SetKey(key, scancode, action, mods);
@@ -234,7 +225,7 @@ bool GameWindow::BaseInit()
     mat->normal = texxx;
     m->material = mat;
 
-    m->loadSTL("untitled.stl");
+    m->loadOBJ("sponza.obj");
     //m->computeNormal();
     //m->CalcTB();
     //m->f
@@ -247,27 +238,37 @@ void GameWindow::BaseUpdate()
 {
     glfwPollEvents();
 
-    m->World = glm::rotate(m->World, (float)gt.elapsed / 100, glm::vec3(0.f,1.f,0.f));
+    //m->World = glm::rotate(m->World, (float)gt.elapsed / 100, glm::vec3(0.f,1.f,0.f));
 
     if(Keyboard::isKeyPress(GLFW_KEY_F2)){
         wire = wire ? (glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ), false) : (glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ), true);
+        glEnable(GL_CULL_FACE);
     }
+
+    if(Keyboard::isKeyDown(GLFW_KEY_W))
+        cam.Move(Camera::FORWARD);
+    if(Keyboard::isKeyDown(GLFW_KEY_A))
+        cam.Move(Camera::LEFT);
+    if(Keyboard::isKeyDown(GLFW_KEY_S))
+        cam.Move(Camera::BACK);
+    if(Keyboard::isKeyDown(GLFW_KEY_D))
+        cam.Move(Camera::RIGHT);
+    if(Keyboard::isKeyDown(GLFW_KEY_Q))
+        cam.setRoll(-gt.elapsed);
+    if(Keyboard::isKeyDown(GLFW_KEY_E))
+        cam.setRoll(gt.elapsed);
 
     if (Keyboard::isKeyDown(GLFW_KEY_LEFT_ALT))
    {
-   Mouse::SetFixedPosState(true);
-   //cam.pitch += Mouse::getCursorDelta().y / 1000.f;
+       Mouse::SetFixedPosState(true);
+       cam.setYaw(Mouse::getCursorDelta().x);
+       cam.setPitch(Mouse::getCursorDelta().y);
    }
    else
-   Mouse::SetFixedPosState(false);
+       Mouse::SetFixedPosState(false);
    if (Mouse::isMiddleDown())
    {
-   cam.Reset();
-   }
-   if (Mouse::isRightDown() || Keyboard::isKeyDown(GLFW_KEY_LEFT_ALT))
-   {
-       cam.setYaw( cam.getYaw() + Mouse::getCursorDelta().x / 100.f);
-       cam.setPitch( cam.getPitch() + Mouse::getCursorDelta().y / 100.f);
+       cam.Reset();
    }
 
    if(Mouse::isWheelUp())
@@ -286,61 +287,18 @@ void GameWindow::BaseUpdate()
 void GameWindow::BaseDraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0, 0, 0, 1);
+    glClearColor(100/255.f, 149/255.f, 237/255.f, 1.f);
 
 
     glEnable(GL_DEPTH_TEST);
     m->Render(cam.getMVP());
-    cam.Update();
-
-   glMatrixMode(GL_PROJECTION);
-   glLoadMatrixf((const GLfloat*)&cam.getProjection()[0][0]);
-   glMatrixMode(GL_MODELVIEW);
-   glm::mat4 MV = cam.getView() * m->World;
-   glLoadMatrixf((const GLfloat*)&MV[0][0]);
-   glUseProgram(0);
-   glBegin(GL_LINES);
-   for(int i=-10;i<=10;i++)
-       for(int j=-10;j<=10;j++)
-   {
-       float z = cam.getZoom() / 3;
-       glColor3f(0.8,0.8,0.8);
-       glVertex3f((i  )*z,(j  )*z,0);
-       glVertex3f((i  )*z,(j+1)*z,0);
-       glVertex3f((i  )*z,(j  )*z,0);
-       glVertex3f((i+1)*z,(j  )*z,0);
-   }
-   glEnd();
-//    for(int i=0;i<m->Indices.size();i++)
-//    {
-//        glColor3f(1,0,0);
-//        glm::vec3 p = m->Vertices[m->Indices[i]].position;
-//        glVertex3fv(&p.x);
-//        glm::vec3 o = glm::normalize(m->Vertices[m->Indices[i]].normal);
-//        p+=o*0.1f;
-//        glVertex3fv(&p.x);
-
-
-//        glColor3f(0,1,0);
-//        p = m->Vertices[m->Indices[i]].position;
-//        glVertex3fv(&p.x);
-//        o = glm::normalize(m->Vertices[m->Indices[i]].tangent);
-//        p+=o*0.1f;
-//        glVertex3fv(&p.x);
-
-//        glColor3f(0,0,1);
-//        p = m->Vertices[m->Indices[i]].position;
-//        glVertex3fv(&p.x);
-//        o = glm::normalize(m->Vertices[m->Indices[i]].binormal);
-//        p+=o*0.1f;
-//        glVertex3fv(&p.x);
-//    }
-//    glEnd();
+    cam.Update(gt);
 
     glDisable(GL_DEPTH_TEST);
     batch->setUniform(proj * model);
     batch->drawRect({100,100}, {100,100}, Color::CornflowerBlue);
     batch->drawText(std::to_string(fps.GetCount()), {100, 100}, f12.get(), Color::White);
+    batch->drawText(string_format("%s\n%g\n%g", std::to_string(cam.getMVP()).c_str(), cam.getYaw(), cam.getPitch()), {10,10}, f12.get(), Color::White);
     batch->render();
 
     glfwSwapBuffers(window);

@@ -6,6 +6,7 @@
 #include <string>
 #include "gametimer.h"
 #include "helper.h"
+#include "gametimer.h"
 
 class Camera {
 public:
@@ -13,10 +14,14 @@ public:
     Camera(glm::vec3 lookAt);
     Camera();
 
+    enum CameraDirection {
+        UP, DOWN, LEFT, RIGHT, FORWARD, BACK
+    };
+
     void CalculateFrustum();
     bool BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max);
-    void Update();
-    void ReCreateViewMatrix();
+    void Update(const GameTimer &gt);
+    void ReCreateViewMatrix(const GameTimer &gt);
     void ReCreateProjectionMatrix();
     void SetPosition(const glm::vec3 &_p);
     void SetLookAt(const glm::vec3 &_p);
@@ -56,10 +61,9 @@ public:
     glm::vec2 Project(const glm::vec3 pos);
     glm::ray unProject(const glm::vec2 pos);
 
+    void Move(CameraDirection dir);
 private:
-    float MinPitch = 0.001f;
-    float MaxPitch = glm::half_pi<float>() - 0.3f;
-    float pitch = 0.001f;
+    float pitch = 0;
     glm::vec4 viewport;
 
     float yaw = 0, roll = 0;
@@ -71,10 +75,13 @@ private:
 
     float MinZoom = 5;
     float MaxZoom = 100;
-    float zoom = 30;
+    float zoom = 30, max_pitch_rate = 5, max_yaw_rate = 5, camera_scale = 1;
+    glm::quat rotation_quaternion;
 
     glm::vec3 position;
     glm::vec3 lookAt;
+
+    glm::vec3 camera_direction = glm::vec3(1, 0, 0), camera_position, camera_position_delta, camera_up = glm::vec3(0, 1, 0), camera_look_at = glm::vec3(1, 0, 0);
 
 
     bool projectionMatrixDirty = true, viewMatrixDirty = true;
