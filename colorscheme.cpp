@@ -2,7 +2,8 @@
 
 ColorScheme ColorScheme::Basic()
 {
-    return ColorScheme::FromColor(glm::vec4(Color::Gray.xyz(), 0.8f));
+    static ColorScheme basic = ColorScheme::FromColor(glm::vec4(Color::Gray.xyz(), 0.8f));
+    return basic;
 }
 
 ColorScheme ColorScheme::FromColor(const glm::vec4 &col)

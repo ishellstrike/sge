@@ -40,15 +40,23 @@ SOURCES += \
     geometry/mesh.cpp \
     geometry/quad.cpp \
     geometry/vpnt.cpp \
-    geometry/model.cpp
+    geometry/model.cpp \
+    sge_ui/button.cpp \
+    sge_ui/component.cpp \
+    sge_ui/graph.cpp \
+    sge_ui/label.cpp \
+    sge_ui/list_container.cpp \
+    sge_ui/panel.cpp \
+    sge_ui/vertical_bar.cpp \
+    sge_ui/win.cpp \
+    sge_ui/wins.cpp \
+    colorscheme.cpp
 
 VERSION = 0.1.0
 
-win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype
+win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype -lassimp-vc120-mtd
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
-
-unix|win32: LIBS += -lOpenCL
 
 win32:INCLUDEPATH += $$PWD/3rdparty/include
 win32:DEPENDPATH += $$PWD/3rdparty/include
@@ -102,7 +110,18 @@ HEADERS += \
     geometry/geometry.hpp \
     geometry/quad.h \
     geometry/vpnt.h \
-    geometry/model.h
+    geometry/model.h \
+    sge_ui/button.h \
+    sge_ui/component.h \
+    sge_ui/graph.h \
+    sge_ui/label.h \
+    sge_ui/list_container.h \
+    sge_ui/panel.h \
+    sge_ui/vertical_bar.h \
+    sge_ui/wcontainer.h \
+    sge_ui/win.h \
+    sge_ui/wins.h \
+    colorscheme.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -110,4 +129,5 @@ DISTFILES += \
     data/shaders/color.glsl \
     data/shaders/font.glsl \
     data/textures/cone1.png \
-    data/shaders/minimal.glsl
+    data/shaders/minimal.glsl \
+    sge_ui/.git

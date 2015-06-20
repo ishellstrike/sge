@@ -17,6 +17,7 @@
 #include <algorithm>
 #include "ClassicNoise.h"
 #include "voronoi/Lloyd.h"
+#include "geometry/model.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -232,6 +233,9 @@ bool GameWindow::BaseInit()
     m->Bind();
     auto far2 = m->FarestPoint() / 2;
     cam.setZoom(far2);
+
+    Model model;
+    model.Load("sponza.obj");
 }
 
 void GameWindow::BaseUpdate()

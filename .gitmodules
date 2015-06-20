@@ -10,3 +10,6 @@
 [submodule "voronoi"]
 	path = voronoi
 	url = https://github.com/denesik/voronoi
+[submodule "sge_ui"]
+	path = sge_ui
+	url = https://github.com/ishellstrike/sge_ui
