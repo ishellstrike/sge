@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2014 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT License.
+        See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
+*******************************************************************************/
+
 #include "spritebatch.h"
 #include "logger.h"
 #include <locale>
