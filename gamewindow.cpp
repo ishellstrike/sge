@@ -195,6 +195,9 @@ bool GameWindow::BaseInit()
         Mouse::Scroll(b);
     });
 
+    gb = std::make_shared<GBuffer>();
+    gb->Init(Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y);
+
     batch = std::make_shared<SpriteBatch>();
 
     f12 = std::make_shared<Font>();
@@ -230,12 +233,10 @@ bool GameWindow::BaseInit()
     //m->computeNormal();
     //m->CalcTB();
     //m->f
+    m->material = mat;
     m->Bind();
     auto far2 = m->FarestPoint() / 2;
     cam.setZoom(far2);
-
-    Model model;
-    model.Load("sponza.obj");
 }
 
 void GameWindow::BaseUpdate()
@@ -332,6 +333,9 @@ void GameWindow::Resize(int w, int h)
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     GameWindow::wi->model = glm::mat4(1.f);
+
+    if(GameWindow::wi->gb)
+        GameWindow::wi->gb->Resize(Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y);
 }
 
 void GameWindow::SetTitle(const std::string &str)

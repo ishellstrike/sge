@@ -65,9 +65,9 @@ const vec4 colc = vec4(0.5, 0.5, 0.5, 1);
 void main(void)
 {
     float DiffuseFactor = dot(normalize(normalout), -lightVec);
-    vec4 col;
-    if (DiffuseFactor > 0) {
-        col =  colc  * DiffuseFactor;
+    vec4 col = texture2D(material_texture, texcoordout) * DiffuseFactor;
+    if (DiffuseFactor <= 0) {
+        col =  vec4(0,0,0,1);
     }
     float z = gl_FragCoord.z / gl_FragCoord.w;
     float fogFactor = exp2( -density * density * z * z * LOG2 );

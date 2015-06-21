@@ -50,7 +50,8 @@ SOURCES += \
     sge_ui/vertical_bar.cpp \
     sge_ui/win.cpp \
     sge_ui/wins.cpp \
-    colorscheme.cpp
+    colorscheme.cpp \
+    gbuffer.cpp
 
 VERSION = 0.1.0
 
@@ -121,7 +122,8 @@ HEADERS += \
     sge_ui/wcontainer.h \
     sge_ui/win.h \
     sge_ui/wins.h \
-    colorscheme.h
+    colorscheme.h \
+    gbuffer.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
