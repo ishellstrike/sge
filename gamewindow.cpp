@@ -137,9 +137,9 @@ bool GameWindow::BaseInit()
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
     std::shared_ptr<Texture> texx = std::make_shared<Texture>();
-    texx->Load("data/tex/derevo.png", true, true);
+    texx->Load("data/textures/derevo.png", true, true);
     std::shared_ptr<Texture> texxx = std::make_shared<Texture>();
-    texxx->Load("data/tex/aaa.png", true, true);
+    texxx->Load("data/textures/aaa.png", true, true);
     mat->texture = texx;
     mat->normal = texxx;
     m->material = mat;
