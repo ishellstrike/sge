@@ -1,8 +1,8 @@
 #ifndef MODEL_H
 #define MODEL_H
 #include "mesh.h"
-#include "material.h"
-#include "basicjargshader.h"
+#include "../material.h"
+#include "../basicjargshader.h"
 
 class Model
 {

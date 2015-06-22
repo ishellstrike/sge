@@ -31,8 +31,6 @@ SOURCES += \
     material.cpp \
     basicjargshader.cpp \
     SphereTesselator.cpp \
-    voronoi/Voronoi.cpp \
-    voronoi/geometry.cpp \
     ClassicNoise.cpp \
     camera.cpp \
     geometry/cube.cpp \
@@ -55,7 +53,7 @@ SOURCES += \
 
 VERSION = 0.1.0
 
-win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype -lassimp-vc120-mtd
+win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
 
@@ -100,9 +98,6 @@ HEADERS += \
     SphereTesselator.h \
     utfcpp/utf8.h \
     helper.h \
-    voronoi/geometry.h \
-    voronoi/Lloyd.h \
-    voronoi/Voronoi.h \
     ClassicNoise.h \
     camera.h \
     geometry/icosahedron.h \

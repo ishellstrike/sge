@@ -12,11 +12,8 @@
 #include "geometry/cube.h"
 #include "geometry/icosahedron.h"
 #include "SphereTesselator.h"
-#include "helper.h"
-#include "voronoi/Voronoi.h"
 #include <algorithm>
 #include "ClassicNoise.h"
-#include "voronoi/Lloyd.h"
 #include "geometry/model.h"
 
 #define MAJOR 2
@@ -31,88 +28,6 @@ GameWindow::~GameWindow()
 {
     glfwDestroyWindow(window);
     glfwTerminate();
-}
-
-std::vector<glm::vec2> Generate(const unsigned int count, const glm::uvec2 &size)
-{
-
-  std::vector<glm::vec2> points;
-  points.reserve(count);
-
-  unsigned int seed = static_cast<unsigned int>(time(NULL));
-  srand(seed);
-
-  struct Generator
-  {
-    const glm::uvec2 size;
-    Generator(const glm::uvec2 &s)
-      : size(s)
-    {}
-    glm::vec2 operator()() {return glm::vec2(rand() % (size.x * 10) / 10.f, rand() % (size.y * 10) / 10.f);}
-  } generator(size);
-
-  std::generate_n(std::back_inserter(points), count, generator);
-
-
-  std::sort(points.begin(), points.end(),
-    [](const glm::vec2 &p1, const glm::vec2 &p2) -> bool
-  {
-    if(p1.y == p2.y)
-      return p1.x > p2.x;
-    return p1.y > p2.y;
-  });
-
-  auto it = std::unique(points.begin(), points.end(),
-    [](const glm::vec2 &p1, const glm::vec2 &p2)
-    {
-      return p1.x == p2.x && p1.y == p2.y;
-    });
-
-  points.resize(std::distance(points.begin(), it));
-
-  return std::move(points);
-}
-
-double RotationPoint(const glm::vec2 &a, const glm::vec2 &b, const glm::vec2 &c)
-{
-    return (b.x - a.x) * (c.y - b.y) - (b.y - a.y) * (c.x - b.x);
-}
-
-std::vector<glm::vec2> SortPointCcw(const std::vector<glm::vec2> &points)
-{
-    // Ищем самую левую точку.
-    // Если таких точек несколько - выбираем верхную
-    auto itPos = points.begin();
-    for(auto it = points.begin(); it != points.end(); ++it)
-    {
-        if((*itPos).x > (*it).x)
-        {
-            itPos = it;
-        }
-        else if((*itPos).x == (*it).x)
-        {
-            if((*itPos).y <= (*it).y)
-            {
-                itPos = it;
-            }
-        }
-    }
-    glm::vec2 point = *itPos;
-    std::multiset<glm::vec2, std::function<bool(const glm::vec2 &, const glm::vec2 &)> >
-    sortedPoints([point](const glm::vec2 &a,const glm::vec2 &b)
-    {
-        return RotationPoint(point, a, b) > 0;
-    });
-    for(auto it = points.begin(); it != points.end(); ++it)
-    {
-        if(itPos != it)
-        sortedPoints.insert(*it);
-    }
-    std::vector<glm::vec2> output;
-    output.reserve(points.size());
-    output.push_back(point);
-    output.insert(output.end(), sortedPoints.begin(), sortedPoints.end());
-    return output;
 }
 
 bool GameWindow::BaseInit()
