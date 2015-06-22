@@ -1,7 +1,7 @@
 #include "model.h"
-//#include <assimp/cimport.h>
-//#include <assimp/scene.h>
-//#include <assimp/postprocess.h>
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include "../logger.h"
 
 Model::Model()
@@ -10,7 +10,7 @@ Model::Model()
 }
 
 bool Model::Load(const std::string &path)
-{/*
+{
     Clear();
 
     bool Ret = false;
@@ -27,7 +27,7 @@ bool Model::Load(const std::string &path)
        LOG(fatal) << "Error parsing " << path.c_str() << " ";
     }
 
-    delete pScene;*/
+    delete pScene;
     return true;
 }
 
