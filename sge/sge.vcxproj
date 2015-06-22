@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{99C0710E-F293-4293-A7D3-03C4D67E0EE4}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>sge</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>E:\git\sge\3rdparty\include\freetype2;E:\git\sge\3rdparty\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\git\sge\3rdparty\lib;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <ExecutablePath>E:\git\sge\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\abstracttexture.cpp" />
+    <ClCompile Include="..\basicjargshader.cpp" />
+    <ClCompile Include="..\camera.cpp" />
+    <ClCompile Include="..\ClassicNoise.cpp" />
+    <ClCompile Include="..\colorextender.cpp" />
+    <ClCompile Include="..\colorscheme.cpp" />
+    <ClCompile Include="..\font.cpp" />
+    <ClCompile Include="..\fpscounter.cpp" />
+    <ClCompile Include="..\gametimer.cpp" />
+    <ClCompile Include="..\gamewindow.cpp" />
+    <ClCompile Include="..\gbuffer.cpp" />
+    <ClCompile Include="..\geometry\cube.cpp" />
+    <ClCompile Include="..\geometry\icosahedron.cpp" />
+    <ClCompile Include="..\geometry\mesh.cpp" />
+    <ClCompile Include="..\geometry\model.cpp" />
+    <ClCompile Include="..\geometry\quad.cpp" />
+    <ClCompile Include="..\geometry\vpnt.cpp" />
+    <ClCompile Include="..\helper.cpp" />
+    <ClCompile Include="..\json\json_reader.cpp" />
+    <ClCompile Include="..\json\json_value.cpp" />
+    <ClCompile Include="..\json\json_writer.cpp" />
+    <ClCompile Include="..\keyboard.cpp" />
+    <ClCompile Include="..\lodepng\lodepng.cpp" />
+    <ClCompile Include="..\logger.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\material.cpp" />
+    <ClCompile Include="..\mouse.cpp" />
+    <ClCompile Include="..\pixmap.cpp" />
+    <ClCompile Include="..\prefecences.cpp" />
+    <ClCompile Include="..\sge_ui\button.cpp" />
+    <ClCompile Include="..\sge_ui\component.cpp" />
+    <ClCompile Include="..\sge_ui\graph.cpp" />
+    <ClCompile Include="..\sge_ui\label.cpp" />
+    <ClCompile Include="..\sge_ui\list_container.cpp" />
+    <ClCompile Include="..\sge_ui\panel.cpp" />
+    <ClCompile Include="..\sge_ui\vertical_bar.cpp" />
+    <ClCompile Include="..\sge_ui\win.cpp" />
+    <ClCompile Include="..\sge_ui\wins.cpp" />
+    <ClCompile Include="..\shader.cpp" />
+    <ClCompile Include="..\singleton.cpp" />
+    <ClCompile Include="..\spheretesselator.cpp" />
+    <ClCompile Include="..\spritebatch.cpp" />
+    <ClCompile Include="..\texture.cpp" />
+    <ClCompile Include="..\textureatlas.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\abstracttexture.h" />
+    <ClInclude Include="..\basicjargshader.h" />
+    <ClInclude Include="..\camera.h" />
+    <ClInclude Include="..\ClassicNoise.h" />
+    <ClInclude Include="..\colorextender.h" />
+    <ClInclude Include="..\colorscheme.h" />
+    <ClInclude Include="..\fielsystem.h" />
+    <ClInclude Include="..\font.h" />
+    <ClInclude Include="..\fpscounter.h" />
+    <ClInclude Include="..\gametimer.h" />
+    <ClInclude Include="..\gamewindow.h" />
+    <ClInclude Include="..\gbuffer.h" />
+    <ClInclude Include="..\geometry\cube.h" />
+    <ClInclude Include="..\geometry\geometry.hpp" />
+    <ClInclude Include="..\geometry\icosahedron.h" />
+    <ClInclude Include="..\geometry\mesh.h" />
+    <ClInclude Include="..\geometry\model.h" />
+    <ClInclude Include="..\geometry\quad.h" />
+    <ClInclude Include="..\geometry\vpnt.h" />
+    <ClInclude Include="..\helper.h" />
+    <ClInclude Include="..\json\autolink.h" />
+    <ClInclude Include="..\json\config.h" />
+    <ClInclude Include="..\json\features.h" />
+    <ClInclude Include="..\json\forwards.h" />
+    <ClInclude Include="..\json\json.h" />
+    <ClInclude Include="..\json\json_batchallocator.h" />
+    <ClInclude Include="..\json\reader.h" />
+    <ClInclude Include="..\json\value.h" />
+    <ClInclude Include="..\json\writer.h" />
+    <ClInclude Include="..\keyboard.h" />
+    <ClInclude Include="..\lodepng\lodepng.h" />
+    <ClInclude Include="..\logger.h" />
+    <ClInclude Include="..\material.h" />
+    <ClInclude Include="..\mouse.h" />
+    <ClInclude Include="..\pixmap.h" />
+    <ClInclude Include="..\prefecences.h" />
+    <ClInclude Include="..\sge.hpp" />
+    <ClInclude Include="..\sge_geometry.h" />
+    <ClInclude Include="..\sge_ui\button.h" />
+    <ClInclude Include="..\sge_ui\component.h" />
+    <ClInclude Include="..\sge_ui\graph.h" />
+    <ClInclude Include="..\sge_ui\label.h" />
+    <ClInclude Include="..\sge_ui\list_container.h" />
+    <ClInclude Include="..\sge_ui\panel.h" />
+    <ClInclude Include="..\sge_ui\vertical_bar.h" />
+    <ClInclude Include="..\sge_ui\wcontainer.h" />
+    <ClInclude Include="..\sge_ui\win.h" />
+    <ClInclude Include="..\sge_ui\wins.h" />
+    <ClInclude Include="..\shader.h" />
+    <ClInclude Include="..\singleton.h" />
+    <ClInclude Include="..\spheretesselator.h" />
+    <ClInclude Include="..\spritebatch.h" />
+    <ClInclude Include="..\tangentcalc.h" />
+    <ClInclude Include="..\texture.h" />
+    <ClInclude Include="..\textureatlas.h" />
+    <ClInclude Include="..\utfcpp\utf8.h" />
+    <ClInclude Include="..\utfcpp\utf8\checked.h" />
+    <ClInclude Include="..\utfcpp\utf8\core.h" />
+    <ClInclude Include="..\utfcpp\utf8\unchecked.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\json\json_internalarray.inl" />
+    <None Include="..\json\json_internalmap.inl" />
+    <None Include="..\json\json_valueiterator.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
