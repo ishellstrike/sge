@@ -41,10 +41,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\git\sge\3rdparty\include\freetype2;E:\git\sge\3rdparty\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\git\sge\3rdparty\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\3rdparty\lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <ExecutablePath>E:\git\sge\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>..\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

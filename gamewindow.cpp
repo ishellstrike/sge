@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "ClassicNoise.h"
 #include "geometry/model.h"
+#include "experimental/quadsphere.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -121,7 +122,7 @@ bool GameWindow::BaseInit()
 
     atlas.LoadAll();
 
-    cam.SetPosition({50,50,50});
+    cam.SetPosition({5,5,5});
     cam.SetLookAt({0,0,0});
 
     basic = std::make_shared<BasicJargShader>();
@@ -131,9 +132,10 @@ bool GameWindow::BaseInit()
     basic->Use();
     basic->Afterlink();
 
-    m = std::make_shared<Mesh>();
-    //Tesselator::SphereTesselate(4, m);
+    m = std::make_shared<Mesh>(Icosahedron::getMesh());
+    Tesselator::SphereTesselate(4, m);
     m->shader = basic;
+    m->World = glm::scale(glm::mat4(1), glm::vec3(4,4,4));
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
     std::shared_ptr<Texture> texx = std::make_shared<Texture>();
@@ -143,18 +145,6 @@ bool GameWindow::BaseInit()
     mat->texture = texx;
     mat->normal = texxx;
     m->material = mat;
-
-    m->loadOBJ("sponza.obj");
-    //m->computeNormal();
-    //m->CalcTB();
-    //m->f
-    m->material = mat;
-    m->Bind();
-    auto far2 = m->FarestPoint() / 2;
-    cam.setZoom(far2);
-
-    Model model;
-    model.Load("sponza.obj");
 }
 
 void GameWindow::BaseUpdate()
@@ -181,6 +171,9 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_E))
         cam.setRoll(gt.elapsed);
 
+    if(Keyboard::isKeyDown(GLFW_KEY_F1))
+        cam.SetLookAt({0,0,0});
+
     if (Keyboard::isKeyDown(GLFW_KEY_LEFT_ALT))
    {
        Mouse::SetFixedPosState(true);
@@ -189,6 +182,7 @@ void GameWindow::BaseUpdate()
    }
    else
        Mouse::SetFixedPosState(false);
+
    if (Mouse::isMiddleDown())
    {
        cam.Reset();
@@ -205,17 +199,19 @@ void GameWindow::BaseUpdate()
    }
 
     Mouse::resetDelta();
+    cam.Update(gt);
 }
 
 void GameWindow::BaseDraw()
 {
+    static QuadSphere qs;
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(100/255.f, 149/255.f, 237/255.f, 1.f);
 
 
     glEnable(GL_DEPTH_TEST);
-    m->Render(cam.getMVP());
-    cam.Update(gt);
+    qs.Render(cam.getMVP());
 
     glDisable(GL_DEPTH_TEST);
     batch->setUniform(proj * model);
@@ -223,6 +219,26 @@ void GameWindow::BaseDraw()
     batch->drawText(std::to_string(fps.GetCount()), {100, 100}, f12.get(), Color::White);
     batch->drawText(string_format("%s\n%g\n%g", std::to_string(cam.getMVP()).c_str(), cam.getYaw(), cam.getPitch()), {10,10}, f12.get(), Color::White);
     batch->render();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf((const GLfloat*)&cam.getProjection());
+    glMatrixMode(GL_MODELVIEW);
+    glm::mat4 MV = cam.getView();
+    glLoadMatrixf((const GLfloat*)&MV[0][0]);
+    glUseProgram(0);
+    glBegin(GL_LINES);
+        glColor3f(1,0,0);
+        glVertex3f(0,0,0);
+        glVertex3f(1,0,0);
+
+        glColor3f(0,1,0);
+        glVertex3f(0,0,0);
+        glVertex3f(0,1,0);
+
+        glColor3f(0,0,1);
+        glVertex3f(0,0,0);
+        glVertex3f(0,0,1);
+    glEnd();
 
     glfwSwapBuffers(window);
     gt.Update(glfwGetTime());

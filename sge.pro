@@ -49,11 +49,13 @@ SOURCES += \
     sge_ui/win.cpp \
     sge_ui/wins.cpp \
     colorscheme.cpp \
-    gbuffer.cpp
+    gbuffer.cpp \
+    experimental/quadsphere.cpp \
+    experimental/quadplane.cpp
 
 VERSION = 0.1.0
 
-win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype -lassimp-vc120-mtd
+win32:LIBS += -L$$PWD/3rdparty/lib/ -lopengl32 -lglew32 -lglfw3dll -lfreetype #-lassimp-vc120-mtd
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
 
@@ -118,7 +120,9 @@ HEADERS += \
     sge_ui/win.h \
     sge_ui/wins.h \
     colorscheme.h \
-    gbuffer.h
+    gbuffer.h \
+    experimental/quadsphere.h \
+    experimental/quadplane.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
