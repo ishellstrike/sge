@@ -136,11 +136,23 @@ float Noise::noise ( float x, float y, float z )
     return nxyz;
 }
 
+/*!
+ * \brief Noise::normalized_simplexnoise
+ * \param xin
+ * \param yin
+ * \return The result is scaled to return values in the interval [0,1]
+ */
 float Noise::normalized_simplexnoise( float xin, float yin )
 {
     return (simplexnoise(xin, yin) + 1) / 2.f;
 }
 
+/*!
+ * \brief Noise::simplexnoise
+ * \param xin
+ * \param yin
+ * \return The result is scaled to return values in the interval [-1,1]
+ */
 float Noise::simplexnoise( float xin, float yin )
 {
     float n0, n1, n2; // Noise contributions from the three corners

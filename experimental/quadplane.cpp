@@ -1,5 +1,6 @@
 #include "quadplane.h"
 #include <glm/gtx/transform.hpp>
+#include "ClassicNoise.h"
 
 QuadPlane::QuadPlane()
 {
@@ -49,16 +50,35 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 {
                     VertPosNormTanBiTex a, b, c, d;
 
-                    a.position = glm::vec3(i    /(float)size, j   /(float)size, 0.5f);
-                    b.position = glm::vec3((i+1)/(float)size, j   /(float)size, 0.5f);
-                    c.position = glm::vec3((i+1)/(float)size,(j+1)/(float)size, 0.5f);
-                    d.position = glm::vec3(i    /(float)size,(j+1)/(float)size, 0.5f);
 
-                    a.position = glm::normalize(a.position);
-                    b.position = glm::normalize(b.position);
-                    c.position = glm::normalize(c.position);
-                    d.position = glm::normalize(d.position);
+                    a.position = {i    /(float)size, j   /(float)size, 0.5f};
+                    b.position = {(i+1)/(float)size, j   /(float)size, 0.5f};
+                    c.position = {(i+1)/(float)size,(j+1)/(float)size, 0.5f};
+                    d.position = {i    /(float)size,(j+1)/(float)size, 0.5f};
 
+                    if(j != size/2 && j!= -size/2 && i != size/2 && i!= -size/2)
+                    {
+                        a.position = glm::normalize(a.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j)  /30.f};
+                        b.position = glm::normalize(b.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j)  /30.f};
+                        c.position = glm::normalize(c.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j+1)/30.f};
+                        d.position = glm::normalize(d.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j+1)/30.f};
+                    }
+                    else {
+                        a.position = glm::normalize(a.position);
+                        b.position = glm::normalize(b.position);
+                        c.position = glm::normalize(c.position);
+                        d.position = glm::normalize(d.position);
+                    }
+
+                    a.normal = a.position;
+                    b.normal = b.position;
+                    c.normal = c.position;
+                    d.normal = d.position;
+
+                    a.uv = {i    /(float)size + 0.5f, j   /(float)size + 0.5f};
+                    b.uv = {(i+1)/(float)size + 0.5f, j   /(float)size + 0.5f};
+                    c.uv = {(i+1)/(float)size + 0.5f,(j+1)/(float)size + 0.5f};
+                    d.uv = {i    /(float)size + 0.5f,(j+1)/(float)size + 0.5f};
 
                     terminal_mesh->Vertices[co*4]   = a;
                     terminal_mesh->Vertices[co*4+1] = b;

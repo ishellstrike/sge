@@ -13,9 +13,9 @@ QuadSphere::QuadSphere()
 
     mat = std::make_shared<Material>();
     std::shared_ptr<Texture> texx = std::make_shared<Texture>();
-    texx->Load("data/textures/derevo.png", true, true);
+    texx->Load("data/derevo.png", true, true);
     std::shared_ptr<Texture> texxx = std::make_shared<Texture>();
-    texxx->Load("data/textures/aaa.png", true, true);
+    texxx->Load("data/aaa.png", true, true);
     mat->texture = texx;
     mat->normal = texxx;
 

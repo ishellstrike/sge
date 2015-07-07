@@ -16,6 +16,7 @@
 #include "ClassicNoise.h"
 #include "geometry/model.h"
 #include "experimental/quadsphere.h"
+#include "resources/resourcecontroller.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -125,6 +126,8 @@ bool GameWindow::BaseInit()
     cam.SetPosition({5,5,5});
     cam.SetLookAt({0,0,0});
 
+    Resources::instance();
+
     basic = std::make_shared<BasicJargShader>();
     basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
     basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
@@ -133,15 +136,15 @@ bool GameWindow::BaseInit()
     basic->Afterlink();
 
     m = std::make_shared<Mesh>(Icosahedron::getMesh());
-    Tesselator::SphereTesselate(4, m);
+    //Tesselator::SphereTesselate(4, m);
     m->shader = basic;
     m->World = glm::scale(glm::mat4(1), glm::vec3(4,4,4));
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
     std::shared_ptr<Texture> texx = std::make_shared<Texture>();
-    texx->Load("data/textures/derevo.png", true, true);
+    texx->Load("data/derevo.png", true, true);
     std::shared_ptr<Texture> texxx = std::make_shared<Texture>();
-    texxx->Load("data/textures/aaa.png", true, true);
+    texxx->Load("data/aaa.png", true, true);
     mat->texture = texx;
     mat->normal = texxx;
     m->material = mat;
@@ -211,9 +214,11 @@ void GameWindow::BaseDraw()
 
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
     qs.Render(cam.getMVP());
 
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
     batch->setUniform(proj * model);
     batch->drawRect({100,100}, {100,100}, Color::CornflowerBlue);
     batch->drawText(std::to_string(fps.GetCount()), {100, 100}, f12.get(), Color::White);
@@ -254,6 +259,7 @@ void GameWindow::Mainloop()
         BaseDraw();
         //std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
+    Resources::drop();
 }
 
 void GameWindow::Resize(int w, int h)

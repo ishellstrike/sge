@@ -51,7 +51,8 @@ SOURCES += \
     colorscheme.cpp \
     gbuffer.cpp \
     experimental/quadsphere.cpp \
-    experimental/quadplane.cpp
+    experimental/quadplane.cpp \
+    resources/resourcecontroller.cpp
 
 VERSION = 0.1.0
 
@@ -122,7 +123,8 @@ HEADERS += \
     colorscheme.h \
     gbuffer.h \
     experimental/quadsphere.h \
-    experimental/quadplane.h
+    experimental/quadplane.h \
+    resources/resourcecontroller.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
