@@ -11,7 +11,7 @@
  */
 struct Pixmap
 {
-    Pixmap(const std::string &a);
+    Pixmap(const std::string &name);
     Pixmap(glm::vec2 size);
     Pixmap();
     ~Pixmap();
