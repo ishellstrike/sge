@@ -4,6 +4,11 @@
 #include <glm/glm.hpp>
 #include <string>
 
+/*!
+ * \brief The Pixmap struct
+ *
+ * Хранит битовую карту, может быть загружена в @Texture
+ */
 struct Pixmap
 {
     Pixmap(const std::string &a);

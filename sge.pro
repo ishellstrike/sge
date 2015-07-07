@@ -6,8 +6,6 @@ CONFIG += c++11
 
 SOURCES += \
     logger.cpp \
-    pixmap.cpp \
-    texture.cpp \
     shader.cpp \
     json/json_reader.cpp \
     json/json_value.cpp \
@@ -28,7 +26,6 @@ SOURCES += \
     json/json_internalmap.inl \
     json/json_valueiterator.inl \
     main.cpp \
-    material.cpp \
     basicjargshader.cpp \
     SphereTesselator.cpp \
     ClassicNoise.cpp \
@@ -52,7 +49,10 @@ SOURCES += \
     gbuffer.cpp \
     experimental/quadsphere.cpp \
     experimental/quadplane.cpp \
-    resources/resourcecontroller.cpp
+    resources/resourcecontroller.cpp \
+    resources/material.cpp \
+    resources/texture.cpp \
+    resources/pixmap.cpp
 
 VERSION = 0.1.0
 
@@ -66,8 +66,6 @@ win32:DEPENDPATH += $$PWD/3rdparty/include
 HEADERS += \
     logger.h \
     colorextender.h \
-    texture.h \
-    pixmap.h \
     fielsystem.h \
     shader.h \
     json/autolink.h \
@@ -95,7 +93,6 @@ HEADERS += \
     utfcpp/utf8/checked.h \
     utfcpp/utf8/core.h \
     utfcpp/utf8/unchecked.h \
-    material.h \
     basicjargshader.h \
     tangentcalc.h \
     SphereTesselator.h \
@@ -124,7 +121,10 @@ HEADERS += \
     gbuffer.h \
     experimental/quadsphere.h \
     experimental/quadplane.h \
-    resources/resourcecontroller.h
+    resources/resourcecontroller.h \
+    resources/material.h \
+    resources/pixmap.h \
+    resources/texture.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

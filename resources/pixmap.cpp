@@ -3,12 +3,20 @@
 #include "logger.h"
 #include "helper.h"
 
-Pixmap::Pixmap(const std::string &a)
+/*!
+ * \brief Pixmap::Pixmap Выполняет загрузку png в битовую карту
+ * \param name Имя изображения *.png
+ */
+Pixmap::Pixmap(const std::string &name)
 {
-    auto error = lodepng::decode(data, width, height, a);
-    if(error) LOG(info) << "png error " << error << ": " << lodepng_error_text(error) << " for " << a;
+    auto error = lodepng::decode(data, width, height, name);
+    if(error) LOG(info) << "png error " << error << ": " << lodepng_error_text(error) << " for " << name;
 }
 
+/*!
+ * \brief Pixmap::Pixmap Создает пустую битовую карту заданного размера
+ * \param size размер битовой карты
+ */
 Pixmap::Pixmap(glm::vec2 size)
 {
     width = (int) size.x;
@@ -26,6 +34,11 @@ Pixmap::~Pixmap()
 
 }
 
+/*!
+ * \brief Pixmap::Blit Производит слияние выбранной битовой карты с этой
+ * \param source Исходные данные для слияния
+ * \param pos Верхняя елвая координата начала слияния
+ */
 void Pixmap::Blit(const Pixmap &source, const glm::vec2 &pos)
 {
     assert(pos.x >= 0 && pos.y >= 0);
