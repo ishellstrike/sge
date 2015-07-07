@@ -32,7 +32,7 @@ bool QuadPlane::is_terminal() const
     return m_parts[0] == nullptr;
 }
 
-void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic)
+void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side)
 {
     if(is_terminal())
     {
@@ -56,29 +56,24 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                     c.position = {(i+1)/(float)size,(j+1)/(float)size, 0.5f};
                     d.position = {i    /(float)size,(j+1)/(float)size, 0.5f};
 
-                    if(j != size/2 && j!= -size/2 && i != size/2 && i!= -size/2)
-                    {
-                        a.position = glm::normalize(a.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j)  /30.f};
-                        b.position = glm::normalize(b.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j)  /30.f};
-                        c.position = glm::normalize(c.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j+1)/30.f};
-                        d.position = glm::normalize(d.position) + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j+1)/30.f};
-                    }
-                    else {
-                        a.position = glm::normalize(a.position);
-                        b.position = glm::normalize(b.position);
-                        c.position = glm::normalize(c.position);
-                        d.position = glm::normalize(d.position);
-                    }
+                    a.position = glm::normalize(a.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j)  /30.f}*/;
+                    b.position = glm::normalize(b.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j)  /30.f}*/;
+                    c.position = glm::normalize(c.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j+1)/30.f}*/;
+                    d.position = glm::normalize(d.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j+1)/30.f}*/;
 
                     a.normal = a.position;
                     b.normal = b.position;
                     c.normal = c.position;
                     d.normal = d.position;
 
-                    a.uv = {i    /(float)size + 0.5f, j   /(float)size + 0.5f};
-                    b.uv = {(i+1)/(float)size + 0.5f, j   /(float)size + 0.5f};
-                    c.uv = {(i+1)/(float)size + 0.5f,(j+1)/(float)size + 0.5f};
-                    d.uv = {i    /(float)size + 0.5f,(j+1)/(float)size + 0.5f};
+                    float ux0 = (i/(float)size + 0.5f);
+                    float uy0 = (j/(float)size + 0.5f);
+                    float du = (1/(float)size);
+
+                    a.uv = {ux0,    uy0}   ;
+                    b.uv = {ux0+du, uy0}   ;
+                    c.uv = {ux0+du, uy0+du};
+                    d.uv = {ux0,    uy0+du};
 
                     terminal_mesh->Vertices[co*4]   = a;
                     terminal_mesh->Vertices[co*4+1] = b;
@@ -95,15 +90,30 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 }
             }
 
+            for(int j = 0; j < terminal_mesh->Vertices.size(); j++)
+            {
+                terminal_mesh->Vertices[j].position =
+                        glm::vec3(terminal_mesh->World *
+                        glm::vec4(terminal_mesh->Vertices[j].position, 1));
+
+                terminal_mesh->Vertices[j].normal =
+                        glm::normalize(
+                        glm::vec3(terminal_mesh->World *
+                        glm::vec4(terminal_mesh->Vertices[j].normal, 1)));
+            }
+            terminal_mesh->World = glm::mat4(1);
+
             terminal_mesh->ForgetBind();
             status = READY;
         }
     }
     else
     {
+        int i = 0;
         for(auto a: m_parts)
         {
-            a->Render(MVP, mat, basic);
+            a->Render(MVP, mat, basic, i);
+            i++;
         }
     }
 }

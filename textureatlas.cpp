@@ -1,6 +1,6 @@
 #include "textureatlas.h"
 #include "fielsystem.h"
-#include "pixmap.h"
+#include "resources/pixmap.h"
 #include "prefecences.h"
 #include "logger.h"
 

@@ -133,4 +133,6 @@ DISTFILES += \
     data/shaders/font.glsl \
     data/textures/cone1.png \
     data/shaders/minimal.glsl \
-    sge_ui/.git
+    sge_ui/.git \
+    data/shaders/noise.lib.glsl \
+    data/shaders/atmosphere.lib.glsl

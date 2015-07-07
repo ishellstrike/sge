@@ -302,7 +302,7 @@ float Noise::simplexnoise( float xin, float yin, float zin )
     int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
     int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
     // Calculate the contribution from the four corners
-    float t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+    float t0 = 0.5 - x0 * x0 - y0 * y0 - z0 * z0;
     if( t0 < 0 )
         n0 = 0.0;
     else

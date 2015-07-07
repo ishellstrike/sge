@@ -6,9 +6,9 @@
 #include <GL/glew.h>
 #include <vector>
 #include "../basicjargshader.h"
-#include "../texture.h"
+#include "../resources/texture.h"
 #include <string>
-#include "../material.h"
+#include "../resources/material.h"
 #include <memory>
 #include "../spritebatch.h"
 

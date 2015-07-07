@@ -77,6 +77,10 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
     if(!has_header){
         ss << GLSLVER << std::endl;
     }
+    else
+    {
+        ss << global_header;
+    }
 
     switch(type)
     {
@@ -102,9 +106,6 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
 
     ss << part_name << std::endl;
 
-    if(has_header) {
-        ss << global_header;
-    }
     std::ifstream file(source.c_str());
     std::string line;
     if (file.is_open()) {
@@ -124,7 +125,7 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
     glShaderSource(id, 1, (const char **)&data, &length);
     glCompileShader(id);
     LOG(verbose) << source << " file " << part_name;
-    printLog(id);
+    //printLog(id);
     glAttachShader(program, id);
     shaders_.push_back(id);
 }
@@ -170,7 +171,7 @@ void JargShader::Afterlink()
 /*!
  * \brief JargShader::PushGlobalHeader
  * \param source
- * \param version version string (e.g. "#version 330 core"
+ * \param version version string (e.g. "#version 330 core")
  *
  * rewrite standart version string and set shader header for each shader
  * can used for adding typical constants and functions to shaders

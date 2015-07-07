@@ -19,17 +19,22 @@ uniform vec4  material_specular;
 uniform vec4  material_emission;
 uniform float material_shininess;
 
-#ifdef _VERTEX_
-attribute vec3 position;
-attribute vec4 color;
-attribute vec3 normal;
-attribute vec3 tangent;
-attribute vec3 binormal;
-attribute vec2 texcoord;
+float R = 30;
+float s = 5;
 
-varying vec2 texcoordout;
-varying vec3 normalout;
-varying vec3 lightVec;
+#ifdef _VERTEX_
+in vec3 position;
+in vec4 color;
+in vec3 normal;
+in vec3 tangent;
+in vec3 binormal;
+in vec2 texcoord;
+
+out vec2 texcoordout;
+out vec3 normalout;
+out vec3 lightVec;
+out vec3 positionout;
+out vec3 plane;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
@@ -39,32 +44,45 @@ uniform vec3 transform_lightPos;
 
 void main(void)
 {
-    vec4 vertex = transform_M *  vec4(position, 1);
-    vec4 vertexPosition = transform_VP * vertex;
+    vec2 vUv = texcoord;
+
+    vec3 grad;
+
+    float snoize = snoise( 5 * position, grad );
+    vec3 newPosition = (R + s * snoize) * position;
+    vec4 vertexPosition = transform_VP * transform_M * vec4(newPosition, 1);
+
+    grad = grad / (R + s * snoize);
+    plane = grad - (grad * position) * position;
 
     vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
     lightVec = normalize(lightVec4.xyz);
 
     gl_Position = vertexPosition;
+    positionout = position;
     texcoordout = texcoord;
-    vec4 normalout4 = transform_M * vec4(normal, 0);
-    normalout = normalout4.xyz;
+    normalout = positionout - s * plane;
 }
 #endif
 
 #ifdef _FRAGMENT_
 const float cutoff = 0.9f;
-varying vec2 texcoordout;
-varying vec3 lightVec;
-varying vec3 normalout;
+in vec2 texcoordout;
+in vec3 lightVec;
+in vec3 normalout;
+in vec3 positionout;
+in vec3 plane;
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
 const float LOG2 = 1.442695;
 const vec4 colc = vec4(0.5, 0.5, 0.5, 1);
 
+out vec4 out_color;
+
 void main(void)
 {
-    float DiffuseFactor = dot(normalize(normalout), -lightVec);
+    vec3 normal = -normalout;
+    float DiffuseFactor = dot(normalize(normal), -lightVec);
     vec4 col = texture2D(material_texture, texcoordout) * DiffuseFactor;
     if (DiffuseFactor <= 0) {
         col =  vec4(0,0,0,1);
@@ -74,6 +92,6 @@ void main(void)
     fogFactor = clamp(fogFactor, 0.0, 1.0);
     col = mix(fog, col, fogFactor);
     col.a = 1;
-    gl_FragColor = col;
+    out_color = col;
 }
 #endif

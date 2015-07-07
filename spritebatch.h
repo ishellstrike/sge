@@ -7,7 +7,7 @@
 
 #ifndef SPRITEBATCH_H
 #define SPRITEBATCH_H
-#include "texture.h"
+#include "resources/texture.h"
 #include <string>
 #include <memory>
 #include "shader.h"

@@ -1,7 +1,7 @@
 #ifndef TEXTUREATLAS_H
 #define TEXTUREATLAS_H
 #include <string>
-#include "texture.h"
+#include "resources/texture.h"
 #include <memory>
 #include <unordered_map>
 

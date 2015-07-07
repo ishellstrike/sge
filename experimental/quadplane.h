@@ -29,7 +29,7 @@ public:
     Status status = ERROR;
 
     bool is_terminal() const;
-    void Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic);
+    void Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side);
 };
 
 #endif // QUADPLANE_H

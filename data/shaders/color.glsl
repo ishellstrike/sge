@@ -7,27 +7,29 @@
 
 #ifdef _FRAGMENT_
 
-varying vec4 fragColor;
-varying vec2 uv;
+in vec4 fragColor;
+in vec2 uv;
+
+out vec4 out_color;
 
 void main(void)
 {
-    gl_FragColor = fragColor;
+    out_color = fragColor;
 }
 
 #endif
 
 #ifdef _VERTEX_
 
-attribute vec3 position;
-attribute vec2 texcoord;
-attribute vec3 normal;
-attribute vec4 color;
+in vec3 position;
+in vec2 texcoord;
+in vec3 normal;
+in vec4 color;
 
 uniform mat4 MVP;
 
-varying vec4 fragColor;
-varying vec2 uv;
+out vec4 fragColor;
+out vec2 uv;
 
 
 void main(void)
