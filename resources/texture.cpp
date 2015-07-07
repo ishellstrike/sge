@@ -20,6 +20,12 @@ Texture::~Texture()
     }
 }
 
+/*!
+ * \brief Texture::Load Загружает заданное изображение png как битовую карту, а затем загружает его в видеопамять
+ * \param a Имя изображения *.png
+ * \param smooth параметр интерполяции текселей (true - GL_LINEAR, false - GL_NEAREST)
+ * \param mip параметр генерации мип-карт
+ */
 void Texture::Load(const std::string &a, bool smooth, bool mip)
 {
     Pixmap p(a);
@@ -28,6 +34,12 @@ void Texture::Load(const std::string &a, bool smooth, bool mip)
     Load(p, smooth, mip);
 }
 
+/*!
+ * \brief Texture::Load Выполняет загрузку битовой карты в видеопамять
+ * \param a Битовая карта
+ * \param smooth параметр интерполяции текселей (true - GL_LINEAR, false - GL_NEAREST)
+ * \param mip параметр генерации мип-карт
+ */
 void Texture::Load(const Pixmap &a, bool smooth, bool mip)
 {
     width = a.width;
@@ -48,6 +60,12 @@ void Texture::Load(const Pixmap &a, bool smooth, bool mip)
     }
 }
 
+/*!
+ * \brief Texture::Empty Создает в видеопамяти @dim мерную текстуру в цветовом пространстве @format
+ * \param size размер текстуры
+ * \param dim размерность (GL_TEXTURE_2D)
+ * \param format цветовое пространство (GL_RGBA)
+ */
 void Texture::Empty(const glm::vec2 &size, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/)
 {
     width = (int) size.x;
@@ -64,6 +82,9 @@ void Texture::Empty(const glm::vec2 &size, GLuint dim /*= GL_TEXTURE_2D*/, GLuin
     glBindTexture(dim, 0);
 }
 
+/*!
+ * \brief Texture::IdOnly Генерирует новую текстуру не устанавливая никаких данных, только генерирует texture id
+ */
 void Texture::IdOnly()
 {
     assert(!textureId);
