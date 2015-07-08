@@ -26,6 +26,8 @@ public:
     std::shared_ptr<QuadPlane> &SE();
 
     std::shared_ptr<Mesh> terminal_mesh;
+    glm::mat4 transformation;
+    glm::vec3 center;
     Status status = ERROR;
 
     bool is_terminal() const;

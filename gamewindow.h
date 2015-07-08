@@ -17,6 +17,8 @@
 #include "geometry/mesh.h"
 #include "camera.h"
 #include "gbuffer.h"
+#include "sge_ui/wins.h"
+#include "sge_perfomance.h"
 
 class GameWindow {
 public:
@@ -51,6 +53,8 @@ public:
     Camera cam;
 
     std::shared_ptr<Font> f12;
+    std::shared_ptr<WinS> ws;
+    sge_perfomance *perf;
 };
 
 #endif // GAMEWINDOW_H

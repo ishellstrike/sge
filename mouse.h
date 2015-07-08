@@ -71,7 +71,7 @@ public:
 
     static bool isRightPressed();
     static bool isLeftPressed();
-    static void resetDelta();
+    static void dropState();
     static bool isRightDown();
     static bool IsLeftDown();
     static bool isWheelDown();

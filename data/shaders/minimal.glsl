@@ -4,6 +4,8 @@
         This software is distributed freely under the terms of the MIT License.
         See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
 *******************************************************************************/
+#include "noise.lib.glsl"
+#include "test1.glsl"
 
 #define VERT_POSITION 0
 #define VERT_TEXCOORD 1

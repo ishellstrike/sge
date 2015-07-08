@@ -44,6 +44,8 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
             terminal_mesh->Indices.resize(size*size*6);
             terminal_mesh->Vertices.resize(size*size*4);
             int co = 0;
+
+            //Generating R=1 sphere
             for(int j = -size/2; j < size/2; j++)
             {
                 for(int i = -size/2; i < size/2; i++)

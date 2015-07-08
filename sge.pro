@@ -52,7 +52,8 @@ SOURCES += \
     resources/resourcecontroller.cpp \
     resources/material.cpp \
     resources/texture.cpp \
-    resources/pixmap.cpp
+    resources/pixmap.cpp \
+    sge_perfomance.cpp
 
 VERSION = 0.1.0
 
@@ -124,7 +125,8 @@ HEADERS += \
     resources/resourcecontroller.h \
     resources/material.h \
     resources/pixmap.h \
-    resources/texture.h
+    resources/texture.h \
+    sge_perfomance.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -135,4 +137,6 @@ DISTFILES += \
     data/shaders/minimal.glsl \
     sge_ui/.git \
     data/shaders/noise.lib.glsl \
-    data/shaders/atmosphere.lib.glsl
+    data/shaders/atmosphere.lib.glsl \
+    data/shaders/test1.glsl \
+    data/shaders/test2.glsl

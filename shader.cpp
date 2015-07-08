@@ -5,6 +5,8 @@
 #include <sstream>
 #include "logger.h"
 #include "helper.h"
+#include <map>
+#include <regex>
 
 #define printLog(obj){int infologLength = 0; \
     char infoLog[1024]; \
@@ -61,6 +63,14 @@ GLint JargShader::locateVar(const std::string &s)
     return a;
 }
 
+std::map<int, std::string> shader_defines = {
+         std::make_pair(GL_FRAGMENT_SHADER, "#define _FRAGMENT_"),
+         std::make_pair(GL_VERTEX_SHADER, "#define _VERTEX_"),
+         std::make_pair(GL_GEOMETRY_SHADER, "#define _GEOMETRY_"),
+         std::make_pair(GL_TESS_EVALUATION_SHADER, "#define _TESSEVAL_"),
+         std::make_pair(GL_TESS_CONTROL_SHADER, "#define _TESSCONTROL_")
+        };
+
 /*!
  * \brief JargShader::loadShaderFromSource
  * \param type shader type
@@ -68,46 +78,44 @@ GLint JargShader::locateVar(const std::string &s)
  *
  * load typed shader from text file
  */
-void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
+void JargShader::loadShaderFromSource(GLenum type, const std::string &source, const std::string &version/* = GLSLVER*/) {
 
     std::stringstream ss;
     name = source;
-    std::string part_name;
 
-    if(!has_header){
-        ss << GLSLVER << std::endl;
-    }
-    else
-    {
-        ss << global_header;
-    }
+    ss << version << std::endl;
 
-    switch(type)
-    {
-    case GL_FRAGMENT_SHADER:
-        part_name = "#define _FRAGMENT_";
-        break;
-    case GL_VERTEX_SHADER:
-        part_name = "#define _VERTEX_";
-        break;
-    case GL_GEOMETRY_SHADER:
-        part_name = "#define _GEOMETRY_";
-        break;
-    case GL_TESS_EVALUATION_SHADER:
-        part_name = "#define _TESSEVAL_";
-        break;
-    case GL_TESS_CONTROL_SHADER:
-        part_name = "#define _TESSCONTROL_";
-        break;
-    default:
-        part_name = "";
-        break;
-    }
+    ss << shader_defines[type] << std::endl;
 
-    ss << part_name << std::endl;
+    ss << preprocessIncludes(source);
 
-    std::ifstream file(source.c_str());
+    std::string str = ss.str();
+    //LOG(verbose) << str;
+
+    int length = str.length();
+    const char *data = str.c_str();
+
+    GLuint id = glCreateShader(type);
+    glShaderSource(id, 1, (const char **)&data, &length);
+    glCompileShader(id);
+
+    LOG(verbose) << source << " file " << shader_defines[type];
+    printLog(id);
+
+    glAttachShader(program, id);
+    shaders_.push_back(id);
+}
+
+std::string get_dir(std::string path)
+{
+    return path.substr(0, path.find_last_of('/') + 1);
+}
+
+std::string JargShader::LoadTextFile(const std::string &filename)
+{
+    std::ifstream file(filename.c_str());
     std::string line;
+    std::stringstream ss;
     if (file.is_open()) {
         while (file.good()) {
             getline(file, line);
@@ -115,19 +123,44 @@ void JargShader::loadShaderFromSource(GLenum type,const std::string &source) {
         }
         file.close();
     } else {
-        LOG(fatal) << string_format("%s %s", "Failed to open file ", source.c_str());
-        return;
+        LOG(fatal) << string_format("%s %s", "Failed to open file ", filename.c_str());
     }
-    std::string str = ss.str();
-    int length = str.length();
-    const char *data = str.c_str();
-    GLuint id = glCreateShader(type);
-    glShaderSource(id, 1, (const char **)&data, &length);
-    glCompileShader(id);
-    LOG(verbose) << source << " file " << part_name;
-    //printLog(id);
-    glAttachShader(program, id);
-    shaders_.push_back(id);
+
+    return ss.str();
+}
+
+std::string JargShader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )
+{
+    //PrintIndent();
+    if(level > 32)
+        LOG(fatal) << "header inclusion depth limit reached, might be caused by cyclic header inclusion";
+
+    static const std::regex re("^[ ]*#[ ]*include[ ]+[\"<](.*)[\">].*");
+    std::stringstream input;
+    std::stringstream output;
+
+    input << LoadTextFile(filename);
+
+    size_t line_number = 1;
+    std::smatch matches;
+
+    std::string line;
+    while(std::getline(input, line))
+    {
+        if (std::regex_search(line, matches, re))
+        {
+            std::string include_file = matches[1];
+
+            output << preprocessIncludes(get_dir(filename) + include_file, level + 1) << std::endl;
+        }
+        else
+        {
+            output <<  line << std::endl;
+        }
+        ++line_number;
+    }
+    //PrintUnindent();
+    return output.str();
 }
 
 /*!
@@ -166,38 +199,4 @@ void JargShader::Afterlink()
                  "; norm = " << normAttrib <<
                  "; tan = " << tangentAttrib <<
                  "; bi = " << binormalAttrib << ";";
-}
-
-/*!
- * \brief JargShader::PushGlobalHeader
- * \param source
- * \param version version string (e.g. "#version 330 core")
- *
- * rewrite standart version string and set shader header for each shader
- * can used for adding typical constants and functions to shaders
- */
-void JargShader::PushGlobalHeader(const std::string &source, const char *version)
-{
-    std::stringstream ss;
-    name = source;
-    std::string part_name;
-    if(!has_header) {
-        ss << version << std::endl;
-    } else {
-        ss << global_header;
-    }
-    std::ifstream file(source.c_str());
-    std::string line;
-    if (file.is_open()) {
-        while (file.good()) {
-            getline(file, line);
-            ss << line << std::endl;
-        }
-        file.close();
-    } else {
-        LOG(fatal) << string_format("%s %s", "Failed to open file ", source.c_str());
-        return;
-    }
-    global_header = ss.str();
-    has_header = true;
 }

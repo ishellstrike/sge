@@ -5,7 +5,6 @@
 QuadSphere::QuadSphere()
 {
     basic = std::make_shared<BasicJargShader>();
-    basic->PushGlobalHeader("data/shaders/noise.lib.glsl");
     basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
     basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
     basic->Link();
@@ -32,15 +31,15 @@ QuadSphere::QuadSphere()
     }
 
 
-    plane[1]->terminal_mesh->World = glm::rotate(plane[1]->terminal_mesh->World, glm::pi<float>(), glm::vec3(0,1,0));
+    plane[1]->transformation = glm::rotate(glm::mat4(1), glm::pi<float>(), glm::vec3(0,1,0));
 
-    plane[2]->terminal_mesh->World = glm::rotate(plane[2]->terminal_mesh->World, glm::half_pi<float>(), glm::vec3(0,1,0));
+    plane[2]->transformation = glm::rotate(glm::mat4(1), glm::half_pi<float>(), glm::vec3(0,1,0));
 
-    plane[3]->terminal_mesh->World = glm::rotate(plane[3]->terminal_mesh->World, -glm::half_pi<float>(), glm::vec3(0,1,0));
+    plane[3]->transformation = glm::rotate(glm::mat4(1), -glm::half_pi<float>(), glm::vec3(0,1,0));
 
-    plane[4]->terminal_mesh->World = glm::rotate(plane[4]->terminal_mesh->World, -glm::half_pi<float>(), glm::vec3(1,0,0));
+    plane[4]->transformation = glm::rotate(glm::mat4(1), -glm::half_pi<float>(), glm::vec3(1,0,0));
 
-    plane[5]->terminal_mesh->World = glm::rotate(plane[5]->terminal_mesh->World, glm::half_pi<float>(), glm::vec3(1,0,0));
+    plane[5]->transformation = glm::rotate(glm::mat4(1), glm::half_pi<float>(), glm::vec3(1,0,0));
 }
 
 void QuadSphere::Render(const glm::mat4 &MVP)

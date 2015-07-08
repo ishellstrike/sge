@@ -21,8 +21,7 @@ public:
     std::vector<int> vars; /*!< stored uniforms locations */
     void Use() const;
     GLint locateVar(const std::string &s);
-    void PushGlobalHeader(const std::string &s, const char *version = GLSLVER);
-    void loadShaderFromSource(GLenum type, const std::string &source);
+    void loadShaderFromSource(GLenum type, const std::string &source, const std::string &version = GLSLVER);
     bool Link();
     GLint program;
     bool has_header;
@@ -37,6 +36,8 @@ public:
     binormalAttrib;  /*!< binormal attribute */
 
     void Afterlink();
+    std::string preprocessIncludes(const std::string &filename, int level = 0);
+    std::string LoadTextFile(const std::string &filename);
 private:
     GLint locate(const std::string &s);
 };

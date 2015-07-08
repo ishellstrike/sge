@@ -93,22 +93,22 @@ bool GameWindow::BaseInit()
     Mouse::initialize(window);
     Resize(Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y);
     //Mouse::SetFixedPosState(true);
-    glfwSetCursorPosCallback(window, [](GLFWwindow *window, double xpos, double ypos){
+    glfwSetCursorPosCallback(window, [](GLFWwindow *, double xpos, double ypos){
         Mouse::SetCursorPos(xpos, ypos);
     });
-    glfwSetCursorEnterCallback(window, [](GLFWwindow *window, int entered){
+    glfwSetCursorEnterCallback(window, [](GLFWwindow *, int entered){
         Mouse::cursorClientArea(entered);
     });
-    glfwSetWindowFocusCallback(window, [](GLFWwindow *window, int focused){
+    glfwSetWindowFocusCallback(window, [](GLFWwindow *, int focused){
         Mouse::windowFocus(focused);
     });
-    glfwSetMouseButtonCallback(window, [](GLFWwindow *window, int a, int b, int c){
+    glfwSetMouseButtonCallback(window, [](GLFWwindow *, int a, int b, int c){
         Mouse::SetButton(a, b, c);
     });
-    glfwSetWindowSizeCallback(window, [](GLFWwindow *window, int a, int b){
+    glfwSetWindowSizeCallback(window, [](GLFWwindow *, int a, int b){
         GameWindow::Resize(a, b); Mouse::setWindowSize(a, b);
     });
-    glfwSetScrollCallback(window, [](GLFWwindow *window, double a, double b){
+    glfwSetScrollCallback(window, [](GLFWwindow *, double , double b){
         Mouse::Scroll(b);
     });
 
@@ -120,6 +120,11 @@ bool GameWindow::BaseInit()
     f12 = std::make_shared<Font>();
     f12->initFreeType(12);
     f12->renderAtlas();
+
+    ws = std::make_shared<WinS>(batch.get());
+    ws->f = f12.get();
+
+    perf = new sge_perfomance(ws.get());
 
     atlas.LoadAll();
 
@@ -201,8 +206,10 @@ void GameWindow::BaseUpdate()
        cam.setZoom(cam.getZoom() - 1);
    }
 
-    Mouse::resetDelta();
     cam.Update(gt);
+    ws->Update();
+
+    Mouse::dropState();
 }
 
 void GameWindow::BaseDraw()
@@ -220,9 +227,9 @@ void GameWindow::BaseDraw()
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     batch->setUniform(proj * model);
-    batch->drawRect({100,100}, {100,100}, Color::CornflowerBlue);
-    batch->drawText(std::to_string(fps.GetCount()), {100, 100}, f12.get(), Color::White);
-    batch->drawText(string_format("%s\n%g\n%g", std::to_string(cam.getMVP()).c_str(), cam.getYaw(), cam.getPitch()), {10,10}, f12.get(), Color::White);
+
+    ws->Draw();
+
     batch->render();
 
     glMatrixMode(GL_PROJECTION);
@@ -248,6 +255,7 @@ void GameWindow::BaseDraw()
     glfwSwapBuffers(window);
     gt.Update(glfwGetTime());
     fps.Update(gt);
+    perf->UpdateTimer(fps, gt);
 }
 
 void GameWindow::Mainloop()
@@ -270,6 +278,7 @@ void GameWindow::Resize(int w, int h)
     glViewport(0, 0, w, h);
     GameWindow::wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
     GameWindow::wi->proj_per = glm::perspective(45.0f, w /(float) h, 0.1f, 100.f);
+    GameWindow::wi->cam.setViewport(glm::vec4(0,0,w,h));
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     GameWindow::wi->model = glm::mat4(1.f);

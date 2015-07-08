@@ -136,7 +136,7 @@ void Mouse::cursorClientArea( int entered )
 }
 
 //  reset mouse delta
-void Mouse::resetDelta(){
+void Mouse::dropState(){
     sm_deltaypos = 0;
     sm_deltaxpos = 0;
     last_offset = offset;
