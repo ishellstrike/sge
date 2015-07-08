@@ -15,7 +15,6 @@
 #include <algorithm>
 #include "ClassicNoise.h"
 #include "geometry/model.h"
-#include "experimental/quadsphere.h"
 #include "resources/resourcecontroller.h"
 
 #define MAJOR 2
@@ -115,6 +114,8 @@ bool GameWindow::BaseInit()
     gb = std::make_shared<GBuffer>();
     gb->Init(Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y);
 
+    qs = std::make_shared<QuadSphere>();
+
     batch = std::make_shared<SpriteBatch>();
 
     f12 = std::make_shared<Font>();
@@ -166,6 +167,7 @@ void GameWindow::BaseUpdate()
         glEnable(GL_CULL_FACE);
     }
 
+    cam.camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10 : 1;
     if(Keyboard::isKeyDown(GLFW_KEY_W))
         cam.Move(Camera::FORWARD);
     if(Keyboard::isKeyDown(GLFW_KEY_A))
@@ -206,6 +208,7 @@ void GameWindow::BaseUpdate()
        cam.setZoom(cam.getZoom() - 1);
    }
 
+    qs->Update(cam);
     cam.Update(gt);
     ws->Update();
 
@@ -214,7 +217,6 @@ void GameWindow::BaseUpdate()
 
 void GameWindow::BaseDraw()
 {
-    static QuadSphere qs;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(100/255.f, 149/255.f, 237/255.f, 1.f);
@@ -222,14 +224,14 @@ void GameWindow::BaseDraw()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    qs.Render(cam.getMVP());
+    qs->Render(cam.getMVP());
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     batch->setUniform(proj * model);
 
     ws->Draw();
-
+    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
 
     glMatrixMode(GL_PROJECTION);

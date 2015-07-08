@@ -19,6 +19,7 @@
 #include "gbuffer.h"
 #include "sge_ui/wins.h"
 #include "sge_perfomance.h"
+#include "experimental/quadsphere.h"
 
 class GameWindow {
 public:
@@ -55,6 +56,7 @@ public:
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
+    std::shared_ptr<QuadSphere> qs;
 };
 
 #endif // GAMEWINDOW_H

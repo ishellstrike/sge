@@ -2,6 +2,7 @@
 #define QUADPLANE_H
 #include <memory>
 #include "geometry/mesh.h"
+#include "camera.h"
 
 class QuadPlane
 {
@@ -27,11 +28,15 @@ public:
 
     std::shared_ptr<Mesh> terminal_mesh;
     glm::mat4 transformation;
-    glm::vec3 center;
+    glm::vec3 subsurface_centers[4];
     Status status = ERROR;
+    int level = 0;
+    glm::vec2 offset = {0,0};
+    float scale = 1;
 
     bool is_terminal() const;
     void Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side);
+    void Update(Camera &camera, float Rs, float eps);
 };
 
 #endif // QUADPLANE_H

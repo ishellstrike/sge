@@ -61,6 +61,8 @@ public:
     glm::vec2 Project(const glm::vec3 pos);
     glm::ray unProject(const glm::vec2 pos);
 
+    float camera_scale = 1;
+
     void Move(CameraDirection dir);
 private:
     float pitch = 0;
@@ -75,7 +77,7 @@ private:
 
     float MinZoom = 5;
     float MaxZoom = 100;
-    float zoom = 30, max_pitch_rate = 5, max_yaw_rate = 5, camera_scale = 1;
+    float zoom = 30, max_pitch_rate = 5, max_yaw_rate = 5;
     glm::quat rotation_quaternion;
 
     glm::vec3 position;

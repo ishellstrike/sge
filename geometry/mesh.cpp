@@ -174,7 +174,7 @@ void Mesh::CalcTB()
  */
 void Mesh::computeNormal()
 {
-    for(int i=0; i<Vertices.size();i+=3){
+    for(size_t i=0; i<Vertices.size();i+=3){
         glm::vec3 const & a = Vertices[i].position;
         glm::vec3 const & b = Vertices[i+1].position;
         glm::vec3 const & c = Vertices[i+2].position;
@@ -190,12 +190,12 @@ void Mesh::computeNormal()
  */
 void Mesh::MergeVerteces()
 {
-    for (int i=0;i<Vertices.size();i++)
+    for (size_t i=0;i<Vertices.size();i++)
     {
         auto n = Vertices[i].normal;
         float nn = 1.0f;
         std::vector<int> same;
-        for (int j=i;j<Vertices.size();j++)
+        for (size_t j=i;j<Vertices.size();j++)
         {
             if(Vertices[i].position == Vertices[j].position){
                 n += Vertices[j].normal;
@@ -206,7 +206,7 @@ void Mesh::MergeVerteces()
         n /= nn;
         Vertices[i].normal = n;
         if(same.size() > 0)
-            for(int j=0; j<same.size(); j++){
+            for(size_t j=0; j<same.size(); j++){
                 Vertices[same[j]].normal = n;
             }
     }
@@ -314,7 +314,7 @@ bool Mesh::loadOBJ(const std::string &path)
     }*/
     Indices.clear();
     Indices.resize(vertexIndices.size());
-    for(int i=0;i<vertexIndices.size();i++){
+    for(size_t i=0;i<vertexIndices.size();i++){
         Indices[i] = i;
     }
 }
@@ -460,7 +460,7 @@ void Mesh::Combine(Mesh* com)
 
     int t = Vertices.size();
     Vertices.resize(Vertices.size() + com->Vertices.size());
-    for (int i =0; i < com->Vertices.size();i++)
+    for (size_t i =0; i < com->Vertices.size();i++)
     {
         Vertices[t] = com->Vertices[i];
         t++;
@@ -468,7 +468,7 @@ void Mesh::Combine(Mesh* com)
 
     t = Indices.size();
     Indices.resize(Indices.size() + com->Indices.size());
-    for (int i =0; i < com->Indices.size();i++)
+    for (size_t i =0; i < com->Indices.size();i++)
     {
         Indices[t] = com->Indices[i] + lastIndex;
         t++;
@@ -574,14 +574,14 @@ void Mesh::loadSTL(const std::string &patch) {
 //                bfile.Close();
             }
 
-            for (int i = 0; i < Vertices.size(); i++) {
+            for (size_t i = 0; i < Vertices.size(); i++) {
                 Indices.push_back(i);
             }
         }
 
         float Mesh::FarestPoint() {
             float max = 0;
-            for (int i = 0; i < Vertices.size(); i++) {
+            for (size_t i = 0; i < Vertices.size(); i++) {
                 auto t = glm::length(Vertices[i].position);
                 if (max < t) {
                     max = t;
