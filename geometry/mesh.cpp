@@ -375,6 +375,7 @@ void Mesh::Bind(int type /* = 0 */)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indices.size(), &Indices[0], bindtype);
 
     loaded = Indices.size();
+    vertices = Vertices.size();
 
     OPENGL_CHECK_ERRORS();
 }
@@ -382,7 +383,6 @@ void Mesh::Bind(int type /* = 0 */)
 void Mesh::ForgetBind()
 {
     Bind();
-    loaded = Indices.size();
     Indices.clear();
     Indices.shrink_to_fit();
     Vertices.clear();

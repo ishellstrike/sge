@@ -129,7 +129,7 @@ bool GameWindow::BaseInit()
 
     atlas.LoadAll();
 
-    cam.SetPosition({5,5,5});
+    cam.SetPosition({3000,3000,3000});
     cam.SetLookAt({0,0,0});
 
     Resources::instance();
@@ -168,6 +168,9 @@ void GameWindow::BaseUpdate()
     }
 
     cam.camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10 : 1;
+
+    cam.camera_scale /= Keyboard::isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 100.f : 1.f;
+
     if(Keyboard::isKeyDown(GLFW_KEY_W))
         cam.Move(Camera::FORWARD);
     if(Keyboard::isKeyDown(GLFW_KEY_A))

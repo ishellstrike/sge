@@ -38,8 +38,6 @@ void QuadSphere::Render(const glm::mat4 &MVP)
     {
         plane[i]->Render(MVP, mat, basic, i);
     }
-     //TODO:костыль
-    plane[5]->Render(MVP, mat, basic, 5);
 }
 
 void QuadSphere::Update(Camera &camera)

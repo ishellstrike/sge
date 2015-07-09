@@ -50,7 +50,8 @@ public:
     std::string id = "";
     void CalcTB();
     void matf();
-    int loaded = false;
+    int loaded = 0;
+    int vertices = 0;
     void loadSTL(const std::string &path);
     float FarestPoint();
     bool loadMTL(const std::string &path);

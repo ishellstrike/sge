@@ -48,51 +48,36 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
             terminal_mesh->Vertices.resize(size*size*4);
             int co = 0;
 
-            float xs = (-0.5 + offset.x);
-            float ys = (-0.5 + offset.y);
-            float dd = ((1.0*scale)/(float)size);
+            float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
+            float ys = (-0.5 + offset.y); /*< y координата начала сектора сферы с отступом*/
+            float dd = ((1.0*scale)/(float)size); /*< размер сектора сферы*/
 
-            //Generating R=1 sphere
+            //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере свера приводится к радиусу R
             for(int j = 0; j < size; j++)
             {
                 for(int i = 0; i < size; i++)
                 {
                     VertPosNormTanBiTex a, b, c, d;
 
-                    a.position = {xs +  i    * dd,
-                                  ys +  j    * dd,
-                                  0.5f};
+                    a.position = {xs +  i    * dd, ys +  j    * dd, 0.5f};
+                    b.position = {xs + (i+1) * dd, ys +  j    * dd, 0.5f};
+                    c.position = {xs + (i+1) * dd, ys + (j+1) * dd, 0.5f};
+                    d.position = {xs +  i    * dd, ys + (j+1) * dd, 0.5f};
 
-                    b.position = {xs + (i+1) * dd,
-                                  ys +  j    * dd,
-                                  0.5f};
-
-                    c.position = {xs + (i+1) * dd,
-                                  ys + (j+1) * dd,
-                                  0.5f};
-
-                    d.position = {xs +  i    * dd,
-                                  ys + (j+1) * dd,
-                                  0.5f};
-
-                    a.position = glm::normalize(a.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j)  /30.f}*/;
-                    b.position = glm::normalize(b.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j)  /30.f}*/;
-                    c.position = glm::normalize(c.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i+1,j+1)/30.f}*/;
-                    d.position = glm::normalize(d.position)/* + glm::vec3{0, 0, Noise::normalized_simplexnoise(i,  j+1)/30.f}*/;
+                    a.position = glm::normalize(a.position);
+                    b.position = glm::normalize(b.position);
+                    c.position = glm::normalize(c.position);
+                    d.position = glm::normalize(d.position);
 
                     a.normal = a.position;
                     b.normal = b.position;
                     c.normal = c.position;
                     d.normal = d.position;
 
-                    float ux0 = (i/(float)size + 0.5f);
-                    float uy0 = (j/(float)size + 0.5f);
-                    float du = (1/(float)size);
-
-                    a.uv = {ux0,    uy0}   ;
-                    b.uv = {ux0+du, uy0}   ;
-                    c.uv = {ux0+du, uy0+du};
-                    d.uv = {ux0,    uy0+du};
+                    a.uv = {xs +  i    * dd + 0.5f, ys +  j    * dd + 0.5f};
+                    b.uv = {xs + (i+1) * dd + 0.5f, ys +  j    * dd + 0.5f};
+                    c.uv = {xs + (i+1) * dd + 0.5f, ys + (j+1) * dd + 0.5f};
+                    d.uv = {xs +  i    * dd + 0.5f, ys + (j+1) * dd + 0.5f};
 
                     terminal_mesh->Vertices[co*4]   = a;
                     terminal_mesh->Vertices[co*4+1] = b;
@@ -109,16 +94,14 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 }
             }
 
+            //трансформация вершин сферы в соответствии с матрицей трансформации, заданной при создании объекта сферы
+            //матрица трансформации разворачивает части сферы в соответствующие стороны
             for(size_t j = 0; j < terminal_mesh->Vertices.size(); j++)
             {
+                terminal_mesh->Vertices[j].normal =
                 terminal_mesh->Vertices[j].position =
                         glm::vec3(transformation *
                         glm::vec4(terminal_mesh->Vertices[j].position, 1));
-
-                terminal_mesh->Vertices[j].normal =
-                        glm::normalize(
-                        glm::vec3(transformation *
-                        glm::vec4(terminal_mesh->Vertices[j].normal, 1)));
             }
 
             subsurface_centers[0] = glm::vec3(transformation *
@@ -155,7 +138,7 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 subsurface_centers[i] = glm::vec3(transformation * glm::vec4(subsurface_centers[i], 0));
             }
 
-            terminal_mesh->Bind();
+            terminal_mesh->ForgetBind();
             status = READY;
             terminal_mesh->Render(MVP);
         }
@@ -174,7 +157,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps)
         glm::distance(subsurface_centers[1] * Rs, camera.getPosition()) < eps * scale ||
         glm::distance(subsurface_centers[2] * Rs, camera.getPosition()) < eps * scale ||
         glm::distance(subsurface_centers[3] * Rs, camera.getPosition()) < eps * scale)
-            && level < 6)
+            && level < 8)
     {
         m_parts[0] = std::make_shared<QuadPlane>();
         m_parts[0]->offset = offset;
@@ -201,9 +184,9 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps)
         m_parts[3]->transformation = transformation;
     }
     else
-        if((glm::distance(subsurface_centers[0] * Rs, camera.getPosition()) > eps * 2.0f * scale ||
-            glm::distance(subsurface_centers[1] * Rs, camera.getPosition()) > eps * 2.0f * scale ||
-            glm::distance(subsurface_centers[2] * Rs, camera.getPosition()) > eps * 2.0f * scale ||
+        if((glm::distance(subsurface_centers[0] * Rs, camera.getPosition()) > eps * 2.0f * scale &&
+            glm::distance(subsurface_centers[1] * Rs, camera.getPosition()) > eps * 2.0f * scale &&
+            glm::distance(subsurface_centers[2] * Rs, camera.getPosition()) > eps * 2.0f * scale &&
             glm::distance(subsurface_centers[3] * Rs, camera.getPosition()) > eps * 2.0f * scale))
     {
         for(int i = 0; i < 4; ++i)
