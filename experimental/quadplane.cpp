@@ -39,13 +39,12 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
             terminal_mesh->Render(MVP);
         else
         {
-            terminal_mesh = std::make_shared<Mesh>();
             terminal_mesh->material = mat;
             terminal_mesh->shader = basic;
 
             const int size = 10;
-            terminal_mesh->Indices.resize(size*size*6);
-            terminal_mesh->Vertices.resize(size*size*4);
+            terminal_mesh->Indices.reserve(size * size * 6);
+            terminal_mesh->Vertices.reserve((size + 1) * (size + 1));
             int co = 0;
 
             float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
@@ -53,46 +52,43 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
             float dd = ((1.0*scale)/(float)size); /*< размер сектора сферы*/
 
             //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере свера приводится к радиусу R
+
+            for(int j = 0; j < size + 1; j++)
+            {
+                for(int i = 0; i < size + 1; i++)
+                {
+                    VertPosNormTanBiTex a;
+                    a.position = {xs + i * dd, ys + j * dd, 0.5f};
+
+                    a.position = glm::normalize(a.position);
+
+                    a.normal = a.position;
+
+                    a.uv = {xs + i * dd + 0.5f, ys + j * dd + 0.5f} * 50.0f;
+
+                    terminal_mesh->Vertices.push_back(a);
+                }
+            }
+
             for(int j = 0; j < size; j++)
             {
                 for(int i = 0; i < size; i++)
                 {
-                    VertPosNormTanBiTex a, b, c, d;
+                    int tl = j*(size + 1) + i;
+                    int tr = j*(size + 1) + i + 1;
+                    int dl = (j+1)*(size + 1) + i;
+                    int dr = (j+1)*(size + 1) + i + 1;
 
-                    a.position = {xs +  i    * dd, ys +  j    * dd, 0.5f};
-                    b.position = {xs + (i+1) * dd, ys +  j    * dd, 0.5f};
-                    c.position = {xs + (i+1) * dd, ys + (j+1) * dd, 0.5f};
-                    d.position = {xs +  i    * dd, ys + (j+1) * dd, 0.5f};
 
-                    a.position = glm::normalize(a.position);
-                    b.position = glm::normalize(b.position);
-                    c.position = glm::normalize(c.position);
-                    d.position = glm::normalize(d.position);
-
-                    a.normal = a.position;
-                    b.normal = b.position;
-                    c.normal = c.position;
-                    d.normal = d.position;
-
-                    a.uv = {xs +  i    * dd + 0.5f, ys +  j    * dd + 0.5f};
-                    b.uv = {xs + (i+1) * dd + 0.5f, ys +  j    * dd + 0.5f};
-                    c.uv = {xs + (i+1) * dd + 0.5f, ys + (j+1) * dd + 0.5f};
-                    d.uv = {xs +  i    * dd + 0.5f, ys + (j+1) * dd + 0.5f};
-
-                    terminal_mesh->Vertices[co*4]   = a;
-                    terminal_mesh->Vertices[co*4+1] = b;
-                    terminal_mesh->Vertices[co*4+2] = c;
-                    terminal_mesh->Vertices[co*4+3] = d;
-
-                    terminal_mesh->Indices[co*6]   = co*4;
-                    terminal_mesh->Indices[co*6+1] = co*4+1;
-                    terminal_mesh->Indices[co*6+2] = co*4+3;
-                    terminal_mesh->Indices[co*6+3] = co*4+1;
-                    terminal_mesh->Indices[co*6+4] = co*4+2;
-                    terminal_mesh->Indices[co*6+5] = co*4+3;
-                    co++;
+                    terminal_mesh->Indices.push_back(tl);
+                    terminal_mesh->Indices.push_back(tr);
+                    terminal_mesh->Indices.push_back(dl);
+                    terminal_mesh->Indices.push_back(tr);
+                    terminal_mesh->Indices.push_back(dr);
+                    terminal_mesh->Indices.push_back(dl);
                 }
             }
+
 
             //трансформация вершин сферы в соответствии с матрицей трансформации, заданной при создании объекта сферы
             //матрица трансформации разворачивает части сферы в соответствующие стороны
@@ -133,11 +129,6 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                                                              )
                                               );
 
-            for(int i = 0; i < 4; ++i)
-            {
-                subsurface_centers[i] = glm::vec3(transformation * glm::vec4(subsurface_centers[i], 0));
-            }
-
             terminal_mesh->ForgetBind();
             status = READY;
             terminal_mesh->Render(MVP);
@@ -160,24 +151,28 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps)
             && level < 8)
     {
         m_parts[0] = std::make_shared<QuadPlane>();
+        m_parts[0]->terminal_mesh = std::make_shared<Mesh>();
         m_parts[0]->offset = offset;
         m_parts[0]->scale = scale/2.0f;
         m_parts[0]->level = level + 1;
         m_parts[0]->transformation = transformation;
 
         m_parts[1] = std::make_shared<QuadPlane>();
+        m_parts[1]->terminal_mesh = std::make_shared<Mesh>();
         m_parts[1]->offset = offset + glm::vec2(0.5f, 0) * scale;
         m_parts[1]->scale = scale/2.0f;
         m_parts[1]->level = level + 1;
         m_parts[1]->transformation = transformation;
 
         m_parts[2] = std::make_shared<QuadPlane>();
+        m_parts[2]->terminal_mesh = std::make_shared<Mesh>();
         m_parts[2]->offset = offset + glm::vec2(0, 0.5f) * scale;
         m_parts[2]->scale = scale/2.0f;
         m_parts[2]->level = level + 1;
         m_parts[2]->transformation = transformation;
 
         m_parts[3] = std::make_shared<QuadPlane>();
+        m_parts[3]->terminal_mesh = std::make_shared<Mesh>();
         m_parts[3]->offset = offset + glm::vec2(0.5f, 0.5f) * scale;
         m_parts[3]->scale = scale/2.0f;
         m_parts[3]->level = level + 1;

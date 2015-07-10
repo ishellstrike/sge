@@ -22,6 +22,7 @@ QuadSphere::QuadSphere()
     for(int i = 0; i < 6; i++)
     {
         plane[i] = std::make_shared<QuadPlane>();
+        plane[i]->terminal_mesh = std::make_shared<Mesh>();
     }
 
 

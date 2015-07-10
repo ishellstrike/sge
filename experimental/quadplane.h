@@ -13,6 +13,11 @@ class QuadPlane
         SE_PLANE
     };
 
+    enum Type {
+        Same,
+        Lower
+    };
+
     enum Status {
         ERROR,
         READY
@@ -20,6 +25,7 @@ class QuadPlane
 public:
     QuadPlane();
     std::shared_ptr<QuadPlane> m_parts[4];
+    Type nighbours[4];
 
     std::shared_ptr<QuadPlane> &NW();
     std::shared_ptr<QuadPlane> &NE();
