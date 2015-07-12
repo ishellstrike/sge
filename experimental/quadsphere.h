@@ -11,6 +11,7 @@ public:
     void Render(const glm::mat4 &MVP);
     std::shared_ptr<BasicJargShader> basic;
     std::shared_ptr<Material> mat;
+    int minimum = 0;
 
     float R = 1000, /*< Радиус сферы*/
           s = 20;  /*< Коэффициент деформации сферы*/

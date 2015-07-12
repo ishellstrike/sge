@@ -6,11 +6,19 @@
 
 class QuadPlane
 {
-    enum {
-        NW_PLANE,
-        NE_PLANE,
-        SW_PLANE,
-        SE_PLANE
+    enum PARTS {
+        TR,
+        TL,
+        DR,
+        DL
+    };
+
+    enum Neighbours {
+        TOP_N,
+        BOTTOM_N,
+        LEFT_N,
+        RIGHT_N,
+        NEIGHB_COUNT
     };
 
     enum Type {
@@ -25,7 +33,8 @@ class QuadPlane
 public:
     QuadPlane();
     std::shared_ptr<QuadPlane> m_parts[4];
-    Type nighbours[4];
+    QuadPlane *parent = nullptr;
+    std::vector<int> GetNeib();
 
     std::shared_ptr<QuadPlane> &NW();
     std::shared_ptr<QuadPlane> &NE();

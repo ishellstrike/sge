@@ -2,6 +2,7 @@
 #include "lodepng/lodepng.h"
 #include "logger.h"
 #include "helper.h"
+#include "error_image.h"
 
 /*!
  * \brief Pixmap::Pixmap Выполняет загрузку png в битовую карту
@@ -10,7 +11,15 @@
 Pixmap::Pixmap(const std::string &name)
 {
     auto error = lodepng::decode(data, width, height, name);
-    if(error) LOG(info) << "png error " << error << ": " << lodepng_error_text(error) << " for " << name;
+    if(error)
+    {
+        LOG(info) << "png error " << error << ": " << lodepng_error_text(error) << " for " << name;
+        data.clear();
+        data.insert(data.end(), &error_image.pixel_data[0], &error_image.pixel_data[error_image.size]);
+        width = error_image.width;
+        height = error_image.height;
+        //name = error_image.name;
+    }
 }
 
 /*!

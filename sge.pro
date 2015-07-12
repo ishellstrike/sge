@@ -126,7 +126,8 @@ HEADERS += \
     resources/material.h \
     resources/pixmap.h \
     resources/texture.h \
-    sge_perfomance.h
+    sge_perfomance.h \
+    resources/error_image.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
