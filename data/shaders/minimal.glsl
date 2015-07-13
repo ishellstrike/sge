@@ -90,6 +90,9 @@ void main(void)
     vec3 normal = -normalout;
     float DiffuseFactor = dot(normalize(normal), -lightVec);
     vec4 col = texture2D(material_texture, texcoordout) * DiffuseFactor;
+    vec4 col2 = texture2D(material_texture, texcoordout*R/10) * DiffuseFactor;
+    vec4 col3 = texture2D(material_texture, texcoordout*R*10) * DiffuseFactor;
+    col = (col + col2 + col3)/3.0;
     if (DiffuseFactor <= 0) {
         col =  vec4(0,0,0,1);
     }

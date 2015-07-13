@@ -64,6 +64,8 @@ public:
     float camera_scale = 1;
 
     void Move(CameraDirection dir);
+
+    glm::vec3 camera_position_delta;
 private:
     float pitch = 0;
     glm::vec4 viewport;
@@ -83,7 +85,7 @@ private:
     glm::vec3 position;
     glm::vec3 lookAt;
 
-    glm::vec3 camera_direction = glm::vec3(1, 0, 0), camera_position, camera_position_delta, camera_up = glm::vec3(0, 1, 0), camera_look_at = glm::vec3(1, 0, 0);
+    glm::vec3 camera_direction = glm::vec3(1, 0, 0), camera_position, camera_up = glm::vec3(0, 1, 0), camera_look_at = glm::vec3(1, 0, 0);
 
 
     bool projectionMatrixDirty = true, viewMatrixDirty = true;

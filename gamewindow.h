@@ -51,7 +51,10 @@ public:
 
     std::shared_ptr<Mesh> m;
     bool wire = true;
-    Camera cam;
+    Camera cam1, cam2;
+    Camera &cam;
+    glm::vec3 moving;
+    std::vector<glm::vec3> tail;
 
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;

@@ -11,24 +11,139 @@ int GetLevel()
     return 1;
 }
 
-std::vector<int> QuadPlane::GetNeib()
+#define parent_pos \
+    PARTS n; \
+    if(parent->m_parts[0].get() == this) \
+        n = QuadPlane::PARTS::TL; \
+    if(parent->m_parts[1].get() == this) \
+        n = QuadPlane::PARTS::TR; \
+    if(parent->m_parts[2].get() == this) \
+        n = QuadPlane::PARTS::DL; \
+    if(parent->m_parts[3].get() == this) \
+        n = QuadPlane::PARTS::DR;
+
+std::vector<QuadPlane::PARTS> mirrorX(std::vector<QuadPlane::PARTS> &__a)
 {
+    std::vector<QuadPlane::PARTS> b;
+    for(auto a : __a)
+    {
+        b.push_back(a == QuadPlane::PARTS::TR ?
+                         QuadPlane::PARTS::TL :
+                    a == QuadPlane::PARTS::TL ?
+                         QuadPlane::PARTS::TR :
+                    a == QuadPlane::PARTS::DL ?
+                         QuadPlane::PARTS::DR :
+                         QuadPlane::PARTS::DL);
+    }
+    return b;
+}
+
+std::vector<QuadPlane::PARTS> mirrorY(std::vector<QuadPlane::PARTS> &__a)
+{
+    std::vector<QuadPlane::PARTS> b;
+    for(auto a : __a)
+    {
+        b.push_back(a == QuadPlane::PARTS::TR ?
+                         QuadPlane::PARTS::DR :
+                    a == QuadPlane::PARTS::TL ?
+                         QuadPlane::PARTS::DL :
+                    a == QuadPlane::PARTS::DL ?
+                         QuadPlane::PARTS::TL :
+                         QuadPlane::PARTS::DR);
+    }
+    return b;
+}
+
+QuadPlane *getRoot(QuadPlane *leaf)
+{
+    QuadPlane *pre = leaf;
+    while(leaf)
+    {
+        pre = leaf;
+        leaf = leaf->parent;
+    }
+    return pre;
+}
+
+QuadPlane *passRoute(QuadPlane *root, std::vector<QuadPlane::PARTS> &route)
+{
+    std::vector<QuadPlane::PARTS> remain_route = route;
+    while(root && remain_route.size())
+    {
+        QuadPlane::PARTS part = *(--remain_route.end());
+        remain_route.pop_back();
+        if(root->m_parts[part])
+            root = root->m_parts[part].get();
+    }
+    return root;
+}
+
+std::vector<QuadPlane *> QuadPlane::getRoute()
+{
+    std::vector<QuadPlane *> a;
     if(parent)
     {
-        PARTS n;
-        if(parent->m_parts[0].get() == this)
-            n = TL;
-        if(parent->m_parts[1].get() == this)
-            n = TR;
-        if(parent->m_parts[2].get() == this)
-            n = DL;
-        if(parent->m_parts[3].get() == this)
-            n = DR;
+        parent_pos
 
+        Neighbours nei_x, nei_y;
+        switch(n)
+        {
+        case TL:
+            a.push_back(m_parts[TR].get());a.push_back(m_parts[DL].get());
+            nei_x = LEFT_N; nei_y = TOP_N;
+            break;
+        case TR:
+            a.push_back(m_parts[TL].get());a.push_back(m_parts[DR].get());
+            nei_x = RIGHT_N; nei_y = TOP_N;
+            break;
+        case DL:
+            a.push_back(m_parts[DR].get());a.push_back(m_parts[TL].get());
+            nei_x = LEFT_N; nei_y = BOTTOM_N;
+            break;
+        case DR:
+            a.push_back(m_parts[DL].get());a.push_back(m_parts[TR].get());
+            nei_x = RIGHT_N; nei_y = BOTTOM_N;
+            break;
+        }
 
+        auto root = getRoot(this);
+
+        {
+            std::vector<PARTS> pt;
+            getRoute(this, pt, nei_x);
+            auto xm = mirrorX(pt);
+            a.push_back(passRoute(root, xm));
+        }
+        {
+            std::vector<PARTS> pt;
+            getRoute(this, pt, nei_y);
+            auto ym = mirrorY(pt);
+            a.push_back(passRoute(root, ym));
+        }
     }
+    else
+        return {0,0,0,0};
+    return a;
+}
 
-    return {1,1,1,1};
+void QuadPlane::getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours that_neib)
+{
+    if(from->parent)
+    {
+        parent_pos
+
+        path.push_back(n);
+        if((that_neib == TR && n == BOTTOM_N) || (that_neib == TL && n == BOTTOM_N))
+            return;
+        if((that_neib == TR && n == LEFT_N) || (that_neib == DR && n == LEFT_N))
+            return;
+        if((that_neib == TL && n == RIGHT_N) || (that_neib == TL && n == RIGHT_N))
+            return;
+        if((that_neib == DR && n == TOP_N) || (that_neib == DL && n == TOP_N))
+            return;
+        getRoute(from->parent, path, that_neib);
+    }
+    return;
 }
 
 bool QuadPlane::is_terminal() const
@@ -85,7 +200,7 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
 
             float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
             float ys = (-0.5 + offset.y); /*< y координата начала сектора сферы с отступом*/
-            float dd = ((1.0*scale)/(float)size); /*< размер сектора сферы*/
+            float dd = ((1.0*scale)/((float)size-2)); /*< размер сектора сферы*/
 
             //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере свера приводится к радиусу R
 
@@ -106,9 +221,9 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 }
             }
 
-            auto nighbours = GetNeib();
+            std::vector<QuadPlane *> nighbours = {0,0,0,0};//getRoute();
 
-            if(nighbours[TOP_N] == Same)
+            if(!nighbours[TOP_N] || nighbours[TOP_N]->level >= level)
             {
                 for(int i = 0; i < size - 1; ++i)
                 {
@@ -163,7 +278,7 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 terminal_mesh->Indices.push_back((size+1)+size-2);
             }
 
-            if(nighbours[RIGHT_N] == Same)
+            if(!nighbours[RIGHT_N] || nighbours[RIGHT_N]->level >= level)
             {
                 for(int j = 0; j < size - 1; ++j)
                 {
@@ -221,7 +336,7 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 terminal_mesh->Indices.push_back((size)*(size+1)+size);
             }
 
-            if(nighbours[LEFT_N] == Same)
+            if(!nighbours[LEFT_N] || nighbours[LEFT_N]->level >= level)
             {
                 for(int j = 0; j < size - 1; ++j)
                 {
@@ -277,7 +392,7 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 terminal_mesh->Indices.push_back((size)*(size+1));
             }
 
-            if(nighbours[BOTTOM_N] == Same)
+            if(!nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level)
             {
                 for(int i = 0; i < size - 1; ++i)
                 {

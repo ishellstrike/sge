@@ -20,7 +20,8 @@
 #define MAJOR 2
 #define MINOR 1
 
-GameWindow::GameWindow()
+GameWindow::GameWindow() :
+    cam(cam1)
 {
     GameWindow::wi = this;
 }
@@ -42,7 +43,7 @@ bool GameWindow::BaseInit()
         LOG(error) << "glfwInit error " << glfwErrorCode;
         return false;
     }
-    glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_SAMPLES, 16);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
@@ -60,7 +61,7 @@ bool GameWindow::BaseInit()
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
 
     int err = glewInit();
     if (err != GLEW_OK)
@@ -129,8 +130,11 @@ bool GameWindow::BaseInit()
 
     atlas.LoadAll();
 
-    cam.SetPosition({3000,3000,3000});
-    cam.SetLookAt({0,0,0});
+    cam1.SetPosition({3000,3000,3000});
+    cam1.SetLookAt({0,0,0});
+
+    cam2.SetPosition({3000,3000,3000});
+    cam2.SetLookAt({0,0,0});
 
     Resources::instance();
 
@@ -154,6 +158,20 @@ bool GameWindow::BaseInit()
     mat->texture = texx;
     mat->normal = texxx;
     m->material = mat;
+}
+
+std::vector<glm::vec3> getTail(glm::vec3 start, glm::vec3 delta)
+{
+    int sss = 100000;
+    std::vector<glm::vec3> a;
+    a.resize(sss);
+    for(int i = 0; i < sss; ++i)
+    {
+        a.push_back(start);
+        start += delta*10.0f;
+        delta += glm::normalize(-start)*0.09f;
+    }
+    return a;
 }
 
 void GameWindow::BaseUpdate()
@@ -184,17 +202,29 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_E))
         cam.setRoll(gt.elapsed);
 
+    if(glm::length(cam.camera_position_delta) > 0.1f)
+    {
+        tail = getTail(cam1.getPosition(), moving);
+    }
+    moving += cam1.camera_position_delta;
+    moving += (glm::normalize(-cam1.getPosition()))*0.009f;
+
+    if(Keyboard::isKeyDown(GLFW_KEY_SPACE))
+        moving = glm::vec3();
+
+    cam1.SetPosition(cam1.getPosition() + moving*0.01f);
+
+    if(Keyboard::isKeyDown(GLFW_KEY_F3))
+    {
+        cam = &cam1 == &cam ? cam2 : cam1;
+    }
+
     if(Keyboard::isKeyDown(GLFW_KEY_F1))
         cam.SetLookAt({0,0,0});
 
-    if (Keyboard::isKeyDown(GLFW_KEY_LEFT_ALT))
-   {
-       Mouse::SetFixedPosState(true);
-       cam.setYaw(Mouse::getCursorDelta().x);
-       cam.setPitch(Mouse::getCursorDelta().y);
-   }
-   else
-       Mouse::SetFixedPosState(false);
+   Mouse::SetFixedPosState(true);
+   cam.setYaw(Mouse::getCursorDelta().x);
+   cam.setPitch(Mouse::getCursorDelta().y);
 
    if (Mouse::isMiddleDown())
    {
@@ -212,7 +242,8 @@ void GameWindow::BaseUpdate()
    }
 
     qs->Update(cam);
-    cam.Update(gt);
+    cam1.Update(gt);
+    cam1.Update(gt);
     ws->Update();
 
     Mouse::dropState();
@@ -235,6 +266,7 @@ void GameWindow::BaseDraw()
 
     ws->Draw();
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
+    batch->drawText(std::to_string(glm::length(moving)).append(" km/s"), {0, 100}, f12.get(), {0,0,0,1});
     batch->render();
 
     glMatrixMode(GL_PROJECTION);
@@ -256,6 +288,17 @@ void GameWindow::BaseDraw()
         glVertex3f(0,0,0);
         glVertex3f(0,0,1);
     glEnd();
+
+    glDisable(GL_DEPTH_TEST);
+    glBegin(GL_LINES);
+        if(tail.size())
+        for(int i = 0; i < tail.size() - 1; ++i)
+        {
+            glVertex3fv(&tail[i][0]);
+            glVertex3fv(&tail[i+1][0]);
+        }
+    glEnd();
+
 
     glfwSwapBuffers(window);
     gt.Update(glfwGetTime());

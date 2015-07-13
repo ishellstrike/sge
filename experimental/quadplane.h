@@ -5,15 +5,7 @@
 #include "camera.h"
 
 class QuadPlane
-{
-    enum PARTS {
-        TR,
-        TL,
-        DR,
-        DL
-    };
-
-    enum Neighbours {
+{    enum Neighbours {
         TOP_N,
         BOTTOM_N,
         LEFT_N,
@@ -31,10 +23,17 @@ class QuadPlane
         READY
     };
 public:
+     enum PARTS {
+         TR,
+         TL,
+         DR,
+         DL
+     };
+
     QuadPlane();
     std::shared_ptr<QuadPlane> m_parts[4];
     QuadPlane *parent = nullptr;
-    std::vector<int> GetNeib();
+    void getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours that_neib);
 
     std::shared_ptr<QuadPlane> &NW();
     std::shared_ptr<QuadPlane> &NE();
@@ -52,6 +51,7 @@ public:
     bool is_terminal() const;
     void Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side);
     void Update(Camera &camera, float Rs, float eps);
+    std::vector<QuadPlane *> getRoute();
 };
 
 #endif // QUADPLANE_H
