@@ -7,8 +7,8 @@ class GameTimer
 public:
     GameTimer();
     ~GameTimer();
-    double last, current, elapsed;
-    void Update(double wglTime);
+    float last, current, elapsed;
+    void Update(float wglTime);
 };
 
 #endif // GAMETIMER_H

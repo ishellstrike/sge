@@ -21,7 +21,7 @@
 #define MINOR 1
 
 GameWindow::GameWindow() :
-    cam(cam1)
+    cam(&cam1)
 {
     GameWindow::wi = this;
 }
@@ -36,7 +36,7 @@ bool GameWindow::BaseInit()
 {
     LOG(info) << "Jarg initialization start";
     LOG(info) << "User-preferred locale setting is " << std::locale("").name().c_str();
-    glfwSetErrorCallback([](int a,const char* description){LOG(error) << description;});
+    glfwSetErrorCallback([](int /*a*/,const char* description){LOG(error) << description;});
     int glfwErrorCode = glfwInit();
     if (!glfwErrorCode)
     {
@@ -87,11 +87,10 @@ bool GameWindow::BaseInit()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Keyboard::Initialize();
-    glfwSetKeyCallback(window, [](GLFWwindow *win, int key, int scancode, int action, int mods){
+    glfwSetKeyCallback(window, [](GLFWwindow *, int key, int scancode, int action, int mods){
         Keyboard::SetKey(key, scancode, action, mods);
     });
     Mouse::initialize(window);
-    Resize(Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y);
     //Mouse::SetFixedPosState(true);
     glfwSetCursorPosCallback(window, [](GLFWwindow *, double xpos, double ypos){
         Mouse::SetCursorPos(xpos, ypos);
@@ -113,7 +112,7 @@ bool GameWindow::BaseInit()
     });
 
     gb = std::make_shared<GBuffer>();
-    gb->Init(Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y);
+    gb->Init(RESX, RESY);
 
     qs = std::make_shared<QuadSphere>();
 
@@ -130,11 +129,12 @@ bool GameWindow::BaseInit()
 
     atlas.LoadAll();
 
-    cam1.SetPosition({3000,3000,3000});
-    cam1.SetLookAt({0,0,0});
+    cam1.Position({3000,3000,3000});
+    cam1.LookAt({0,0,0});
 
-    cam2.SetPosition({3000,3000,3000});
-    cam2.SetLookAt({0,0,0});
+    cam2.Position({3000,3000,3000});
+    cam2.LookAt({0,0,0});
+    Resize(800, 600);
 
     Resources::instance();
 
@@ -158,6 +158,8 @@ bool GameWindow::BaseInit()
     mat->texture = texx;
     mat->normal = texxx;
     m->material = mat;
+
+    return true;
 }
 
 std::vector<glm::vec3> getTail(glm::vec3 start, glm::vec3 delta)
@@ -168,8 +170,8 @@ std::vector<glm::vec3> getTail(glm::vec3 start, glm::vec3 delta)
     for(int i = 0; i < sss; ++i)
     {
         a.push_back(start);
-        start += delta*10.0f;
-        delta += glm::normalize(-start)*0.09f;
+        start += delta*1.0f;
+        delta += glm::normalize(-start)*0.009f;
     }
     return a;
 }
@@ -185,60 +187,60 @@ void GameWindow::BaseUpdate()
         glEnable(GL_CULL_FACE);
     }
 
-    cam.camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10 : 1;
+    cam->camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
 
-    cam.camera_scale /= Keyboard::isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 100.f : 1.f;
+    cam->camera_scale /= Keyboard::isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 100.f : 1.f;
 
     if(Keyboard::isKeyDown(GLFW_KEY_W))
-        cam.Move(Camera::FORWARD);
+        cam->Move(Camera::FORWARD);
     if(Keyboard::isKeyDown(GLFW_KEY_A))
-        cam.Move(Camera::LEFT);
+        cam->Move(Camera::LEFT);
     if(Keyboard::isKeyDown(GLFW_KEY_S))
-        cam.Move(Camera::BACK);
+        cam->Move(Camera::BACK);
     if(Keyboard::isKeyDown(GLFW_KEY_D))
-        cam.Move(Camera::RIGHT);
+        cam->Move(Camera::RIGHT);
     if(Keyboard::isKeyDown(GLFW_KEY_Q))
-        cam.setRoll(-gt.elapsed);
+        cam->Roll(-gt.elapsed);
     if(Keyboard::isKeyDown(GLFW_KEY_E))
-        cam.setRoll(gt.elapsed);
+        cam->Roll(gt.elapsed);
 
-    if(glm::length(cam.camera_position_delta) > 0.1f)
+    if(glm::length(cam->camera_position_delta) > 0.1f)
     {
-        tail = getTail(cam1.getPosition(), moving);
+        tail = getTail(cam1.Position(), moving);
     }
     moving += cam1.camera_position_delta;
-    moving += (glm::normalize(-cam1.getPosition()))*0.009f;
+    moving += (glm::normalize(-cam1.Position()))*0.009f;
 
     if(Keyboard::isKeyDown(GLFW_KEY_SPACE))
         moving = glm::vec3();
 
-    cam1.SetPosition(cam1.getPosition() + moving*0.01f);
+    cam1.Position(cam1.Position() + moving*0.01f);
 
-    if(Keyboard::isKeyDown(GLFW_KEY_F3))
+    if(Keyboard::isKeyPress(GLFW_KEY_F3))
     {
-        cam = &cam1 == &cam ? cam2 : cam1;
+        cam = &cam1 == &cam ? &cam2 : &cam1;
     }
 
     if(Keyboard::isKeyDown(GLFW_KEY_F1))
-        cam.SetLookAt({0,0,0});
+        cam.LookAt({0,0,0});
 
    Mouse::SetFixedPosState(true);
-   cam.setYaw(Mouse::getCursorDelta().x);
-   cam.setPitch(Mouse::getCursorDelta().y);
+   cam->Yaw(Mouse::getCursorDelta().x);
+   cam->Pitch(Mouse::getCursorDelta().y);
 
    if (Mouse::isMiddleDown())
    {
-       cam.Reset();
+       cam->Reset();
    }
 
    if(Mouse::isWheelUp())
    {
-       cam.setZoom(cam.getZoom() + 1);
+       cam->Zoom(cam.Zoom() + 1);
    }
 
    if(Mouse::isWheelDown())
    {
-       cam.setZoom(cam.getZoom() - 1);
+       cam.Zoom(cam.Zoom() - 1);
    }
 
     qs->Update(cam);
@@ -258,7 +260,7 @@ void GameWindow::BaseDraw()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    qs->Render(cam.getMVP());
+    qs->Render(cam.MVP());
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
@@ -270,9 +272,9 @@ void GameWindow::BaseDraw()
     batch->render();
 
     glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf((const GLfloat*)&cam.getProjection());
+    glLoadMatrixf((const GLfloat*)&cam.Projection());
     glMatrixMode(GL_MODELVIEW);
-    glm::mat4 MV = cam.getView();
+    glm::mat4 MV = cam.View();
     glLoadMatrixf((const GLfloat*)&MV[0][0]);
     glUseProgram(0);
     glBegin(GL_LINES);
@@ -289,10 +291,10 @@ void GameWindow::BaseDraw()
         glVertex3f(0,0,1);
     glEnd();
 
-    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     glBegin(GL_LINES);
         if(tail.size())
-        for(int i = 0; i < tail.size() - 1; ++i)
+        for(size_t i = 0; i < tail.size() - 1; ++i)
         {
             glVertex3fv(&tail[i][0]);
             glVertex3fv(&tail[i+1][0]);
@@ -301,7 +303,7 @@ void GameWindow::BaseDraw()
 
 
     glfwSwapBuffers(window);
-    gt.Update(glfwGetTime());
+    gt.Update(static_cast<float>(glfwGetTime()));
     fps.Update(gt);
     perf->UpdateTimer(fps, gt);
 }
@@ -323,16 +325,16 @@ void GameWindow::Resize(int w, int h)
     if(h == 0)
         h = 1;
     Prefecences::Instance()->resolution = glm::vec2(w, h);
-    glViewport(0, 0, w, h);
     GameWindow::wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
     GameWindow::wi->proj_per = glm::perspective(45.0f, w /(float) h, 0.1f, 100.f);
-    GameWindow::wi->cam.setViewport(glm::vec4(0,0,w,h));
+    GameWindow::wi->cam.Viewport(glm::vec4(0,0,w,h));
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     GameWindow::wi->model = glm::mat4(1.f);
+    glViewport(0, 0, w, h);
 
     if(GameWindow::wi->gb)
-        GameWindow::wi->gb->Resize(Prefecences::Instance()->resolution.x, Prefecences::Instance()->resolution.y);
+        GameWindow::wi->gb->Resize(RESX, RESY);
 }
 
 void GameWindow::SetTitle(const std::string &str)

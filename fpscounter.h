@@ -7,7 +7,7 @@
 class FPSCounter
 {
 private:
-    std::list<double> fpsStack;
+    std::list<float> fpsStack;
 
     double fpsTime;
 

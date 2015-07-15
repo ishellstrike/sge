@@ -10,8 +10,8 @@
 
 class Camera {
 public:
-    Camera(float fieldOfView, glm::vec3 lookAt, glm::vec3 up, float nearPlane, float farPlane);
-    Camera(glm::vec3 lookAt);
+    Camera(float m_fieldOfView, glm::vec3 m_lookAt, glm::vec3 up, float m_nearPlane, float m_farPlane);
+    Camera(glm::vec3 m_lookAt);
     Camera();
 
     enum CameraDirection {
@@ -23,38 +23,35 @@ public:
     void Update(const GameTimer &gt);
     void ReCreateViewMatrix(const GameTimer &gt);
     void ReCreateProjectionMatrix();
-    void SetPosition(const glm::vec3 &_p);
-    void SetLookAt(const glm::vec3 &_p);
     std::string getFullDebugDescription();
-    void SetViewport(const glm::vec4 &_p);
     void Reset();
 
-    const glm::mat4 &getProjection() const;
-    const glm::mat4 &getView() const;
-    const glm::mat4 &getModel() const;
-    const glm::mat4 &getMVP() const;
-    const glm::mat4 &getVP() const;
+    const glm::mat4 &Projection() const;
+    const glm::mat4 &View() const;
+    const glm::mat4 &Model() const;
+    const glm::mat4 &MVP() const;
+    const glm::mat4 &VP() const;
 
-    const glm::vec3 &getLookAt() const;
-    void setLookAt(const glm::vec3 &value);
+    const glm::vec3 &LookAt() const;
+    void LookAt(const glm::vec3 &value);
 
-    const glm::vec3 &getPosition() const;
-    void setPosition(const glm::vec3 &value);
+    const glm::vec3 &Position() const;
+    void Position(const glm::vec3 &value);
 
-    float getPitch() const;
-    void setPitch(float value);
+    float Pitch() const;
+    void Pitch(float value);
 
-    float getYaw() const;
-    void setYaw(float value);
+    float Yaw() const;
+    void Yaw(float value);
 
-    float getRoll() const;
-    void setRoll(float value);
+    float Roll() const;
+    void Roll(float value);
 
-    float getZoom() const;
-    void setZoom(float value);
+    float Zoom() const;
+    void Zoom(float value);
 
-    const glm::vec4 &getViewport() const;
-    void setViewport(const glm::vec4 &value);
+    const glm::vec4 &Viewport() const;
+    void Viewport(const glm::vec4 &value);
 
     glm::vec3 Up, Forward, Backward, Left, Right;
 
@@ -67,29 +64,29 @@ public:
 
     glm::vec3 camera_position_delta;
 private:
-    float pitch = 0;
-    glm::vec4 viewport;
+    float m_pitch = 0;
+    glm::vec4 m_viewport;
 
-    float yaw = 0, roll = 0;
+    float m_yaw = 0, m_roll = 0;
 
-    float fieldOfView;
+    float m_fieldOfView;
 
-    float nearPlane;
-    float farPlane;
+    float m_nearPlane;
+    float m_farPlane;
 
     float MinZoom = 5;
     float MaxZoom = 100;
     float zoom = 30, max_pitch_rate = 5, max_yaw_rate = 5;
-    glm::quat rotation_quaternion;
+    glm::quat m_rotation_quaternion;
 
-    glm::vec3 position;
-    glm::vec3 lookAt;
+    glm::vec3 m_position;
+    glm::vec3 m_lookAt;
 
-    glm::vec3 camera_direction = glm::vec3(1, 0, 0), camera_position, camera_up = glm::vec3(0, 1, 0), camera_look_at = glm::vec3(1, 0, 0);
+    glm::vec3 m_camera_direction = glm::vec3(1, 0, 0), m_camera_position, m_camera_up = glm::vec3(0, 1, 0), m_camera_look_at = glm::vec3(1, 0, 0);
 
 
-    bool projectionMatrixDirty = true, viewMatrixDirty = true;
-    glm::mat4 projection = glm::mat4(1), view = glm::mat4(1), model = glm::mat4(1), MVP = glm::mat4(1), VP = glm::mat4(1);
+    bool m_projection_matrix_dirty = true, m_view_matrix_dirty = true;
+    glm::mat4 m_projection = glm::mat4(1), m_view = glm::mat4(1), m_model = glm::mat4(1), m_MVP = glm::mat4(1), m_VP = glm::mat4(1);
 
     enum FrustrumPlane {
         RIGHT_PLANE, LEFT_PLANE, BOTTOM_PLANE, TOP_PLANE, BACK_PLANE, FRONT_PLANE

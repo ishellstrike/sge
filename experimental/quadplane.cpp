@@ -529,10 +529,10 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
 void QuadPlane::Update(Camera &camera, float Rs, float eps)
 {
     if(is_terminal() &&
-       (glm::distance(subsurface_centers[0] * Rs, camera.getPosition()) < eps * scale ||
-        glm::distance(subsurface_centers[1] * Rs, camera.getPosition()) < eps * scale ||
-        glm::distance(subsurface_centers[2] * Rs, camera.getPosition()) < eps * scale ||
-        glm::distance(subsurface_centers[3] * Rs, camera.getPosition()) < eps * scale)
+       (glm::distance(subsurface_centers[0] * Rs, camera.Position()) < eps * scale ||
+        glm::distance(subsurface_centers[1] * Rs, camera.Position()) < eps * scale ||
+        glm::distance(subsurface_centers[2] * Rs, camera.Position()) < eps * scale ||
+        glm::distance(subsurface_centers[3] * Rs, camera.Position()) < eps * scale)
             && level < 8)
     {
         m_parts[0] = std::make_shared<QuadPlane>();
@@ -568,10 +568,10 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps)
         m_parts[3]->parent = this;
     }
     else
-        if((glm::distance(subsurface_centers[0] * Rs, camera.getPosition()) > eps * 1.1f * scale &&
-            glm::distance(subsurface_centers[1] * Rs, camera.getPosition()) > eps * 1.1f * scale &&
-            glm::distance(subsurface_centers[2] * Rs, camera.getPosition()) > eps * 1.1f * scale &&
-            glm::distance(subsurface_centers[3] * Rs, camera.getPosition()) > eps * 1.1f * scale))
+        if((glm::distance(subsurface_centers[0] * Rs, camera.Position()) > eps * 1.1f * scale &&
+            glm::distance(subsurface_centers[1] * Rs, camera.Position()) > eps * 1.1f * scale &&
+            glm::distance(subsurface_centers[2] * Rs, camera.Position()) > eps * 1.1f * scale &&
+            glm::distance(subsurface_centers[3] * Rs, camera.Position()) > eps * 1.1f * scale))
     {
         for(int i = 0; i < 4; ++i)
             m_parts[i] = nullptr;

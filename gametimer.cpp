@@ -1,6 +1,6 @@
 #include "gametimer.h"
 
-void GameTimer::Update(double wglTime)
+void GameTimer::Update(float wglTime)
 {
     last = current;
     current = wglTime;

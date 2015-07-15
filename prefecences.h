@@ -4,8 +4,10 @@
 #include <glm/glm.hpp>
 #include <string>
 
-#define RESX (static_cast<int>(Prefecences::Instance()->resolution.x))
-#define RESY (static_cast<int>(Prefecences::Instance()->resolution.y))
+#define RESX Prefecences::Instance()->resolution.x
+#define RESY Prefecences::Instance()->resolution.y
+#define RESX_float static_cast<float>(RESX)
+#define RESY_float static_cast<float>(RESY)
 
 class Prefecences
 {
@@ -49,7 +51,7 @@ public:
     /*!
      * \brief current window resolution
      */
-    glm::vec2 resolution = glm::vec2(800, 600);
+    glm::ivec2 resolution = glm::ivec2(800, 600);
 
     /*!
      * \brief data dir

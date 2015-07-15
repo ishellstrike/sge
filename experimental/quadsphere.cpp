@@ -46,10 +46,10 @@ void QuadSphere::Update(Camera &camera)
     std::stringstream ss;
     for(int i = 0; i < 6; i++)
     {
-        ss << std::to_string(glm::distance(plane[i]->subsurface_centers[0] * R, camera.getPosition()))
-                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[1] * R, camera.getPosition()))
-                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[2] * R, camera.getPosition()))
-                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[3] * R, camera.getPosition())) << std::endl;
+        ss << std::to_string(glm::distance(plane[i]->subsurface_centers[0] * R, camera.Position()))
+                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[1] * R, camera.Position()))
+                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[2] * R, camera.Position()))
+                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[3] * R, camera.Position())) << std::endl;
 
         plane[i]->Update(camera, R + s, R * 2);
     }

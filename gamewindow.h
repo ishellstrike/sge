@@ -52,7 +52,7 @@ public:
     std::shared_ptr<Mesh> m;
     bool wire = true;
     Camera cam1, cam2;
-    Camera &cam;
+    Camera *cam;
     glm::vec3 moving;
     std::vector<glm::vec3> tail;
 

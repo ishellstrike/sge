@@ -61,7 +61,7 @@ public:
     glm::vec2 measureText(const std::string &text, Font *font);
     void drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
 private:
-    glm::vec2 drawText(const std::u32string &text32, int x, int y,
+    glm::vec2 drawText(const std::u32string &text32, float x, float y,
                        Font *font, const glm::vec4 &col_, bool no_draw = false);
     void drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, const Texture &tex, const glm::vec4 &color);
 };

@@ -92,8 +92,8 @@ void SpriteBatch::drawText(const std::string &text, const glm::vec2 &pos,
     std::u32string text32;
     utf8::utf8to32(text.begin(), text.end(), std::back_inserter(text32));
 
-    glm::vec2 a = drawText(text32, static_cast<int>(pos.x), static_cast<int>(pos.y), font, col_, true);
-    drawText(text32, static_cast<int>(pos.x), static_cast<int>(pos.y) + font->spacing, font, col_);
+    glm::vec2 a = drawText(text32, pos.x, pos.y, font, col_, true);
+    drawText(text32, pos.x, pos.y + font->spacing, font, col_);
 }
 
 /*!
@@ -140,7 +140,7 @@ glm::vec2 SpriteBatch::measureText(const std::string &text, Font *font)
     return drawText(text32, 0, 0, font, glm::vec4(0), true);
 }
 
-glm::vec2 SpriteBatch::drawText(const std::u32string &text32, int x, int y,
+glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
                                 Font *font, const glm::vec4 &col_, bool no_draw)
 {
     float x_start = x;

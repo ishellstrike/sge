@@ -21,7 +21,7 @@ int Keyboard::EnquePressed(){
 }
 
 
-void Keyboard::SetKey( int key, int scancode, int action, int mods )
+void Keyboard::SetKey( int key, int /*scancode*/, int action, int /*mods*/ )
 {
     sm_keys[key] = action;
     switch(key){

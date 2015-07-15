@@ -38,7 +38,7 @@ void Mouse::initialize(GLFWwindow *win )
 }
 
 
-void Mouse::SetButton( int button, int state ,int c )
+void Mouse::SetButton( int button, int state , int )
 {
     Mouse::sm_buttons[button] = state;
 }
