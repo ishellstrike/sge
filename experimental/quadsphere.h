@@ -6,7 +6,7 @@
 class QuadSphere
 {
 public:
-    QuadSphere();
+    QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat);
     std::shared_ptr<QuadPlane> plane[6];
     void Render(const glm::mat4 &MVP);
     std::shared_ptr<BasicJargShader> basic;
@@ -15,6 +15,8 @@ public:
 
     float R = 1000, /*< Радиус сферы*/
           s = 20;  /*< Коэффициент деформации сферы*/
+
+    glm::vec3 center = {0,0,0};
 
     void Update(Camera &camera);
     std::string out;

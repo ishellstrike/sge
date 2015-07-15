@@ -20,8 +20,7 @@
 #define MAJOR 2
 #define MINOR 1
 
-GameWindow::GameWindow() :
-    cam(&cam1)
+GameWindow::GameWindow()
 {
     GameWindow::wi = this;
 }
@@ -114,8 +113,6 @@ bool GameWindow::BaseInit()
     gb = std::make_shared<GBuffer>();
     gb->Init(RESX, RESY);
 
-    qs = std::make_shared<QuadSphere>();
-
     batch = std::make_shared<SpriteBatch>();
 
     f12 = std::make_shared<Font>();
@@ -129,11 +126,15 @@ bool GameWindow::BaseInit()
 
     atlas.LoadAll();
 
-    cam1.Position({3000,3000,3000});
-    cam1.LookAt({0,0,0});
+    cam1 = std::make_shared<Camera>();
+    cam2 = std::make_shared<Camera>();
+    cam = cam1.get();
 
-    cam2.Position({3000,3000,3000});
-    cam2.LookAt({0,0,0});
+    cam1->Position({3000,3000,3000});
+    cam1->LookAt({0,0,0});
+
+    cam2->Position({3000,3000,3000});
+    cam2->LookAt({0,0,0});
     Resize(800, 600);
 
     Resources::instance();
@@ -144,6 +145,13 @@ bool GameWindow::BaseInit()
     basic->Link();
     basic->Use();
     basic->Afterlink();
+
+    water = std::make_shared<BasicJargShader>();
+    water->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal_watertest.glsl");
+    water->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal_watertest.glsl");
+    water->Link();
+    water->Use();
+    water->Afterlink();
 
     m = std::make_shared<Mesh>(Icosahedron::getMesh());
     //Tesselator::SphereTesselate(4, m);
@@ -158,6 +166,15 @@ bool GameWindow::BaseInit()
     mat->texture = texx;
     mat->normal = texxx;
     m->material = mat;
+
+    auto wm = std::make_shared<Material>();
+    auto wt = std::make_shared<Texture>();
+    wt->Load("data/water.png", true, true);
+    wm->texture = wt;
+    wm->normal = wt;
+
+    qs = std::make_shared<QuadSphere>(basic, mat);
+    qs_w = std::make_shared<QuadSphere>(water, wm);
 
     return true;
 }
@@ -204,25 +221,25 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_E))
         cam->Roll(gt.elapsed);
 
-    if(glm::length(cam->camera_position_delta) > 0.1f)
+    if(glm::length(cam1->camera_position_delta) > 0.1f)
     {
-        tail = getTail(cam1.Position(), moving);
+        tail = getTail(cam1->Position(), moving);
     }
-    moving += cam1.camera_position_delta;
-    moving += (glm::normalize(-cam1.Position()))*0.009f;
+    moving += cam1->camera_position_delta;
+    moving += (glm::normalize(-cam1->Position()))*0.009f;
 
     if(Keyboard::isKeyDown(GLFW_KEY_SPACE))
         moving = glm::vec3();
 
-    cam1.Position(cam1.Position() + moving*0.01f);
+    cam1->Position(cam1->Position() + moving*0.01f);
 
     if(Keyboard::isKeyPress(GLFW_KEY_F3))
     {
-        cam = &cam1 == &cam ? &cam2 : &cam1;
+        cam = cam1.get() == cam ? cam2.get() : cam1.get();
     }
 
     if(Keyboard::isKeyDown(GLFW_KEY_F1))
-        cam.LookAt({0,0,0});
+        cam->LookAt({0,0,0});
 
    Mouse::SetFixedPosState(true);
    cam->Yaw(Mouse::getCursorDelta().x);
@@ -235,17 +252,18 @@ void GameWindow::BaseUpdate()
 
    if(Mouse::isWheelUp())
    {
-       cam->Zoom(cam.Zoom() + 1);
+       cam->Zoom(cam->Zoom() + 1);
    }
 
    if(Mouse::isWheelDown())
    {
-       cam.Zoom(cam.Zoom() - 1);
+       cam->Zoom(cam->Zoom() - 1);
    }
 
-    qs->Update(cam);
-    cam1.Update(gt);
-    cam1.Update(gt);
+    qs->Update(*cam);
+    qs_w->Update(*cam);
+    cam1->Update(gt);
+    cam2->Update(gt);
     ws->Update();
 
     Mouse::dropState();
@@ -260,7 +278,10 @@ void GameWindow::BaseDraw()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    qs->Render(cam.MVP());
+    qs->Render(cam->MVP());
+    water->Use();
+    glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
+    qs_w->Render(cam->MVP());
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
@@ -272,9 +293,9 @@ void GameWindow::BaseDraw()
     batch->render();
 
     glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf((const GLfloat*)&cam.Projection());
+    glLoadMatrixf((const GLfloat*)&cam->Projection());
     glMatrixMode(GL_MODELVIEW);
-    glm::mat4 MV = cam.View();
+    glm::mat4 MV = cam->View();
     glLoadMatrixf((const GLfloat*)&MV[0][0]);
     glUseProgram(0);
     glBegin(GL_LINES);
@@ -327,7 +348,7 @@ void GameWindow::Resize(int w, int h)
     Prefecences::Instance()->resolution = glm::vec2(w, h);
     GameWindow::wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
     GameWindow::wi->proj_per = glm::perspective(45.0f, w /(float) h, 0.1f, 100.f);
-    GameWindow::wi->cam.Viewport(glm::vec4(0,0,w,h));
+    GameWindow::wi->cam->Viewport(glm::vec4(0,0,w,h));
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     GameWindow::wi->model = glm::mat4(1.f);

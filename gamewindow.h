@@ -46,12 +46,12 @@ public:
     GameWindow();
     ~GameWindow();
 
-    std::shared_ptr<BasicJargShader> basic;
+    std::shared_ptr<BasicJargShader> basic, water;
     std::shared_ptr<SpriteBatch> batch;
 
     std::shared_ptr<Mesh> m;
     bool wire = true;
-    Camera cam1, cam2;
+    std::shared_ptr<Camera> cam1, cam2;
     Camera *cam;
     glm::vec3 moving;
     std::vector<glm::vec3> tail;
@@ -59,7 +59,7 @@ public:
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
-    std::shared_ptr<QuadSphere> qs;
+    std::shared_ptr<QuadSphere> qs, qs_w;
 };
 
 #endif // GAMEWINDOW_H

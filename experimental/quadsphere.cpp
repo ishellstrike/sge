@@ -2,22 +2,10 @@
 #include "geometry/icosahedron.h"
 #include "glm/gtx/transform.hpp"
 
-QuadSphere::QuadSphere()
+QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat)
 {
-    basic = std::make_shared<BasicJargShader>();
-    basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
-    basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
-    basic->Link();
-    basic->Use();
-    basic->Afterlink();
-
-    mat = std::make_shared<Material>();
-    std::shared_ptr<Texture> texx = std::make_shared<Texture>();
-    texx->Load("data/derevo.png", true, true);
-    std::shared_ptr<Texture> texxx = std::make_shared<Texture>();
-    texxx->Load("data/aaa.png", true, true);
-    mat->texture = texx;
-    mat->normal = texxx;
+    basic = shader;
+    mat = __mat;
 
     for(int i = 0; i < 6; i++)
     {
@@ -43,16 +31,11 @@ void QuadSphere::Render(const glm::mat4 &MVP)
 
 void QuadSphere::Update(Camera &camera)
 {
-    std::stringstream ss;
+    if(pow(center.x - camera.Position().x, 2) + pow(center.y - camera.Position().y, 2) + pow(center.z - camera.Position().z, 2) < R*R)
+        return;
     for(int i = 0; i < 6; i++)
     {
-        ss << std::to_string(glm::distance(plane[i]->subsurface_centers[0] * R, camera.Position()))
-                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[1] * R, camera.Position()))
-                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[2] * R, camera.Position()))
-                 << " " << std::to_string(glm::distance(plane[i]->subsurface_centers[3] * R, camera.Position())) << std::endl;
-
         plane[i]->Update(camera, R + s, R * 2);
     }
-    out = ss.str();
 }
 

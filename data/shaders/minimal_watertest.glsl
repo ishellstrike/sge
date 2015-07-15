@@ -21,9 +21,10 @@ uniform vec4  material_diffuse;
 uniform vec4  material_specular;
 uniform vec4  material_emission;
 uniform float material_shininess;
+uniform float time;
 
-float R = 1000;
-float s = 50;
+float R = 1010;
+float s = 20;
 
 #ifdef _VERTEX_
 in vec3 position;
@@ -53,7 +54,7 @@ void main(void)
     vec3 grad2;
     vec3 grad3;
 
-    float snoize = (snoise( 5 * position, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
+    float snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
     //snoize = 0;
     grad = (grad*5+grad2)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
@@ -101,7 +102,7 @@ void main(void)
     float fogFactor = exp2( -density * density * z * z * LOG2 );
     fogFactor = clamp(fogFactor, 0.0, 1.0);
     col = mix(fog, col, fogFactor);
-    col.a = 1;
+    col.a = 0.5;
     out_color = col;
 }
 #endif
