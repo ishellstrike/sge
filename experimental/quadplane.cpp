@@ -182,6 +182,41 @@ bool QuadPlane::is_terminal() const
     int dl =  (j+1)*(size + 1) + i - 1; \
     int dr =  (j+1)*(size + 1) + i + 1; \
 
+
+inline void PushTileIndex(Mesh &m, int x, int y, bool top, bool bottom, bool reverse, int sizex)
+{
+    if(!reverse)
+    {
+        if(top)
+        {
+            m.Indices.push_back(y*sizex + x);
+            m.Indices.push_back(y*sizex + x+1);
+            m.Indices.push_back((y+1)*sizex + x+1);
+        }
+        if(bottom)
+        {
+            m.Indices.push_back(y*sizex + x);
+            m.Indices.push_back((y+1)*sizex + x+1);
+            m.Indices.push_back((y+1)*sizex + x);
+        }
+    }
+    else
+    {
+        if(top)
+        {
+            m.Indices.push_back(y*sizex + x);
+            m.Indices.push_back(y*sizex + x+1);
+            m.Indices.push_back((y+1)*sizex + x);
+        }
+        if(bottom)
+        {
+            m.Indices.push_back(y*sizex + x+1);
+            m.Indices.push_back((y+1)*sizex + x+1);
+            m.Indices.push_back((y+1)*sizex + x);
+        }
+    }
+}
+
 void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side)
 {
     if(is_terminal())
@@ -193,16 +228,17 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
             terminal_mesh->material = mat;
             terminal_mesh->shader = basic;
 
-            const int size = 32;
+            const int size = 8;
             terminal_mesh->Indices.reserve(size * size * 6);
             terminal_mesh->Vertices.reserve((size + 1) * (size + 1));
+            int xcount = size + 1;
             int co = 0;
 
             float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
             float ys = (-0.5 + offset.y); /*< y координата начала сектора сферы с отступом*/
-            float dd = ((1.0*scale)/((float)size-2)); /*< размер сектора сферы*/
+            float dd = ((1.0*scale)/((float)size)); /*< размер сектора сферы*/
 
-            //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере свера приводится к радиусу R
+            //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере сфера приводится к радиусу R
 
             for(int j = 0; j < size + 1; j++)
             {
@@ -221,230 +257,52 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
                 }
             }
 
-            std::vector<QuadPlane *> nighbours = {0,0,0,0};//getRoute();
+            std::vector<QuadPlane *> nighbours = getRoute();
 
-            if(!nighbours[TOP_N] || nighbours[TOP_N]->level >= level)
+            //top
+            for(int i=0;i<size;i++)
             {
-                for(int i = 0; i < size - 1; ++i)
-                {
-                    int j = 0;
-                    int tl = (j)*(size + 1) +   i;
-                    int tr = (j)*(size + 1) +   i + 1;
-                    int dl = (j+1)*(size + 1) + i;
-                    int dr = (j+1)*(size + 1) + i + 1;
+                int j = 0;
 
-                    PUSH_BACKWARD
-                }
-            }
-            else
-            {
-                terminal_mesh->Indices.push_back(0);
-                terminal_mesh->Indices.push_back(2);
-                terminal_mesh->Indices.push_back((size+1)+1);
+                bool has_bot = (i!=0)&&(i!=size-1);
+                bool has_top = !nighbours[TOP_N] || nighbours[TOP_N]->level >= level;
 
-                terminal_mesh->Indices.push_back(2);
-                terminal_mesh->Indices.push_back((size+1)+2);
-                terminal_mesh->Indices.push_back((size+1)+1);
-                for(int i = 2; i < size - 2; i+=2)
-                {
-                    int j = 0;
-                    int tl =  (j)  *(size + 1) + i;
-                    int tr =  (j)  *(size + 1) + i + 2;
-                    int dl =  (j+1)*(size + 1) + i;
-                    int dr =  (j+1)*(size + 1) + i + 2;
-                    int mid = (j+1)*(size + 1) + i + 1;
-                    //  ____________________
-                    //  \0|\ 3/|\  /|\  /|x/
-                    //   \|1\/2|_\/_|_\/_|/
-
-                    terminal_mesh->Indices.push_back(tl); //1
-                    terminal_mesh->Indices.push_back(mid);
-                    terminal_mesh->Indices.push_back(dl);
-
-                    terminal_mesh->Indices.push_back(tr); //2
-                    terminal_mesh->Indices.push_back(dr);
-                    terminal_mesh->Indices.push_back(mid);
-
-                    terminal_mesh->Indices.push_back(tl); //3
-                    terminal_mesh->Indices.push_back(tr);
-                    terminal_mesh->Indices.push_back(mid);
-                }
-                terminal_mesh->Indices.push_back(size-2);
-                terminal_mesh->Indices.push_back(size);
-                terminal_mesh->Indices.push_back((size+1)+size-1);
-
-                terminal_mesh->Indices.push_back(size-2);
-                terminal_mesh->Indices.push_back((size+1)+size-1);
-                terminal_mesh->Indices.push_back((size+1)+size-2);
+               // PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 != 0, xcount);
             }
 
-            if(!nighbours[RIGHT_N] || nighbours[RIGHT_N]->level >= level)
+            //bot
+            for(int i=0;i<size;i++)
             {
-                for(int j = 0; j < size - 1; ++j)
-                {
-                    int i = size-1;
-                    int tl = (j)*(size + 1) +   i;
-                    int tr = (j)*(size + 1) +   i + 1;
-                    int dl = (j+1)*(size + 1) + i;
-                    int dr = (j+1)*(size + 1) + i + 1;
+                int j = size-1;
 
-                    PUSH_BACKWARD
-                }
-            }
-            else
-            {
-                terminal_mesh->Indices.push_back((0)*(size+1)+size); //x
-                terminal_mesh->Indices.push_back((2)*(size+1)+size);
-                terminal_mesh->Indices.push_back((1)*(size+1)+size-1);
+                bool has_top = (i!=0)&&(i!=size-1);
+                bool has_bot = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
 
-                terminal_mesh->Indices.push_back((1)*(size+1)+size-1); //x
-                terminal_mesh->Indices.push_back((2)*(size+1)+size);
-                terminal_mesh->Indices.push_back((2)*(size+1)+size-1);
-
-                for(int j = 2; j < size - 2; j+=2)
-                {
-                    int i = size-1;
-                    int tl =  (j)  *(size + 1) + i;
-                    int tr =  (j)  *(size + 1) + i + 1;
-                    int dl =  (j+2)*(size + 1) + i;
-                    int dr =  (j+2)*(size + 1) + i + 1;
-                    int mid_right = (j+1)*(size + 1) + i;
-                    //  1/|
-                    //  / |
-                    //  \3|
-                    //  2\|
-
-                    terminal_mesh->Indices.push_back(tl);
-                    terminal_mesh->Indices.push_back(tr);
-                    terminal_mesh->Indices.push_back(mid_right);
-
-                    terminal_mesh->Indices.push_back(tr);
-                    terminal_mesh->Indices.push_back(dr);
-                    terminal_mesh->Indices.push_back(mid_right);
-
-                    terminal_mesh->Indices.push_back(mid_right);
-                    terminal_mesh->Indices.push_back(dr);
-                    terminal_mesh->Indices.push_back(dl);
-                }
-
-                terminal_mesh->Indices.push_back((size-2)*(size+1)+size-1); //x
-                terminal_mesh->Indices.push_back((size-2)*(size+1)+size);
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+size-1);
-
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+size-1); //x
-                terminal_mesh->Indices.push_back((size-2)*(size+1)+size);
-                terminal_mesh->Indices.push_back((size)*(size+1)+size);
+                //PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 == 0, xcount);
             }
 
-            if(!nighbours[LEFT_N] || nighbours[LEFT_N]->level >= level)
+            //left
+            for(int j=0;j<size;j++)
             {
-                for(int j = 0; j < size - 1; ++j)
-                {
-                    int i = 0;
-                    int tl = (j)*(size + 1) +   i;
-                    int tr = (j)*(size + 1) +   i + 1;
-                    int dl = (j+1)*(size + 1) + i;
-                    int dr = (j+1)*(size + 1) + i + 1;
+                int i = 0;
 
-                    PUSH_BACKWARD
-                }
-            }
-            else
-            {
-                terminal_mesh->Indices.push_back(0);
-                terminal_mesh->Indices.push_back(size+1+1);
-                terminal_mesh->Indices.push_back((size+1)*2);
+                bool no_nei = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
+                bool has_top = (j!=0)&&no_nei;
+                bool has_bot = (j!=size-1)&&no_nei;
 
-                terminal_mesh->Indices.push_back(size+1+1);
-                terminal_mesh->Indices.push_back((size+1)*2+1);
-                terminal_mesh->Indices.push_back((size+1)*2);
-                for(int j = 2; j < size - 2; j+=2)
-                {
-                    int i = 0;
-                    int tl =  (j)  *(size + 1) + i;
-                    int tr =  (j)  *(size + 1) + i + 1;
-                    int dl =  (j+2)*(size + 1) + i;
-                    int dr =  (j+2)*(size + 1) + i + 1;
-                    int mid_right = (j+1)*(size + 1) + i + 1;
-                    //  |\1
-                    //  |3\
-                    //  | /
-                    //  |/2
-
-                    terminal_mesh->Indices.push_back(tl);
-                    terminal_mesh->Indices.push_back(tr);
-                    terminal_mesh->Indices.push_back(mid_right);
-
-                    terminal_mesh->Indices.push_back(mid_right);
-                    terminal_mesh->Indices.push_back(dr);
-                    terminal_mesh->Indices.push_back(dl);
-
-                    terminal_mesh->Indices.push_back(tl);
-                    terminal_mesh->Indices.push_back(mid_right);
-                    terminal_mesh->Indices.push_back(dl);
-                }
-                terminal_mesh->Indices.push_back((size-2)*(size+1));
-                terminal_mesh->Indices.push_back((size-2)*(size+1)+1);
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+1);
-
-                terminal_mesh->Indices.push_back((size-2)*(size+1));
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+1);
-                terminal_mesh->Indices.push_back((size)*(size+1));
+               // PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 == 0, xcount);
             }
 
-            if(!nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level)
+            //right
+            for(int j=0;j<size;++j)
             {
-                for(int i = 0; i < size - 1; ++i)
-                {
-                    int j = size - 1;
-                    int tl = (j)*(size + 1) +   i;
-                    int tr = (j)*(size + 1) +   i + 1;
-                    int dl = (j+1)*(size + 1) + i;
-                    int dr = (j+1)*(size + 1) + i + 1;
+                int i = size - 1;
 
-                    PUSH_BACKWARD
-                }
-            }
-            else
-            {
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+1); //0
-                terminal_mesh->Indices.push_back((size)*(size+1)+2);
-                terminal_mesh->Indices.push_back((size)*(size+1));
+                bool no_nei = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
+                bool has_top = (j!=0)&&no_nei;
+                bool has_bot = (j!=size-1)&&no_nei;
 
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+1);
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+2);
-                terminal_mesh->Indices.push_back((size)*(size+1)+2);
-                for(int i = 2; i < size - 2; i+=2)
-                {
-                    int j = size - 1;
-                    int tl =      (j)  *(size + 1) + i;
-                    int tr =      (j)  *(size + 1) + i + 2;
-                    int dl =      (j+1)*(size + 1) + i;
-                    int dr =      (j+1)*(size + 1) + i + 2;
-                    int mid_top = (j)*(size + 1) + i + 1;
-                    //  __________________________
-                    //  \0|1/\2|| /\ | /\ | /\ |x/
-                    //   \|/_3\||/__\|/__\|/__\|/
-
-                    terminal_mesh->Indices.push_back(tl);
-                    terminal_mesh->Indices.push_back(mid_top);
-                    terminal_mesh->Indices.push_back(dl);
-
-                    terminal_mesh->Indices.push_back(mid_top);
-                    terminal_mesh->Indices.push_back(tr);
-                    terminal_mesh->Indices.push_back(dr);
-
-                    terminal_mesh->Indices.push_back(dl);
-                    terminal_mesh->Indices.push_back(mid_top);
-                    terminal_mesh->Indices.push_back(dr);
-                }
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+size-2); //x
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+size-1);
-                terminal_mesh->Indices.push_back((size-0)*(size+1)+size-2);
-
-                terminal_mesh->Indices.push_back((size-1)*(size+1)+size-1); //x
-                terminal_mesh->Indices.push_back((size)*(size+1)+size);
-                terminal_mesh->Indices.push_back((size)*(size+1)+size-2);
+                PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 != 0, xcount);
             }
 
             for(int j = 1; j < size - 1; j+=2)

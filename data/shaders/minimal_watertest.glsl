@@ -101,8 +101,8 @@ void main(void)
     float z = gl_FragCoord.z / gl_FragCoord.w;
     float fogFactor = exp2( -density * density * z * z * LOG2 );
     fogFactor = clamp(fogFactor, 0.0, 1.0);
-    col = mix(fog, col, fogFactor);
+    col = mix(fog, col, fogFactor) * 1.0/((positionout.z - R)/s);
     col.a = 0.5;
-    out_color = col;
+    out_color = vec4(positionout.z - R, 0,0, 1);//col;
 }
 #endif

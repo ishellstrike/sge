@@ -221,10 +221,10 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_E))
         cam->Roll(gt.elapsed);
 
-    if(glm::length(cam1->camera_position_delta) > 0.1f)
-    {
-        tail = getTail(cam1->Position(), moving);
-    }
+//    if(glm::length(cam1->camera_position_delta) > 0.1f)
+//    {
+//        tail = getTail(cam1->Position(), moving);
+//    }
     moving += cam1->camera_position_delta;
     moving += (glm::normalize(-cam1->Position()))*0.009f;
 
@@ -312,15 +312,15 @@ void GameWindow::BaseDraw()
         glVertex3f(0,0,1);
     glEnd();
 
-    glEnable(GL_DEPTH_TEST);
-    glBegin(GL_LINES);
-        if(tail.size())
-        for(size_t i = 0; i < tail.size() - 1; ++i)
-        {
-            glVertex3fv(&tail[i][0]);
-            glVertex3fv(&tail[i+1][0]);
-        }
-    glEnd();
+//    glEnable(GL_DEPTH_TEST);
+//    glBegin(GL_LINES);
+//        if(tail.size())
+//        for(size_t i = 0; i < tail.size() - 1; ++i)
+//        {
+//            glVertex3fv(&tail[i][0]);
+//            glVertex3fv(&tail[i+1][0]);
+//        }
+//    glEnd();
 
 
     glfwSwapBuffers(window);
