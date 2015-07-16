@@ -217,6 +217,60 @@ inline void PushTileIndex(Mesh &m, int x, int y, bool top, bool bottom, bool rev
     }
 }
 
+inline void PushTileIndexN(Mesh &m, int x, int y, int part, int sizex, int xoff, int yoff, bool reverse)
+{
+    if(!reverse)
+        switch(part % 4)
+        {
+        case 0:
+            m.Indices.push_back((y+yoff)*sizex + x+xoff);
+            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
+            break;
+        case 1:
+            m.Indices.push_back((y+yoff)*sizex + x+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
+            break;
+        case 2:
+            m.Indices.push_back((y+yoff)*sizex + x+xoff);
+            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
+            break;
+        case 3:
+            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
+            break;
+        }
+    else
+        switch(part % 4)
+        {
+        case 0:
+
+            m.Indices.push_back((y+yoff)*sizex + x+xoff);
+            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
+            break;
+        case 1:
+
+            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
+            break;
+        case 2:
+            m.Indices.push_back((y+yoff)*sizex + x+xoff);
+            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
+            break;
+        case 3:
+            m.Indices.push_back((y+yoff)*sizex + x+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
+            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
+            break;
+        }
+}
+
 void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side)
 {
     if(is_terminal())
@@ -228,7 +282,7 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
             terminal_mesh->material = mat;
             terminal_mesh->shader = basic;
 
-            const int size = 8;
+            const int size = 32;
             terminal_mesh->Indices.reserve(size * size * 6);
             terminal_mesh->Vertices.reserve((size + 1) * (size + 1));
             int xcount = size + 1;
@@ -260,49 +314,103 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
             std::vector<QuadPlane *> nighbours = getRoute();
 
             //top
-            for(int i=0;i<size;i++)
+            int p = 0;
+            for(int i=0;i<size;i+=2)
             {
                 int j = 0;
 
-                bool has_bot = (i!=0)&&(i!=size-1);
-                bool has_top = !nighbours[TOP_N] || nighbours[TOP_N]->level >= level;
+                bool no_nei = !nighbours[TOP_N] || nighbours[TOP_N]->level >= level;
 
-               // PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 != 0, xcount);
+                if(i!=0)
+                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, false);
+                if(no_nei)
+                {
+                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, false);
+                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 1, 0, false);
+                }
+                else if (i % 2 == 0)
+                {
+                    terminal_mesh->Indices.push_back((j)*xcount + i);
+                    terminal_mesh->Indices.push_back((j)*xcount + i + 2);
+                    terminal_mesh->Indices.push_back((j + 1)*xcount + i + 1);
+                }
+                if(i!=size-2)
+                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 1, 0, false);
             }
 
             //bot
-            for(int i=0;i<size;i++)
+            p = 0;
+            for(int i=0;i<size;i+=2)
             {
                 int j = size-1;
 
-                bool has_top = (i!=0)&&(i!=size-1);
-                bool has_bot = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
+                bool no_nei = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
 
-                //PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 == 0, xcount);
+                if(i!=0)
+                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, true);
+                if(no_nei)
+                {
+                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, true);
+                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 1, 0, true);
+                }
+                else if (i % 2 == 0)
+                {
+                    terminal_mesh->Indices.push_back((j)*xcount + i + 1);
+                    terminal_mesh->Indices.push_back((j + 1)*xcount + i + 2);
+                    terminal_mesh->Indices.push_back((j + 1)*xcount + i);
+                }
+                if(i!=size-2)
+                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 1, 0, true);
             }
 
             //left
-            for(int j=0;j<size;j++)
+            p = 0;
+            for(int j=0;j<size;j+=2)
             {
                 int i = 0;
 
-                bool no_nei = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
-                bool has_top = (j!=0)&&no_nei;
-                bool has_bot = (j!=size-1)&&no_nei;
+                bool no_nei = !nighbours[LEFT_N] || nighbours[LEFT_N]->level >= level;
 
-               // PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 == 0, xcount);
+                if(j!=0)
+                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, false);
+                if(no_nei)
+                {
+                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, false);
+                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 0, 1, false);
+                }
+                else if (j % 2 == 0)
+                {
+                    terminal_mesh->Indices.push_back((j)*xcount + i);
+                    terminal_mesh->Indices.push_back((j + 1)*xcount + i + 1);
+                    terminal_mesh->Indices.push_back((j + 2)*xcount + i);
+                }
+                if(j!=size-2)
+                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 0, 1, false);
             }
 
             //right
-            for(int j=0;j<size;++j)
+            p = 0;
+            for(int j=0;j<size;j+=2)
             {
                 int i = size - 1;
 
-                bool no_nei = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
-                bool has_top = (j!=0)&&no_nei;
-                bool has_bot = (j!=size-1)&&no_nei;
+                bool no_nei = !nighbours[RIGHT_N] || nighbours[RIGHT_N]->level >= level;
 
-                PushTileIndex(*terminal_mesh, i, j, has_top, has_bot, i % 2 != 0, xcount);
+                if(j!=0)
+                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, true);
+                if(no_nei)
+                {
+                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, true);
+                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 0, 1, true);
+                }
+                else if (j % 2 == 0)
+                {
+                    terminal_mesh->Indices.push_back((j)*xcount + i + 1);
+                    terminal_mesh->Indices.push_back((j + 2)*xcount + i + 1);
+                    terminal_mesh->Indices.push_back((j + 1)*xcount + i);
+                }
+                if(j!=size-2)
+                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 0, 1, true);
             }
 
             for(int j = 1; j < size - 1; j+=2)

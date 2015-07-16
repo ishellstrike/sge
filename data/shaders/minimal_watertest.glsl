@@ -39,6 +39,7 @@ out vec3 normalout;
 out vec3 lightVec;
 out vec3 positionout;
 out vec3 plane;
+out float snoize;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
@@ -54,7 +55,7 @@ void main(void)
     vec3 grad2;
     vec3 grad3;
 
-    float snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
+    snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
     //snoize = 0;
     grad = (grad*5+grad2)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
@@ -80,6 +81,7 @@ in vec3 lightVec;
 in vec3 normalout;
 in vec3 positionout;
 in vec3 plane;
+in float snoize;
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
 const float LOG2 = 1.442695;
@@ -93,16 +95,15 @@ void main(void)
     float DiffuseFactor = dot(normalize(normal), -lightVec);
     vec4 col = texture2D(material_texture, texcoordout) * DiffuseFactor;
     vec4 col2 = texture2D(material_texture, texcoordout*R/10) * DiffuseFactor;
-    vec4 col3 = texture2D(material_texture, texcoordout*R*10) * DiffuseFactor;
-    col = (col + col2 + col3)/3.0;
+    col = (col + col2)/2.0;
     if (DiffuseFactor <= 0) {
         col =  vec4(0,0,0,1);
     }
     float z = gl_FragCoord.z / gl_FragCoord.w;
     float fogFactor = exp2( -density * density * z * z * LOG2 );
     fogFactor = clamp(fogFactor, 0.0, 1.0);
-    col = mix(fog, col, fogFactor) * 1.0/((positionout.z - R)/s);
-    col.a = 0.5;
-    out_color = vec4(positionout.z - R, 0,0, 1);//col;
+    col = mix(fog, col, fogFactor);
+    col.a = snoize + 0.5f;
+    out_color = col;
 }
 #endif

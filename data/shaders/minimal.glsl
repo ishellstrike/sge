@@ -23,7 +23,7 @@ uniform vec4  material_emission;
 uniform float material_shininess;
 
 float R = 1000;
-float s = 50;
+float s = 100;
 
 #ifdef _VERTEX_
 in vec3 position;

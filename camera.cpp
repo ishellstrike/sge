@@ -11,7 +11,7 @@ Camera::Camera(glm::vec3 __lookAt) :
     m_fieldOfView(glm::quarter_pi<float>()),
     m_lookAt(__lookAt),
     m_nearPlane(0.1f),
-    m_farPlane(1000000)
+    m_farPlane(10000)
 {
 
 }
@@ -20,7 +20,7 @@ Camera::Camera() :
        m_fieldOfView(glm::quarter_pi<float>()),
        m_lookAt(glm::vec3(0,0,0)),
        m_nearPlane(0.1f),
-       m_farPlane(1000000)
+       m_farPlane(10000)
 {
 
 }
