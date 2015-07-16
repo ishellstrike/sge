@@ -532,6 +532,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps)
         m_parts[3]->level = level + 1;
         m_parts[3]->transformation = transformation;
         m_parts[3]->parent = this;
+        status = ERROR;
     }
     else
         if((glm::distance(subsurface_centers[0] * Rs, camera.Position()) > eps * 1.1f * scale &&

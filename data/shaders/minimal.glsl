@@ -23,7 +23,7 @@ uniform vec4  material_emission;
 uniform float material_shininess;
 
 float R = 1000;
-float s = 100;
+float s = 50;
 
 #ifdef _VERTEX_
 in vec3 position;
@@ -54,7 +54,7 @@ void main(void)
     vec3 grad3;
 
     float snoize = (snoise( 5 * position, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
-    snoize = 0;
+   // snoize = 0;
     grad = (grad*5+grad2)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
     vec4 vertexPosition = transform_VP * transform_M * vec4(newPosition, 1);

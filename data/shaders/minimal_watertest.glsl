@@ -39,7 +39,7 @@ out vec3 normalout;
 out vec3 lightVec;
 out vec3 positionout;
 out vec3 plane;
-out float snoize;
+out float deff;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
@@ -55,8 +55,9 @@ void main(void)
     vec3 grad2;
     vec3 grad3;
 
-    snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
-    //snoize = 0;
+    float snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
+    float snoize_terr = (snoise( 5 * position, grad3 )*5 + snoise( 100 * position, grad3 ))/6.0;
+    deff = abs(snoize_terr - snoize);
     grad = (grad*5+grad2)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
     vec4 vertexPosition = transform_VP * transform_M * vec4(newPosition, 1);
@@ -81,7 +82,7 @@ in vec3 lightVec;
 in vec3 normalout;
 in vec3 positionout;
 in vec3 plane;
-in float snoize;
+in float deff;
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
 const float LOG2 = 1.442695;
@@ -103,7 +104,7 @@ void main(void)
     float fogFactor = exp2( -density * density * z * z * LOG2 );
     fogFactor = clamp(fogFactor, 0.0, 1.0);
     col = mix(fog, col, fogFactor);
-    col.a = snoize + 0.5f;
+    col.a = deff;
     out_color = col;
 }
 #endif
