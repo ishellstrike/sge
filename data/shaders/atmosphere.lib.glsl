@@ -170,7 +170,7 @@ vec4 texture4D(sampler3D table, float r, float mu, float muS, float nu)
     float uNu = floor(lerp);
     lerp = lerp - uNu;
     return texture3D(table, vec3((uNu + uMuS) / float(RES_NU), uMu, uR)) * (1.0 - lerp) +
-           texture3D(table, vec3((uNu + uMuS + 1.0) / float(RES_NU), uMu, uR)) * lerp;
+            texture3D(table, vec3((uNu + uMuS + 1.0) / float(RES_NU), uMu, uR)) * lerp;
 }
 
 void getMuMuSNu(float r, vec4 dhdH, out float mu, out float muS, out float nu) {
@@ -500,7 +500,7 @@ vec4 cloudColor(vec3 worldP, vec3 worldCamera, vec3 worldSunDir) {
     vec3 extinction;
     sunRadianceAndSkyIrradiance(PP, worldSunDir, Lsun, Esky);
 
-	vec3 cloudL = v * (Lsun * max(worldSunDir.z, 0.0) + Esky / 10.0) / M_PI;
+    vec3 cloudL = v * (Lsun * max(worldSunDir.z, 0.0) + Esky / 10.0) / M_PI;
 
     vec3 inscatter = inScattering(worldCamera + earthPos, PP, worldSunDir, extinction);
     cloudL = cloudL * extinction + inscatter;

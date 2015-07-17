@@ -1,7 +1,7 @@
 #include "quad.h"
 #include "vpnt.h"
 
-std::shared_ptr<Mesh> Quad::getMesh()
+std::shared_ptr<Mesh> Quad::getMesh(float scale)
 {
     if(sm_mesh != nullptr){
         return std::make_shared<Mesh>(*sm_mesh);
@@ -9,10 +9,10 @@ std::shared_ptr<Mesh> Quad::getMesh()
 
     sm_mesh = std::make_shared<Mesh>();
 
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5, 0, -0.5}, {0,0}));
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5,  0, -0.5}, {1,0}));
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5, 0,  0.5}, {0,1}));
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5,  0,  0.5}, {1,1}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5*scale, 0,  -0.5*scale}, {0,0}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5 *scale,  0, -0.5*scale}, {1,0}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5*scale, 0,   0.5*scale}, {0,1}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5 *scale,  0,  0.5*scale}, {1,1}));
 
     sm_mesh->Indices.push_back(0);
     sm_mesh->Indices.push_back(1);

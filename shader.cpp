@@ -90,7 +90,7 @@ void JargShader::loadShaderFromSource(GLenum type, const std::string &source, co
     ss << preprocessIncludes(source);
 
     std::string str = ss.str();
-    LOG(verbose) << str;
+    //LOG(verbose) << str;
 
     int length = str.length();
     const char *data = str.c_str();

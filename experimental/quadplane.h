@@ -50,7 +50,7 @@ public:
 
     bool is_terminal() const;
     void Render(const Camera &cam, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side);
-    void Update(Camera &camera, float Rs, float eps);
+    void Update(Camera &camera, float Rs, float eps, int max_divide);
     std::vector<QuadPlane *> getRoute();
 };
 

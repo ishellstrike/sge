@@ -492,14 +492,14 @@ void QuadPlane::Render(const Camera &cam, std::shared_ptr<Material> &mat, std::s
 #undef PUSH_BACKWARD
 #undef PUSH_FORWARD
 
-void QuadPlane::Update(Camera &camera, float Rs, float eps)
+void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide)
 {
     if(is_terminal() &&
        (glm::distance(subsurface_centers[0] * Rs, camera.Position()) < eps * scale ||
         glm::distance(subsurface_centers[1] * Rs, camera.Position()) < eps * scale ||
         glm::distance(subsurface_centers[2] * Rs, camera.Position()) < eps * scale ||
         glm::distance(subsurface_centers[3] * Rs, camera.Position()) < eps * scale)
-            && level < 8)
+            && level < max_divide)
     {
         m_parts[0] = std::make_shared<QuadPlane>();
         m_parts[0]->terminal_mesh = std::make_shared<Mesh>();
@@ -547,7 +547,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps)
     if(!is_terminal())
     {
         for(int i = 0; i < 4; ++i)
-            m_parts[i]->Update(camera, Rs, eps);
+            m_parts[i]->Update(camera, Rs, eps, max_divide);
     }
 }
 

@@ -39,6 +39,7 @@ out vec3 normalout;
 out vec3 lightVec;
 out vec3 positionout;
 out vec3 plane;
+out vec3 eyeNormal;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
@@ -55,8 +56,6 @@ void main(void)
     vec3 grad3;
 
     float snoize = ground(position, grad);
-   // snoize = 0;
-    grad = (grad*5+grad2)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
     vec4 vertexPosition = transform_VP * transform_M * vec4(newPosition, 1);
 
@@ -70,6 +69,8 @@ void main(void)
     positionout = position;
     texcoordout = texcoord;
     normalout = positionout - s * plane;
+
+    eyeNormal = vec3(transform_N * vec4(normalout, 0.0));
 }
 #endif
 
@@ -80,6 +81,8 @@ in vec3 lightVec;
 in vec3 normalout;
 in vec3 positionout;
 in vec3 plane;
+in vec3 eyeNormal;
+
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
 const float LOG2 = 1.442695;
@@ -89,18 +92,21 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 normal = -normalout;
-    float DiffuseFactor = dot(normalize(normal), -lightVec);
-    vec4 col = texture2D(material_texture, texcoordout) * DiffuseFactor;
-    vec4 col2 = texture2D(material_texture, texcoordout*R/10) * DiffuseFactor;
-    vec4 col3 = texture2D(material_texture, texcoordout*R*10) * DiffuseFactor;
+    vec3 eye = normalize(eyeNormal);
+    vec3 light = normalize(lightVec);
+
+    vec4 col = texture2D(material_texture, texcoordout);
+    vec4 col2 = texture2D(material_texture, texcoordout*R/10);
+    vec4 col3 = texture2D(material_texture, texcoordout*R*10);
     col = (col + col2 + col3)/3.0;
-    if (DiffuseFactor <= 0) {
-        col =  vec4(0,0,0,1);
-    }
-    float z = gl_FragCoord.z / gl_FragCoord.w;
-    float fogFactor = exp2( -density * density * z * z * LOG2 );
-    fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+    float NdotL = max(dot(eye, light), 0.0);
+
+    col *= NdotL;
+
+    //float z = gl_FragCoord.z / gl_FragCoord.w;
+    //  float fogFactor = exp2( -density * density * z * z * LOG2 );
+    // fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
     out_color = col;

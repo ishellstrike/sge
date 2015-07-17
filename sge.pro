@@ -53,7 +53,9 @@ SOURCES += \
     resources/material.cpp \
     resources/texture.cpp \
     resources/pixmap.cpp \
-    sge_perfomance.cpp
+    sge_perfomance.cpp \
+    FrameBuffer.cpp \
+    TextureGenerator.cpp
 
 VERSION = 0.1.0
 
@@ -127,7 +129,10 @@ HEADERS += \
     resources/pixmap.h \
     resources/texture.h \
     sge_perfomance.h \
-    resources/error_image.h
+    resources/error_image.h \
+    FrameBuffer.h \
+    TextureGenerator.h \
+    resources/random_noise.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -142,4 +147,5 @@ DISTFILES += \
     data/shaders/test1.glsl \
     data/shaders/test2.glsl \
     data/shaders/minimal_watertest.glsl \
-    data/shaders/height.lib.glsl
+    data/shaders/height.lib.glsl \
+    data/shaders/celltexture.glsl

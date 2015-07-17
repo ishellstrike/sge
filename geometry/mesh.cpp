@@ -400,8 +400,6 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
         return;
     if(!shader)
         throw std::logic_error("null shader");
-    if(!material)
-        throw std::logic_error("null material");
 
     shader->Use();
     glUniform3fv(shader->viewPosition_location, 1, &cam.Position()[0]);
@@ -428,11 +426,11 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
     if(shader->normal_location != -1)
         glUniform1i(shader->normal_location, 1);
 
-    if(material->texture != nullptr) {
+    if(material && material->texture != nullptr) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, material->texture->textureId);
     }
-    if(material->normal != nullptr) {
+    if(material && material->normal != nullptr) {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
     }

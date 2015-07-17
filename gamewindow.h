@@ -48,6 +48,7 @@ public:
 
     std::shared_ptr<BasicJargShader> basic, water;
     std::shared_ptr<SpriteBatch> batch;
+    std::shared_ptr<Texture> tex1;
 
     std::shared_ptr<Mesh> m;
     bool wire = true;

@@ -12,7 +12,7 @@ public:
      *
      * Получение копии меша, содержащего геометрию куба 1х1х1 без нормалей, тангентов, бинормалей
      */
-    static std::shared_ptr<Mesh> getMesh();
+    static std::shared_ptr<Mesh> getMesh(float scale = 1.0f);
 private:
     static std::shared_ptr<Mesh> sm_mesh;
 };

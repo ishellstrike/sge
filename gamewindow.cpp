@@ -16,6 +16,8 @@
 #include "ClassicNoise.h"
 #include "geometry/model.h"
 #include "resources/resourcecontroller.h"
+#include "TextureGenerator.h"
+#include "resources/random_noise.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -176,7 +178,27 @@ bool GameWindow::BaseInit()
     wm->normal = wn;
 
     qs = std::make_shared<QuadSphere>(basic, mat);
+    qs->max_divide = 7;
     qs_w = std::make_shared<QuadSphere>(water, wm);
+    qs_w->max_divide = 4;
+
+    auto cellt = std::make_shared<BasicJargShader>();
+    cellt->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/celltexture.glsl");
+    cellt->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/celltexture.glsl");
+    cellt->Link();
+    cellt->Use();
+    cellt->Afterlink();
+
+    tex1 = std::make_shared<Texture>();
+    tex1->Empty({123,123});
+
+    TextureGenerator tg;
+    std::shared_ptr<Texture> tt = std::make_shared<Texture>();
+    tt->Load(RandomNoise({128,128}));
+    tg.SetShader(cellt);
+    tg.SetTextures(tt);
+    tg.SetResultTexture(texx);
+    tg.RenderOnTempFbo();
 
     return true;
 }
@@ -222,18 +244,6 @@ void GameWindow::BaseUpdate()
         cam->Roll(-gt.elapsed);
     if(Keyboard::isKeyDown(GLFW_KEY_E))
         cam->Roll(gt.elapsed);
-
-//    if(glm::length(cam1->camera_position_delta) > 0.1f)
-//    {
-//        tail = getTail(cam1->Position(), moving);
-//    }
-    moving += cam1->camera_position_delta;
-    moving += (glm::normalize(-cam1->Position()))*0.009f;
-
-    if(Keyboard::isKeyDown(GLFW_KEY_SPACE))
-        moving = glm::vec3();
-
-    cam1->Position(cam1->Position() + moving*0.01f);
 
     if(Keyboard::isKeyPress(GLFW_KEY_F3))
     {

@@ -16,6 +16,8 @@ public:
     float R = 1000, /*< Радиус сферы*/
           s = 20;  /*< Коэффициент деформации сферы*/
 
+    int max_divide = 8;
+
     glm::vec3 center = {0,0,0};
 
     void Update(Camera &camera);

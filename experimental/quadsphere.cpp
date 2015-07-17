@@ -35,7 +35,7 @@ void QuadSphere::Update(Camera &camera)
         return;
     for(int i = 0; i < 6; i++)
     {
-        plane[i]->Update(camera, R + s, R * 2);
+        plane[i]->Update(camera, R + s, R * 2, max_divide);
     }
 }
 
