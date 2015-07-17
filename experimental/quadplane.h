@@ -49,7 +49,7 @@ public:
     float scale = 1;
 
     bool is_terminal() const;
-    void Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side);
+    void Render(const Camera &cam, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side);
     void Update(Camera &camera, float Rs, float eps);
     std::vector<QuadPlane *> getRoute();
 };

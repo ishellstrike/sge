@@ -21,11 +21,11 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     plane[5]->transformation = glm::rotate(glm::mat4(1), glm::half_pi<float>(), glm::vec3(1,0,0));
 }
 
-void QuadSphere::Render(const glm::mat4 &MVP)
+void QuadSphere::Render(const Camera &cam)
 {
     for(int i = 0; i < 6; i++)
     {
-        plane[i]->Render(MVP, mat, basic, i);
+        plane[i]->Render(cam, mat, basic, i);
     }
 }
 

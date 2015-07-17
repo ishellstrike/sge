@@ -271,12 +271,12 @@ inline void PushTileIndexN(Mesh &m, int x, int y, int part, int sizex, int xoff,
         }
 }
 
-void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side)
+void QuadPlane::Render(const Camera &cam, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side)
 {
     if(is_terminal())
     {
         if(status == READY)
-            terminal_mesh->Render(MVP);
+            terminal_mesh->Render(cam);
         else
         {
             terminal_mesh->material = mat;
@@ -478,13 +478,13 @@ void QuadPlane::Render(const glm::mat4 &MVP, std::shared_ptr<Material> &mat, std
 
             terminal_mesh->ForgetBind();
             status = READY;
-            terminal_mesh->Render(MVP);
+            terminal_mesh->Render(cam);
         }
     }
     else
     {
         for(int i = 0; i < 4; ++i)
-            m_parts[i]->Render(MVP, mat, basic, side);
+            m_parts[i]->Render(cam, mat, basic, side);
     }
 }
 

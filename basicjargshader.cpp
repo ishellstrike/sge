@@ -40,7 +40,7 @@ void BasicJargShader::Afterlink()
 
     mat_model_location = locate("transform_M");
     mat_viewProjection_location = locate("transform_VP");
-    viewPosition_location = locate("transform_viewPosn");
+    viewPosition_location = locate("transform_viewPos");
     mat_normal_location = locate("transform_N");
     lightPosition_location = locate("transform_lightPos");
 

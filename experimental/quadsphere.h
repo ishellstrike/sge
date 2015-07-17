@@ -8,7 +8,7 @@ class QuadSphere
 public:
     QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat);
     std::shared_ptr<QuadPlane> plane[6];
-    void Render(const glm::mat4 &MVP);
+    void Render(const Camera &cam);
     std::shared_ptr<BasicJargShader> basic;
     std::shared_ptr<Material> mat;
     int minimum = 0;

@@ -389,13 +389,10 @@ void Mesh::ForgetBind()
     Vertices.shrink_to_fit();
 }
 
-void Mesh::Render(const glm::mat4 &MVP, bool patches /* = false*/)
+void Mesh::Render(const Camera &cam, bool patches /* = false*/)
 {
-    Render(glm::mat4(1), MVP, patches);
-}
+    const glm::mat4 &MVP = cam.MVP();
 
-inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &VP, bool patches /* = false*/)
-{
     if(Vertices.size() == 0 && !loaded){
         return;
     }
@@ -407,11 +404,12 @@ inline void Mesh::Render(const glm::mat4 &Model, const glm::mat4 &VP, bool patch
         throw std::logic_error("null material");
 
     shader->Use();
-    auto mult = Model*World;
-    glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &mult[0][0]);
-    glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &VP[0][0]);
-    //glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(mult)));
-    //glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
+    glUniform3fv(shader->viewPosition_location, 1, &cam.Position()[0]);
+
+    glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &World[0][0]);
+    glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
+    glm::mat4 normal = glm::transpose(glm::inverse(World));
+    glUniformMatrix4fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
     glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(200000,234560,9850000)[0]);
 
     //    if(shader->ambient_location != -1)

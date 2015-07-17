@@ -41,7 +41,7 @@ out vec3 plane;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
-uniform mat3 transform_N; // normal matrix
+uniform mat4 transform_N; // normal matrix
 uniform vec3 transform_viewPos;
 uniform vec3 transform_lightPos;
 
@@ -100,7 +100,7 @@ void main(void)
     float z = gl_FragCoord.z / gl_FragCoord.w;
     float fogFactor = exp2( -density * density * z * z * LOG2 );
     fogFactor = clamp(fogFactor, 0.0, 1.0);
-    col = mix(fog, col, fogFactor);
+    //col = mix(fog, col, fogFactor);
     col.a = 1;
     out_color = col;
 }

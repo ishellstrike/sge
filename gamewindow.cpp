@@ -278,10 +278,10 @@ void GameWindow::BaseDraw()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    qs->Render(cam->MVP());
+    qs->Render(*cam);
     water->Use();
     glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    qs_w->Render(cam->MVP());
+    qs_w->Render(*cam);
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);

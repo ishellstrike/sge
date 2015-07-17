@@ -11,6 +11,7 @@
 #include "../resources/material.h"
 #include <memory>
 #include "../spritebatch.h"
+#include "camera.h"
 
 
 /*!
@@ -27,8 +28,7 @@ public:
     ~Mesh(void);
     void Create(std::vector<VertPosNormTanBiTex> verteces, std::vector<GLuint> indeces);
     void Bind(int type = 0);
-    void Render(const glm::mat4 &MVP, bool patches = false);
-    void Render(const glm::mat4 &Model, const glm::mat4 &VP, bool patches = false);
+    void Render(const Camera &cam, bool patches = false);
     void Combine(Mesh* com);
     bool loadOBJ(const std::string &path);
     void computeNormal();
