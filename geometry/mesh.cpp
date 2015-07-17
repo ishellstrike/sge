@@ -432,13 +432,10 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, material->texture->textureId);
     }
-//    if(material->normal != nullptr) {
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
-//        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 1);
-//    } else {
-//        glUniform1i(glGetUniformLocation(shader->program, "NoTangent"), 0);
-//    }
+    if(material->normal != nullptr) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
+    }
 
     glBindVertexArray(*m_vao);
 

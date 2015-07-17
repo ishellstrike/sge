@@ -141,4 +141,5 @@ DISTFILES += \
     data/shaders/atmosphere.lib.glsl \
     data/shaders/test1.glsl \
     data/shaders/test2.glsl \
-    data/shaders/minimal_watertest.glsl
+    data/shaders/minimal_watertest.glsl \
+    data/shaders/height.lib.glsl

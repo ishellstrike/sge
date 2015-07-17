@@ -7,6 +7,7 @@
 *******************************************************************************/
 #include "noise.lib.glsl"
 #include "test1.glsl"
+#include "height.lib.glsl"
 
 #define VERT_POSITION 0
 #define VERT_TEXCOORD 1
@@ -23,7 +24,7 @@ uniform vec4  material_emission;
 uniform float material_shininess;
 
 float R = 1000;
-float s = 50;
+float s = 5;
 
 #ifdef _VERTEX_
 in vec3 position;
@@ -53,7 +54,7 @@ void main(void)
     vec3 grad2;
     vec3 grad3;
 
-    float snoize = (snoise( 5 * position, grad )*5 + snoise( 100 * position, grad2 ))/6.0;
+    float snoize = ground(position, grad);
    // snoize = 0;
     grad = (grad*5+grad2)/6.0;
     vec3 newPosition = (R + s * snoize) * position;

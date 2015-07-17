@@ -7,6 +7,7 @@
 *******************************************************************************/
 #include "noise.lib.glsl"
 #include "test1.glsl"
+#include "height.lib.glsl"
 
 #define VERT_POSITION 0
 #define VERT_TEXCOORD 1
@@ -23,8 +24,8 @@ uniform vec4  material_emission;
 uniform float material_shininess;
 uniform float time;
 
-float R = 1010;
-float s = 20;
+float R = 1000;
+float s = 5;
 
 #ifdef _VERTEX_
 in vec3 position;
@@ -57,8 +58,8 @@ void main(void)
     vec3 grad2;
     vec3 grad3;
 
-    float snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position  + vec3(-0.1,-0.2,0)*time, grad2 ))/6.0;
-    float snoize_terr = (snoise( 5 * position, grad3 )*5 + snoise( 100 * position, grad3 ))/6.0;
+    float snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 10 * position  + vec3(-0.1,-0.2,0)*time, grad2 ))/6.0;
+    float snoize_terr = ground(position, grad3);
     deff = abs(snoize_terr - snoize);
     grad = (grad*5+grad2)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
@@ -68,9 +69,8 @@ void main(void)
     plane = grad - (grad * position) * position;
 
     vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
-    lightVec = normalize(lightVec4.xyz);
-
-    lightVec  = transform_lightPos - vertexPosition.xyz;
+    lightVec = lightVec4.xyz;
+    lightVec  = normalize(transform_lightPos);
 
     gl_Position = transform_VP * vertexPosition;
     positionout = position;
@@ -108,15 +108,17 @@ void main(void)
     vec3 halfWay = normalize(light + view);
     vec3 eye = normalize(eyeNormal);
 
-    vec3 normal = normalout;
+    vec4 normalmap = texture2D(material_normal, texcoordout * 100);
+    eye = normalize(normalmap.xyz + eye);
     vec4 tex_col = texture2D(material_texture, texcoordout);
+
     vec4 col2 = texture2D(material_texture, texcoordout*R/10);
     tex_col = (tex_col + col2)/2.0;
     vec4 color = vec4(0,0,0,1);
 
     float NdotL = max(dot(eye, light), 0.0);
     color += vec4(0.5, 0.5, 1, 1) * NdotL;
-    float RdotVpow = max(0.0,pow(dot(eye, halfWay), 80));
+    float RdotVpow = max(0.0,pow(dot(eye, halfWay), 180));
 
     //Fresnel approximation
     float base = max(0, 1-dot(view, light));
@@ -124,7 +126,8 @@ void main(void)
     float fresnel = fZero + (1-fZero)*exp;
 
     out_color = color * tex_col;
-    out_color.a = 0.5f + deff;
+    out_color.a = 0.1f + deff;
     out_color += vec4(1,1,1,1) * RdotVpow;
+    //out_color = normalmap;
 }
 #endif

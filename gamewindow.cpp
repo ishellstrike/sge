@@ -169,9 +169,11 @@ bool GameWindow::BaseInit()
 
     auto wm = std::make_shared<Material>();
     auto wt = std::make_shared<Texture>();
+    auto wn = std::make_shared<Texture>();
     wt->Load("data/water.png", true, true);
+    wn->Load("data/normal.png", true, true);
     wm->texture = wt;
-    wm->normal = wt;
+    wm->normal = wn;
 
     qs = std::make_shared<QuadSphere>(basic, mat);
     qs_w = std::make_shared<QuadSphere>(water, wm);
