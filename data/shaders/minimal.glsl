@@ -55,7 +55,7 @@ void main(void)
     vec3 grad = texture2D(material_grad, vUv).xyz;
 
     vec3 newPosition = (R + s * snoize) * position;
-    vec4 vertexPosition = transform_VP * transform_M * vec4(newPosition, 1);
+    vec4 vertexPosition = transform_VP * transform_M * vec4(position.xyz*R, 1);
 
     vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
     lightVec = normalize(lightVec4.xyz);
@@ -89,18 +89,18 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = texture2D(material_grad, texcoordout).xyz;
+    vec3 grad = texture2D(material_grad, texcoordout).xyz*50;
     float snoize = texture2D(material_height, texcoordout).x;
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;
-    vec3 normal = positionout - s * plane*10;
+    vec3 normal = positionout - s * plane;
     vec3 eye = normalize(vec3(transform_N * vec4(normal, 0.0)));
     vec3 light = normalize(lightVec);
 
     vec4 tex = texture2D(material_texture, texcoordout);
     vec4 col = material_ambient;
 
-    float NdotL = max(dot(eye, light), 0.0);
+    float NdotL = clamp(dot(light, eye), 0, 1);
 
     col += material_diffuse * NdotL;
 

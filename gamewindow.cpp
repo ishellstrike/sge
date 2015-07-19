@@ -268,6 +268,8 @@ void GameWindow::BaseDraw()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(100/255.f, 149/255.f, 237/255.f, 1.f);
+    //glClearColor(0,0,0, 1.f);
+
 
 
     glEnable(GL_DEPTH_TEST);

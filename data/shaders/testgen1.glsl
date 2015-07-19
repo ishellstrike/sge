@@ -42,7 +42,7 @@ out vec4 color;
 
 void main(void)
 {
-    float p = sin(Vert.texcoord.x*10);//jordanTurbulence(Vert.texcoord*10, 0, 8);
+    float p = jordanTurbulence(Vert.texcoord*10, 0, 8);
     color = vec4(p,p,p, 1);
     //color.w = 1;
 }

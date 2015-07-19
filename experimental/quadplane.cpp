@@ -323,7 +323,7 @@ void QuadPlane::Render(const Camera &cam,
         {
             std::shared_ptr<Material> sub_texture = std::make_shared<Material>();
             GenerateSubTexture(sub_texture, h_shader, g_shader);
-            sub_texture->texture = sub_texture->grad;
+            sub_texture->texture = mat->texture;
 
             terminal_mesh->material = sub_texture;
             terminal_mesh->shader = basic;
