@@ -11,7 +11,8 @@ class TextureGenerator
 public:
     TextureGenerator(void);
     ~TextureGenerator(void);
-    void SetTextures(std::shared_ptr<Texture> tex);
+    void PushBackTexture(std::shared_ptr<Texture> tex);
+    void AddTexture(std::string __name, std::shared_ptr<Texture> &a);
     void SetResultTexture(std::shared_ptr<Texture> _tex);
     void SetShader(std::shared_ptr<BasicJargShader> _shader);
     void RenderOnTempFbo(std::function<void()> func = [](){}) const;
@@ -22,5 +23,6 @@ private:
     std::vector<float> params;
     std::shared_ptr<BasicJargShader> shader;
     std::shared_ptr<Texture> target;
+    std::vector<std::pair<std::string, std::shared_ptr<Texture>>> named_textures;
 };
 

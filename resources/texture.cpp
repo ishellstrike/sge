@@ -12,6 +12,11 @@ Texture::Texture(GLuint id) :
 {
 }
 
+Texture::Texture(glm::vec2 __size)
+{
+    Empty(__size);
+}
+
 Texture::~Texture()
 {
     if(textureId != -1){
@@ -57,6 +62,11 @@ void Texture::Load(const Pixmap &a, bool smooth, bool mip)
     {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+
+    if(mip)
+    {
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
 }
 

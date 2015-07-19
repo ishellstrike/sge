@@ -15,6 +15,7 @@ public:
 
     Texture();
     Texture(GLuint id);
+    Texture(glm::vec2 __size);
     ~Texture();
 
     void Load(const std::string &a, bool smooth = false, bool mip = false);

@@ -6,6 +6,7 @@
 #include "BasicJargShader.h"
 #include <functional>
 #include "prefecences.h"
+#include "logger.h"
 
 // TODO: наследуемые классы текстурного генератора, с перегрузкой функции OtherUniforms, которая вызывается перед рендером
 TextureGenerator::TextureGenerator(void)
@@ -17,9 +18,14 @@ TextureGenerator::~TextureGenerator(void)
 {
 }
 
-void TextureGenerator::SetTextures(std::shared_ptr<Texture> tex)
+void TextureGenerator::PushBackTexture(std::shared_ptr<Texture> tex)
 {
     texes.push_back(tex);
+}
+
+void TextureGenerator::AddTexture(std::string __name, std::shared_ptr<Texture> &a)
+{
+    named_textures.push_back(std::make_pair(__name, a));
 }
 
 void TextureGenerator::Reset(){
@@ -59,6 +65,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0,0,0,1);
     shader->Use();
+
     for (int i=0; i<texes.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0+i);
@@ -66,7 +73,20 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         std::string str = "inputTex";
         str.append(std::to_string(i));
         auto uni = glGetUniformLocation(shader->program, str.c_str());
-        glUniform1i(uni, 0);
+        if(uni == -1)
+            LOG(error) << "Texture generator could't found " << str << " sampler in " << shader->name;
+        glUniform1i(uni, i);
+    }
+
+    for(int i=0; i < named_textures.size(); ++i)
+    {
+        glActiveTexture(GL_TEXTURE0 + i + texes.size());
+        glBindTexture(GL_TEXTURE_2D, named_textures[i].second->textureId);
+        const char *s = named_textures[i].first.c_str();
+        auto uni = glGetUniformLocation(shader->program, s);
+        if(uni == -1)
+            LOG(error) << "Texture generator could't found " << named_textures[i].first << " sampler in " << shader->name;
+        glUniform1i(uni, i + texes.size());
     }
 
     //TODO: определение параметра
@@ -75,6 +95,8 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         std::string str = "param";
         str.append(std::to_string(i));
         auto uni = glGetUniformLocation(shader->program, str.c_str());
+        if(uni == -1)
+            LOG(error) << "Texture generator could't found " << str << " uniform in " << shader->name;
         glUniform1f(uni, params[i]);
     }
     

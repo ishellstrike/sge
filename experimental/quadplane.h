@@ -45,13 +45,19 @@ public:
     glm::vec3 subsurface_centers[4];
     Status status = ERROR;
     int level = 0;
-    glm::vec2 offset = {0,0};
-    float scale = 1;
+    glm::vec2 offset = {0,0}; /*< [0,1] */
+    float scale = 1; /*< [0, 1] */
 
     bool is_terminal() const;
-    void Render(const Camera &cam, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side);
+    void Render(const Camera &cam,
+                std::shared_ptr<Material> &mat,
+                std::shared_ptr<BasicJargShader> &basic,
+                int side,
+                std::shared_ptr<BasicJargShader> &h_shader,
+                std::shared_ptr<BasicJargShader> &g_shader);
     void Update(Camera &camera, float Rs, float eps, int max_divide);
-    std::vector<QuadPlane *> getRoute();
+     std::vector<QuadPlane *> getRoute();
+      void GenerateSubTexture(std::shared_ptr<Material> &t, std::shared_ptr<BasicJargShader> &h_shader, std::shared_ptr<BasicJargShader> &g_shader);
 };
 
 #endif // QUADPLANE_H

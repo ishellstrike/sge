@@ -9,10 +9,10 @@ std::shared_ptr<Mesh> Quad::getMesh(float scale)
 
     sm_mesh = std::make_shared<Mesh>();
 
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5*scale, 0,  -0.5*scale}, {0,0}));
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5 *scale,  0, -0.5*scale}, {1,0}));
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5*scale, 0,   0.5*scale}, {0,1}));
-    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5 *scale,  0,  0.5*scale}, {1,1}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5*scale, -0.5*scale, 0}, {0,0}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5 *scale, -0.5*scale, 0}, {1,0}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({-0.5*scale,  0.5*scale, 0}, {0,1}));
+    sm_mesh->Vertices.push_back(VertPosNormTanBiTex({0.5 *scale,  0.5*scale, 0}, {1,1}));
 
     sm_mesh->Indices.push_back(0);
     sm_mesh->Indices.push_back(1);

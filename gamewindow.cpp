@@ -178,27 +178,9 @@ bool GameWindow::BaseInit()
     wm->normal = wn;
 
     qs = std::make_shared<QuadSphere>(basic, mat);
-    qs->max_divide = 7;
+    qs->max_divide = 6;
     qs_w = std::make_shared<QuadSphere>(water, wm);
     qs_w->max_divide = 4;
-
-    auto cellt = std::make_shared<BasicJargShader>();
-    cellt->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/celltexture.glsl");
-    cellt->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/celltexture.glsl");
-    cellt->Link();
-    cellt->Use();
-    cellt->Afterlink();
-
-    tex1 = std::make_shared<Texture>();
-    tex1->Empty({123,123});
-
-    TextureGenerator tg;
-    std::shared_ptr<Texture> tt = std::make_shared<Texture>();
-    tt->Load(RandomNoise({128,128}));
-    tg.SetShader(cellt);
-    tg.SetTextures(tt);
-    tg.SetResultTexture(texx);
-    tg.RenderOnTempFbo();
 
     return true;
 }
@@ -273,7 +255,7 @@ void GameWindow::BaseUpdate()
    }
 
     qs->Update(*cam);
-    qs_w->Update(*cam);
+   // qs_w->Update(*cam);
     cam1->Update(gt);
     cam2->Update(gt);
     ws->Update();
@@ -293,7 +275,7 @@ void GameWindow::BaseDraw()
     qs->Render(*cam);
     water->Use();
     glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    qs_w->Render(*cam);
+    //qs_w->Render(*cam);
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);

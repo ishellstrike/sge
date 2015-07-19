@@ -34,9 +34,13 @@ void BasicJargShader::Afterlink()
 
     texture_location = locate("material_texture");
     normal_location = locate("material_normal");
+    height_location = locate("material_height");
+    grad_location = locate("material_grad");
 
     glUniform1i(texture_location, 0);
     glUniform1i(normal_location, 1);
+    glUniform1i(height_location, 2);
+    glUniform1i(grad_location, 3);
 
     mat_model_location = locate("transform_M");
     mat_viewProjection_location = locate("transform_VP");

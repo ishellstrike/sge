@@ -11,10 +11,11 @@ public:
     void Render(const Camera &cam);
     std::shared_ptr<BasicJargShader> basic;
     std::shared_ptr<Material> mat;
+    std::shared_ptr<BasicJargShader> h_map, g_map;
     int minimum = 0;
 
     float R = 1000, /*< Радиус сферы*/
-          s = 20;  /*< Коэффициент деформации сферы*/
+          s = 100;  /*< Коэффициент деформации сферы*/
 
     int max_divide = 8;
 

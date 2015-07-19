@@ -1,4 +1,3 @@
-//autoversion here
 /*******************************************************************************
         Copyright (C) 2014 Samsonov Andrey
 
@@ -22,9 +21,10 @@ uniform vec4  material_diffuse;
 uniform vec4  material_specular;
 uniform vec4  material_emission;
 uniform float material_shininess;
+
 uniform float time;
 
-float R = 1000;
+float R = 1010;
 float s = 5;
 
 #ifdef _VERTEX_
@@ -58,10 +58,10 @@ void main(void)
     vec3 grad2;
     vec3 grad3;
 
-    float snoize = (snoise( 5 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position  + vec3(-0.1,-0.2,0)*time, grad2 )*5)/6.0;
-    float snoize_terr = ground(position, grad3);
+    float snoize = (snoise( 1 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position  + vec3(-0.1,-0.2,0)*time, grad2 ))/6.0;
+    float snoize_terr = ground(texcoord, grad3);
 
-    deff = abs(snoize_terr - snoize);
+    deff = abs(snoize_terr - snoize)+10;
     grad = (grad*5+grad2*5)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
     vec4 vertexPosition = transform_M * vec4(newPosition, 1);
@@ -109,17 +109,17 @@ void main(void)
     vec3 halfWay = normalize(light + view);
     vec3 eye = normalize(eyeNormal);
 
-    //vec4 normalmap = texture2D(material_normal, texcoordout * 100);
-    //eye = normalize(normalmap.xyz + eye);
+    vec4 normalmap = texture2D(material_normal, texcoordout * 200);
+    eye = normalize(normalmap.xyz + eye);
     vec4 tex_col = texture2D(material_texture, texcoordout);
 
     vec4 col2 = texture2D(material_texture, texcoordout*R/10);
     tex_col = (tex_col + col2)/2.0;
-    vec4 color = vec4(0,0,0,1);
+    vec4 color = material_ambient;
 
     float NdotL = clamp(dot(light, eye), 0, 1);
-    color += vec4(0.5, 0.5, 1, 1) * NdotL;
-    float RdotVpow = max(0.0,pow(dot(eye, halfWay), 80));
+    color += material_diffuse * NdotL;
+    float RdotVpow = max(0.0,pow(dot(eye, halfWay), material_shininess));
 
     //Fresnel approximation
     float base = max(0, 1-dot(view, light));
@@ -127,8 +127,8 @@ void main(void)
     float fresnel = fZero + (1-fZero)*exp;
 
     out_color = color * tex_col;
-    //out_color.a = deff * 10;
-    out_color += vec4(1,1,1,1) * fresnel * RdotVpow;
+    out_color.a = deff ;
+    out_color += material_specular * fresnel * RdotVpow;
     //out_color = normalmap;
 }
 #endif

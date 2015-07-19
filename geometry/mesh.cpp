@@ -410,21 +410,25 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
     glUniformMatrix4fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
     glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(200000,234560,9850000)[0]);
 
-    //    if(shader->ambient_location != -1)
-    //        glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);
-    //    if(shader->diffuse_location != -1)
-    //        glUniform4fv(shader->diffuse_location,   1, &material->diffuse[0]);
-    //    if(shader->specular_location != -1)
-    //        glUniform4fv(shader->specular_location,  1, &material->specular[0]);
-    //    if(shader->emission_location != -1)
-    //        glUniform4fv(shader->emission_location,  1, &material->emission[0]);
-    //    if(shader->shininess_location != -1)
-    //        glUniform1fv(shader->shininess_location, 1, &material->shininess);
+    if(shader->ambient_location != -1)
+        glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);
+    if(shader->diffuse_location != -1)
+        glUniform4fv(shader->diffuse_location,   1, &material->diffuse[0]);
+    if(shader->specular_location != -1)
+        glUniform4fv(shader->specular_location,  1, &material->specular[0]);
+    if(shader->emission_location != -1)
+        glUniform4fv(shader->emission_location,  1, &material->emission[0]);
+    if(shader->shininess_location != -1)
+        glUniform1fv(shader->shininess_location, 1, &material->shininess);
 
     if(shader->texture_location != -1)
         glUniform1i(shader->texture_location, 0);
     if(shader->normal_location != -1)
         glUniform1i(shader->normal_location, 1);
+    if(shader->height_location != -1)
+        glUniform1i(shader->height_location, 2);
+    if(shader->height_location != -1)
+        glUniform1i(shader->grad_location, 3);
 
     if(material && material->texture != nullptr) {
         glActiveTexture(GL_TEXTURE0);
@@ -433,6 +437,14 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
     if(material && material->normal != nullptr) {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
+    }
+    if(material && material->height != nullptr) {
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, material->height->textureId);
+    }
+    if(material && material->grad != nullptr) {
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, material->grad->textureId);
     }
 
     glBindVertexArray(*m_vao);

@@ -1,6 +1,8 @@
 #include "quadplane.h"
 #include <glm/gtx/transform.hpp>
 #include "ClassicNoise.h"
+#include "TextureGenerator.h"
+#include "sge_ui/wins.h"
 
 QuadPlane::QuadPlane()
 {
@@ -148,7 +150,7 @@ void QuadPlane::getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours t
 
 bool QuadPlane::is_terminal() const
 {
-    return m_parts[0] == nullptr;
+    return m_parts[0] == nullptr || m_parts[1] == nullptr || m_parts[2] == nullptr || m_parts[3] == nullptr;
 }
 
 //Помещается вершины rldr в меш в прямом порядке
@@ -271,15 +273,59 @@ inline void PushTileIndexN(Mesh &m, int x, int y, int part, int sizex, int xoff,
         }
 }
 
-void QuadPlane::Render(const Camera &cam, std::shared_ptr<Material> &mat, std::shared_ptr<BasicJargShader> &basic, int side)
+void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, std::shared_ptr<BasicJargShader> &h_shader, std::shared_ptr<BasicJargShader> &g_shader)
+{
+    const float res = 256.0f;
+    TextureGenerator tg;
+    std::shared_ptr<Texture> tnoise = std::make_shared<Texture>();
+    std::shared_ptr<Texture> dnoise = std::make_shared<Texture>();
+    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
+    std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2{res,res});
+    tnoise->Load("data/PerlinPerm2D.png");
+    dnoise->Load("data/PerlinGrad2D.png");
+    tg.SetShader(h_shader);
+    tg.AddTexture("samplerPerlinPerm2D", tnoise);
+    tg.AddTexture("samplerPerlinGrad2D", dnoise);
+    tg.SetParams(offset.x);
+    tg.SetParams(offset.y);
+    tg.SetParams(scale);
+    tg.SetResultTexture(height_map);
+    tg.RenderOnTempFbo();
+
+    t->height = height_map;
+
+    TextureGenerator grad_gen;
+    grad_gen.SetShader(g_shader);
+    grad_gen.AddTexture("height_map", height_map);
+    grad_gen.SetResultTexture(grad_map);
+    grad_gen.SetParams(height_map->width);
+    grad_gen.SetParams(height_map->height);
+    grad_gen.RenderOnTempFbo();
+
+    t->grad = grad_map;
+}
+
+void QuadPlane::Render(const Camera &cam,
+                       std::shared_ptr<Material> &mat,
+                       std::shared_ptr<BasicJargShader> &basic,
+                       int side,
+                       std::shared_ptr<BasicJargShader> &h_shader,
+                       std::shared_ptr<BasicJargShader> &g_shader)
 {
     if(is_terminal())
     {
         if(status == READY)
+        {
             terminal_mesh->Render(cam);
+            //WinS::ws->sb->drawQuad(glm::vec2(10,10) + 500.f*offset, glm::vec2(500,500)*scale, *terminal_mesh->material->height, Color::White);
+        }
         else
         {
-            terminal_mesh->material = mat;
+            std::shared_ptr<Material> sub_texture = std::make_shared<Material>();
+            GenerateSubTexture(sub_texture, h_shader, g_shader);
+            sub_texture->texture = sub_texture->grad;
+
+            terminal_mesh->material = sub_texture;
             terminal_mesh->shader = basic;
 
             const int size = 32;
@@ -290,7 +336,7 @@ void QuadPlane::Render(const Camera &cam, std::shared_ptr<Material> &mat, std::s
 
             float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
             float ys = (-0.5 + offset.y); /*< y координата начала сектора сферы с отступом*/
-            float dd = ((1.0*scale)/((float)size)); /*< размер сектора сферы*/
+            float dd = ((1.0*scale)/((float)size)); /*< размер 1 квада сектора сферы*/
 
             //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере сфера приводится к радиусу R
 
@@ -305,7 +351,7 @@ void QuadPlane::Render(const Camera &cam, std::shared_ptr<Material> &mat, std::s
 
                     a.normal = a.position;
 
-                    a.uv = {xs + i * dd + 0.5f, ys + j * dd + 0.5f};
+                    a.uv = {i * (1.0/(float)size), j * (1.0/(float)size) };
 
                     terminal_mesh->Vertices.push_back(a);
                 }
@@ -484,8 +530,9 @@ void QuadPlane::Render(const Camera &cam, std::shared_ptr<Material> &mat, std::s
     else
     {
         for(int i = 0; i < 4; ++i)
-            m_parts[i]->Render(cam, mat, basic, side);
+            m_parts[i]->Render(cam, mat, basic, side, h_shader, g_shader);
     }
+
 }
 
 #undef T_L_D_R_M_STAR
@@ -532,7 +579,8 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide)
         m_parts[3]->level = level + 1;
         m_parts[3]->transformation = transformation;
         m_parts[3]->parent = this;
-        status = ERROR;
+
+        //status = ERROR;
     }
     else
         if((glm::distance(subsurface_centers[0] * Rs, camera.Position()) > eps * 1.1f * scale &&
