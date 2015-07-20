@@ -94,76 +94,76 @@ void CalcTangentBasis(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 
  */
 void Mesh::CalcTB()
 {
-  for (unsigned int i=0; i < Vertices.size(); i++)
-  {
-    Vertices[i].tangent = glm::vec3(0.0f);
-    Vertices[i].binormal = glm::vec3(0.0f);
-  }
-  for (unsigned int i=0; i < (Vertices.size() / 3);i++)
-  {
-    unsigned int a = Indices[i * 3 + 0];
-    unsigned int b = Indices[i * 3 + 1];
-    unsigned int c = Indices[i * 3 + 2];
+//  for (unsigned int i=0; i < Vertices.size(); i++)
+//  {
+//    Vertices[i].tangent = glm::vec3(0.0f);
+//    Vertices[i].binormal = glm::vec3(0.0f);
+//  }
+//  for (unsigned int i=0; i < (Vertices.size() / 3);i++)
+//  {
+//    unsigned int a = Indices[i * 3 + 0];
+//    unsigned int b = Indices[i * 3 + 1];
+//    unsigned int c = Indices[i * 3 + 2];
 
-    glm::vec3 bin, tan;
-    CalcTangentBasis ( Vertices[a].position,
-                       Vertices[b].position,
-                       Vertices[c].position,
-                       Vertices[a].uv,
-                       Vertices[b].uv,
-                       Vertices[c].uv,
-                       tan, bin);
+//    glm::vec3 bin, tan;
+//    CalcTangentBasis ( Vertices[a].position,
+//                       Vertices[b].position,
+//                       Vertices[c].position,
+//                       Vertices[a].uv,
+//                       Vertices[b].uv,
+//                       Vertices[c].uv,
+//                       tan, bin);
 
-    Vertices[a].tangent  += tan;
-    Vertices[b].tangent  += tan;
-    Vertices[c].tangent  += tan;
+//    Vertices[a].tangent  += tan;
+//    Vertices[b].tangent  += tan;
+//    Vertices[c].tangent  += tan;
 
-    Vertices[a].binormal += bin;
-    Vertices[b].binormal += bin;
-    Vertices[c].binormal += bin;
-  }
+//    Vertices[a].binormal += bin;
+//    Vertices[b].binormal += bin;
+//    Vertices[c].binormal += bin;
+//  }
 
-  for (unsigned int i=0; i < Vertices.size();i++)
-  {
-    Vertices[i].tangent = glm::normalize(Vertices[i].tangent);
-    Vertices[i].binormal = glm::normalize(Vertices[i].binormal);
+//  for (unsigned int i=0; i < Vertices.size();i++)
+//  {
+//    Vertices[i].tangent = glm::normalize(Vertices[i].tangent);
+//    Vertices[i].binormal = glm::normalize(Vertices[i].binormal);
 
-    glm::vec3 tmpT = Vertices[i].tangent;
-    glm::vec3 tmpB = Vertices[i].binormal;
-    glm::vec3 tmpN = Vertices[i].normal;
+//    glm::vec3 tmpT = Vertices[i].tangent;
+//    glm::vec3 tmpB = Vertices[i].binormal;
+//    glm::vec3 tmpN = Vertices[i].normal;
 
-    glm::vec3 newT = tmpT - ((glm::cross(tmpN, tmpT)) * tmpN);
-    glm::vec3 newB = tmpB - ((glm::cross(tmpN, tmpB)) * tmpN) - ((glm::cross(newT, tmpB))*newT);
-    newT = glm::normalize(newT);
-    newB = glm::normalize(newB);
-    Vertices[i].tangent  = newT;
-    Vertices[i].binormal = newB;
+//    glm::vec3 newT = tmpT - ((glm::cross(tmpN, tmpT)) * tmpN);
+//    glm::vec3 newB = tmpB - ((glm::cross(tmpN, tmpB)) * tmpN) - ((glm::cross(newT, tmpB))*newT);
+//    newT = glm::normalize(newT);
+//    newB = glm::normalize(newB);
+//    Vertices[i].tangent  = newT;
+//    Vertices[i].binormal = newB;
 
-    float lenT = newT.length ();
-    float lenB = newB.length ();
+//    float lenT = newT.length ();
+//    float lenB = newB.length ();
 
-    if (lenT <= 0.0001 || lenB <= 0.0001)
-    {
-      if (lenT > 0.5)
-        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
-      else if (lenB > 0.5)
-        Vertices[i].tangent  = glm::cross(Vertices[i].binormal, tmpN);
-      else
-      {
-        glm::vec3 xAxis (1.0, 0.0, 0.0);
-        glm::vec3 yAxis (0.0, 1.0, 0.0);
-        glm::vec3 startAxis;
-        if ((glm::dot(xAxis, tmpN)) < (glm::dot(yAxis, tmpN)))
-          startAxis = xAxis;
-        else
-          startAxis = yAxis;
-        Vertices[i].tangent  = glm::cross(tmpN, startAxis);
-        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
-      }
-    }
-    else if ((glm::dot(Vertices[i].binormal, Vertices[i].tangent))> 0.9999)
-      Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
-  }
+//    if (lenT <= 0.0001 || lenB <= 0.0001)
+//    {
+//      if (lenT > 0.5)
+//        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
+//      else if (lenB > 0.5)
+//        Vertices[i].tangent  = glm::cross(Vertices[i].binormal, tmpN);
+//      else
+//      {
+//        glm::vec3 xAxis (1.0, 0.0, 0.0);
+//        glm::vec3 yAxis (0.0, 1.0, 0.0);
+//        glm::vec3 startAxis;
+//        if ((glm::dot(xAxis, tmpN)) < (glm::dot(yAxis, tmpN)))
+//          startAxis = xAxis;
+//        else
+//          startAxis = yAxis;
+//        Vertices[i].tangent  = glm::cross(tmpN, startAxis);
+//        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
+//      }
+//    }
+//    else if ((glm::dot(Vertices[i].binormal, Vertices[i].tangent))> 0.9999)
+//      Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
+//  }
 }
 
 
@@ -212,7 +212,7 @@ void Mesh::MergeVerteces()
     }
 }
 
-void Mesh::Create(std::vector<VertPosNormTanBiTex> v, std::vector<GLuint> i)
+void Mesh::Create(std::vector<VertPosNormUvUv> v, std::vector<GLuint> i)
 {
     Vertices.assign(v.begin(), v.end());
     Indices.assign(i.begin(), i.end());
@@ -301,7 +301,7 @@ bool Mesh::loadOBJ(const std::string &path)
     Vertices.clear();
     Vertices.resize(vertexIndices.size());
     for( unsigned int i=0; i<vertexIndices.size(); i++ ){
-        Vertices[i] = VertPosNormTanBiTex(temp_normals[normalIndices[i]-1], temp_vertices[vertexIndices[i]-1], temp_uvs[uvIndices[i]-1]);
+        Vertices[i] = VertPosNormUvUv(temp_normals[normalIndices[i]-1], temp_vertices[vertexIndices[i]-1], temp_uvs[uvIndices[i]-1]);
     }
     /*for( unsigned int i=0; i<vertexIndices.size(); i++ ){
     unsigned int vertexIndex = vertexIndices[i];
@@ -356,20 +356,18 @@ void Mesh::Bind(int type /* = 0 */)
     } else {
         glBindVertexArray(*m_vao);
     }
-    GLuint stride = sizeof(VertPosNormTanBiTex);
+    GLuint stride = sizeof(VertPosNormUvUv);
     GLuint offset = 0;
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(VertPosNormTanBiTex)*Vertices.size(), &Vertices[0], bindtype);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(VertPosNormUvUv)*Vertices.size(), &Vertices[0], bindtype);
     glEnableVertexAttribArray(shader->posAttrib);
     glVertexAttribPointer(shader->posAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
     glEnableVertexAttribArray(shader->normAttrib);
     glVertexAttribPointer(shader->normAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
-    glEnableVertexAttribArray(shader->tangentAttrib);
-    glVertexAttribPointer(shader->tangentAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
-    glEnableVertexAttribArray(shader->binormalAttrib);
-    glVertexAttribPointer(shader->binormalAttrib, 3, GL_FLOAT, GL_FALSE, stride, (void*)(offset)); offset += sizeof(glm::vec3);
     glEnableVertexAttribArray(shader->uvAttrib);
     glVertexAttribPointer(shader->uvAttrib, 2, GL_FLOAT, GL_FALSE, stride, (void*)(offset));  offset += sizeof(glm::vec2);
+    glEnableVertexAttribArray(shader->uv2Attrib);
+    glVertexAttribPointer(shader->uv2Attrib, 2, GL_FLOAT, GL_FALSE, stride, (void*)(offset));  offset += sizeof(glm::vec2);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indices.size(), &Indices[0], bindtype);
@@ -429,6 +427,8 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
         glUniform1i(shader->height_location, 2);
     if(shader->height_location != -1)
         glUniform1i(shader->grad_location, 3);
+    if(shader->global_height_location != -1)
+        glUniform1i(shader->global_height_location, 4);
 
     if(material && material->texture != nullptr) {
         glActiveTexture(GL_TEXTURE0);
@@ -445,6 +445,10 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
     if(material && material->grad != nullptr) {
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, material->grad->textureId);
+    }
+    if(material && material->global_height != nullptr) {
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, material->global_height->textureId);
     }
 
     glBindVertexArray(*m_vao);
@@ -481,9 +485,9 @@ void Mesh::Combine(Mesh* com)
 }
 
 void Mesh::loadSTL(const std::string &patch) {
-            VertPosNormTanBiTex vertex1;
-            VertPosNormTanBiTex vertex2;
-            VertPosNormTanBiTex vertex3;
+            VertPosNormUvUv vertex1;
+            VertPosNormUvUv vertex2;
+            VertPosNormUvUv vertex3;
             int phase = -1; //0 normal, 1 nothing, 2 3 4 vertex, 5 6 nothing
             int type = -1; //0 ascii, 1 binary
             Vertices.clear();

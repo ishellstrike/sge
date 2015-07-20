@@ -24,6 +24,7 @@ public:
     GLuint texture_location;
     GLuint normal_location;
     GLuint height_location;
+    GLuint global_height_location;
     GLuint grad_location;
 
     GLuint mat_model_location;

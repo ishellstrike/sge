@@ -324,6 +324,7 @@ void QuadPlane::Render(const Camera &cam,
             std::shared_ptr<Material> sub_texture = std::make_shared<Material>();
             GenerateSubTexture(sub_texture, h_shader, g_shader);
             sub_texture->texture = mat->texture;
+            sub_texture->global_height = mat->global_height;
 
             terminal_mesh->material = sub_texture;
             terminal_mesh->shader = basic;
@@ -344,7 +345,7 @@ void QuadPlane::Render(const Camera &cam,
             {
                 for(int i = 0; i < size + 1; i++)
                 {
-                    VertPosNormTanBiTex a;
+                    VertPosNormUvUv a;
                     a.position = {xs + i * dd, ys + j * dd, 0.5f};
 
                     a.position = glm::normalize(a.position);

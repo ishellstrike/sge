@@ -7,7 +7,7 @@
 struct Material
 {
     std::string id;
-    std::shared_ptr<Texture> texture = nullptr, normal = nullptr, height = nullptr, grad = nullptr;
+    std::shared_ptr<Texture> texture = nullptr, normal = nullptr, height = nullptr, grad = nullptr, global_height = nullptr;
     glm::vec4 emission = glm::vec4(0.0f, 0.0f, 0.0f, 1.f);
     glm::vec4 ambient = glm::vec4(0.05f, 0.05f, 0.05f, 1.0f);
     glm::vec4 diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);

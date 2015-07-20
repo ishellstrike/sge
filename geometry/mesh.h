@@ -26,7 +26,7 @@ public:
     Mesh(void);
     Mesh(const Mesh &m);
     ~Mesh(void);
-    void Create(std::vector<VertPosNormTanBiTex> verteces, std::vector<GLuint> indeces);
+    void Create(std::vector<VertPosNormUvUv> verteces, std::vector<GLuint> indeces);
     void Bind(int type = 0);
     void Render(const Camera &cam, bool patches = false);
     void Combine(Mesh* com);
@@ -42,7 +42,7 @@ public:
     //void RenderBounding(Batched &sb, mat4 Model);
     glm::vec3 minBound, maxBound;
 
-    std::vector<VertPosNormTanBiTex> Vertices;
+    std::vector<VertPosNormUvUv> Vertices;
     std::vector<GLuint> Indices;
     std::shared_ptr<BasicJargShader> shader;
     std::shared_ptr<Material> material;

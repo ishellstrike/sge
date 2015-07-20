@@ -219,6 +219,7 @@ void JargShader::Afterlink()
     Use();
     posAttrib = glGetAttribLocation(program, "position");
     uvAttrib = glGetAttribLocation(program, "texcoord");
+    uv2Attrib = glGetAttribLocation(program, "texcoord2");
     colAttrib = glGetAttribLocation(program, "color");
     normAttrib = glGetAttribLocation(program, "normal");
     tangentAttrib = glGetAttribLocation(program, "tangent");
@@ -227,6 +228,7 @@ void JargShader::Afterlink()
     LOG(verbose) << "pos = " << posAttrib <<
                  "; col = " << colAttrib <<
                  "; uv = " << uvAttrib <<
+                 "; uv2 = " << uv2Attrib <<
                  "; norm = " << normAttrib <<
                  "; tan = " << tangentAttrib <<
                  "; bi = " << binormalAttrib << ";";

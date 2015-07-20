@@ -31,6 +31,7 @@ public:
     GLint posAttrib, /*!< position attribute */
     colAttrib,       /*!< color attribute */
     uvAttrib,        /*!< texcoord attribute */
+    uv2Attrib,        /*!< texcoord2 attribute */
     normAttrib,      /*!< normal attribute */
     tangentAttrib,   /*!< tangent attribute */
     binormalAttrib;  /*!< binormal attribute */

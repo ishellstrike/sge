@@ -1,6 +1,7 @@
 #include "quadsphere.h"
 #include "geometry/icosahedron.h"
 #include "glm/gtx/transform.hpp"
+#include "TextureGenerator.h"
 
 QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat)
 {
@@ -34,6 +35,23 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     g_map->Use();
     g_map->Afterlink();
 
+    const float res = 2048.0f;
+    TextureGenerator tg;
+    std::shared_ptr<Texture> tnoise = std::make_shared<Texture>();
+    std::shared_ptr<Texture> dnoise = std::make_shared<Texture>();
+    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
+    tnoise->Load("data/PerlinPerm2D.png");
+    dnoise->Load("data/PerlinGrad2D.png");
+    tg.SetShader(h_map);
+    tg.AddTexture("samplerPerlinPerm2D", tnoise);
+    tg.AddTexture("samplerPerlinGrad2D", dnoise);
+    tg.SetParams(0);
+    tg.SetParams(0);
+    tg.SetParams(1);
+    tg.SetResultTexture(height_map);
+    tg.RenderOnTempFbo();
+
+    mat->global_height = height_map;
 }
 
 void QuadSphere::Render(const Camera &cam)

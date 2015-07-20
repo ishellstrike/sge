@@ -14,6 +14,8 @@ uniform sampler2D material_texture;
 uniform sampler2D material_normal;
 uniform sampler2D material_height;
 uniform sampler2D material_grad;
+uniform sampler2D material_global_height;
+
 uniform vec4  material_ambient;
 uniform vec4  material_diffuse;
 uniform vec4  material_specular;
@@ -36,18 +38,21 @@ in vec3 normal;
 in vec3 tangent;
 in vec3 binormal;
 in vec2 texcoord;
+in vec2 texcoord2;
 
 out vec2 texcoordout;
 out vec3 normalout;
 out vec3 lightVec;
 out vec3 positionout;
 out vec3 eyeNormal;
+out float noise;
 
 void main(void)
 {
     vec2 vUv = texcoord;
 
-    float snoize = texture2D(material_height, vUv).x;
+    float snoize = texture2D(material_global_height, texcoord2).x;
+    noise = snoize;
     vec3 grad = texture2D(material_grad, vUv).xyz;
 
     vec3 newPosition = (R + s * snoize) * position;
@@ -75,6 +80,7 @@ in vec3 lightVec;
 in vec3 normalout;
 in vec3 positionout;
 in vec3 eyeNormal;
+in float noise;
 
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
@@ -105,6 +111,6 @@ void main(void)
     // fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
-    out_color = col * tex;
+    out_color = vec4(noise,noise,noise,1);// col * tex;
 }
 #endif

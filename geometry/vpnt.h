@@ -38,37 +38,35 @@ public:
 /**
  * @brief The VPNTBT struct. Vertex position normal tangent binormal texture
  */
-struct VertPosNormTanBiTex{
+struct VertPosNormUvUv{
 public:
     glm::vec3 position;
     glm::vec3 normal;
-    glm::vec3 tangent;
-    glm::vec3 binormal;
     glm::vec2 uv;
-    VertPosNormTanBiTex(glm::vec3 __norm, glm::vec3 __pos, glm::vec2 __uv);
-    VertPosNormTanBiTex(glm::vec3 __pos, glm::vec2 __uv);
-    VertPosNormTanBiTex();
-    ~VertPosNormTanBiTex();
+    glm::vec2 uv_glob;
+    VertPosNormUvUv(glm::vec3 __norm, glm::vec3 __pos, glm::vec2 __uv);
+    VertPosNormUvUv(glm::vec3 __norm, glm::vec3 __pos, glm::vec2 __uv, glm::vec2 __uv2);
+    VertPosNormUvUv(glm::vec3 __pos, glm::vec2 __uv);
+    VertPosNormUvUv();
+    ~VertPosNormUvUv();
 
-    VertPosNormTanBiTex operator + (VertPosNormTanBiTex __a) const
+    VertPosNormUvUv operator + (VertPosNormUvUv __a) const
     {
-        VertPosNormTanBiTex b;
+        VertPosNormUvUv b;
         b.position = position + __a.position;
         b.uv = __a.uv + uv;
+        b.uv_glob = __a.uv_glob + uv_glob;
         b.normal = normal + __a.normal;
-        b.tangent = tangent + __a.tangent;
-        b.binormal = binormal + __a.binormal;
         return b;
     }
 
-    VertPosNormTanBiTex operator / (float __a) const
+    VertPosNormUvUv operator / (float __a) const
     {
-        VertPosNormTanBiTex b;
+        VertPosNormUvUv b;
         b.position = position / __a;
         b.uv = uv / __a;
+        b.uv_glob = uv_glob / __a;
         b.normal = normal / __a;
-        b.tangent = tangent / __a;
-        b.binormal = binormal / __a;
         return b;
     }
 };

@@ -48,11 +48,11 @@ void Tesselator::SphereSubTesselate(std::shared_ptr<Mesh> &mesh)
     int off = 0;
     for (int i =0; i< mesh->Indices.size() -2; i+= 3)
     {
-        VertPosNormTanBiTex t;
+        VertPosNormUvUv t;
 
-        VertPosNormTanBiTex v0 = mesh->Vertices[mesh->Indices[i]];
-        VertPosNormTanBiTex v1 = mesh->Vertices[mesh->Indices[i+1]];
-        VertPosNormTanBiTex v2 = mesh->Vertices[mesh->Indices[i+2]];
+        VertPosNormUvUv v0 = mesh->Vertices[mesh->Indices[i]];
+        VertPosNormUvUv v1 = mesh->Vertices[mesh->Indices[i+1]];
+        VertPosNormUvUv v2 = mesh->Vertices[mesh->Indices[i+2]];
 
         t = v0;
         t.position = glm::normalize(t.position);
@@ -110,7 +110,7 @@ Mesh* Tesselator::SubTesselate(const Mesh& mesh)
     int off = 0;
     for (int i =0; i< mesh.Indices.size() -2; i+= 3)
     {
-        VertPosNormTanBiTex t;
+        VertPosNormUvUv t;
 
         m->Vertices.push_back(mesh.Vertices[mesh.Indices[i]]);
         m->Vertices.push_back(mesh.Vertices[mesh.Indices[i+1]]);
