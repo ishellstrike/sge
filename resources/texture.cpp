@@ -12,9 +12,9 @@ Texture::Texture(GLuint id) :
 {
 }
 
-Texture::Texture(glm::vec2 __size)
+Texture::Texture(glm::vec2 __size, bool smooth)
 {
-    Empty(__size);
+    Empty(__size, smooth);
 }
 
 Texture::~Texture()
@@ -55,13 +55,13 @@ void Texture::Load(const Pixmap &a, bool smooth, bool mip)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &a.data[0]);
     if(smooth)
     {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
     else
     {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
     if(mip)
@@ -76,7 +76,7 @@ void Texture::Load(const Pixmap &a, bool smooth, bool mip)
  * \param dim размерность (GL_TEXTURE_2D)
  * \param format цветовое пространство (GL_RGBA)
  */
-void Texture::Empty(const glm::vec2 &size, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/)
+void Texture::Empty(const glm::vec2 &size, bool smooth, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/)
 {
     width = (int) size.x;
     height = (int) size.y;
@@ -86,8 +86,16 @@ void Texture::Empty(const glm::vec2 &size, GLuint dim /*= GL_TEXTURE_2D*/, GLuin
     glBindTexture(dim, textureId);
     glTexImage2D(dim, 0, format, size.x, size.y, 0, format, GL_UNSIGNED_BYTE, NULL);
 
-    glTexParameteri(dim, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(dim, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    if(smooth)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
 
     glBindTexture(dim, 0);
 }

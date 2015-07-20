@@ -39,7 +39,7 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     TextureGenerator tg;
     std::shared_ptr<Texture> tnoise = std::make_shared<Texture>();
     std::shared_ptr<Texture> dnoise = std::make_shared<Texture>();
-    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
+    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res}, false);
     tnoise->Load("data/PerlinPerm2D.png");
     dnoise->Load("data/PerlinGrad2D.png");
     tg.SetShader(h_map);

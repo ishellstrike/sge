@@ -45,18 +45,16 @@ out vec3 normalout;
 out vec3 lightVec;
 out vec3 positionout;
 out vec3 eyeNormal;
-out float noise;
 
 void main(void)
 {
     vec2 vUv = texcoord;
 
     float snoize = texture2D(material_global_height, texcoord2).x;
-    noise = snoize;
     vec3 grad = texture2D(material_grad, vUv).xyz;
 
     vec3 newPosition = (R + s * snoize) * position;
-    vec4 vertexPosition = transform_VP * transform_M * vec4(position.xyz*R, 1);
+    vec4 vertexPosition = transform_VP * transform_M * vec4(newPosition, 1);
 
     vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
     lightVec = normalize(lightVec4.xyz);
@@ -80,7 +78,6 @@ in vec3 lightVec;
 in vec3 normalout;
 in vec3 positionout;
 in vec3 eyeNormal;
-in float noise;
 
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
@@ -111,6 +108,6 @@ void main(void)
     // fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
-    out_color = vec4(noise,noise,noise,1);// col * tex;
+    out_color = col * tex;
 }
 #endif

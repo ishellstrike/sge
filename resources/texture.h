@@ -15,13 +15,13 @@ public:
 
     Texture();
     Texture(GLuint id);
-    Texture(glm::vec2 __size);
+    Texture(glm::vec2 __size, bool smooth = true);
     ~Texture();
 
     void Load(const std::string &a, bool smooth = false, bool mip = false);
     void Load(const Pixmap &a, bool smooth = false, bool mip = false);
     //void Load(QImage *a, bool smooth = false, bool mip = false);
-    void Empty(const glm::vec2 &size, GLuint dim = GL_TEXTURE_2D, GLuint format = GL_RGBA);
+    void Empty(const glm::vec2 &size, bool smooth = false, GLuint dim = GL_TEXTURE_2D, GLuint format = GL_RGBA);
     void CreateDepth(glm::vec2 &size);
     void IdOnly();
 };

@@ -354,6 +354,8 @@ void QuadPlane::Render(const Camera &cam,
 
                     a.uv = {i * (1.0/(float)size), j * (1.0/(float)size) };
 
+                    a.uv_glob = {xs + i * dd + 0.5f, ys + j * dd + 0.5f};
+
                     terminal_mesh->Vertices.push_back(a);
                 }
             }
