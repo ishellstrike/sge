@@ -55,8 +55,7 @@ SOURCES += \
     resources/pixmap.cpp \
     sge_perfomance.cpp \
     FrameBuffer.cpp \
-    TextureGenerator.cpp \
-    sge_ui/imagebox.cpp
+    TextureGenerator.cpp
 
 VERSION = 0.1.0
 
@@ -133,8 +132,7 @@ HEADERS += \
     resources/error_image.h \
     FrameBuffer.h \
     TextureGenerator.h \
-    resources/random_noise.h \
-    sge_ui/imagebox.h
+    resources/random_noise.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

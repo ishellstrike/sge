@@ -51,15 +51,15 @@ void main(void)
       vec2( Dx, -Dy)
     );
 
-    vec3 col[NUM];
+    float col[NUM];
     int i;
 
     for (i=0; i < NUM; i++) {
-      col[i] = texture2D(height_map, Vert.uv + c[i]).xyz;
+      col[i] = texture2D(height_map, Vert.uv + c[i]).x;
     }
 
-    highp float x = col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6];
-    highp float y = col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2];
+    float x = col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6];
+    float y = col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2];
 
     color = vec4(normalize(vec3(x, y, 0)), 1.0);
 }

@@ -8,17 +8,26 @@
 #include <map>
 #include <regex>
 
-#define printLog(obj){int infologLength = 0; \
-    char infoLog[1024]; \
-    if (glIsShader(obj)) \
-    glGetShaderInfoLog(obj, 1024, &infologLength, infoLog); \
-else \
-    glGetProgramInfoLog(obj, 1024, &infologLength, infoLog); \
-    if (infologLength > 0) { \
-    LOG(verbose) << infoLog; \
-    } else { \
-    LOG(verbose) << "     no errors"; \
-    } }
+bool printLog(GLuint id)
+{
+    char infoLog[1024];
+    int infologLength = 0;
+    if (glIsShader(id))
+        glGetShaderInfoLog(id, 1024, &infologLength, infoLog);
+    else
+        glGetProgramInfoLog(id, 1024, &infologLength, infoLog);
+
+    if (infologLength > 0)
+    {
+        LOG(error) << infoLog;
+        return false;
+    }
+    else
+    {
+        LOG(verbose) << "     no errors";
+        return true;
+    }
+}
 
 JargShader::JargShader() :
     has_header(false)
@@ -100,7 +109,19 @@ void JargShader::loadShaderFromSource(GLenum type, const std::string &source, co
     glCompileShader(id);
 
     LOG(verbose) << source << " file " << shader_defines[type];
-    printLog(id);
+    bool has_error = !printLog(id);
+    if(has_error)
+    {
+        std::string f_name = std::to_string((unsigned int)rand()).append(".txt");
+        LOG(error) << "shader error detail saveid in " << f_name;
+        std::stringstream out_file;
+        out_file << str;
+        char infoLog[1024];
+        int infologLength = 0;
+        glGetProgramInfoLog(id, 1024, &infologLength, infoLog);
+        out_file << std::endl << "=======ERROR======" << std::endl << infoLog;
+        SaveTextFile(f_name, out_file.str());
+    }
 
     glAttachShader(program, id);
     shaders_.push_back(id);
@@ -123,10 +144,20 @@ std::string JargShader::LoadTextFile(const std::string &filename)
         }
         file.close();
     } else {
-        LOG(fatal) << string_format("%s %s", "Failed to open file ", filename.c_str());
+        LOG(fatal) << string_format("Failed to open file %s", filename.c_str());
     }
 
     return ss.str();
+}
+
+void JargShader::SaveTextFile(const std::string &filename, const std::string &content)
+{
+    std::ofstream file(filename.c_str());
+    if (file.is_open()) {
+        file << content;
+    } else {
+        LOG(fatal) << string_format("Failed to save file %s", filename.c_str());
+    }
 }
 
 std::string JargShader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )

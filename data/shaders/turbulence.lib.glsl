@@ -131,13 +131,14 @@ vec3 perlinNoisePseudoDeriv(vec2 p, float seed)
 }
 
 
-float swissTurbulence(vec2 p, float seed, int octaves,
-                      float lacunarity = 2.0, float gain = 0.5,
-                      float warp = 0.15)
+float swissTurbulence(vec2 p, float seed, int octaves)
 {
      float sum = 0;
      float freq = 1.0, amp = 1.0;
      vec2 dsum = vec2(0,0);
+     float lacunarity = 2.0;
+     float gain = 0.5;
+     float warp = 0.15;
      for(int i=0; i < octaves; i++)
      {
          vec3 n = perlinNoiseDeriv((p + warp * dsum)*freq, seed + i);
@@ -149,12 +150,13 @@ float swissTurbulence(vec2 p, float seed, int octaves,
     return sum;
 }
 
-float jordanTurbulence(vec2 p, float seed, int octaves, float lacunarity = 2.0,
-                       float gain1 = 0.8, float gain = 0.5,
-                       float warp0 = 0.4, float warp = 0.35,
-                       float damp0 = 1.0, float damp = 0.8,
-                       float damp_scale = 1.0)
+float jordanTurbulence(vec2 p, float seed, int octaves)
 {
+    float lacunarity = 2.0;
+    float gain1 = 0.8; float gain = 0.5;
+    float warp0 = 0.4; float warp = 0.35;
+    float damp0 = 1.0; float damp = 0.8;
+    float damp_scale = 1.0;
     vec3 n = perlinNoiseDeriv(p, seed);
     vec3 n2 = n * n.x;
     float sum = n2.x;
@@ -179,11 +181,11 @@ float jordanTurbulence(vec2 p, float seed, int octaves, float lacunarity = 2.0,
     return sum;
 }
 
-float turbulence(vec2 p, float seed, int octaves,
-                 float lacunarity = 2.0, float gain = 0.5)
+float turbulence(vec2 p, float seed, int octaves)
 {
     float sum = 0;
     float freq = 1.0, amp = 1.0;
+    float lacunarity = 2.0; float gain = 0.5;
     for (int i=0; i < octaves; i++)
     {
         float n = perlinNoise(p*freq, seed + i / 256.0);
@@ -204,11 +206,11 @@ float ridgedNoise(vec2 p, float seed)
     return 1.0f-abs(perlinNoise(p, seed));
 }
 
-float iqTurbulence(vec2 p, float seed, int octaves,
-                   float lacunarity = 2.0, float gain = 0.5)
+float iqTurbulence(vec2 p, float seed, int octaves)
 {
     float sum = 0.5;
     float freq = 1.0, amp = 1.0;
+    float lacunarity = 2.0; float gain = 0.5;
     vec2 dsum = vec2(0,0);
     for (int i=0; i < octaves; i++)
     {

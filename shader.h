@@ -38,6 +38,7 @@ public:
     void Afterlink();
     std::string preprocessIncludes(const std::string &filename, int level = 0);
     std::string LoadTextFile(const std::string &filename);
+    void SaveTextFile(const std::string &filename, const std::string &content);
 private:
     GLint locate(const std::string &s);
 };
