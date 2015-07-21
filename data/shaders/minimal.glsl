@@ -88,7 +88,7 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = texture2D(material_grad, texcoordout).xyz*50;
+    vec3 grad = textureLod(material_grad, texcoordout, 0).xyz*50;
     float snoize = texture2D(material_height, texcoordout).x;
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;

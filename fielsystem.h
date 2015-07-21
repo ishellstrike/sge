@@ -4,6 +4,48 @@
 #include <vector>
 #include "helper.h"
 
+inline std::string LoadTextFile(const std::string &filename)
+{
+    std::ifstream file(filename.c_str());
+    std::string line;
+    std::stringstream ss;
+    if (file.is_open()) {
+        while (file.good()) {
+            getline(file, line);
+            ss << line << std::endl;
+        }
+        file.close();
+    } else {
+        LOG(fatal) << string_format("Failed to open file %s", filename.c_str());
+    }
+
+    return ss.str();
+}
+
+inline void SaveTextFile(const std::string &filename, const std::string &content)
+{
+    std::ofstream file(filename.c_str());
+    if (file.is_open()) {
+        file << content;
+        file.close();
+    } else {
+        LOG(fatal) << string_format("Failed to save file %s", filename.c_str());
+    }
+}
+
+inline  GetLastPatternedFilenameNubmer(const std::string &filename)
+{
+    bool cont = true;
+    int i = 0;
+    while(cont)
+    {
+        std::ifstream file(filename.c_str());
+        if(file.is_open()) cont = false;
+        else i++;
+        file.close();
+    }
+}
+
 #ifdef _WIN32
     #include <windows.h>
 
