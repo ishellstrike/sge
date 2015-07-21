@@ -69,7 +69,6 @@ win32:DEPENDPATH += $$PWD/3rdparty/include
 HEADERS += \
     logger.h \
     colorextender.h \
-    fielsystem.h \
     shader.h \
     json/autolink.h \
     json/config.h \
@@ -132,7 +131,9 @@ HEADERS += \
     resources/error_image.h \
     FrameBuffer.h \
     TextureGenerator.h \
-    resources/random_noise.h
+    resources/random_noise.h \
+    sge_fielsystem.h \
+    experimental/sphereparamstorage.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

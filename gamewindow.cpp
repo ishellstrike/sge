@@ -205,10 +205,13 @@ void GameWindow::BaseUpdate()
 
     //m->World = glm::rotate(m->World, (float)gt.elapsed / 100, glm::vec3(0.f,1.f,0.f));
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F2)){
-        wire = wire ? (glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ), false) : (glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ), true);
-        glEnable(GL_CULL_FACE);
-    }
+    if(Keyboard::isKeyPress(GLFW_KEY_F2))
+        wire = !wire;
+    glEnable(GL_CULL_FACE);
+    if(wire)
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    else
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     cam->camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
 
@@ -255,7 +258,7 @@ void GameWindow::BaseUpdate()
    }
 
     qs->Update(*cam);
-   // qs_w->Update(*cam);
+    qs_w->Update(*cam);
     cam1->Update(gt);
     cam2->Update(gt);
     ws->Update();
@@ -277,7 +280,7 @@ void GameWindow::BaseDraw()
     qs->Render(*cam);
     water->Use();
     glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    //qs_w->Render(*cam);
+    qs_w->Render(*cam);
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);

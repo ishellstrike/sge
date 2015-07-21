@@ -3,6 +3,7 @@
 #include <memory>
 #include "geometry/mesh.h"
 #include "camera.h"
+#include "sphereparamstorage.h"
 
 class QuadPlane
 {    enum Neighbours {
@@ -50,14 +51,11 @@ public:
 
     bool is_terminal() const;
     void Render(const Camera &cam,
-                std::shared_ptr<Material> &mat,
-                std::shared_ptr<BasicJargShader> &basic,
                 int side,
-                std::shared_ptr<BasicJargShader> &h_shader,
-                std::shared_ptr<BasicJargShader> &g_shader);
+                SphereParamsStorage *parent);
     void Update(Camera &camera, float Rs, float eps, int max_divide);
-     std::vector<QuadPlane *> getRoute();
-      void GenerateSubTexture(std::shared_ptr<Material> &t, std::shared_ptr<BasicJargShader> &h_shader, std::shared_ptr<BasicJargShader> &g_shader);
+    std::vector<QuadPlane *> getRoute();
+    void GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent);
 };
 
 #endif // QUADPLANE_H

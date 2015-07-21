@@ -41,6 +41,7 @@ in vec2 texcoord;
 in vec2 texcoord2;
 
 out vec2 texcoordout;
+out vec2 texcoordout2;
 out vec3 normalout;
 out vec3 lightVec;
 out vec3 positionout;
@@ -48,20 +49,19 @@ out vec3 eyeNormal;
 
 void main(void)
 {
-    vec2 vUv = texcoord;
-
-    float snoize = texture2D(material_global_height, texcoord2).x;
-    vec3 grad = texture2D(material_grad, vUv).xyz;
+    float snoize = textureLod(material_global_height, texcoord2, 0).x;
+    vec3 grad = texture2D(material_grad, texcoord).xyz;
 
     vec3 newPosition = (R + s * snoize) * position;
-    vec4 vertexPosition = transform_VP * transform_M * vec4(newPosition, 1);
+    vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
 
     vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
     lightVec = normalize(lightVec4.xyz);
 
-    gl_Position = vertexPosition;
+    gl_Position = mvpLocation;
     positionout = position;
-    texcoordout = vUv;
+    texcoordout = texcoord;
+    texcoordout2 = texcoord2;
 
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * position) * position;
@@ -74,6 +74,7 @@ void main(void)
 #ifdef _FRAGMENT_
 const float cutoff = 0.9f;
 in vec2 texcoordout;
+in vec2 texcoordout2;
 in vec3 lightVec;
 in vec3 normalout;
 in vec3 positionout;
@@ -88,7 +89,7 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = textureLod(material_grad, texcoordout, 0).xyz*50;
+    vec3 grad = texture2D(material_grad, texcoordout).xyz*25;
     float snoize = texture2D(material_height, texcoordout).x;
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;
@@ -96,18 +97,25 @@ void main(void)
     vec3 eye = normalize(vec3(transform_N * vec4(normal, 0.0)));
     vec3 light = normalize(lightVec);
 
-    vec4 tex = texture2D(material_texture, texcoordout);
+
+    vec4 tex = texture2D(material_texture, texcoordout2);
+    tex += texture2D(material_texture, texcoordout2*10);
+    tex += texture2D(material_texture, texcoordout2*100);
+    tex /= 3;
     vec4 col = material_ambient;
 
-    float NdotL = clamp(dot(light, eye), 0, 1);
+    tex = mix(vec4(0,1,0,1), vec4(1,0,0,1), plane.x);
 
-    col += material_diffuse * NdotL;
+    float diffuse_rate = clamp(dot(light, eye), 0, 1);
+
+    col += material_diffuse * diffuse_rate;
 
     //float z = gl_FragCoord.z / gl_FragCoord.w;
     //  float fogFactor = exp2( -density * density * z * z * LOG2 );
     // fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
+    float asd = normalize(grad).z;
     out_color = col * tex;
 }
 #endif

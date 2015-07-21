@@ -3,10 +3,12 @@
 #include "logger.h"
 #include <vector>
 #include "helper.h"
+#include <fstream>
+#include <sstream>
 
 inline std::string LoadTextFile(const std::string &filename)
 {
-    std::ifstream file(filename.c_str());
+    std::ifstream file(filename);
     std::string line;
     std::stringstream ss;
     if (file.is_open()) {
@@ -24,7 +26,7 @@ inline std::string LoadTextFile(const std::string &filename)
 
 inline void SaveTextFile(const std::string &filename, const std::string &content)
 {
-    std::ofstream file(filename.c_str());
+    std::ofstream file(filename);
     if (file.is_open()) {
         file << content;
         file.close();
@@ -33,17 +35,23 @@ inline void SaveTextFile(const std::string &filename, const std::string &content
     }
 }
 
-inline  GetLastPatternedFilenameNubmer(const std::string &filename)
+inline int GetLastPatternedFilenameNubmer(const std::string &filename, const std::string &ext)
 {
     bool cont = true;
     int i = 0;
+
+    std::ifstream file(string_format("%s%d%s", filename.c_str(), 0, ext.c_str()));
+    if(!file.is_open()) {file.close(); return -1;}
+    file.close();
+
     while(cont)
     {
-        std::ifstream file(filename.c_str());
-        if(file.is_open()) cont = false;
+        std::ifstream file(string_format("%s%d%s", filename.c_str(), i, ext.c_str()));
+        if(!file.is_open()) cont = false;
         else i++;
         file.close();
     }
+    return i;
 }
 
 #ifdef _WIN32

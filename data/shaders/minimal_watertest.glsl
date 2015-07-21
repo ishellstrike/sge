@@ -16,6 +16,9 @@
 
 uniform sampler2D material_texture;
 uniform sampler2D material_normal;
+uniform sampler2D material_height;
+uniform sampler2D material_grad;
+uniform sampler2D material_global_height;
 uniform vec4  material_ambient;
 uniform vec4  material_diffuse;
 uniform vec4  material_specular;
@@ -23,6 +26,12 @@ uniform vec4  material_emission;
 uniform float material_shininess;
 
 uniform float time;
+
+uniform mat4 transform_M; // model matrix
+uniform mat4 transform_VP; // view * projection matrix
+uniform mat4 transform_N; // normal matrix
+uniform vec3 transform_viewPos;
+uniform vec3 transform_lightPos;
 
 float R = 1010;
 float s = 5;
@@ -34,50 +43,37 @@ in vec3 normal;
 in vec3 tangent;
 in vec3 binormal;
 in vec2 texcoord;
+in vec2 texcoord2;
 
 out vec2 texcoordout;
+out vec2 texcoordout2;
 out vec3 normalout;
 out vec3 lightVec;
 out vec3 viewDir;
 out vec3 positionout;
 out vec3 plane;
-out float deff;
 out vec3 eyeNormal;
-
-uniform mat4 transform_M; // model matrix
-uniform mat4 transform_VP; // view * projection matrix
-uniform mat4 transform_N; // normal matrix
-uniform vec3 transform_viewPos;
-uniform vec3 transform_lightPos;
 
 void main(void)
 {
-    vec2 vUv = texcoord;
+    float snoize = textureLod(material_global_height, texcoord2, 0).x;
+    vec3 grad = texture2D(material_grad, texcoord).xyz;
 
-    vec3 grad;
-    vec3 grad2;
-    vec3 grad3;
-
-    float snoize = (snoise( 1 * position + vec3(0.1,0,0)*time, grad )*5 + snoise( 100 * position  + vec3(-0.1,-0.2,0)*time, grad2 ))/6.0;
-    float snoize_terr = ground(texcoord, grad3);
-
-    deff = abs(snoize_terr - snoize)+10;
-    grad = (grad*5+grad2*5)/6.0;
     vec3 newPosition = (R + s * snoize) * position;
-    vec4 vertexPosition = transform_M * vec4(newPosition, 1);
-
-    grad = grad / (R + s * snoize);
-    plane = grad - (grad * position) * position;
+    vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
 
     vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
-    lightVec = lightVec4.xyz;
-    lightVec  = normalize(transform_lightPos);
+    lightVec = normalize(lightVec4.xyz);
 
-    gl_Position = transform_VP * vertexPosition;
+    gl_Position = mvpLocation;
     positionout = position;
     texcoordout = texcoord;
-    normalout = positionout - s * plane;
-    viewDir = transform_viewPos - vertexPosition.xyz;
+    texcoordout2 = texcoord2;
+
+    grad = grad / (R + s * snoize);
+    vec3 plane = grad - (grad * position) * position;
+    normalout = position - s * plane;
+
     eyeNormal = vec3(transform_N * vec4(normalout, 0.0));
 }
 #endif
@@ -85,11 +81,11 @@ void main(void)
 #ifdef _FRAGMENT_
 const float cutoff = 0.9f;
 in vec2 texcoordout;
+in vec2 texcoordout2;
 in vec3 lightVec;
 in vec3 normalout;
 in vec3 positionout;
 in vec3 plane;
-in float deff;
 in vec3 viewDir;
 in vec3 eyeNormal;
 
@@ -107,13 +103,21 @@ void main(void)
     vec3 light = normalize(lightVec);
     vec3 view = normalize(viewDir);
     vec3 halfWay = normalize(light + view);
-    vec3 eye = normalize(eyeNormal);
 
-    vec4 normalmap = texture2D(material_normal, texcoordout * 200);
-    eye = normalize(normalmap.xyz + eye);
-    vec4 tex_col = texture2D(material_texture, texcoordout);
+    float snoize = textureLod(material_height, texcoordout, 0).x;
+    float snoize_terr = textureLod(material_height, texcoordout, 0).x;
+    float deff = abs((snoize_terr*100 + 1000) - (snoize*s+1010))/100;
 
-    vec4 col2 = texture2D(material_texture, texcoordout*R/10);
+    vec3 grad = texture2D(material_grad, texcoordout+vec2(time,time)/100.0).xyz*25;
+    snoize = texture2D(material_height, texcoordout+vec2(time,time)/100.0).x;
+    grad = grad / (R + s * snoize);
+    vec3 plane = grad - (grad * positionout) * positionout;
+    vec3 normal = positionout - s * plane;
+    vec3 eye = normalize(vec3(transform_N * vec4(normal, 0.0)));
+
+    vec4 tex_col = texture2D(material_texture, texcoordout2*100);
+    vec4 col2 = texture2D(material_texture, texcoordout2*R/10);
+
     tex_col = (tex_col + col2)/2.0;
     vec4 color = material_ambient;
 
@@ -127,7 +131,7 @@ void main(void)
     float fresnel = fZero + (1-fZero)*exp;
 
     out_color = color * tex_col;
-    out_color.a = deff ;
+    out_color.a = deff *10;
     out_color += material_specular * fresnel * RdotVpow;
     //out_color = normalmap;
 }

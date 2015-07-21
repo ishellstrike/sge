@@ -7,6 +7,7 @@
 #include "helper.h"
 #include <map>
 #include <regex>
+#include "sge_fielsystem.h"
 
 bool printLog(GLuint id)
 {
@@ -39,11 +40,11 @@ JargShader::~JargShader(void)
 {
     while(!shaders_.empty()) {
         glDeleteShader(shaders_.back());
-        LOG(verbose) << "Deleting shader " << std::to_string(shaders_.back());
+        //LOG(verbose) << "Deleting shader " << std::to_string(shaders_.back());
         shaders_.pop_back();
     }
     glDeleteProgram(program);
-    LOG(verbose) << string_format("Deleting program %i", program);
+    //LOG(verbose) << string_format("Deleting program %i", program);
 }
 
 /*!
@@ -112,7 +113,8 @@ void JargShader::loadShaderFromSource(GLenum type, const std::string &source, co
     bool has_error = !printLog(id);
     if(has_error)
     {
-        std::string f_name = std::to_string((unsigned int)rand()).append(".txt");
+        int num = GetLastPatternedFilenameNubmer("shader_error_log", ".txt");
+        std::string f_name = string_format("shader_error_log%d.txt", num+1);
         LOG(error) << "shader error detail saveid in " << f_name;
         std::stringstream out_file;
         out_file << str;
@@ -130,34 +132,6 @@ void JargShader::loadShaderFromSource(GLenum type, const std::string &source, co
 std::string get_dir(std::string path)
 {
     return path.substr(0, path.find_last_of('/') + 1);
-}
-
-std::string JargShader::LoadTextFile(const std::string &filename)
-{
-    std::ifstream file(filename.c_str());
-    std::string line;
-    std::stringstream ss;
-    if (file.is_open()) {
-        while (file.good()) {
-            getline(file, line);
-            ss << line << std::endl;
-        }
-        file.close();
-    } else {
-        LOG(fatal) << string_format("Failed to open file %s", filename.c_str());
-    }
-
-    return ss.str();
-}
-
-void JargShader::SaveTextFile(const std::string &filename, const std::string &content)
-{
-    std::ofstream file(filename.c_str());
-    if (file.is_open()) {
-        file << content;
-    } else {
-        LOG(fatal) << string_format("Failed to save file %s", filename.c_str());
-    }
 }
 
 std::string JargShader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )

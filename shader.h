@@ -1,6 +1,5 @@
 #ifndef JargShader_h__
 #define JargShader_h__
-
 #include <string>
 #include <vector>
 #include <GL/glew.h>
@@ -31,15 +30,13 @@ public:
     GLint posAttrib, /*!< position attribute */
     colAttrib,       /*!< color attribute */
     uvAttrib,        /*!< texcoord attribute */
-    uv2Attrib,        /*!< texcoord2 attribute */
+    uv2Attrib,       /*!< texcoord2 attribute */
     normAttrib,      /*!< normal attribute */
     tangentAttrib,   /*!< tangent attribute */
     binormalAttrib;  /*!< binormal attribute */
 
     void Afterlink();
     std::string preprocessIncludes(const std::string &filename, int level = 0);
-    std::string LoadTextFile(const std::string &filename);
-    void SaveTextFile(const std::string &filename, const std::string &content);
 private:
     GLint locate(const std::string &s);
 };

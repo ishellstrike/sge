@@ -62,8 +62,8 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     glBindFramebuffer(GL_FRAMEBUFFER, fbo.FBO); 
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     glViewport(0, 0, target->width, target->height);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0,0,0,1);
+   // glClear(GL_COLOR_BUFFER_BIT);
+   // glClearColor(0,0,0,1);
     shader->Use();
 
     for (int i=0; i<texes.size(); i++)
@@ -107,6 +107,6 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     quad_mesh->Bind();
     Camera c;
     quad_mesh->Render(c);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, RESX, RESY);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

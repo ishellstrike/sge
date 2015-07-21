@@ -273,19 +273,17 @@ inline void PushTileIndexN(Mesh &m, int x, int y, int part, int sizex, int xoff,
         }
 }
 
-void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, std::shared_ptr<BasicJargShader> &h_shader, std::shared_ptr<BasicJargShader> &g_shader)
+void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
     const float res = 256.0f;
     TextureGenerator tg;
-    std::shared_ptr<Texture> tnoise = std::make_shared<Texture>();
-    std::shared_ptr<Texture> dnoise = std::make_shared<Texture>();
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
     std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2{res,res});
-    tnoise->Load("data/PerlinPerm2D.png");
-    dnoise->Load("data/PerlinGrad2D.png");
-    tg.SetShader(h_shader);
-    tg.AddTexture("samplerPerlinPerm2D", tnoise);
-    tg.AddTexture("samplerPerlinGrad2D", dnoise);
+
+
+    tg.SetShader(parent->height_shader);
+    tg.AddTexture("samplerPerlinPerm2D", parent->noise_map);
+    tg.AddTexture("samplerPerlinGrad2D", parent->grad_map);
     tg.SetParams(offset.x);
     tg.SetParams(offset.y);
     tg.SetParams(scale);
@@ -295,7 +293,7 @@ void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, std::shared_ptr
     t->height = height_map;
 
     TextureGenerator grad_gen;
-    grad_gen.SetShader(g_shader);
+    grad_gen.SetShader(parent->grad_shader);
     grad_gen.AddTexture("height_map", height_map);
     grad_gen.SetResultTexture(grad_map);
     grad_gen.SetParams(height_map->width);
@@ -306,11 +304,8 @@ void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, std::shared_ptr
 }
 
 void QuadPlane::Render(const Camera &cam,
-                       std::shared_ptr<Material> &mat,
-                       std::shared_ptr<BasicJargShader> &basic,
                        int side,
-                       std::shared_ptr<BasicJargShader> &h_shader,
-                       std::shared_ptr<BasicJargShader> &g_shader)
+                       SphereParamsStorage *parent)
 {
     if(is_terminal())
     {
@@ -322,12 +317,12 @@ void QuadPlane::Render(const Camera &cam,
         else
         {
             std::shared_ptr<Material> sub_texture = std::make_shared<Material>();
-            GenerateSubTexture(sub_texture, h_shader, g_shader);
-            sub_texture->texture = mat->texture;
-            sub_texture->global_height = mat->global_height;
+            GenerateSubTexture(sub_texture, parent);
+            sub_texture->texture = parent->mat->texture;
+            sub_texture->global_height = parent->mat->global_height;
 
             terminal_mesh->material = sub_texture;
-            terminal_mesh->shader = basic;
+            terminal_mesh->shader = parent->basic;
 
             const int size = 32;
             terminal_mesh->Indices.reserve(size * size * 6);
@@ -471,17 +466,31 @@ void QuadPlane::Render(const Camera &cam,
                     int dl = (j+1)*(size + 1) + i;
                     int dr = (j+1)*(size + 1) + i + 1;
 
-                    PUSH_FORWARD
+                    if(i%2==0)
+                    {
+                        PUSH_FORWARD
+                    }
+                    else
+                    {
+                        PUSH_BACKWARD
+                    }
                 }
 
-                for(int i = size - 2; i >= 1; --i)
+                for(int i = 1; i < size - 1; ++i)
                 {
                     int tl = (j+1)*(size + 1) + i;
                     int tr = (j+1)*(size + 1) + i + 1;
                     int dl = (j+2)*(size + 1) + i;
                     int dr = (j+2)*(size + 1) + i + 1;
 
-                    PUSH_BACKWARD
+                    if(i%2==0)
+                    {
+                        PUSH_BACKWARD
+                    }
+                    else
+                    {
+                        PUSH_FORWARD
+                    }
                 }
             }
 
@@ -533,7 +542,7 @@ void QuadPlane::Render(const Camera &cam,
     else
     {
         for(int i = 0; i < 4; ++i)
-            m_parts[i]->Render(cam, mat, basic, side, h_shader, g_shader);
+            m_parts[i]->Render(cam, side, parent);
     }
 
 }

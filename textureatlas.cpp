@@ -1,5 +1,5 @@
 #include "textureatlas.h"
-#include "fielsystem.h"
+#include "sge_fielsystem.h"
 #include "resources/pixmap.h"
 #include "prefecences.h"
 #include "logger.h"
