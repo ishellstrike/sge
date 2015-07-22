@@ -49,7 +49,7 @@ out vec3 eyeNormal;
 
 void main(void)
 {
-    float snoize = textureLod(material_global_height, texcoord2, 0).x;
+    float snoize = textureLod(material_global_height, texcoord2, 0).b;
     vec3 grad = texture2D(material_grad, texcoord).xyz;
 
     vec3 newPosition = (R + s * snoize) * position;
@@ -89,7 +89,7 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = texture2D(material_grad, texcoordout).xyz*25;
+    vec3 grad = texture2D(material_grad, texcoordout).xyz*100;
     float snoize = texture2D(material_height, texcoordout).x;
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;
@@ -104,7 +104,7 @@ void main(void)
     tex /= 3;
     vec4 col = material_ambient;
 
-    tex = mix(vec4(0,1,0,1), vec4(1,0,0,1), plane.x);
+    //tex = mix(vec4(0,1,0,1), vec4(1,0,0,1), grad.z);
 
     float diffuse_rate = clamp(dot(light, eye), 0, 1);
 
@@ -116,6 +116,6 @@ void main(void)
     //col = mix(fog, col, fogFactor);
     col.a = 1;
     float asd = normalize(grad).z;
-    out_color = col * tex;
+    out_color = vec4(grad*100,1);// col * tex;
 }
 #endif

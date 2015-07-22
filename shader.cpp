@@ -88,16 +88,16 @@ std::map<int, std::string> shader_defines = {
  *
  * load typed shader from text file
  */
-void JargShader::loadShaderFromSource(GLenum type, const std::string &source, const std::string &version/* = GLSLVER*/) {
+void JargShader::loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version/* = GLSLVER*/) {
 
     std::stringstream ss;
-    name = source;
+    name = filename;
 
     ss << version << std::endl;
 
     ss << shader_defines[type] << std::endl;
 
-    ss << preprocessIncludes(source);
+    ss << preprocessIncludes(filename);
 
     std::string str = ss.str();
     //LOG(verbose) << str;
@@ -109,10 +109,11 @@ void JargShader::loadShaderFromSource(GLenum type, const std::string &source, co
     glShaderSource(id, 1, (const char **)&data, &length);
     glCompileShader(id);
 
-    LOG(verbose) << source << " file " << shader_defines[type];
+    LOG(verbose) << filename << " file " << shader_defines[type];
     bool has_error = !printLog(id);
     if(has_error)
     {
+        LOG(error) << "in file " << filename;
         int num = GetLastPatternedFilenameNubmer("shader_error_log", ".txt");
         std::string f_name = string_format("shader_error_log%d.txt", num+1);
         LOG(error) << "shader error detail saveid in " << f_name;

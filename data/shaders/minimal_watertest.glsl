@@ -104,11 +104,11 @@ void main(void)
     vec3 view = normalize(viewDir);
     vec3 halfWay = normalize(light + view);
 
-    float snoize = textureLod(material_height, texcoordout, 0).x;
+    float snoize = 1;//textureLod(material_height, texcoordout, 0).x;
     float snoize_terr = textureLod(material_height, texcoordout, 0).x;
     float deff = abs((snoize_terr*100 + 1000) - (snoize*s+1010))/100;
 
-    vec3 grad = texture2D(material_grad, texcoordout+vec2(time,time)/100.0).xyz*25;
+    vec3 grad = texture2D(material_grad, texcoordout+vec2(time,time)/100.0).xyz;
     snoize = texture2D(material_height, texcoordout+vec2(time,time)/100.0).x;
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;
@@ -133,6 +133,6 @@ void main(void)
     out_color = color * tex_col;
     out_color.a = deff *10;
     out_color += material_specular * fresnel * RdotVpow;
-    //out_color = normalmap;
+    //out_color = textureLod(material_height, texcoordout, 0);
 }
 #endif

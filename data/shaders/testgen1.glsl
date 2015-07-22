@@ -5,6 +5,7 @@
         See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
 *******************************************************************************/
 #include "turbulence.lib.glsl"
+#include "float.lib.glsl"
 
 uniform sampler2D inputTex0; //random texture
 uniform float param0; //off_x
@@ -43,7 +44,7 @@ out vec4 color;
 void main(void)
 {
     float p = jordanTurbulence(Vert.texcoord*10, 0, 8);
-    color = vec4(p,p,p, 1);
+    color = vec4(unpackColor(p), 1);
     //color.w = 1;
 }
 #endif

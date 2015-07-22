@@ -20,7 +20,7 @@ public:
     std::vector<int> vars; /*!< stored uniforms locations */
     void Use() const;
     GLint locateVar(const std::string &s);
-    void loadShaderFromSource(GLenum type, const std::string &source, const std::string &version = GLSLVER);
+    void loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version = GLSLVER);
     bool Link();
     GLint program;
     bool has_header;
