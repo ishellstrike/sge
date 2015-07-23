@@ -10,6 +10,8 @@
 #define VERT_COLOR 3
 #define FRAG_OUTPUT0 0
 
+#include "float.lib.glsl"
+
 uniform sampler2D material_texture;
 uniform sampler2D material_normal;
 uniform sampler2D material_height;
@@ -49,7 +51,7 @@ out vec3 eyeNormal;
 
 void main(void)
 {
-    float snoize = textureLod(material_global_height, texcoord2, 0).b;
+    float snoize = packColor(textureLod(material_global_height, texcoord2, 0));
     vec3 grad = texture2D(material_grad, texcoord).xyz;
 
     vec3 newPosition = (R + s * snoize) * position;
@@ -89,7 +91,7 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = texture2D(material_grad, texcoordout).xyz*100;
+    vec3 grad = texture2D(material_grad, texcoordout).xyz;
     float snoize = texture2D(material_height, texcoordout).x;
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;
@@ -111,11 +113,13 @@ void main(void)
     col += material_diffuse * diffuse_rate;
 
     //float z = gl_FragCoord.z / gl_FragCoord.w;
-    //  float fogFactor = exp2( -density * density * z * z * LOG2 );
-    // fogFactor = clamp(fogFactor, 0.0, 1.0);
+    //float fogFactor = exp2( -density * density * z * z * LOG2 );
+    //fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
     float asd = normalize(grad).z;
-    out_color = vec4(grad*100,1);// col * tex;
+    out_color = vec4(grad*255, 1);// col * tex;
+    //if(grad.y + grad.x > 0.01000)
+        //out_color = vec4(1,0,0,1);
 }
 #endif

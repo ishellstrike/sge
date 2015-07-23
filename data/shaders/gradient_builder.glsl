@@ -71,32 +71,34 @@ vec3 CalculateSurfaceNormal(vec3 position, vec3 normal, float height)
 
 void main(void)
 {
-//    const int NUM = 9;
+    const int NUM = 9;
 
-//    vec2 c[NUM] = vec2[](
-//      vec2(-Dx,  Dy),   vec2( 0.00,  Dy),
-//      vec2( Dx,  Dy),   vec2(-Dx,    0.00 ),
-//      vec2( 0.0, 0.0 ), vec2( Dx,    Dy ),
-//      vec2(-Dx, -Dy),   vec2( 0.00, -Dy),
-//      vec2( Dx, -Dy)
-//    );
+    vec2 c[NUM] = vec2[](
+      vec2(-Dx,  Dy),   vec2( 0.00,  Dy),
+      vec2( Dx,  Dy),   vec2(-Dx,    0.00 ),
+      vec2( 0.0, 0.0 ), vec2( Dx,    Dy ),
+      vec2(-Dx, -Dy),   vec2( 0.00, -Dy),
+      vec2( Dx, -Dy)
+    );
 
-//    float col[NUM];
-//    int i;
+    float col[NUM];
+    int i;
 
-//    for (i=0; i < NUM; i++) {
-//      vec3 tex = texture2D(height_map, Vert.uv + c[i]).xyz;
-//      col[i] = packColor(tex);
-//    }
+    for (i=0; i < NUM; i++) {
+      vec4 tex = texture2D(height_map, Vert.uv + c[i]);
+      col[i] = packColor(tex);
+    }
 
-//    float x = col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6];
-//    float y = col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2];
+    float x = (col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6]);
+    float y = (col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2]);
+  //  x*= 10;
+  //  y*= 10;
 
-    vec3 tex = texture2D(height_map, Vert.uv).xyz;
-    float height = packColor(tex);
-    vec3 grad = CalculateSurfaceNormal(Vert.position, vec3(0,0,1), height);
+   // vec3 tex = texture2D(height_map, Vert.uv).xyz;
+   // float height = packColor(tex);
+   // vec3 grad = CalculateSurfaceNormal(Vert.position, vec3(0.5,0.5,0), height);
 
-    color = vec4(grad, 1.0);
+    color = vec4(normalize(vec3(x,y,0)), 1.0);
 }
 #endif
 

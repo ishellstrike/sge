@@ -1,12 +1,10 @@
-float packColor(vec3 color) {
-    return (color.r + color.g * 256.0 + color.b * 256.0 * 256.0)/16777215.0;
+vec4 unpackColor( float v ) {
+  vec4 enc = vec4(1.0, 255.0, 65025.0, 0.0) * v;
+  enc = fract(enc);
+  enc -= enc.yzww * vec4(1.0/255.0,1.0/255.0,1.0/255.0,0.0);
+  return enc;
 }
 
-vec3 unpackColor(float mf) {
-    float f = mf * 16777215.0;
-    vec3 color;
-    color.b = floor(f / 256.0 / 256.0);
-    color.g = floor((f - color.b * 256.0 * 256.0) / 256.0);
-    color.r = floor(f - color.b * 256.0 * 256.0 - color.g * 256.0);
-    return color / 256.0;
+float packColor( vec4 rgba ) {
+  return clamp(dot( rgba, vec4(1.0, 1/255.0, 1/65025.0, 1/16581375.0) ), 0.0, 1.0);
 }
