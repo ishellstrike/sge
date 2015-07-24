@@ -51,8 +51,8 @@ out vec3 eyeNormal;
 
 void main(void)
 {
-    float snoize = packColor(textureLod(material_global_height, texcoord2, 0));
-    vec3 grad = texture2D(material_grad, texcoord).xyz;
+    float snoize = decodeFloat(textureLod(material_global_height, texcoord2, 0));
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoord));
 
     vec3 newPosition = (R + s * snoize) * position;
     vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
@@ -91,8 +91,8 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = texture2D(material_grad, texcoordout).xyz;
-    float snoize = texture2D(material_height, texcoordout).x;
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*1000;
+    float snoize = decodeFloat(texture2D(material_height, texcoordout));
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;
     vec3 normal = positionout - s * plane;
@@ -118,8 +118,8 @@ void main(void)
     //col = mix(fog, col, fogFactor);
     col.a = 1;
     float asd = normalize(grad).z;
-    out_color = vec4(grad*255, 1);// col * tex;
-    //if(grad.y + grad.x > 0.01000)
-        //out_color = vec4(1,0,0,1);
+    out_color = vec4(grad, 1);// col * tex;
+    //if(grad.y + grad.x > 0.1100)
+     //   out_color = vec4(0,0,1,1);
 }
 #endif

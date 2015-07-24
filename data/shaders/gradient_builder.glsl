@@ -86,19 +86,19 @@ void main(void)
 
     for (i=0; i < NUM; i++) {
       vec4 tex = texture2D(height_map, Vert.uv + c[i]);
-      col[i] = packColor(tex);
+      col[i] = decodeFloat(tex);
     }
 
-    float x = (col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6]);
-    float y = (col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2]);
-  //  x*= 10;
-  //  y*= 10;
+    //[-1, 1]
+    float x = (col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6]);///4.0;
+    float y = (col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2]);///4.0;
+    vec3 v3 = normalize(vec3(x, y, 0));
 
    // vec3 tex = texture2D(height_map, Vert.uv).xyz;
    // float height = packColor(tex);
    // vec3 grad = CalculateSurfaceNormal(Vert.position, vec3(0.5,0.5,0), height);
 
-    color = vec4(normalize(vec3(x,y,0)), 1.0);
+    color = encodeNormal(v3);
 }
 #endif
 
