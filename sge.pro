@@ -153,4 +153,6 @@ DISTFILES += \
     data/shaders/turbulence.lib.glsl \
     data/shaders/testgen1.glsl \
     data/shaders/gradient_builder.glsl \
-    data/shaders/float.lib.glsl
+    data/shaders/float.lib.glsl \
+    data/textures/PerlinGrad2D.png \
+    data/textures/PerlinPerm2D.png

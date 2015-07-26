@@ -91,8 +91,9 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*1000;
+    vec3 grad = texture2D(material_grad, texcoordout).xyz;
     float snoize = decodeFloat(texture2D(material_height, texcoordout));
+
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * positionout) * positionout;
     vec3 normal = positionout - s * plane;
@@ -117,8 +118,7 @@ void main(void)
     //fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
-    float asd = normalize(grad).z;
-    out_color = vec4(grad, 1);// col * tex;
+    out_color = vec4(grad*10, 1);// col * tex;
     //if(grad.y + grad.x > 0.1100)
      //   out_color = vec4(0,0,1,1);
 }

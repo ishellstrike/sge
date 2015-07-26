@@ -41,8 +41,8 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
 
     noise_map = std::make_shared<Texture>();
     grad_map = std::make_shared<Texture>();
-    noise_map->Load("data/PerlinPerm2D.png");
-    grad_map->Load("data/PerlinGrad2D.png");
+    noise_map->Load("data/textures/PerlinPerm2D.png");
+    grad_map->Load("data/textures/PerlinGrad2D.png");
 
 
     tg.SetShader(height_shader);

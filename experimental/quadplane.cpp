@@ -298,6 +298,7 @@ void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsSto
     grad_gen.SetResultTexture(grad_map);
     grad_gen.SetParams(height_map->width);
     grad_gen.SetParams(height_map->height);
+    grad_gen.SetParams(scale);
     grad_gen.RenderOnTempFbo();
 
     t->grad = grad_map;

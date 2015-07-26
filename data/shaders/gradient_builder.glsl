@@ -8,6 +8,7 @@
 uniform sampler2D height_map;
 uniform float param0;
 uniform float param1;
+uniform float param2;
 #define Dx 1.0/param0
 #define Dy 1.0/param1
 
@@ -90,15 +91,15 @@ void main(void)
     }
 
     //[-1, 1]
-    float x = (col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6]);///4.0;
-    float y = (col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2]);///4.0;
-    vec3 v3 = normalize(vec3(x, y, 0));
+    float x = (col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6])/4.0;
+    float y = (col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2])/4.0;
+    vec3 v3 = vec3(x * param2, y * param2, 0);
 
-   // vec3 tex = texture2D(height_map, Vert.uv).xyz;
-   // float height = packColor(tex);
-   // vec3 grad = CalculateSurfaceNormal(Vert.position, vec3(0.5,0.5,0), height);
+    //vec3 tex = texture2D(height_map, Vert.uv).xyz;
+    //float height = packColor(tex);
+    //vec3 grad = CalculateSurfaceNormal(Vert.position, vec3(0.5,0.5,0), height);
 
-    color = encodeNormal(v3);
+    color = vec4(v3, 1);
 }
 #endif
 
