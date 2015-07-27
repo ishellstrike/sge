@@ -303,7 +303,7 @@ void QuadPlane::Render(const Camera &cam,
         }
         else
         {
-            std::shared_ptr<Material> sub_texture = std::make_shared<Material>();
+            std::shared_ptr<Material> sub_texture = std::make_shared<Material>(*parent->mat);
             GenerateSubTexture(sub_texture, parent);
             sub_texture->texture = parent->mat->texture;
             sub_texture->global_height = parent->mat->global_height;

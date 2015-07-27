@@ -122,6 +122,7 @@ const glm::vec4 Color::Salmon = glm::vec4(250/255.f, 128/255.f, 114/255.f, 1.f);
 const glm::vec4 Color::SandyBrown = glm::vec4(244/255.f, 164/255.f, 96/255.f, 1.f);
 const glm::vec4 Color::SeaGreen = glm::vec4( 46/255.f, 139/255.f, 87/255.f, 1.f);
 const glm::vec4 Color::Seashell = glm::vec4(255/255.f, 245/255.f, 238/255.f, 1.f);
+const glm::vec4 Color::SeaBlue = glm::vec4(26/255.f, 71/255.f, 128/255.f, 1.f);
 const glm::vec4 Color::Sienna = glm::vec4(160/255.f, 82/255.f, 45/255.f, 1.f);
 const glm::vec4 Color::Silver = glm::vec4(192/255.f, 192/255.f, 192/255.f, 1.f);
 const glm::vec4 Color::SkyBlue = glm::vec4(135/255.f, 206/255.f, 235/255.f, 1.f);

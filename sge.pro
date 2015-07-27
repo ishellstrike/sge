@@ -55,7 +55,8 @@ SOURCES += \
     resources/pixmap.cpp \
     sge_perfomance.cpp \
     FrameBuffer.cpp \
-    TextureGenerator.cpp
+    TextureGenerator.cpp \
+    experimental/scattering.cpp
 
 VERSION = 0.1.0
 
@@ -133,7 +134,9 @@ HEADERS += \
     TextureGenerator.h \
     resources/random_noise.h \
     sge_fielsystem.h \
-    experimental/sphereparamstorage.h
+    experimental/sphereparamstorage.h \
+    experimental/scattering.h \
+    data/shaders/scattering/scatter_params.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -155,4 +158,15 @@ DISTFILES += \
     data/shaders/gradient_builder.glsl \
     data/shaders/float.lib.glsl \
     data/textures/PerlinGrad2D.png \
-    data/textures/PerlinPerm2D.png
+    data/textures/PerlinPerm2D.png \
+    data/shaders/scattering/common.glsl \
+    data/shaders/scattering/copyInscatter1.glsl \
+    data/shaders/scattering/copyInscatterN.glsl \
+    data/shaders/scattering/copyIrradiance.glsl \
+    data/shaders/scattering/earth.glsl \
+    data/shaders/scattering/inscatter1.glsl \
+    data/shaders/scattering/inscatterN.glsl \
+    data/shaders/scattering/inscatterS.glsl \
+    data/shaders/scattering/irradiance1.glsl \
+    data/shaders/scattering/irradianceN.glsl \
+    data/shaders/scattering/transmittance.glsl

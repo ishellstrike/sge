@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT License.
+        See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
+*******************************************************************************/
+
 #include "turbulence.lib.glsl"
 
 float ground(vec2 uv, out vec3 grad)

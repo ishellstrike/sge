@@ -1,5 +1,5 @@
 /*******************************************************************************
-        Copyright (C) 2014 Samsonov Andrey
+        Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT License.
         See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
@@ -31,7 +31,7 @@ uniform vec3 transform_viewPos;
 uniform vec3 transform_lightPos;
 
 float R = 1000;
-float s = 300;
+float s = 100;
 
 #ifdef _VERTEX_
 in vec3 position;

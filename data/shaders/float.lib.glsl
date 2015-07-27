@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT License.
+        See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
+*******************************************************************************/
+
 vec4 encodeFloat( float v ) {
   vec3 enc = vec3(1.0, 255.0, 65025.0) * v;
   enc = fract(enc);

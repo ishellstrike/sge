@@ -20,6 +20,7 @@
 #include "sge_ui/wins.h"
 #include "sge_perfomance.h"
 #include "experimental/quadsphere.h"
+#include "experimental/scattering.h"
 
 class GameWindow {
 public:
@@ -56,6 +57,7 @@ public:
     Camera *cam;
     glm::vec3 moving;
     std::vector<glm::vec3> tail;
+    Scattering scat;
 
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;

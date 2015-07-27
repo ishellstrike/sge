@@ -137,7 +137,7 @@ bool GameWindow::BaseInit()
 
     cam2->Position({3000,3000,3000});
     cam2->LookAt({0,0,0});
-    Resize(800, 600);
+    Resize(RESX, RESY);
 
     Resources::instance();
 
@@ -180,7 +180,11 @@ bool GameWindow::BaseInit()
     qs = std::make_shared<QuadSphere>(basic, mat);
     qs->max_divide = 6;
     qs_w = std::make_shared<QuadSphere>(water, wm);
-    qs_w->max_divide = 4;
+    qs_w->max_divide = 6;
+    wm->diffuse = Color::SeaBlue;
+    wm->shininess = 80;
+
+    scat.Precompute();
 
     return true;
 }
@@ -236,8 +240,7 @@ void GameWindow::BaseUpdate()
     }
 
     if(Keyboard::isKeyDown(GLFW_KEY_F1))
-        cam->LookAt({0,0,0});
-
+        cam->Position(glm::vec3(1));
    Mouse::SetFixedPosState(true);
    cam->Yaw(Mouse::getCursorDelta().x);
    cam->Pitch(Mouse::getCursorDelta().y);
@@ -273,16 +276,21 @@ void GameWindow::BaseDraw()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(100/255.f, 149/255.f, 237/255.f, 1.f);
-    //glClearColor(0,0,0, 1.f);
+    glClearColor(0,0,0, 1.f);
 
 
 
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    scat.redisplayFunc(*cam);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     qs->Render(*cam);
     water->Use();
     glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    //qs_w->Render(*cam);
+    qs_w->Render(*cam);
+
+
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
@@ -322,7 +330,6 @@ void GameWindow::BaseDraw()
 //            glVertex3fv(&tail[i+1][0]);
 //        }
 //    glEnd();
-
 
     glfwSwapBuffers(window);
     gt.Update(static_cast<float>(glfwGetTime()));

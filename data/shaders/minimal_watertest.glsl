@@ -1,5 +1,5 @@
 /*******************************************************************************
-        Copyright (C) 2014 Samsonov Andrey
+        Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT License.
         See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
@@ -7,6 +7,7 @@
 #include "noise.lib.glsl"
 #include "test1.glsl"
 #include "height.lib.glsl"
+#include "float.lib.glsl"
 
 #define VERT_POSITION 0
 #define VERT_TEXCOORD 1
@@ -29,12 +30,17 @@ uniform float time;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
-uniform mat4 transform_N; // normal matrix
+uniform mat3 transform_N; // normal matrix
 uniform vec3 transform_viewPos;
 uniform vec3 transform_lightPos;
 
 float R = 1010;
-float s = 5;
+float s = 1;
+
+vec3 offsetedPosition(vec3 pos, float time)
+{
+    return pos*100 + pos*1000 + pos*10 + vec3(1,1,1)*time - vec3(0.8,0.2,0.4)*time  + vec3(0.2,0.1,0.2)*time;
+}
 
 #ifdef _VERTEX_
 in vec3 position;
@@ -56,15 +62,14 @@ out vec3 eyeNormal;
 
 void main(void)
 {
-    float snoize = textureLod(material_global_height, texcoord2, 0).x;
-    vec3 grad = texture2D(material_grad, texcoord).xyz;
+    vec3 grad;
+    float snoize = snoise(offsetedPosition(position, time), grad);
 
     vec3 newPosition = (R + s * snoize) * position;
     vec4 mLocation = transform_M * vec4(newPosition, 1);
     vec4 mvpLocation = transform_VP * mLocation;
 
-    vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
-    lightVec = normalize(lightVec4.xyz);
+    lightVec = transform_lightPos;
 
     gl_Position = mvpLocation;
     positionout = position;
@@ -76,7 +81,7 @@ void main(void)
     vec3 plane = grad - (grad * position) * position;
     normalout = position - s * plane;
 
-    eyeNormal = vec3(transform_N * vec4(normalout, 0.0));
+    eyeNormal = transform_N * normalout;
 }
 #endif
 
@@ -102,20 +107,20 @@ out vec4 out_color;
 
 void main(void)
 {
+    vec3 grad;
+    float snoize = snoise(offsetedPosition(positionout, time), grad);
+    float snoize_terr = decodeFloat(textureLod(material_global_height, texcoordout2, 0));
+    //vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*100;
+    float deff = abs((snoize_terr*100 + 1000) - (snoize*s + 1010))/100;
+
+    grad = grad / (R + s * snoize);
+    grad = transform_N * grad * 50;
+    vec3 plane = grad - (grad * positionout) * positionout;
+    vec3 normal = positionout - s * plane;
+    vec3 eye = normalize(transform_N * normal);
     vec3 light = normalize(lightVec);
     vec3 view = normalize(viewDir);
     vec3 halfWay = normalize(light + view);
-
-    float snoize = 1;//textureLod(material_height, texcoordout, 0).x;
-    float snoize_terr = textureLod(material_height, texcoordout, 0).x;
-    float deff = abs((snoize_terr*100 + 1000) - (snoize*s+1010))/100;
-
-    vec3 grad = texture2D(material_grad, texcoordout+vec2(time,time)/100.0).xyz;
-    snoize = texture2D(material_height, texcoordout+vec2(time,time)/100.0).x;
-    grad = grad / (R + s * snoize);
-    vec3 plane = grad - (grad * positionout) * positionout;
-    vec3 normal = positionout - s * plane;
-    vec3 eye = normalize(vec3(transform_N * vec4(normal, 0.0)));
 
     vec4 tex_col = texture2D(material_texture, texcoordout2*100);
     vec4 col2 = texture2D(material_texture, texcoordout2*R/10);
@@ -132,8 +137,8 @@ void main(void)
     float exp = pow(base, 5);
     float fresnel = fZero + (1-fZero)*exp;
 
-    out_color = color * tex_col;
-    out_color.a = deff *10;
+    out_color = color;
+    out_color.a = deff * 10;
     out_color += material_specular * fresnel * RdotVpow;
     //out_color = textureLod(material_height, texcoordout, 0);
 }

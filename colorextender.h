@@ -127,6 +127,7 @@ public:
       static const glm::vec4 SandyBrown;
       static const glm::vec4 SeaGreen;
       static const glm::vec4 Seashell;
+      static const glm::vec4 SeaBlue;
       static const glm::vec4 Sienna;
       static const glm::vec4 Silver;
       static const glm::vec4 SkyBlue;
