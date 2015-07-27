@@ -3,6 +3,24 @@
 #include "glm/gtx/transform.hpp"
 #include "TextureGenerator.h"
 
+//Помещается вершины rldr в меш в прямом порядке
+#define PUSH_FORWARD \
+    Indeces.push_back(tl); \
+    Indeces.push_back(tr); \
+    Indeces.push_back(dl); \
+    Indeces.push_back(tr); \
+    Indeces.push_back(dr); \
+    Indeces.push_back(dl);
+
+//Помещается вершины rldr в меш в альтернативном порядке
+#define PUSH_BACKWARD \
+    Indeces.push_back(tl); \
+    Indeces.push_back(tr); \
+    Indeces.push_back(dr); \
+    Indeces.push_back(tl); \
+    Indeces.push_back(dr); \
+    Indeces.push_back(dl);
+
 QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat)
 {
     basic = shader;
@@ -55,7 +73,58 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     tg.RenderOnTempFbo();
 
     mat->global_height = height_map;
+
+
+    int xcount = tess_size + 3;
+    for(int j = 0; j < tess_size + 2; j+=2)
+    {
+        for(int i = 0; i < tess_size + 2; ++i)
+        {
+            int tl = j*xcount + i;
+            int tr = j*xcount + i + 1;
+            int dl = (j+1)*xcount + i;
+            int dr = (j+1)*xcount + i + 1;
+
+            if(i%2==0)
+            {
+                PUSH_FORWARD
+            }
+            else
+            {
+                PUSH_BACKWARD
+            }
+        }
+
+        for(int i = 0; i < tess_size + 2; ++i)
+        {
+            int tl = (j+1)*xcount + i;
+            int tr = (j+1)*xcount + i + 1;
+            int dl = (j+2)*xcount + i;
+            int dr = (j+2)*xcount + i + 1;
+
+            if(i%2==0)
+            {
+                PUSH_BACKWARD
+            }
+            else
+            {
+                PUSH_FORWARD
+            }
+        }
+    }
+
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indeces.size(), &Indeces[0], GL_STATIC_DRAW);
 }
+
+QuadSphere::~QuadSphere()
+{
+    glDeleteBuffers(1, &ibo);
+}
+
+#undef PUSH_BACKWARD
+#undef PUSH_FORWARD
 
 void QuadSphere::Render(const Camera &cam)
 {
@@ -65,13 +134,18 @@ void QuadSphere::Render(const Camera &cam)
     }
 }
 
+void QuadSphere::SetWorld(const glm::mat4 &world)
+{
+
+}
+
 void QuadSphere::Update(Camera &camera)
 {
     if(pow(center.x - camera.Position().x, 2) + pow(center.y - camera.Position().y, 2) + pow(center.z - camera.Position().z, 2) < R*R)
         return;
     for(int i = 0; i < 6; i++)
     {
-        plane[i]->Update(camera, R + s, R * 2, max_divide);
+        plane[i]->Update(camera, R + s, R * 2, max_divide, this);
     }
 }
 

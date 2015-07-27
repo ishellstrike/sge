@@ -26,50 +26,39 @@ uniform float material_shininess;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
-uniform mat4 transform_N; // normal matrix
+uniform mat3 transform_N; // normal matrix
 uniform vec3 transform_viewPos;
 uniform vec3 transform_lightPos;
 
 float R = 1000;
-float s = 100;
+float s = 300;
 
 #ifdef _VERTEX_
 in vec3 position;
 in vec4 color;
 in vec3 normal;
-in vec3 tangent;
-in vec3 binormal;
 in vec2 texcoord;
 in vec2 texcoord2;
 
 out vec2 texcoordout;
 out vec2 texcoordout2;
-out vec3 normalout;
 out vec3 lightVec;
 out vec3 positionout;
-out vec3 eyeNormal;
 
 void main(void)
 {
     float snoize = decodeFloat(textureLod(material_global_height, texcoord2, 0));
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoord));
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoord))*100;
 
     vec3 newPosition = (R + s * snoize) * position;
     vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
 
-    vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
-    lightVec = normalize(lightVec4.xyz);
+    lightVec = transform_lightPos;
 
     gl_Position = mvpLocation;
     positionout = position;
     texcoordout = texcoord;
     texcoordout2 = texcoord2;
-
-    grad = grad / (R + s * snoize);
-    vec3 plane = grad - (grad * position) * position;
-    normalout = position - s * plane;
-
-    eyeNormal = vec3(transform_N * vec4(normalout, 0.0));
 }
 #endif
 
@@ -78,9 +67,7 @@ const float cutoff = 0.9f;
 in vec2 texcoordout;
 in vec2 texcoordout2;
 in vec3 lightVec;
-in vec3 normalout;
 in vec3 positionout;
-in vec3 eyeNormal;
 
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
@@ -91,13 +78,14 @@ out vec4 out_color;
 
 void main(void)
 {
-    vec3 grad = texture2D(material_grad, texcoordout).xyz;
-    float snoize = decodeFloat(texture2D(material_height, texcoordout));
+    float snoize = decodeFloat(textureLod(material_height, texcoordout, 0));
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*100;
 
     grad = grad / (R + s * snoize);
+    grad = transform_N * grad;
     vec3 plane = grad - (grad * positionout) * positionout;
     vec3 normal = positionout - s * plane;
-    vec3 eye = normalize(vec3(transform_N * vec4(normal, 0.0)));
+    vec3 eye = normalize(transform_N * normal);
     vec3 light = normalize(lightVec);
 
 
@@ -107,7 +95,7 @@ void main(void)
     tex /= 3;
     vec4 col = material_ambient;
 
-    //tex = mix(vec4(0,1,0,1), vec4(1,0,0,1), grad.z);
+    //tex = mix(vec4(0,1,0,1), vec4(1,0,0,1), abs(grad.y) + abs(grad.x));
 
     float diffuse_rate = clamp(dot(light, eye), 0, 1);
 
@@ -118,8 +106,6 @@ void main(void)
     //fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
-    out_color = vec4(grad*10, 1);// col * tex;
-    //if(grad.y + grad.x > 0.1100)
-     //   out_color = vec4(0,0,1,1);
+    out_color = col * tex;
 }
 #endif

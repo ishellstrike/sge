@@ -257,6 +257,8 @@ void GameWindow::BaseUpdate()
        cam->Zoom(cam->Zoom() - 1);
    }
 
+   qs->world = glm::rotate(qs->world, gt.elapsed/100, glm::vec3(1));
+   qs_w->world = glm::rotate(qs_w->world, gt.elapsed/100, glm::vec3(1));
     qs->Update(*cam);
     qs_w->Update(*cam);
     cam1->Update(gt);
@@ -280,7 +282,7 @@ void GameWindow::BaseDraw()
     qs->Render(*cam);
     water->Use();
     glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    qs_w->Render(*cam);
+    //qs_w->Render(*cam);
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
@@ -288,7 +290,7 @@ void GameWindow::BaseDraw()
 
     ws->Draw();
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
-    batch->drawText(std::to_string(glm::length(moving)).append(" km/s"), {0, 100}, f12.get(), {0,0,0,1});
+    batch->drawText(std::to_string(glm::length(moving)).append(" km/s"), {0, 100}, f12.get(), {0,0,0,1});        
     batch->render();
 
     glMatrixMode(GL_PROJECTION);

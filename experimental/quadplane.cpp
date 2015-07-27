@@ -153,24 +153,6 @@ bool QuadPlane::is_terminal() const
     return m_parts[0] == nullptr || m_parts[1] == nullptr || m_parts[2] == nullptr || m_parts[3] == nullptr;
 }
 
-//Помещается вершины rldr в меш в прямом порядке
-#define PUSH_FORWARD \
-    terminal_mesh->Indices.push_back(tl); \
-    terminal_mesh->Indices.push_back(tr); \
-    terminal_mesh->Indices.push_back(dl); \
-    terminal_mesh->Indices.push_back(tr); \
-    terminal_mesh->Indices.push_back(dr); \
-    terminal_mesh->Indices.push_back(dl);
-
-//Помещается вершины rldr в меш в альтернативном порядке
-#define PUSH_BACKWARD \
-    terminal_mesh->Indices.push_back(tl); \
-    terminal_mesh->Indices.push_back(tr); \
-    terminal_mesh->Indices.push_back(dr); \
-    terminal_mesh->Indices.push_back(tl); \
-    terminal_mesh->Indices.push_back(dr); \
-    terminal_mesh->Indices.push_back(dl);
-
 //генерирует индексы ... TODO:описать
 #define T_L_D_R_M_STAR \
     int star =        (j)*(size+1) + i; \
@@ -275,7 +257,7 @@ inline void PushTileIndexN(Mesh &m, int x, int y, int part, int sizex, int xoff,
 
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
-    const float res = 256.0f;
+    const float res = 512.0f;
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
     std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2{res,res});
@@ -312,8 +294,12 @@ void QuadPlane::Render(const Camera &cam,
     {
         if(status == READY)
         {
-            terminal_mesh->Render(cam);
-            //WinS::ws->sb->drawQuad(glm::vec2(10,10) + 500.f*offset, glm::vec2(500,500)*scale, *terminal_mesh->material->height, Color::White);
+            terminal_mesh->Render(cam, parent->world);
+            float pre_size = 222.f;
+            //texture vis
+            //WinS::ws->sb->drawQuad(glm::vec2(10,10) + pre_size*offset + glm::vec2(pre_size,0)*(float)(side/2) + glm::vec2(0,pre_size)*(float)(side%2), glm::vec2(pre_size)*scale, *terminal_mesh->material->grad, Color::White);
+            //quadtree vis
+            //WinS::ws->sb->drawRect(glm::vec2(10,10) + pre_size*offset + glm::vec2(pre_size,0)*(float)(side/2) + glm::vec2(0,pre_size)*(float)(side%2), glm::vec2(pre_size)*scale, glm::vec4(rand()%255/255.0,rand()%255/255.0,rand()%255/255.0,1 ));
         }
         else
         {
@@ -325,10 +311,9 @@ void QuadPlane::Render(const Camera &cam,
             terminal_mesh->material = sub_texture;
             terminal_mesh->shader = parent->basic;
 
-            const int size = 32;
+            int size = parent->tess_size;
             terminal_mesh->Indices.reserve(size * size * 6);
             terminal_mesh->Vertices.reserve((size + 1) * (size + 1));
-            int xcount = size + 1;
             int co = 0;
 
             float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
@@ -337,14 +322,16 @@ void QuadPlane::Render(const Camera &cam,
 
             //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере сфера приводится к радиусу R
 
-            for(int j = 0; j < size + 1; j++)
+            for(int j = -1; j < size + 2; j++)
             {
-                for(int i = 0; i < size + 1; i++)
+                for(int i = -1; i < size + 2; i++)
                 {
                     VertPosNormUvUv a;
                     a.position = {xs + i * dd, ys + j * dd, 0.5f};
 
                     a.position = glm::normalize(a.position);
+                    if(j == -1 || i == -1 || j == size + 1 || i == size +1)
+                        a.position *= 0.99;
 
                     a.normal = a.position;
 
@@ -353,145 +340,6 @@ void QuadPlane::Render(const Camera &cam,
                     a.uv_glob = {xs + i * dd + 0.5f, ys + j * dd + 0.5f};
 
                     terminal_mesh->Vertices.push_back(a);
-                }
-            }
-
-            std::vector<QuadPlane *> nighbours = getRoute();
-
-            //top
-            int p = 0;
-            for(int i=0;i<size;i+=2)
-            {
-                int j = 0;
-
-                bool no_nei = !nighbours[TOP_N] || nighbours[TOP_N]->level >= level;
-
-                if(i!=0)
-                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, false);
-                if(no_nei)
-                {
-                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, false);
-                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 1, 0, false);
-                }
-                else if (i % 2 == 0)
-                {
-                    terminal_mesh->Indices.push_back((j)*xcount + i);
-                    terminal_mesh->Indices.push_back((j)*xcount + i + 2);
-                    terminal_mesh->Indices.push_back((j + 1)*xcount + i + 1);
-                }
-                if(i!=size-2)
-                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 1, 0, false);
-            }
-
-            //bot
-            p = 0;
-            for(int i=0;i<size;i+=2)
-            {
-                int j = size-1;
-
-                bool no_nei = !nighbours[BOTTOM_N] || nighbours[BOTTOM_N]->level >= level;
-
-                if(i!=0)
-                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, true);
-                if(no_nei)
-                {
-                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, true);
-                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 1, 0, true);
-                }
-                else if (i % 2 == 0)
-                {
-                    terminal_mesh->Indices.push_back((j)*xcount + i + 1);
-                    terminal_mesh->Indices.push_back((j + 1)*xcount + i + 2);
-                    terminal_mesh->Indices.push_back((j + 1)*xcount + i);
-                }
-                if(i!=size-2)
-                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 1, 0, true);
-            }
-
-            //left
-            p = 0;
-            for(int j=0;j<size;j+=2)
-            {
-                int i = 0;
-
-                bool no_nei = !nighbours[LEFT_N] || nighbours[LEFT_N]->level >= level;
-
-                if(j!=0)
-                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, false);
-                if(no_nei)
-                {
-                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, false);
-                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 0, 1, false);
-                }
-                else if (j % 2 == 0)
-                {
-                    terminal_mesh->Indices.push_back((j)*xcount + i);
-                    terminal_mesh->Indices.push_back((j + 1)*xcount + i + 1);
-                    terminal_mesh->Indices.push_back((j + 2)*xcount + i);
-                }
-                if(j!=size-2)
-                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 0, 1, false);
-            }
-
-            //right
-            p = 0;
-            for(int j=0;j<size;j+=2)
-            {
-                int i = size - 1;
-
-                bool no_nei = !nighbours[RIGHT_N] || nighbours[RIGHT_N]->level >= level;
-
-                if(j!=0)
-                    PushTileIndexN(*terminal_mesh, i, j, 0, xcount, 0, 0, true);
-                if(no_nei)
-                {
-                    PushTileIndexN(*terminal_mesh, i, j, 1, xcount, 0, 0, true);
-                    PushTileIndexN(*terminal_mesh, i, j, 2, xcount, 0, 1, true);
-                }
-                else if (j % 2 == 0)
-                {
-                    terminal_mesh->Indices.push_back((j)*xcount + i + 1);
-                    terminal_mesh->Indices.push_back((j + 2)*xcount + i + 1);
-                    terminal_mesh->Indices.push_back((j + 1)*xcount + i);
-                }
-                if(j!=size-2)
-                    PushTileIndexN(*terminal_mesh, i, j, 3, xcount, 0, 1, true);
-            }
-
-            for(int j = 1; j < size - 1; j+=2)
-            {
-                for(int i = 1; i < size - 1; ++i)
-                {
-                    int tl = j*(size + 1) + i;
-                    int tr = j*(size + 1) + i + 1;
-                    int dl = (j+1)*(size + 1) + i;
-                    int dr = (j+1)*(size + 1) + i + 1;
-
-                    if(i%2==0)
-                    {
-                        PUSH_FORWARD
-                    }
-                    else
-                    {
-                        PUSH_BACKWARD
-                    }
-                }
-
-                for(int i = 1; i < size - 1; ++i)
-                {
-                    int tl = (j+1)*(size + 1) + i;
-                    int tr = (j+1)*(size + 1) + i + 1;
-                    int dl = (j+2)*(size + 1) + i;
-                    int dr = (j+2)*(size + 1) + i + 1;
-
-                    if(i%2==0)
-                    {
-                        PUSH_BACKWARD
-                    }
-                    else
-                    {
-                        PUSH_FORWARD
-                    }
                 }
             }
 
@@ -535,9 +383,11 @@ void QuadPlane::Render(const Camera &cam,
                                                              )
                                               );
 
+            terminal_mesh->Indices = parent->Indeces;
             terminal_mesh->ForgetBind();
+            //terminal_mesh->BindExistingIBO(parent->ibo, parent->Indeces.size());
             status = READY;
-            terminal_mesh->Render(cam);
+            terminal_mesh->Render(cam, parent->world);
         }
     }
     else
@@ -549,16 +399,20 @@ void QuadPlane::Render(const Camera &cam,
 }
 
 #undef T_L_D_R_M_STAR
-#undef PUSH_BACKWARD
-#undef PUSH_FORWARD
 
-void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide)
+void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent)
 {
+    glm::vec3 cent[4];
+    for(int i = 0; i < 4; i++)
+    {
+        cent[i] = glm::vec3(parent->world * glm::vec4(subsurface_centers[i], 0));
+    }
+
     if(is_terminal() &&
-       (glm::distance(subsurface_centers[0] * Rs, camera.Position()) < eps * scale ||
-        glm::distance(subsurface_centers[1] * Rs, camera.Position()) < eps * scale ||
-        glm::distance(subsurface_centers[2] * Rs, camera.Position()) < eps * scale ||
-        glm::distance(subsurface_centers[3] * Rs, camera.Position()) < eps * scale)
+       (glm::distance(cent[0] * Rs, camera.Position()) < eps * scale ||
+        glm::distance(cent[1] * Rs, camera.Position()) < eps * scale ||
+        glm::distance(cent[2] * Rs, camera.Position()) < eps * scale ||
+        glm::distance(cent[3] * Rs, camera.Position()) < eps * scale)
             && level < max_divide)
     {
         m_parts[0] = std::make_shared<QuadPlane>();
@@ -596,10 +450,10 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide)
         //status = ERROR;
     }
     else
-        if((glm::distance(subsurface_centers[0] * Rs, camera.Position()) > eps * 1.1f * scale &&
-            glm::distance(subsurface_centers[1] * Rs, camera.Position()) > eps * 1.1f * scale &&
-            glm::distance(subsurface_centers[2] * Rs, camera.Position()) > eps * 1.1f * scale &&
-            glm::distance(subsurface_centers[3] * Rs, camera.Position()) > eps * 1.1f * scale))
+        if((glm::distance(cent[0] * Rs, camera.Position()) > eps * 1.1f * scale &&
+            glm::distance(cent[1] * Rs, camera.Position()) > eps * 1.1f * scale &&
+            glm::distance(cent[2] * Rs, camera.Position()) > eps * 1.1f * scale &&
+            glm::distance(cent[3] * Rs, camera.Position()) > eps * 1.1f * scale))
     {
         for(int i = 0; i < 4; ++i)
             m_parts[i] = nullptr;
@@ -608,7 +462,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide)
     if(!is_terminal())
     {
         for(int i = 0; i < 4; ++i)
-            m_parts[i]->Update(camera, Rs, eps, max_divide);
+            m_parts[i]->Update(camera, Rs, eps, max_divide, parent);
     }
 }
 

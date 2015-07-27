@@ -337,6 +337,7 @@ void Mesh::Bind(int type /* = 0 */)
         glBindVertexArray(0);
         glDisableVertexAttribArray(shader->posAttrib);
         glDisableVertexAttribArray(shader->uvAttrib);
+        glDisableVertexAttribArray(shader->uv2Attrib);
         glDisableVertexAttribArray(shader->normAttrib);
 
         glDeleteBuffers(2, m_vbo);
@@ -370,12 +371,27 @@ void Mesh::Bind(int type /* = 0 */)
     glVertexAttribPointer(shader->uv2Attrib, 2, GL_FLOAT, GL_FALSE, stride, (void*)(offset));  offset += sizeof(glm::vec2);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indices.size(), &Indices[0], bindtype);
+    if(Indices.size())
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indices.size(), &Indices[0], bindtype);
+    else
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, (void*)0, bindtype);
 
     loaded = Indices.size();
     vertices = Vertices.size();
+    glBindVertexArray(0);
 
     OPENGL_CHECK_ERRORS();
+}
+
+void Mesh::BindExistingIBO(GLuint id, int size)
+{
+    assert(m_vao && "bind first!");
+    assert(id != -1 && "empty ibo!");
+
+    glBindVertexArray(*m_vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, (void*)0, GL_STATIC_DRAW);
+    glBindVertexArray(0);
 }
 
 void Mesh::ForgetBind()
@@ -387,7 +403,7 @@ void Mesh::ForgetBind()
     Vertices.shrink_to_fit();
 }
 
-void Mesh::Render(const Camera &cam, bool patches /* = false*/)
+void Mesh::Render(const Camera &cam, const glm::mat4 &world, bool patches /* = false*/)
 {
     const glm::mat4 &MVP = cam.MVP();
 
@@ -402,10 +418,12 @@ void Mesh::Render(const Camera &cam, bool patches /* = false*/)
     shader->Use();
     glUniform3fv(shader->viewPosition_location, 1, &cam.Position()[0]);
 
-    glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &World[0][0]);
+    glm::mat4 Model = world * World;
+
+    glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &Model[0][0]);
     glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
-    glm::mat4 normal = glm::transpose(glm::inverse(World));
-    glUniformMatrix4fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
+    glm::mat3 normal = glm::mat3(glm::transpose(glm::inverse(Model)));
+    glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
     glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(200000,234560,9850000)[0]);
 
     if(shader->ambient_location != -1)

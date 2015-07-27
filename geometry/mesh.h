@@ -28,7 +28,7 @@ public:
     ~Mesh(void);
     void Create(std::vector<VertPosNormUvUv> verteces, std::vector<GLuint> indeces);
     void Bind(int type = 0);
-    void Render(const Camera &cam, bool patches = false);
+    void Render(const Camera &cam, const glm::mat4 &world = glm::mat4(1), bool patches = false);
     void Combine(Mesh* com);
     bool loadOBJ(const std::string &path);
     void computeNormal();
@@ -55,6 +55,7 @@ public:
     void loadSTL(const std::string &path);
     float FarestPoint();
     bool loadMTL(const std::string &path);
+    void BindExistingIBO(GLuint id, int size);
 private:
     GLuint *m_vao = nullptr;
     GLuint *m_vbo = nullptr;

@@ -60,7 +60,8 @@ void main(void)
     vec3 grad = texture2D(material_grad, texcoord).xyz;
 
     vec3 newPosition = (R + s * snoize) * position;
-    vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
+    vec4 mLocation = transform_M * vec4(newPosition, 1);
+    vec4 mvpLocation = transform_VP * mLocation;
 
     vec4 lightVec4 = transform_M * vec4(transform_lightPos, 1);
     lightVec = normalize(lightVec4.xyz);
@@ -69,6 +70,7 @@ void main(void)
     positionout = position;
     texcoordout = texcoord;
     texcoordout2 = texcoord2;
+    viewDir = transform_viewPos - vec3(mLocation);
 
     grad = grad / (R + s * snoize);
     vec3 plane = grad - (grad * position) * position;

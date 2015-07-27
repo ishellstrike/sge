@@ -36,11 +36,6 @@ public:
     QuadPlane *parent = nullptr;
     void getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours that_neib);
 
-    std::shared_ptr<QuadPlane> &NW();
-    std::shared_ptr<QuadPlane> &NE();
-    std::shared_ptr<QuadPlane> &SW();
-    std::shared_ptr<QuadPlane> &SE();
-
     std::shared_ptr<Mesh> terminal_mesh;
     glm::mat4 transformation;
     glm::vec3 subsurface_centers[4];
@@ -53,7 +48,7 @@ public:
     void Render(const Camera &cam,
                 int side,
                 SphereParamsStorage *parent);
-    void Update(Camera &camera, float Rs, float eps, int max_divide);
+    void Update(Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent);
     std::vector<QuadPlane *> getRoute();
     void GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent);
 };
