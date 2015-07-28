@@ -52,7 +52,7 @@ const vec3 betaR = vec3(5.8e-3, 1.35e-2, 3.31e-2) / SCALE;
 // DEFAULT
 const float HM = 1.2 * SCALE;
 const vec3 betaMSca = vec3(4e-3) / SCALE;
-const vec3 betaMEx = betaMSca / 0.9;
+const vec3 betaMEx = betaMSca / 0.9f;
 const float mieG = 0.8;
 // CLEAR SKY
 /*const float HM = 1.2 * SCALE;
@@ -67,7 +67,7 @@ const float mieG = 0.65;*/
 
 const float g = 9.81;
 
-const float M_PI = 3.141592657;
+const float M_PI_ = 3.141592657f;
 
 // ----------------------------------------------------------------------------
 // NUMERICAL INTEGRATION PARAMETERS

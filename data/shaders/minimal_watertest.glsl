@@ -34,8 +34,8 @@ uniform mat3 transform_N; // normal matrix
 uniform vec3 transform_viewPos;
 uniform vec3 transform_lightPos;
 
-float R = 1010;
-float s = 1;
+uniform float R = 1010;
+uniform float s = 1;
 
 vec3 offsetedPosition(vec3 pos, float time)
 {

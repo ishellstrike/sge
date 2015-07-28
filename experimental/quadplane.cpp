@@ -257,7 +257,7 @@ inline void PushTileIndexN(Mesh &m, int x, int y, int part, int sizex, int xoff,
 
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
-    const float res = 512.0f;
+    const float res = 256.0f;
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
     std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2{res,res});
@@ -292,6 +292,10 @@ void QuadPlane::Render(const Camera &cam,
 {
     if(is_terminal())
     {
+        float distance = glm::distance(cam.Position(), parent->center);
+            glUniform1f(parent->shader_r, parent->R / (distance/ 1000));
+            glUniform1f(parent->shader_s, parent->s / (distance/ 1000));
+
         if(status == READY)
         {
             terminal_mesh->Render(cam, parent->world);

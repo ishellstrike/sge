@@ -42,19 +42,17 @@ uniform mat4 projInverse;
 uniform mat4 viewInverse;
 uniform float exposure;
 
-uniform sampler2D reflectanceSampler;//ground reflectance texture
-uniform sampler2D irradianceSampler;//precomputed skylight irradiance (E table)
-uniform sampler3D inscatterSampler;//precomputed inscattered light (S table)
-
-varying vec2 coords;
-varying vec3 ray;
-
 #ifdef _VERTEX_
 
+in vec3 position;
+
+out vec2 coords;
+out vec3 ray;
+
 void main() {
-    coords = gl_Vertex.xy * 0.5 + 0.5;
-    ray = (viewInverse * vec4((projInverse * gl_Vertex).xyz, 0.0)).xyz;
-    gl_Position = gl_Vertex;
+    coords = position.xy * 0.5 + 0.5;
+    ray = (viewInverse * vec4((projInverse * vec4(position, 1)).xyz, 0.0)).xyz;
+    gl_Position = vec4(position, 1);
 }
 
 #else
@@ -134,7 +132,7 @@ vec3 inscatter(inout vec3 x, inout float t, vec3 v, vec3 s, out float r, out flo
 //attenuated bewteen ground and viewer (=R[L0]+R[L*])
 vec3 groundColor(vec3 x, float t, vec3 v, vec3 s, float r, float mu, vec3 attenuation)
 {
-    vec3 result;
+    vec3 result = vec3(0);
     if (t > 0.0) { // if ray hits ground surface
         // ground reflectance at end of ray, x0
         vec3 x0 = x + t * v;
@@ -189,6 +187,9 @@ vec3 HDR(vec3 L) {
     L.b = L.b < 1.413 ? pow(L.b * 0.38317, 1.0 / 2.2) : 1.0 - exp(-L.b);
     return L;
 }
+
+in vec2 coords;
+in vec3 ray;
 
 void main() {
     vec3 x = c;

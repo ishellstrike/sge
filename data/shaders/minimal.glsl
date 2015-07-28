@@ -30,8 +30,8 @@ uniform mat3 transform_N; // normal matrix
 uniform vec3 transform_viewPos;
 uniform vec3 transform_lightPos;
 
-float R = 1000;
-float s = 100;
+uniform float R = 1000;
+uniform float s = 100;
 
 #ifdef _VERTEX_
 in vec3 position;

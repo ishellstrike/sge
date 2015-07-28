@@ -53,6 +53,9 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     grad_shader->Use();
     grad_shader->Afterlink();
 
+    shader_r = glGetUniformLocation(basic->program, "R");
+    shader_s = glGetUniformLocation(basic->program, "s");
+
     const float res = 2048.0f;
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res}, false);

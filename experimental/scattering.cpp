@@ -28,6 +28,8 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 using namespace std;
+#include <glm/glm.hpp>
+using namespace glm;
 #include "scattering.h"
 #include <fstream>
 #include <sstream>
@@ -80,7 +82,7 @@ unsigned int loadProgram(const vector<string> &files)
     int n = files.size();
     string **strs = new string*[n];
     const char** lines = new const char*[n + 1];
-    LOG(info) << "loading program " << files[n - 1] << "...";
+    LOG(verbose) << "loading program " << files[n - 1] << "...";
     bool geo = false;
     for (int i = 0; i < n; ++i) {
         string* s = loadFile(files[i]);
@@ -91,7 +93,7 @@ unsigned int loadProgram(const vector<string> &files)
         }
     }
 
-    lines[0] = "#define _VERTEX_\n";
+    lines[0] = "#version 330 core\n#define _VERTEX_\n";
     glShaderSource(vertexShaderId, n + 1, lines, NULL);
     glCompileShader(vertexShaderId);
     printShaderLog(vertexShaderId);
@@ -99,7 +101,7 @@ unsigned int loadProgram(const vector<string> &files)
     if (geo) {
         unsigned geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER_EXT);
         glAttachShader(programId, geometryShaderId);
-        lines[0] = "#define _GEOMETRY_\n";
+        lines[0] = "#version 330 core\n#define _GEOMETRY_\n";
         glShaderSource(geometryShaderId, n + 1, lines, NULL);
         glCompileShader(geometryShaderId);
         printShaderLog(geometryShaderId);
@@ -108,7 +110,7 @@ unsigned int loadProgram(const vector<string> &files)
         glProgramParameteriEXT(programId, GL_GEOMETRY_VERTICES_OUT_EXT, 3);
     }
 
-    lines[0] = "#define _FRAGMENT_\n";
+    lines[0] = "#version 330 core\n#define _FRAGMENT_\n";
     glShaderSource(fragmentShaderId, n + 1, lines, NULL);
     glCompileShader(fragmentShaderId);
     printShaderLog(fragmentShaderId);
@@ -289,7 +291,12 @@ void Scattering::Precompute()
     glUniform1i(glGetUniformLocation(drawProg, "irradianceSampler"), irradianceUnit);
     glUniform1i(glGetUniformLocation(drawProg, "inscatterSampler"), inscatterUnit);
 
-    LOG(info) << "precomputations...";
+    LOG(verbose) << glGetUniformLocation(drawProg, "reflectanceSampler") << "; " <<
+                    glGetUniformLocation(drawProg, "transmittanceSampler") << "; " <<
+                    glGetUniformLocation(drawProg, "irradianceSampler") << "; " <<
+                    glGetUniformLocation(drawProg, "inscatterSampler") << "; ";
+
+    LOG(verbose) << "precomputations...";
 
     glGenFramebuffers(1, &fbo);
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
@@ -408,13 +415,13 @@ void Scattering::Precompute()
         glDisable(GL_BLEND);
     }
 
+    glFinish();
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, RESX, RESY);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glFinish();
+
     LOG(verbose) << "ready.";
 }
 
@@ -427,7 +434,7 @@ void Scattering::redisplayFunc(const Camera & cam)
 
     glm::mat4 iproj = glm::inverse(cam.Projection());
     glm::mat4 iview = glm::inverse(cam.View());
-    glm::vec4 c = iview * glm::vec4(1.f, 0.f, 0.f, 0.f);
+    glm::vec4 c = iview * glm::vec4(0.f, 0.f, 0.f, 0.f);
     glm::mat4 iviewf = glm::mat4(iview[0][0], iview[0][1], iview[0][2], iview[0][3],
             iview[1][0], iview[1][1], iview[1][2], iview[1][3],
             iview[2][0], iview[2][1], iview[2][2], iview[2][3],

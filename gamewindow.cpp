@@ -178,9 +178,11 @@ bool GameWindow::BaseInit()
     wm->normal = wn;
 
     qs = std::make_shared<QuadSphere>(basic, mat);
-    qs->max_divide = 6;
+    qs->max_divide = 5;
     qs_w = std::make_shared<QuadSphere>(water, wm);
-    qs_w->max_divide = 6;
+    qs_w->max_divide = 5;
+    qs_w->s = 1;
+    qs_w->R = 1010;
     wm->diffuse = Color::SeaBlue;
     wm->shininess = 80;
 

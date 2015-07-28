@@ -45,8 +45,10 @@ uniform float first;
 
 #ifdef _VERTEX_
 
+in vec3 position;
+
 void main() {
-    gl_Position = gl_Vertex;
+    gl_Position = vec4(position, 1);
 }
 
 #endif
