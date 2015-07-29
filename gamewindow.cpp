@@ -38,6 +38,7 @@ GameWindow::~GameWindow()
 
 bool GameWindow::BaseInit()
 {
+    srand(123);
     LOG(info) << "Jarg initialization start";
     LOG(info) << "User-preferred locale setting is " << std::locale("").name().c_str();
     glfwSetErrorCallback([](int /*a*/,const char* description){LOG(error) << description;});
@@ -191,8 +192,11 @@ bool GameWindow::BaseInit()
 
     scat.Precompute();
 
+    ss.system.push_back(std::make_shared<SpaceObject>(1000, 1 , glm::vec3{0,0,0}));
+    ss.system.push_back(std::make_shared<SpaceObject>(50, 1 , glm::vec3{1000,1000,1000}));
+    ss.system.back()->speed = glm::vec3(1000000,1000000,0);
     for(int i = 0 ; i < 10; i++)
-    ss.system.push_back(std::make_shared<SpaceObject>(trand<float>() * 1000, 1 , glm::vec3{trand<float>() * 300, trand<float>() * 300, trand<float>() * 300}));
+    ss.system.push_back(std::make_shared<SpaceObject>(trand<float>() * 1, 1 , glm::vec3{trand<float>() * 3000, trand<float>() * 3000, trand<float>() * 3000}));
 
     return true;
 }
@@ -286,8 +290,6 @@ void GameWindow::BaseDraw()
     glClearColor(100/255.f, 149/255.f, 237/255.f, 1.f);
     glClearColor(0,0,0, 1.f);
 
-
-
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     scat.redisplayFunc(*cam);
@@ -309,7 +311,6 @@ void GameWindow::BaseDraw()
     //qs_w->Render(*cam);
 
 
-
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     batch->setUniform(proj * model);
@@ -318,6 +319,7 @@ void GameWindow::BaseDraw()
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->drawText(std::to_string(glm::length(moving)).append(" km/s"), {0, 100}, f12.get(), {0,0,0,1});        
     batch->render();
+
 
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf((const GLfloat*)&cam->Projection());

@@ -1,6 +1,6 @@
 const float SUN_INTENSITY = 100.0;
 
-const vec3 earthPos = vec3(0.0, 0.0, 0.0);
+const vec3 earthPos = vec3(0.0, 0.0, 9000.0);
 
 // ----------------------------------------------------------------------------
 // PHYSICAL MODEL PARAMETERS

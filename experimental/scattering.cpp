@@ -126,13 +126,13 @@ unsigned int loadProgram(const vector<string> &files)
     return programId;
 }
 
-void drawQuad()
+void drawQuad(const vec4 &view = vec4(-1,-1,1,1))
 {
     glBegin(GL_TRIANGLE_STRIP);
-    glVertex2f(-1.0, -1.0);
-    glVertex2f(+1.0, -1.0);
-    glVertex2f(-1.0, +1.0);
-    glVertex2f(+1.0, +1.0);
+    glVertex2f(view.x, view.y);
+    glVertex2f(view.z, view.y);
+    glVertex2f(view.x, view.w);
+    glVertex2f(view.z, view.w);
     glEnd();
 }
 
@@ -431,6 +431,7 @@ float exposure = 0.4f;
 void Scattering::redisplayFunc(const Camera & cam)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0,0,0,1);
 
     glm::mat4 iproj = glm::inverse(cam.Projection());
     glm::mat4 iview = glm::inverse(cam.View());
@@ -447,4 +448,6 @@ void Scattering::redisplayFunc(const Camera & cam)
     glUniformMatrix4fv(glGetUniformLocation(drawProg, "viewInverse"), 1, true, &iviewf[0][0]);
     glUniform1f(glGetUniformLocation(drawProg, "exposure"), exposure);
     drawQuad();
+    glFinish();
+    glFlush();
 }

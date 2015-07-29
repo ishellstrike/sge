@@ -182,7 +182,7 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt)
     calcZ(syst);
 
     moving += (float)glm::abs(distance(pos, lpos));
-    if(moving >= m_R)
+    if(moving >= m_R*10)
     {
         cur_h++;
         if(cur_h >= max_h)
