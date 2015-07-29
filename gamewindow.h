@@ -21,6 +21,7 @@
 #include "sge_perfomance.h"
 #include "experimental/quadsphere.h"
 #include "experimental/scattering.h"
+#include "space/spacesystem.h"
 
 class GameWindow {
 public:
@@ -46,6 +47,7 @@ public:
 
     GameWindow();
     ~GameWindow();
+        SpaceSystem ss;
 
     std::shared_ptr<BasicJargShader> basic, water;
     std::shared_ptr<SpriteBatch> batch;

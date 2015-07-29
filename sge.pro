@@ -56,7 +56,9 @@ SOURCES += \
     sge_perfomance.cpp \
     FrameBuffer.cpp \
     TextureGenerator.cpp \
-    experimental/scattering.cpp
+    experimental/scattering.cpp \
+    space/space_object.cpp \
+    space/spacesystem.cpp
 
 VERSION = 0.1.0
 
@@ -136,7 +138,9 @@ HEADERS += \
     sge_fielsystem.h \
     experimental/sphereparamstorage.h \
     experimental/scattering.h \
-    data/shaders/scattering/scatter_params.h
+    data/shaders/scattering/scatter_params.h \
+    space/space_object.h \
+    space/spacesystem.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

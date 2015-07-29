@@ -18,6 +18,9 @@
 #include "resources/resourcecontroller.h"
 #include "TextureGenerator.h"
 #include "resources/random_noise.h"
+#include "space/space_object.h"
+#include "space/spacesystem.h"
+#include <glm/gtx/compatibility.hpp>
 
 #define MAJOR 2
 #define MINOR 1
@@ -188,6 +191,9 @@ bool GameWindow::BaseInit()
 
     scat.Precompute();
 
+    for(int i = 0 ; i < 10; i++)
+    ss.system.push_back(std::make_shared<SpaceObject>(trand<float>() * 1000, 1 , glm::vec3{trand<float>() * 300, trand<float>() * 300, trand<float>() * 300}));
+
     return true;
 }
 
@@ -287,10 +293,20 @@ void GameWindow::BaseDraw()
     scat.redisplayFunc(*cam);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    qs->Render(*cam);
-    water->Use();
-    glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    qs_w->Render(*cam);
+    for(int i = 0; i < ss.system.size(); i++)
+    {
+        qs->world = glm::translate(glm::mat4(1), glm::vec3(ss.system[i]->pos));
+        qs->s *= ss.system[i]->R()/qs->R*10;
+        qs->R = ss.system[i]->R()*10;
+        qs->Render(*cam);
+        ss.system[i]->Update(ss, gt);
+
+        batch->drawText(ss.system[i]->GetDebugInfo(), {250*i,0}, f12.get(), {1,0,1,1});
+    }
+
+    //water->Use();
+    //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
+    //qs_w->Render(*cam);
 
 
 
@@ -322,6 +338,20 @@ void GameWindow::BaseDraw()
         glVertex3f(0,0,0);
         glVertex3f(0,0,1);
     glEnd();
+
+    for(int i = 0; i < ss.system.size(); i++)
+    {
+        glBegin(GL_LINES);
+            for(int b = ss.system[i]->cur_h; b < ss.system[i]->max_h + ss.system[i]->cur_h; b++)
+            {
+                auto a = b % ss.system[i]->max_h;
+                if(a == 0) continue;
+                glColor4fv(&glm::lerp(Color::Clear, ss.system[i]->color, (b - ss.system[i]->cur_h)/(float)ss.system[i]->hist.size())[0]);
+                glVertex3dv(&ss.system[i]->hist[a-1][0]);
+                glVertex3dv(&ss.system[i]->hist[a][0]);
+            }
+        glEnd();
+    }
 
 //    glEnable(GL_DEPTH_TEST);
 //    glBegin(GL_LINES);

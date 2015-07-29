@@ -13,6 +13,6 @@ struct Material
     glm::vec4 diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
     glm::vec4 specular = glm::vec4(0.95f, 0.95f, 0.95f, 1.0f);
     float shininess = 80.0f;
-    float index_of_refraction = 1.33;
+    float index_of_refraction = 1.33f;
 };	
 #endif //MATERIAL_H
