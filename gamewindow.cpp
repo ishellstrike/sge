@@ -192,9 +192,9 @@ bool GameWindow::BaseInit()
 
     scat.Precompute();
 
-    ss.system.push_back(std::make_shared<SpaceObject>(1000, 1 , glm::vec3{0,0,0}));
-    ss.system.push_back(std::make_shared<SpaceObject>(1.23, 1 , glm::vec3{10,10,10}));
-    ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[1], ssolver::v_1<float>(*ss.system[0])*100000000);
+    ss.system.push_back(std::make_shared<SpaceObject>(1000, 5510 , glm::vec3{0,0,0}));
+    ss.system.push_back(std::make_shared<SpaceObject>(1.23, 3200 , glm::vec3{150,150,150}));
+    ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[1], ssolver::v_1<float>(*ss.system[0]));
 
     return true;
 }
@@ -340,19 +340,32 @@ void GameWindow::BaseDraw()
     glEnd();
 
     glEnable(GL_DEPTH_TEST);
+    glBegin(GL_LINES);
     for(int i = 0; i < ss.system.size(); i++)
     {
-        glBegin(GL_LINES);
-            for(int b = ss.system[i]->cur_h; b < ss.system[i]->max_h + ss.system[i]->cur_h - 1; b++)
+            for(int b = ss.system[i]->cur_h; b < ss.system[i]->max_h + ss.system[i]->cur_h; b++)
             {
                 auto a = b % ss.system[i]->max_h;
-                if(a == 0) continue;
+
                 glColor4fv(&glm::lerp(Color::Clear, ss.system[i]->color, (b - ss.system[i]->cur_h)/(float)ss.system[i]->hist.size())[0]);
-                glVertex3dv(&ss.system[i]->hist[a-1][0]);
-                glVertex3dv(&ss.system[i]->hist[a][0]);
+
+                if(a == ss.system[i]->max_h - 1)
+                {
+                    glVertex3dv(&ss.system[i]->hist[0][0]);
+                    glVertex3dv(&ss.system[i]->hist[ss.system[i]->max_h - 1][0]);
+                }
+                else
+                {
+                    glVertex3dv(&ss.system[i]->hist[a][0]);
+                    glVertex3dv(&ss.system[i]->hist[a+1][0]);
+                }
             }
-        glEnd();
+
+            glColor4fv(&Color::Red[0]);
+            glVertex3dv(&ss.system[i]->pos[0]);
+            glVertex3dv(&(ss.system[i]->pos + ss.system[i]->speed)[0]);
     }
+    glEnd();
 
 //    glEnable(GL_DEPTH_TEST);
 //    glBegin(GL_LINES);

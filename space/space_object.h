@@ -21,8 +21,10 @@ public:
     const int max_h = 1000;
     int cur_h = 0;
 
-    double ro() const; /*< density*/
+    double ro() const; /*< density kg/m^3*/
     void ro(double __ro);
+    double ro_si() const; /*< density g/cm^3*/
+    void ro_si(double __ro);
 
     double V() const; /*< volume (indirect)*/
 
@@ -34,10 +36,10 @@ public:
     double fx(double local_x, SpaceSystem &syst);
     double fy(double local_y, SpaceSystem &syst);
     double fz(double local_y, SpaceSystem &syst);
-    void calcX(SpaceSystem &syst);
-    void calcY(SpaceSystem &syst);
-    void calcZ(SpaceSystem &syst);
-    const double T = 0.0000001;
+    void calcX(SpaceSystem &syst, GameTimer &gt);
+    void calcY(SpaceSystem &syst, GameTimer &gt);
+    void calcZ(SpaceSystem &syst, GameTimer &gt);
+    const double T = 0.0001;
 
     std::string GetDebugInfo();
 
@@ -47,6 +49,7 @@ private:
     double m_R = 1.0;
     double m_ro = 1.0;
     double m_V = 1.0;
+
     void BuildVR();
 };
 
