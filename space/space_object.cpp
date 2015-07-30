@@ -4,18 +4,6 @@
 #include "helper.h"
 #include "gametimer.h"
 
-#ifndef FAST_GLM
-#define sqrt glm::sqrt
-#define distance glm::distance
-#define rsqrt glm::inverseSqrt
-#define normalize glm::normalize
-#else
-#define sqrt glm::fastSqrt
-#define distance glm::fastDistance
-#define rsqrt glm::fastInverseSqrt
-#define normalize glm::fastNormalize
-#endif
-
 SpaceObject::SpaceObject()
 {
 
@@ -31,7 +19,7 @@ SpaceObject::SpaceObject(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0)
 void SpaceObject::BuildVR()
 {
     m_V = m_mass / m_ro;
-    m_R = glm::pow( ( ( V() / glm::pi<double>() ) * (3.0 / 4.0) ), 1.0 / 3.0 );
+    m_R = pow( ( ( V() / glm::pi<double>() ) * (3.0 / 4.0) ), 1.0 / 3.0 );
 }
 
 
@@ -76,8 +64,8 @@ double SpaceObject::fx(double local_x, SpaceSystem &syst)
         double dy = a.pos.y - pos.y;
         double dz = a.pos.z - pos.z;
         double r = sqrt( dx*dx + dy*dy + dz*dz );
-        if(r > m_R)
-            d += glm::pow( a.mass() * ( a.pos.x - local_x ) / r, 3.0 );
+      //  if(r > m_R + a.m_R)
+            d += pow( a.mass() * ( a.pos.x - local_x ) / r, 3.0 );
     }
 
     return d;
@@ -94,8 +82,8 @@ double SpaceObject::fy(double local_y, SpaceSystem &syst)
         double dy = a.pos.y - local_y;
         double dz = a.pos.z - pos.z;
         double r = sqrt( dx*dx + dy*dy + dz*dz );
-        if(r > m_R)
-            d += glm::pow( a.mass() * ( a.pos.y - local_y ) / r, 3.0 );
+      //  if(r > m_R + a.m_R)
+            d += pow( a.mass() * ( a.pos.y - local_y ) / r, 3.0 );
     }
 
     return d;
@@ -112,8 +100,8 @@ double SpaceObject::fz(double local_z, SpaceSystem &syst)
         double dy = a.pos.y - pos.y;
         double dz = a.pos.z - local_z;
         double r = sqrt( dx*dx + dy*dy + dz*dz );
-        if(r > m_R)
-            d += glm::pow( a.mass() * ( a.pos.y - local_z ) / r, 3.0 );
+      //  if(r > m_R + a.m_R)
+            d += pow( a.mass() * ( a.pos.y - local_z ) / r, 3.0 );
     }
 
     return d;
@@ -177,12 +165,15 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt)
 {
     glm::dvec3 lpos = pos;
 
-    calcX(syst);
-    calcY(syst);
-    calcZ(syst);
+    for(int i = 1; i < 1000 ; i++)
+    {
+        calcX(syst);
+        calcY(syst);
+        calcZ(syst);
+    }
 
     moving += (float)glm::abs(distance(pos, lpos));
-    if(moving >= m_R*10)
+    if(moving >= m_R*2)
     {
         cur_h++;
         if(cur_h >= max_h)

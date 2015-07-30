@@ -65,12 +65,15 @@ inline void get_uvs(unsigned int apos, float &q, float &w, float &qq, float &ww)
     qq += q - 2 / 2048.f; ww += w - 2 / 2048.f;
 }
 
-inline glm::vec4 lerp(glm::vec4 &a, glm::vec4 &b, float a_percent){
+
+template<typename T>
+T lerp(T &a, T &b, float a_percent){
     return a_percent * a + (1.0f - a_percent) * b;
 }
 
-inline glm::vec3 lerp(glm::vec3 &a, glm::vec3 &b, float a_percent){
-    return a_percent * a + (1.0f - a_percent) * b;
+template<typename T>
+T lerp(T &a, T &b, double a_percent){
+    return a_percent * a + (1.0 - a_percent) * b;
 }
 
 inline std::string wstring_to_string(const std::wstring &wstr)

@@ -140,7 +140,8 @@ HEADERS += \
     experimental/scattering.h \
     data/shaders/scattering/scatter_params.h \
     space/space_object.h \
-    space/spacesystem.h
+    space/spacesystem.h \
+    space/space_solver.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

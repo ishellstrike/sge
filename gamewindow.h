@@ -22,6 +22,7 @@
 #include "experimental/quadsphere.h"
 #include "experimental/scattering.h"
 #include "space/spacesystem.h"
+#include "space/space_solver.h"
 
 class GameWindow {
 public:

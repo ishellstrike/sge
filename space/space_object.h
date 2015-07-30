@@ -4,6 +4,7 @@
 #include <glm/gtx/common.hpp>
 #include "spacesystem.h"
 #include "gametimer.h"
+#include "space_solver.h"
 
 class SpaceObject
 {
@@ -23,9 +24,9 @@ public:
     double ro() const; /*< density*/
     void ro(double __ro);
 
-    double V() const; /*< volume (undirect)*/
+    double V() const; /*< volume (indirect)*/
 
-    double R() const; /*< radius (undirect)*/
+    double R() const; /*< radius (indirect)*/
 
     double mass() const; /*< mass*/
     void mass(double __mass);
@@ -36,7 +37,7 @@ public:
     void calcX(SpaceSystem &syst);
     void calcY(SpaceSystem &syst);
     void calcZ(SpaceSystem &syst);
-    const double T = 0.00001;
+    const double T = 0.0000001;
 
     std::string GetDebugInfo();
 

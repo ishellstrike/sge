@@ -193,10 +193,8 @@ bool GameWindow::BaseInit()
     scat.Precompute();
 
     ss.system.push_back(std::make_shared<SpaceObject>(1000, 1 , glm::vec3{0,0,0}));
-    ss.system.push_back(std::make_shared<SpaceObject>(50, 1 , glm::vec3{1000,1000,1000}));
-    ss.system.back()->speed = glm::vec3(1000000,1000000,0);
-    for(int i = 0 ; i < 10; i++)
-    ss.system.push_back(std::make_shared<SpaceObject>(trand<float>() * 1, 1 , glm::vec3{trand<float>() * 3000, trand<float>() * 3000, trand<float>() * 3000}));
+    ss.system.push_back(std::make_shared<SpaceObject>(1.23, 1 , glm::vec3{10,10,10}));
+    ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[1], ssolver::v_1<float>(*ss.system[0])*100000000);
 
     return true;
 }
@@ -341,10 +339,11 @@ void GameWindow::BaseDraw()
         glVertex3f(0,0,1);
     glEnd();
 
+    glEnable(GL_DEPTH_TEST);
     for(int i = 0; i < ss.system.size(); i++)
     {
         glBegin(GL_LINES);
-            for(int b = ss.system[i]->cur_h; b < ss.system[i]->max_h + ss.system[i]->cur_h; b++)
+            for(int b = ss.system[i]->cur_h; b < ss.system[i]->max_h + ss.system[i]->cur_h - 1; b++)
             {
                 auto a = b % ss.system[i]->max_h;
                 if(a == 0) continue;

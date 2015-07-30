@@ -218,7 +218,7 @@ void main() {
     vec3 inscatterColor = inscatter(x, t, v, s, r, mu, attenuation); //S[L]-T(x,xs)S[l]|xs
     vec3 groundColor = groundColor(x, t, v, s, r, mu, attenuation); //R[L0]+R[L*]
     vec3 sunColor = sunColor(x, t, v, s, r, mu); //L0
-    gl_FragColor = vec4(1,0,0,1);//vec4(HDR(sunColor + groundColor + inscatterColor), 1.0); // Eq (16)
+    gl_FragColor = vec4(HDR(sunColor + groundColor + inscatterColor), 1.0); // Eq (16)
 
 
     //gl_FragColor = texture3D(inscatterSampler,vec3(coords,(s.x+1.0)/2.0));
