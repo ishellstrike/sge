@@ -122,7 +122,7 @@ double SpaceObject::fz(double local_z, SpaceSystem &syst)
     return d;
 }
 
-void SpaceObject::calcX(SpaceSystem &syst, GameTimer &gt)
+void SpaceObject::rk4_x(SpaceSystem &syst, GameTimer &gt)
 {
     double k1 = gt.elapsed * T * fx(pos.x, syst);
     double q1 = gt.elapsed * T * speed.x;
@@ -140,7 +140,7 @@ void SpaceObject::calcX(SpaceSystem &syst, GameTimer &gt)
     pos.x += (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0;
 }
 
-void SpaceObject::calcY(SpaceSystem &syst, GameTimer &gt)
+void SpaceObject::rk4_y(SpaceSystem &syst, GameTimer &gt)
 {
     double k1 = gt.elapsed * T * fy(pos.y, syst);
     double q1 = gt.elapsed * T * speed.y;
@@ -158,7 +158,7 @@ void SpaceObject::calcY(SpaceSystem &syst, GameTimer &gt)
     pos.y += (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0;
 }
 
-void SpaceObject::calcZ(SpaceSystem &syst, GameTimer &gt)
+void SpaceObject::rk4_z(SpaceSystem &syst, GameTimer &gt)
 {
     double k1 = gt.elapsed * T * fz(pos.z, syst);
     double q1 = gt.elapsed * T * speed.z;
@@ -180,14 +180,14 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt)
 {
     glm::dvec3 lpos = pos;
 
-        calcX(syst, gt);
-        calcY(syst, gt);
-        calcZ(syst, gt);
+        rk4_x(syst, gt);
+        rk4_y(syst, gt);
+        rk4_z(syst, gt);
 
     hist[cur_h] = pos;
 
     last += gt.elapsed;
-    moving += (float)glm::abs(distance(pos, lpos));
+    //moving += (float)glm::abs(distance(pos, lpos));
     //if(moving >= m_R*2)
     if(last >= 0.2)
     {

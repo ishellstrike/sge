@@ -43,7 +43,7 @@ namespace ssolver
     T v_3( const SpaceObject &o )
     {
         //v_3=\sqrt{(\sqrt{2}-1)^2 v^2+v_2^2}
-        return sqrt( pow((sqrt(2) - 1), 2) * pow(v_1<T>(o), 2) + pow(compute2stSpeed<T>(o), 2));
+        return sqrt( pow((sqrt(2) - 1), 2) * pow(v_1<T>(o), 2) + pow(v_2<T>(o), 2));
     }
 
     template<typename T>

@@ -36,9 +36,9 @@ public:
     double fx(double local_x, SpaceSystem &syst);
     double fy(double local_y, SpaceSystem &syst);
     double fz(double local_y, SpaceSystem &syst);
-    void calcX(SpaceSystem &syst, GameTimer &gt);
-    void calcY(SpaceSystem &syst, GameTimer &gt);
-    void calcZ(SpaceSystem &syst, GameTimer &gt);
+    void rk4_x(SpaceSystem &syst, GameTimer &gt);
+    void rk4_y(SpaceSystem &syst, GameTimer &gt);
+    void rk4_z(SpaceSystem &syst, GameTimer &gt);
     const double T = 0.0001;
 
     std::string GetDebugInfo();
