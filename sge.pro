@@ -58,7 +58,8 @@ SOURCES += \
     TextureGenerator.cpp \
     experimental/scattering.cpp \
     space/space_object.cpp \
-    space/spacesystem.cpp
+    space/spacesystem.cpp \
+    random.cpp
 
 VERSION = 0.1.0
 
@@ -141,7 +142,8 @@ HEADERS += \
     data/shaders/scattering/scatter_params.h \
     space/space_object.h \
     space/spacesystem.h \
-    space/space_solver.h
+    space/space_solver.h \
+    random.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

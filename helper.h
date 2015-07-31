@@ -16,6 +16,7 @@
 #include <sstream>
 #include <stdarg.h>
 #include <stdio.h>
+#include "random.h"
 
 #ifdef NNNDEBUG
 #define OPENGL_CHECK_ERRORS() \
@@ -188,12 +189,6 @@ inline std::string to_traf_string(double traf){
         return string_format("%2f KiB", traf / 1024.0);
     }
     return string_format("%i B", (int)traf);
-}
-
-template <typename T>
-T trand()
-{
-    return rand()/static_cast<T>(RAND_MAX);
 }
 
 namespace glm {

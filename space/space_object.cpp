@@ -3,6 +3,7 @@
 #include <glm/gtx/fast_square_root.hpp>
 #include "helper.h"
 #include "gametimer.h"
+#include <random>
 
 SpaceObject::SpaceObject()
 {
@@ -19,7 +20,7 @@ SpaceObject::SpaceObject(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0)
 {
     BuildVR();
     hist.resize(max_h);
-    color = glm::vec4(rand()%255/255.0f + 0.5f, rand()%255/255.0f + 0.5f, rand()%255/255.0f + 0.5f, 1.0f);
+    color = glm::vec4(random::next<float>() + 0.5f, random::next<float>() + 0.5f, random::next<float>() + 0.5f, 1.0f);
 }
 
 void SpaceObject::BuildVR()
