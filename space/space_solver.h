@@ -19,51 +19,66 @@
 namespace ssolver
 {
 
-    template<typename T = double>
-    T G()
+    template<typename _Ty = double>
+    _Ty G()
     {
-        return T( 6.674083131313131313131e-11 );
+        return _Ty( 6.674083131313131313131e-11 );
     }
 
-    template<typename T = double>
-    T v_1( const SpaceObject &o )
+    template<typename _Ty = double>
+    _Ty v_1( const SpaceObject &o )
     {
         //v_1=\sqrt{G\frac{M}{R}}
-        return sqrt( G<T>() * ( o.mass() / o.R() ) );
+        return sqrt( G<_Ty>() * ( o.mass<_Ty>() / o.R<_Ty>() ) );
     }
 
-    template<typename T = double>
-    T v_2( const SpaceObject &o )
+    template<typename _Ty = double>
+    _Ty v_2( const SpaceObject &o )
     {
         //v_2=\sqrt{2G\frac{M}{R}}
-        return sqrt( 2 * G<T>() * ( o.mass() / o.R() ) );
+        return sqrt( 2 * G<_Ty>() * ( o.mass<_Ty>() / o.R<_Ty>() ) );
     }
 
-    template<typename T = double>
-    T v_3( const SpaceObject &o )
+    template<typename _Ty = double>
+    _Ty v_3( const SpaceObject &o )
     {
         //v_3=\sqrt{(\sqrt{2}-1)^2 v^2+v_2^2}
-        return sqrt( pow((sqrt(2) - 1), 2) * pow(v_1<T>(o), 2) + pow(v_2<T>(o), 2));
+        return sqrt( pow((sqrt(2) - 1), 2) * pow(v_1<_Ty>(o), 2) + pow(v_2<_Ty>(o), 2));
     }
 
-    template<typename T = double>
-    T randomize_orbital( const SpaceObject &o )
+    template<typename _Ty = double>
+    _Ty randomize_orbital( const SpaceObject &o )
     {
-        T r  = random::next<T>( );
-        T v1 =          v_1<T>(o);
-        T v2 =          v_2<T>(o);
+        _Ty r  = random::next<_Ty>( );
+        _Ty v1 =          v_1<_Ty>(o);
+        _Ty v2 =          v_2<_Ty>(o);
 
         return lerp( v1, v2, r );
     }
 
-    template<typename T = double>
-    glm::tvec3<T, glm::defaultp> make_orbital_vector(const SpaceObject &cen, const SpaceObject &sat, T speed)
+    template<typename _Ty = double>
+    glm::tvec3<_Ty, glm::defaultp> make_orbital_vector(const SpaceObject &cen, const SpaceObject &sat, _Ty speed)
     {
-        typedef glm::tvec3<T, glm::defaultp> vec;
+        typedef glm::tvec3<_Ty, glm::defaultp> vec;
 
-        vec set_to_cen = cen.pos - sat.pos;
-        vec perp = glm::rotate<T, glm::defaultp>(set_to_cen, glm::half_pi<T>(), vec(1,0,0));
+        vec set_to_cen = sat.pos - cen.pos;
+        vec perp = glm::rotate<_Ty, glm::defaultp>(set_to_cen, glm::half_pi<_Ty>(), vec(0,1,0));
         return perp * speed;
+    }
+
+    template<typename _Ty>
+    glm::tvec3<_Ty, glm::defaultp> sphere_surface(_Ty R)
+    {
+        typedef glm::tvec3<_Ty, glm::defaultp> vec;
+
+        _Ty A = glm::two_pi<_Ty>() * random::next<_Ty>();
+        _Ty gamma = glm::two_pi<_Ty>() * random::next<_Ty>();
+
+        _Ty x = R * cos(gamma) * cos(A);
+        _Ty y = R * cos(gamma) * sin(A);
+        _Ty z = R * sin(gamma);
+
+        return vec(x, y, z);
     }
 }
 

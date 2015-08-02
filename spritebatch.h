@@ -41,9 +41,9 @@ public:
 
     glm::mat4 uniform;
 
-    std::shared_ptr<JargShader> font_program = std::shared_ptr<JargShader>(new JargShader()),
-                                basic_program = std::shared_ptr<JargShader>(new JargShader()),
-                                color_program = std::shared_ptr<JargShader>(new JargShader()),
+    std::shared_ptr<Shader> font_program = std::shared_ptr<Shader>(new Shader()),
+                                basic_program = std::shared_ptr<Shader>(new Shader()),
+                                color_program = std::shared_ptr<Shader>(new Shader()),
                                 current_program;
     glm::vec2 scis_min, scis_size;
 

@@ -24,6 +24,7 @@
 
 #define MAJOR 2
 #define MINOR 1
+#define NO_SCATT
 
 GameWindow::GameWindow()
 {
@@ -190,27 +191,28 @@ bool GameWindow::BaseInit()
     wm->diffuse = Color::SeaBlue;
     wm->shininess = 80;
 
+#ifndef NO_SCATT
     scat.Precompute();
+#endif
 
-    ss.system.push_back(std::make_shared<SpaceObject>(1000, 5510 , glm::vec3{0,0,0}));
-    ss.system.push_back(std::make_shared<SpaceObject>(1.23, 3200 , glm::vec3{150,150,150}));
-    ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[1], ssolver::v_1<float>(*ss.system[0]));
+#ifndef NO_STARFIELD
+    sf = std::unique_ptr<Starfield>(new Starfield());
+#endif
+
+    ss.system.push_back(std::make_shared<SpaceObject>(1000.f, 5510.f , glm::vec3{0,0,0}));
+
+    for(int i = 0; i < 40; i++)
+    {
+        ss.system.push_back(std::make_shared<SpaceObject>(random::next<float>()+1,
+                                                          3200.f,
+                                                          glm::vec3{random::next<float>()*30 - 15,
+                                                                    random::next<float>()*30 - 15,
+                                                                    random::next<float>()*30 - 15}));
+
+        ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital(*ss.system[0])*1000);
+    }
 
     return true;
-}
-
-std::vector<glm::vec3> getTail(glm::vec3 start, glm::vec3 delta)
-{
-    int sss = 100000;
-    std::vector<glm::vec3> a;
-    a.resize(sss);
-    for(int i = 0; i < sss; ++i)
-    {
-        a.push_back(start);
-        start += delta*1.0f;
-        delta += glm::normalize(-start)*0.009f;
-    }
-    return a;
 }
 
 void GameWindow::BaseUpdate()
@@ -229,7 +231,7 @@ void GameWindow::BaseUpdate()
 
     cam->camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
 
-    cam->camera_scale /= Keyboard::isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 100.f : 1.f;
+    cam->camera_scale /= Keyboard::isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 10.f : 1.f;
 
     if(Keyboard::isKeyDown(GLFW_KEY_W))
         cam->Move(Camera::FORWARD);
@@ -288,20 +290,29 @@ void GameWindow::BaseDraw()
     glClearColor(100/255.f, 149/255.f, 237/255.f, 1.f);
     glClearColor(0,0,0, 1.f);
 
+#ifndef NO_SCATT
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     scat.redisplayFunc(*cam);
+#endif
+
+#ifndef NO_STARFIELD
+    sf->Render(*cam);
+#endif
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    for(int i = 0; i < ss.system.size(); i++)
+    for(size_t i = 0; i < ss.system.size(); i++)
     {
         qs->world = glm::translate(glm::mat4(1), glm::vec3(ss.system[i]->pos));
-        qs->s *= ss.system[i]->R()/qs->R*10;
-        qs->R = ss.system[i]->R()*10;
+        qs->s *= ss.system[i]->R<float>()/qs->R*10;
+        qs->R = ss.system[i]->R<float>()*10;
         qs->Render(*cam);
-        ss.system[i]->Update(ss, gt);
+    }
 
-        batch->drawText(ss.system[i]->GetDebugInfo(), {250*i,0}, f12.get(), {1,0,1,1});
+    //for(size_t j = 0; j < 100; ++j)
+    for(size_t i = 0; i < ss.system.size(); i++)
+    {
+        ss.system[i]->Update(ss, gt);
     }
 
     //water->Use();
@@ -314,8 +325,7 @@ void GameWindow::BaseDraw()
     batch->setUniform(proj * model);
 
     ws->Draw();
-    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
-    batch->drawText(std::to_string(glm::length(moving)).append(" km/s"), {0, 100}, f12.get(), {0,0,0,1});        
+    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});   
     batch->render();
 
 
@@ -341,7 +351,7 @@ void GameWindow::BaseDraw()
 
     glEnable(GL_DEPTH_TEST);
     glBegin(GL_LINES);
-    for(int i = 0; i < ss.system.size(); i++)
+    for(size_t i = 0; i < ss.system.size(); i++)
     {
             for(int b = ss.system[i]->cur_h; b < ss.system[i]->max_h + ss.system[i]->cur_h; b++)
             {
@@ -351,19 +361,29 @@ void GameWindow::BaseDraw()
 
                 if(a == ss.system[i]->max_h - 1)
                 {
-                    glVertex3dv(&ss.system[i]->hist[0][0]);
-                    glVertex3dv(&ss.system[i]->hist[ss.system[i]->max_h - 1][0]);
+                    if(ss.system[i]->hist[0] != glm::dvec3(0) && ss.system[i]->hist[ss.system[i]->max_h - 1] != glm::dvec3(0))
+                    {
+                        glVertex3dv(&ss.system[i]->hist[0][0]);
+                        glVertex3dv(&ss.system[i]->hist[ss.system[i]->max_h - 1][0]);
+                    }
                 }
                 else
                 {
-                    glVertex3dv(&ss.system[i]->hist[a][0]);
-                    glVertex3dv(&ss.system[i]->hist[a+1][0]);
+                    if(ss.system[i]->hist[a] != glm::dvec3(0) && ss.system[i]->hist[a+1] != glm::dvec3(0))
+                    {
+                        glVertex3dv(&ss.system[i]->hist[a][0]);
+                        glVertex3dv(&ss.system[i]->hist[a+1][0]);
+                    }
                 }
             }
 
-            glColor4fv(&Color::Red[0]);
-            glVertex3dv(&ss.system[i]->pos[0]);
-            glVertex3dv(&(ss.system[i]->pos + ss.system[i]->speed)[0]);
+//            glColor4fv(&Color::Red[0]);
+//            glVertex3dv(&ss.system[i]->pos[0]);
+//            glVertex3dv(&(ss.system[i]->pos + ss.system[i]->speed)[0]);
+
+//            glColor4fv(&Color::Green[0]);
+//            glVertex3dv(&ss.system[i]->pos[0]);
+//            glVertex3dv(&(ss.system[i]->pos + ss.system[i]->acc)[0]);
     }
     glEnd();
 

@@ -51,5 +51,5 @@ void BasicJargShader::Afterlink()
 
     glUniformMatrix4fv(viewPosition_location,  1, GL_FALSE,  &glm::translate(glm::mat4(1), glm::vec3(2.f,2.f,2.f))[0][0]);
 
-    JargShader::Afterlink();
+    Shader::Afterlink();
 }

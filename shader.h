@@ -12,10 +12,10 @@
  * can load adn compile programs from source
  * automatically release owning ogl resources
  */
-class JargShader{
+class Shader{
 public:
-    JargShader();
-    ~JargShader(void);
+    Shader();
+    ~Shader(void);
     std::string name;
     std::vector<int> vars; /*!< stored uniforms locations */
     void Use() const;

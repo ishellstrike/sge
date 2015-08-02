@@ -4,17 +4,9 @@
 
 #include "../colorextender.h"
 #include <glm/glm.hpp>
-
-enum BufferType
-{
-    BUFFER_TYPE_VERTEX,
-    BUFFER_TYPE_TEXTCOORD,
-    BUFFER_TYPE_NORMALE,
-    BUFFER_TYPE_COLOR,
-};
+#include "vertexinfo.h"
 
 struct VertexPositionTexture{
-public:
     glm::vec3 position;
     glm::vec2 uv;
     VertexPositionTexture(glm::vec3 __v, glm::vec3 __p , glm::vec2 __u);
@@ -39,7 +31,6 @@ public:
  * @brief The VPNTBT struct. Vertex position normal tangent binormal texture
  */
 struct VertPosNormUvUv{
-public:
     glm::vec3 position;
     glm::vec3 normal;
     glm::vec2 uv;
@@ -69,12 +60,47 @@ public:
         b.normal = normal / __a;
         return b;
     }
+
+    static VertexInfo info;
+};
+
+/**
+ * @brief The VPNTBT struct. Vertex position normal tangent binormal texture
+ */
+struct VertPosUvUv{
+    glm::vec3 position;
+    glm::vec2 uv;
+    glm::vec2 uv_glob;
+    VertPosUvUv(glm::vec3 __pos, glm::vec2 __uv);
+    VertPosUvUv(glm::vec3 __pos, glm::vec2 __uv, glm::vec2 __uv2);
+    VertPosUvUv();
+    ~VertPosUvUv();
+
+    VertPosUvUv operator + (VertPosUvUv __a) const
+    {
+        VertPosUvUv b;
+        b.position = position + __a.position;
+        b.uv = __a.uv + uv;
+        b.uv_glob = __a.uv_glob + uv_glob;
+        return b;
+    }
+
+    VertPosUvUv operator / (float __a) const
+    {
+        VertPosUvUv b;
+        b.position = position / __a;
+        b.uv = uv / __a;
+        b.uv_glob = uv_glob / __a;
+        return b;
+    }
+
+    static VertexInfo info;
 };
 
 /**
  * @brief The VPNTBT struct. Vertex position bytenormal texture
  */
-struct VertPosMininormTex{
+class VertPosMininormTex{
 public:
     glm::vec3 position;
     unsigned char normal;
@@ -101,7 +127,7 @@ public:
     }
 };
 
-struct VertexPositionColor{
+class VertexPositionColor{
 public:
     glm::vec3 pos;
     glm::vec4 col;

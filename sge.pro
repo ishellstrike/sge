@@ -59,7 +59,11 @@ SOURCES += \
     experimental/scattering.cpp \
     space/space_object.cpp \
     space/spacesystem.cpp \
-    random.cpp
+    random.cpp \
+    experimental/starfield.cpp \
+    geometry/umesh.cpp \
+    geometry/vertex.cpp \
+    geometry/vertexinfo.cpp
 
 VERSION = 0.1.0
 
@@ -143,7 +147,11 @@ HEADERS += \
     space/space_object.h \
     space/spacesystem.h \
     space/space_solver.h \
-    random.h
+    random.h \
+    experimental/starfield.h \
+    geometry/umesh.h \
+    geometry/vertex.h \
+    geometry/vertexinfo.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -176,4 +184,5 @@ DISTFILES += \
     data/shaders/scattering/inscatterS.glsl \
     data/shaders/scattering/irradiance1.glsl \
     data/shaders/scattering/irradianceN.glsl \
-    data/shaders/scattering/transmittance.glsl
+    data/shaders/scattering/transmittance.glsl \
+    data/shaders/starfield.glsl

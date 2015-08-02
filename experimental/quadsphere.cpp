@@ -29,7 +29,7 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     for(int i = 0; i < 6; i++)
     {
         plane[i] = std::make_shared<QuadPlane>();
-        plane[i]->terminal_mesh = std::make_shared<Mesh>();
+        plane[i]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
     }
 
 
@@ -43,14 +43,12 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     height_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/testgen1.glsl");
     height_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/testgen1.glsl");
     height_shader->Link();
-    height_shader->Use();
     height_shader->Afterlink();
 
     grad_shader = std::make_shared<BasicJargShader>();
     grad_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/gradient_builder.glsl");
     grad_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/gradient_builder.glsl");
     grad_shader->Link();
-    grad_shader->Use();
     grad_shader->Afterlink();
 
     shader_r = glGetUniformLocation(basic->program, "R");

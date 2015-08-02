@@ -26,20 +26,34 @@ public:
     double ro_si() const; /*< density g/cm^3*/
     void ro_si(double __ro);
 
-    double V() const; /*< volume (indirect)*/
+    template <typename _Ty = double>
+    _Ty V() const /*< volume (indirect)*/
+    {
+        return _Ty(m_V);
+    }
 
-    double R() const; /*< radius (indirect)*/
+    template <typename _Ty = double>
+    _Ty R() const /*< radius (indirect)*/
+    {
+        return _Ty(m_R);
+    }
 
-    double mass() const; /*< mass*/
+    template <typename _Ty = double>
+    _Ty mass() const /*< mass*/
+    {
+        return _Ty(m_mass);
+    }
+
+
     void mass(double __mass);
 
     double fx(double local_x, SpaceSystem &syst);
     double fy(double local_y, SpaceSystem &syst);
     double fz(double local_y, SpaceSystem &syst);
-    void rk4_x(SpaceSystem &syst, GameTimer &gt);
-    void rk4_y(SpaceSystem &syst, GameTimer &gt);
-    void rk4_z(SpaceSystem &syst, GameTimer &gt);
-    const double T = 0.0001;
+    void rk4_x(SpaceSystem &syst, GameTimer &);
+    void rk4_y(SpaceSystem &syst, GameTimer &);
+    void rk4_z(SpaceSystem &syst, GameTimer &);
+    const double T = 0.03;
 
     std::string GetDebugInfo();
 

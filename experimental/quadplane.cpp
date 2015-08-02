@@ -13,246 +13,9 @@ int GetLevel()
     return 1;
 }
 
-#define parent_pos \
-    PARTS n; \
-    if(parent->m_parts[0].get() == this) \
-        n = QuadPlane::PARTS::TL; \
-    if(parent->m_parts[1].get() == this) \
-        n = QuadPlane::PARTS::TR; \
-    if(parent->m_parts[2].get() == this) \
-        n = QuadPlane::PARTS::DL; \
-    if(parent->m_parts[3].get() == this) \
-        n = QuadPlane::PARTS::DR;
-
-std::vector<QuadPlane::PARTS> mirrorX(std::vector<QuadPlane::PARTS> &__a)
-{
-    std::vector<QuadPlane::PARTS> b;
-    for(auto a : __a)
-    {
-        b.push_back(a == QuadPlane::PARTS::TR ?
-                         QuadPlane::PARTS::TL :
-                    a == QuadPlane::PARTS::TL ?
-                         QuadPlane::PARTS::TR :
-                    a == QuadPlane::PARTS::DL ?
-                         QuadPlane::PARTS::DR :
-                         QuadPlane::PARTS::DL);
-    }
-    return b;
-}
-
-std::vector<QuadPlane::PARTS> mirrorY(std::vector<QuadPlane::PARTS> &__a)
-{
-    std::vector<QuadPlane::PARTS> b;
-    for(auto a : __a)
-    {
-        b.push_back(a == QuadPlane::PARTS::TR ?
-                         QuadPlane::PARTS::DR :
-                    a == QuadPlane::PARTS::TL ?
-                         QuadPlane::PARTS::DL :
-                    a == QuadPlane::PARTS::DL ?
-                         QuadPlane::PARTS::TL :
-                         QuadPlane::PARTS::DR);
-    }
-    return b;
-}
-
-QuadPlane *getRoot(QuadPlane *leaf)
-{
-    QuadPlane *pre = leaf;
-    while(leaf)
-    {
-        pre = leaf;
-        leaf = leaf->parent;
-    }
-    return pre;
-}
-
-QuadPlane *passRoute(QuadPlane *root, std::vector<QuadPlane::PARTS> &route)
-{
-    std::vector<QuadPlane::PARTS> remain_route = route;
-    while(root && remain_route.size())
-    {
-        QuadPlane::PARTS part = *(--remain_route.end());
-        remain_route.pop_back();
-        if(root->m_parts[part])
-            root = root->m_parts[part].get();
-    }
-    return root;
-}
-
-std::vector<QuadPlane *> QuadPlane::getRoute()
-{
-    std::vector<QuadPlane *> a;
-    if(parent)
-    {
-        parent_pos
-
-        Neighbours nei_x, nei_y;
-        switch(n)
-        {
-        case TL:
-            a.push_back(m_parts[TR].get());a.push_back(m_parts[DL].get());
-            nei_x = LEFT_N; nei_y = TOP_N;
-            break;
-        case TR:
-            a.push_back(m_parts[TL].get());a.push_back(m_parts[DR].get());
-            nei_x = RIGHT_N; nei_y = TOP_N;
-            break;
-        case DL:
-            a.push_back(m_parts[DR].get());a.push_back(m_parts[TL].get());
-            nei_x = LEFT_N; nei_y = BOTTOM_N;
-            break;
-        case DR:
-            a.push_back(m_parts[DL].get());a.push_back(m_parts[TR].get());
-            nei_x = RIGHT_N; nei_y = BOTTOM_N;
-            break;
-        }
-
-        auto root = getRoot(this);
-
-        {
-            std::vector<PARTS> pt;
-            getRoute(this, pt, nei_x);
-            auto xm = mirrorX(pt);
-            a.push_back(passRoute(root, xm));
-        }
-        {
-            std::vector<PARTS> pt;
-            getRoute(this, pt, nei_y);
-            auto ym = mirrorY(pt);
-            a.push_back(passRoute(root, ym));
-        }
-    }
-    else
-        return {0,0,0,0};
-    return a;
-}
-
-void QuadPlane::getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours that_neib)
-{
-    if(from->parent)
-    {
-        parent_pos
-
-        path.push_back(n);
-        if((that_neib == TR && n == BOTTOM_N) || (that_neib == TL && n == BOTTOM_N))
-            return;
-        if((that_neib == TR && n == LEFT_N) || (that_neib == DR && n == LEFT_N))
-            return;
-        if((that_neib == TL && n == RIGHT_N) || (that_neib == TL && n == RIGHT_N))
-            return;
-        if((that_neib == DR && n == TOP_N) || (that_neib == DL && n == TOP_N))
-            return;
-        getRoute(from->parent, path, that_neib);
-    }
-    return;
-}
-
 bool QuadPlane::is_terminal() const
 {
     return m_parts[0] == nullptr || m_parts[1] == nullptr || m_parts[2] == nullptr || m_parts[3] == nullptr;
-}
-
-//генерирует индексы ... TODO:описать
-#define T_L_D_R_M_STAR \
-    int star =        (j)*(size+1) + i; \
-    int middle_left = (j)*(size+1) + i - 1; \
-    int middle_right = (j)*(size+1) + i + 1; \
-    int middle_up =   (j-1)*(size+1) + i; \
-    int middle_down =   (j+1)*(size+1) + i; \
-\
-    int tl =  (j-1)*(size + 1) + i - 1; \
-    int tr =  (j-1)*(size + 1) + i + 1; \
-    int dl =  (j+1)*(size + 1) + i - 1; \
-    int dr =  (j+1)*(size + 1) + i + 1; \
-
-
-inline void PushTileIndex(Mesh &m, int x, int y, bool top, bool bottom, bool reverse, int sizex)
-{
-    if(!reverse)
-    {
-        if(top)
-        {
-            m.Indices.push_back(y*sizex + x);
-            m.Indices.push_back(y*sizex + x+1);
-            m.Indices.push_back((y+1)*sizex + x+1);
-        }
-        if(bottom)
-        {
-            m.Indices.push_back(y*sizex + x);
-            m.Indices.push_back((y+1)*sizex + x+1);
-            m.Indices.push_back((y+1)*sizex + x);
-        }
-    }
-    else
-    {
-        if(top)
-        {
-            m.Indices.push_back(y*sizex + x);
-            m.Indices.push_back(y*sizex + x+1);
-            m.Indices.push_back((y+1)*sizex + x);
-        }
-        if(bottom)
-        {
-            m.Indices.push_back(y*sizex + x+1);
-            m.Indices.push_back((y+1)*sizex + x+1);
-            m.Indices.push_back((y+1)*sizex + x);
-        }
-    }
-}
-
-inline void PushTileIndexN(Mesh &m, int x, int y, int part, int sizex, int xoff, int yoff, bool reverse)
-{
-    if(!reverse)
-        switch(part % 4)
-        {
-        case 0:
-            m.Indices.push_back((y+yoff)*sizex + x+xoff);
-            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
-            break;
-        case 1:
-            m.Indices.push_back((y+yoff)*sizex + x+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
-            break;
-        case 2:
-            m.Indices.push_back((y+yoff)*sizex + x+xoff);
-            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
-            break;
-        case 3:
-            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
-            break;
-        }
-    else
-        switch(part % 4)
-        {
-        case 0:
-
-            m.Indices.push_back((y+yoff)*sizex + x+xoff);
-            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
-            break;
-        case 1:
-
-            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
-            break;
-        case 2:
-            m.Indices.push_back((y+yoff)*sizex + x+xoff);
-            m.Indices.push_back((y+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
-            break;
-        case 3:
-            m.Indices.push_back((y+yoff)*sizex + x+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+1+xoff);
-            m.Indices.push_back((y+1+yoff)*sizex + x+xoff);
-            break;
-        }
 }
 
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
@@ -294,8 +57,8 @@ void QuadPlane::Render(const Camera &cam,
     {
         parent->basic->Use();
         //float distance = glm::distance(cam.Position(), parent->center);
-        glUniform1f(parent->shader_r, parent->R/100.f );
-        glUniform1f(parent->shader_s, parent->s/100.f );
+        glUniform1f(parent->shader_r, parent->R );
+        glUniform1f(parent->shader_s, parent->s );
 
         if(status == READY)
         {
@@ -317,8 +80,8 @@ void QuadPlane::Render(const Camera &cam,
             terminal_mesh->shader = parent->basic;
 
             int size = parent->tess_size;
-            terminal_mesh->Indices.reserve(size * size * 6);
-            terminal_mesh->Vertices.reserve((size + 1) * (size + 1));
+            terminal_mesh->indices.reserve(size * size * 6);
+            terminal_mesh->vertices.reserve((size + 1) * (size + 1));
             int co = 0;
 
             float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
@@ -331,32 +94,29 @@ void QuadPlane::Render(const Camera &cam,
             {
                 for(int i = -1; i < size + 2; i++)
                 {
-                    VertPosNormUvUv a;
+                    VertPosUvUv a;
                     a.position = {xs + i * dd, ys + j * dd, 0.5f};
 
                     a.position = glm::normalize(a.position);
                     if(j == -1 || i == -1 || j == size + 1 || i == size +1)
                         a.position *= 0.99;
 
-                    a.normal = a.position;
-
                     a.uv = {i * (1.0/(float)size), j * (1.0/(float)size) };
 
                     a.uv_glob = {xs + i * dd + 0.5f, ys + j * dd + 0.5f};
 
-                    terminal_mesh->Vertices.push_back(a);
+                    terminal_mesh->vertices.push_back(a);
                 }
             }
 
 
             //трансформация вершин сферы в соответствии с матрицей трансформации, заданной при создании объекта сферы
             //матрица трансформации разворачивает части сферы в соответствующие стороны
-            for(size_t j = 0; j < terminal_mesh->Vertices.size(); j++)
+            for(size_t j = 0; j < terminal_mesh->vertices.size(); j++)
             {
-                terminal_mesh->Vertices[j].normal =
-                terminal_mesh->Vertices[j].position =
+                terminal_mesh->vertices[j].position =
                         glm::vec3(transformation *
-                        glm::vec4(terminal_mesh->Vertices[j].position, 1));
+                        glm::vec4(terminal_mesh->vertices[j].position, 1));
             }
 
             subsurface_centers[0] = glm::vec3(transformation *
@@ -388,7 +148,7 @@ void QuadPlane::Render(const Camera &cam,
                                                              )
                                               );
 
-            terminal_mesh->Indices = parent->Indeces;
+            terminal_mesh->indices = parent->Indeces;
             terminal_mesh->ForgetBind();
             //terminal_mesh->BindExistingIBO(parent->ibo, parent->Indeces.size());
             status = READY;
@@ -402,8 +162,6 @@ void QuadPlane::Render(const Camera &cam,
     }
 
 }
-
-#undef T_L_D_R_M_STAR
 
 void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent)
 {
@@ -421,7 +179,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide, Sphe
             && level < max_divide)
     {
         m_parts[0] = std::make_shared<QuadPlane>();
-        m_parts[0]->terminal_mesh = std::make_shared<Mesh>();
+        m_parts[0]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
         m_parts[0]->offset = offset;
         m_parts[0]->scale = scale/2.0f;
         m_parts[0]->level = level + 1;
@@ -429,7 +187,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide, Sphe
         m_parts[0]->parent = this;
 
         m_parts[1] = std::make_shared<QuadPlane>();
-        m_parts[1]->terminal_mesh = std::make_shared<Mesh>();
+        m_parts[1]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
         m_parts[1]->offset = offset + glm::vec2(0.5f, 0) * scale;
         m_parts[1]->scale = scale/2.0f;
         m_parts[1]->level = level + 1;
@@ -437,7 +195,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide, Sphe
         m_parts[1]->parent = this;
 
         m_parts[2] = std::make_shared<QuadPlane>();
-        m_parts[2]->terminal_mesh = std::make_shared<Mesh>();
+        m_parts[2]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
         m_parts[2]->offset = offset + glm::vec2(0, 0.5f) * scale;
         m_parts[2]->scale = scale/2.0f;
         m_parts[2]->level = level + 1;
@@ -445,7 +203,7 @@ void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide, Sphe
         m_parts[2]->parent = this;
 
         m_parts[3] = std::make_shared<QuadPlane>();
-        m_parts[3]->terminal_mesh = std::make_shared<Mesh>();
+        m_parts[3]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
         m_parts[3]->offset = offset + glm::vec2(0.5f, 0.5f) * scale;
         m_parts[3]->scale = scale/2.0f;
         m_parts[3]->level = level + 1;

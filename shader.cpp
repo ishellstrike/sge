@@ -30,13 +30,13 @@ bool printLog(GLuint id)
     }
 }
 
-JargShader::JargShader() :
+Shader::Shader() :
     has_header(false)
 {
     program = glCreateProgram();
 }
 
-JargShader::~JargShader(void)
+Shader::~Shader(void)
 {
     while(!shaders_.empty()) {
         glDeleteShader(shaders_.back());
@@ -50,7 +50,7 @@ JargShader::~JargShader(void)
 /*!
  * \brief JargShader::Use
  */
-void JargShader::Use() const
+void Shader::Use() const
 {
     glUseProgram(program);
 }
@@ -62,7 +62,7 @@ void JargShader::Use() const
  *
  * search uniform and store it location in #vars
  */
-GLint JargShader::locateVar(const std::string &s)
+GLint Shader::locateVar(const std::string &s)
 {
     GLint a = glGetUniformLocation(program, s.c_str());
     if(a >= 0)
@@ -88,7 +88,7 @@ std::map<int, std::string> shader_defines = {
  *
  * load typed shader from text file
  */
-void JargShader::loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version/* = GLSLVER*/) {
+void Shader::loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version/* = GLSLVER*/) {
 
     std::stringstream ss;
     name = filename;
@@ -135,7 +135,7 @@ std::string get_dir(std::string path)
     return path.substr(0, path.find_last_of('/') + 1);
 }
 
-std::string JargShader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )
+std::string Shader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )
 {
     //PrintIndent();
     if(level > 32)
@@ -175,7 +175,7 @@ std::string JargShader::preprocessIncludes(const std::string &filename, int leve
  *
  * link compiled shaders to program
  */
-bool JargShader::Link() {
+bool Shader::Link() {
     glLinkProgram(program);
     LOG(verbose) << "Program " << std::to_string(program) << " linking";
     printLog(program);
@@ -189,7 +189,7 @@ bool JargShader::Link() {
  * search basic uniforms
  * uniforms uses in #Mesh class
  */
-void JargShader::Afterlink()
+void Shader::Afterlink()
 {
     Use();
     posAttrib = glGetAttribLocation(program, "position");

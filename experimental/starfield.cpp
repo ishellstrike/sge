@@ -1,0 +1,37 @@
+#include "starfield.h"
+#include "random.h"
+#include "space/space_solver.h"
+
+Starfield::Starfield()
+{
+    for(int i = 0; i < 100000; ++i)
+    {
+        VertPosCol vpc;
+        vpc.pos = ssolver::sphere_surface(100.f);
+        vpc.col = lerp(Color::White, Color::DarkBlue, random::norm<float>()-0.5f);
+        field.vertices.push_back(vpc);
+        field.indices.push_back(i);
+    }
+    field.primitives = GL_POINTS;
+
+    auto mat = std::make_shared<Material>();
+    std::shared_ptr<BasicJargShader> shader = std::make_shared<BasicJargShader>();
+    field.material = mat;
+    shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/starfield.glsl");
+    shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/starfield.glsl");
+    shader->Link();
+    shader->Afterlink();
+    field.shader = shader;
+    int a = sizeof(VertPosCol);
+
+    field.Bind();
+}
+
+void Starfield::Render(const Camera &cam)
+{
+    glPointSize(1);
+    field.Render(cam);
+}
+
+VertexInfo VertPosCol::info = VertexInfo({VertexAttribute("position", 3, GL_FLOAT, sizeof(glm::vec3)+4), //align?
+                                          VertexAttribute("color", 4, GL_FLOAT, sizeof(glm::vec4))});

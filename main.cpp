@@ -23,5 +23,6 @@ int main( int argc, char* const argv[] )
 
     GameWindow gw;
     gw.Mainloop();
+
     return 0;
 }

@@ -9,7 +9,7 @@
  * Shader for typical programs
  * automaticaly search basic uniforms
  */
-class BasicJargShader : public JargShader
+class BasicJargShader : public Shader
 {
 public:
     BasicJargShader();

@@ -1,9 +1,10 @@
 #ifndef QUADPLANE_H
 #define QUADPLANE_H
 #include <memory>
-#include "geometry/mesh.h"
+#include "geometry/umesh.h"
 #include "camera.h"
 #include "sphereparamstorage.h"
+#include "geometry/vpnt.h"
 
 class QuadPlane
 {    enum Neighbours {
@@ -36,13 +37,13 @@ public:
     QuadPlane *parent = nullptr;
     void getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours that_neib);
 
-    std::shared_ptr<Mesh> terminal_mesh;
-    glm::mat4 transformation;
-    glm::vec3 subsurface_centers[4];
+    std::shared_ptr< UMesh<VertPosUvUv> > terminal_mesh;
+    glm::mat4 transformation; // матрица, поворачивающие каждлую из 6 граней квадрата в соответствующую сторону
+    glm::vec3 subsurface_centers[4]; //центры виртуальных поддеревьев
     Status status = ERROR;
-    int level = 0;
-    glm::vec2 offset = {0,0}; /*< [0,1] */
-    float scale = 1; /*< [0, 1] */
+    int level = 0; //уровень поддерева
+    glm::vec2 offset = {0,0}; /*< [0, 1] отствуп участка дерева от верхнего левого угла корня дерева*/
+    float scale = 1; /*< [0, 1] масштабирование участка квад дерева, относительно всего дерева */
 
     bool is_terminal() const;
     void Render(const Camera &cam,

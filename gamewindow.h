@@ -23,6 +23,7 @@
 #include "experimental/scattering.h"
 #include "space/spacesystem.h"
 #include "space/space_solver.h"
+#include "experimental/starfield.h"
 
 class GameWindow {
 public:
@@ -61,6 +62,7 @@ public:
     glm::vec3 moving;
     std::vector<glm::vec3> tail;
     Scattering scat;
+    std::unique_ptr<Starfield> sf;
 
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
