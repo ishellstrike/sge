@@ -84,7 +84,6 @@ public:
 
 
         GLuint stride = sizeof(_Ty);
-        GLuint offset = 0;
         glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(_Ty)*vertices.size(), &vertices[0], bindtype);
 
@@ -93,7 +92,7 @@ public:
             VertexAttribute &a = info.attrib[i];
 
             glEnableVertexAttribArray(a.shader_pos);
-            glVertexAttribPointer(a.shader_pos, a.count, a.type, a.normalized, stride, (void*)(offset)); offset += a.size;
+            glVertexAttribPointer(a.shader_pos, a.count, a.type, a.normalized, stride, (void*)(a.offset));
         }
 
 

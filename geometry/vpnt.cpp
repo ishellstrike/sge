@@ -32,10 +32,11 @@ VertPosNormUvUv::~VertPosNormUvUv()
 {
 }
 
-VertexInfo VertPosNormUvUv::info = VertexInfo({VertexAttribute("position", 3, GL_FLOAT, sizeof(glm::vec3)),
-                                               VertexAttribute("normal", 3, GL_FLOAT, sizeof(glm::vec3)),
-                                               VertexAttribute("texcoord", 2, GL_FLOAT, sizeof(glm::vec2)),
-                                               VertexAttribute("texcoord2", 2, GL_FLOAT, sizeof(glm::vec2))});
+VertexInfo VertPosNormUvUv::info = VertexInfo({VERTEX_ATTRIBUTE("position",  glm::vec3, position, VertPosNormUvUv),
+                                               VERTEX_ATTRIBUTE("normal",    glm::vec3, normal,   VertPosNormUvUv),
+                                               VERTEX_ATTRIBUTE("texcoord",  glm::vec2, uv,       VertPosNormUvUv),
+                                               VERTEX_ATTRIBUTE("texcoord2", glm::vec2, uv_glob,  VertPosNormUvUv)
+                                              });
 
 VertPosMininormTex::VertPosMininormTex(unsigned char norm, glm::vec3 __pos, glm::vec2 __uv) :
     normal(norm),
@@ -83,6 +84,7 @@ VertPosUvUv::~VertPosUvUv()
 
 }
 
-VertexInfo VertPosUvUv::info = VertexInfo({VertexAttribute("position", 3, GL_FLOAT, sizeof(float)*3),
-                                           VertexAttribute("texcoord", 2, GL_FLOAT, sizeof(float)*2),
-                                           VertexAttribute("texcoord2", 2, GL_FLOAT, sizeof(float)*2)});
+VertexInfo VertPosUvUv::info = VertexInfo({VERTEX_ATTRIBUTE("position",  glm::vec3, position, VertPosUvUv),
+                                           VERTEX_ATTRIBUTE("texcoord",  glm::vec2, uv,       VertPosUvUv),
+                                           VERTEX_ATTRIBUTE("texcoord2", glm::vec2, uv_glob,  VertPosUvUv)
+                                          });

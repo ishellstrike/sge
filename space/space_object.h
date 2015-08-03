@@ -16,6 +16,7 @@ public:
     std::vector<glm::dvec3> hist;
     float last = 0;
     float moving = 0;
+    bool dominant = false;
 
     glm::vec4 color;
     const int max_h = 1000;

@@ -200,13 +200,14 @@ bool GameWindow::BaseInit()
 #endif
 
     ss.system.push_back(std::make_shared<SpaceObject>(1000.f, 5510.f , glm::vec3{0,0,0}));
+    (*(--ss.system.end()))->dominant = true;
 
     for(int i = 0; i < 40; i++)
     {
-        ss.system.push_back(std::make_shared<SpaceObject>(random::next<float>()+1,
+        ss.system.push_back(std::make_shared<SpaceObject>(random::next<float>()/5.0f,
                                                           3200.f,
                                                           glm::vec3{random::next<float>()*30 - 15,
-                                                                    random::next<float>()*30 - 15,
+                                                                    0,
                                                                     random::next<float>()*30 - 15}));
 
         ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital(*ss.system[0])*1000);
@@ -357,7 +358,7 @@ void GameWindow::BaseDraw()
             {
                 auto a = b % ss.system[i]->max_h;
 
-                glColor4fv(&glm::lerp(Color::Clear, ss.system[i]->color, (b - ss.system[i]->cur_h)/(float)ss.system[i]->hist.size())[0]);
+                glColor4fv(&glm::lerp(Color::Clear, ss.system[i]->color - glm::vec4(0,0,0,0.7f), (b - ss.system[i]->cur_h)/(float)ss.system[i]->hist.size())[0]);
 
                 if(a == ss.system[i]->max_h - 1)
                 {

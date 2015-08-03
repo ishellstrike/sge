@@ -5,6 +5,7 @@
 #include "gamewindow.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "experimental/starfield.h"
 
 int main( int argc, char* const argv[] )
 {

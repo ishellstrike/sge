@@ -169,9 +169,12 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt)
 {
     glm::dvec3 lpos = pos;
 
-    rk4_x(syst, gt);
-    rk4_y(syst, gt);
-    rk4_z(syst, gt);
+    if(!dominant)
+    {
+        rk4_x(syst, gt);
+        rk4_y(syst, gt);
+        rk4_z(syst, gt);
+    }
 
     hist[cur_h] = pos;
 

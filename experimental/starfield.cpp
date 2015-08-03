@@ -33,5 +33,6 @@ void Starfield::Render(const Camera &cam)
     field.Render(cam);
 }
 
-VertexInfo VertPosCol::info = VertexInfo({VertexAttribute("position", 3, GL_FLOAT, sizeof(glm::vec3)+4), //align?
-                                          VertexAttribute("color", 4, GL_FLOAT, sizeof(glm::vec4))});
+VertexInfo VertPosCol::info = VertexInfo({VERTEX_ATTRIBUTE("color",    glm::vec4, col, VertPosCol),
+                                          VERTEX_ATTRIBUTE("position", glm::vec3, pos, VertPosCol),
+                                         });

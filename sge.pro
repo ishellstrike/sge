@@ -3,6 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
+CONFIG +=  -E -dD
 
 SOURCES += \
     logger.cpp \
