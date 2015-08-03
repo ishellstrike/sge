@@ -174,6 +174,12 @@ bool GameWindow::BaseInit()
     mat->normal = texxx;
     m->material = mat;
 
+
+    std::shared_ptr<Material> mat_star = std::make_shared<Material>();
+    mat_star->texture = texx;
+    mat_star->normal = texxx;
+    mat_star->emission = Color::White;
+
     auto wm = std::make_shared<Material>();
     auto wt = std::make_shared<Texture>();
     auto wn = std::make_shared<Texture>();
@@ -199,8 +205,9 @@ bool GameWindow::BaseInit()
     sf = std::unique_ptr<Starfield>(new Starfield());
 #endif
 
-    ss.system.push_back(std::make_shared<SpaceObject>(1000.f, 5510.f , glm::vec3{0,0,0}));
-    (*(--ss.system.end()))->dominant = true;
+    ss.system.push_back(std::make_shared<SpaceObject>(5000.f, 5510.f , glm::vec3{0,0,0}));
+    ss.system.back()->dominant = true;
+    ss.system.back()->InitRender(basic, mat);
 
     for(int i = 0; i < 40; i++)
     {
@@ -211,6 +218,7 @@ bool GameWindow::BaseInit()
                                                                     random::next<float>()*30 - 15}));
 
         ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital(*ss.system[0])*1000);
+        ss.system.back()->InitRender(basic, mat);
     }
 
     return true;
@@ -230,7 +238,7 @@ void GameWindow::BaseUpdate()
     else
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-    cam->camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
+    cam->camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 0.1f : 0.01f;
 
     cam->camera_scale /= Keyboard::isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 10.f : 1.f;
 
@@ -275,13 +283,13 @@ void GameWindow::BaseUpdate()
 
    qs->world = glm::rotate(qs->world, gt.elapsed/100, glm::vec3(1));
    qs_w->world = glm::rotate(qs_w->world, gt.elapsed/100, glm::vec3(1));
-    qs->Update(*cam);
-    qs_w->Update(*cam);
-    cam1->Update(gt);
-    cam2->Update(gt);
-    ws->Update();
+   qs->Update(*cam);
+   qs_w->Update(*cam);
+   cam1->Update(gt);
+   cam2->Update(gt);
+   ws->Update();
 
-    Mouse::dropState();
+   Mouse::dropState();
 }
 
 void GameWindow::BaseDraw()
@@ -302,18 +310,11 @@ void GameWindow::BaseDraw()
 #endif
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    for(size_t i = 0; i < ss.system.size(); i++)
-    {
-        qs->world = glm::translate(glm::mat4(1), glm::vec3(ss.system[i]->pos));
-        qs->s *= ss.system[i]->R<float>()/qs->R*10;
-        qs->R = ss.system[i]->R<float>()*10;
-        qs->Render(*cam);
-    }
 
-    //for(size_t j = 0; j < 100; ++j)
     for(size_t i = 0; i < ss.system.size(); i++)
     {
-        ss.system[i]->Update(ss, gt);
+        ss.system[i]->Update(ss, gt, *cam);
+        ss.system[i]->Render(*cam);
     }
 
     //water->Use();

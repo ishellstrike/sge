@@ -49,7 +49,7 @@ public:
     void Render(const Camera &cam,
                 int side,
                 SphereParamsStorage *parent);
-    void Update(Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent);
+    void Update(const Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent);
     std::vector<QuadPlane *> getRoute();
     void GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent);
 };

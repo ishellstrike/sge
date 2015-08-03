@@ -54,7 +54,7 @@ struct VertexAttribute
     VertexAttribute(std::string n, unsigned short *, GLuint _offset) : name(n), count(1), type(GL_UNSIGNED_SHORT), offset(_offset){}
 
     std::string name = "error";
-    GLuint shader_pos = -1;
+    mutable GLuint shader_pos = -1;
     GLuint count = 0;
     GLenum type = 0;
     GLboolean normalized = GL_FALSE;

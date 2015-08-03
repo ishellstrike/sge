@@ -5,13 +5,16 @@
 #include "spacesystem.h"
 #include "gametimer.h"
 #include "space_solver.h"
+#include "experimental/quadsphere.h"
 
 class SpaceObject
 {
 public:
     SpaceObject();
     SpaceObject(float __mass, float __ro, glm::vec3 p0 = glm::vec3(0));
+    void InitRender(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat);
 
+    std::unique_ptr<QuadSphere> render;
     glm::dvec3 pos = glm::dvec3(0), speed = glm::dvec3(0), acc = glm::dvec3(0);
     std::vector<glm::dvec3> hist;
     float last = 0;
@@ -54,11 +57,12 @@ public:
     void rk4_x(SpaceSystem &syst, GameTimer &);
     void rk4_y(SpaceSystem &syst, GameTimer &);
     void rk4_z(SpaceSystem &syst, GameTimer &);
-    const double T = 0.03;
+    const double T = 0.00003;
 
     std::string GetDebugInfo();
 
-    void Update(SpaceSystem &syst, GameTimer &gt);
+    void Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam);
+    void Render(Camera &camera);
 private:
     double m_mass = 1.0;
     double m_R = 1.0;

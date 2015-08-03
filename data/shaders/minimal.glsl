@@ -106,6 +106,6 @@ void main(void)
     //fogFactor = clamp(fogFactor, 0.0, 1.0);
     //col = mix(fog, col, fogFactor);
     col.a = 1;
-    out_color = col * tex;
+    out_color = col * tex + material_emission;
 }
 #endif

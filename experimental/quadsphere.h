@@ -12,8 +12,7 @@ public:
     std::shared_ptr<QuadPlane> plane[6];
 
     void Render(const Camera &cam);
-    void SetWorld(const glm::mat4 &world);
-    void Update(Camera &camera);
+    void Update(const Camera &camera);
     std::string out;
 };
 

@@ -23,6 +23,11 @@ SpaceObject::SpaceObject(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0)
     color = glm::vec4(random::next<float>() + 0.5f, random::next<float>() + 0.5f, random::next<float>() + 0.5f, 1.0f);
 }
 
+void SpaceObject::InitRender(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat)
+{
+    render = std::unique_ptr<QuadSphere>(new QuadSphere(shader, __mat));
+}
+
 void SpaceObject::BuildVR()
 {
     m_V = m_mass / m_ro;
@@ -165,7 +170,7 @@ void SpaceObject::rk4_z(SpaceSystem &syst, GameTimer &)
     pos.z += (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0;
 }
 
-void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt)
+void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
 {
     glm::dvec3 lpos = pos;
 
@@ -181,7 +186,7 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt)
     last += gt.elapsed;
     //moving += (float)glm::abs(distance(pos, lpos));
     //if(moving >= m_R*2)
-    if(last >= 0.1)
+    if(last >= 1)
     {
         cur_h++;
         if(cur_h >= max_h)
@@ -192,6 +197,22 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt)
         last = 0;
     }
 
+    if(render)
+    {
+        render->world = glm::translate(glm::mat4(1), glm::vec3(pos));
+        render->s = R<float>()/10.0;
+        render->R = R<float>();
+        render->center = glm::vec3(pos);
+        render->Update(cam);
+    }
+}
+
+void SpaceObject::Render(Camera &camera)
+{
+    if(render)
+    {
+        render->Render(camera);
+    }
 }
 
 std::string SpaceObject::GetDebugInfo()

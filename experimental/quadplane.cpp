@@ -163,12 +163,12 @@ void QuadPlane::Render(const Camera &cam,
 
 }
 
-void QuadPlane::Update(Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent)
+void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent)
 {
     glm::vec3 cent[4];
     for(int i = 0; i < 4; i++)
     {
-        cent[i] = glm::vec3(parent->world * glm::vec4(subsurface_centers[i], 0));
+        cent[i] = glm::vec3(parent->world * glm::vec4(subsurface_centers[i] + parent->center, 0));
     }
 
     if(is_terminal() &&
