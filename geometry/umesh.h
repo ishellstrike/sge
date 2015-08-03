@@ -54,7 +54,7 @@ public:
             glBindVertexArray(0);
             for(int i = 0; i < _Ty::info.attrib.size(); ++i)
             {
-                VertexAttribute &a = _Ty::info.attrib[i];
+                const VertexAttribute &a = _Ty::info.attrib[i];
                 glDisableVertexAttribArray(a.shader_pos);
             }
 
@@ -83,13 +83,13 @@ public:
         }
 
 
-        GLuint stride = sizeof(_Ty);
+        const GLuint stride = sizeof(_Ty);
         glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(_Ty)*vertices.size(), &vertices[0], bindtype);
 
         for(int i = 0; i < info.attrib.size(); ++i)
         {
-            VertexAttribute &a = info.attrib[i];
+            const VertexAttribute &a = info.attrib[i];
 
             glEnableVertexAttribArray(a.shader_pos);
             glVertexAttribPointer(a.shader_pos, a.count, a.type, a.normalized, stride, (void*)(a.offset));
@@ -130,7 +130,7 @@ public:
 
         for(int i = 0; i < info.attrib.size(); ++i)
         {
-            VertexAttribute &a = info.attrib[i];
+            const VertexAttribute &a = info.attrib[i];
             a.shader_pos = glGetAttribLocation(shader->program, a.name.c_str());
             if(a.shader_pos == -1)
             {
@@ -163,11 +163,11 @@ public:
         shader->Use();
         glUniform3fv(shader->viewPosition_location, 1, &cam.Position()[0]);
 
-        glm::mat4 Model = world * World;
+        const glm::mat4 Model = world * World;
 
         glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &Model[0][0]);
         glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
-        glm::mat3 normal = glm::mat3(glm::transpose(glm::inverse(Model)));
+        const glm::mat3 normal = glm::mat3(glm::transpose(glm::inverse(Model)));
         glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
         glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(200000,234560,9850000)[0]);
 
