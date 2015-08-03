@@ -7,8 +7,8 @@
 
 struct VertPosCol
 {
-    glm::vec4 col;
     glm::vec3 pos;
+    glm::vec4 col;
 
     static VertexInfo info;
 };
