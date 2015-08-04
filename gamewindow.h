@@ -51,11 +51,10 @@ public:
     ~GameWindow();
         SpaceSystem ss;
 
-    std::shared_ptr<BasicJargShader> basic, water;
     std::shared_ptr<SpriteBatch> batch;
     std::shared_ptr<Texture> tex1;
+    float speed = 0.001;
 
-    std::shared_ptr<Mesh> m;
     bool wire = true;
     std::shared_ptr<Camera> cam1, cam2;
     Camera *cam;

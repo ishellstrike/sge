@@ -23,9 +23,9 @@ SpaceObject::SpaceObject(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0)
     color = glm::vec4(random::next<float>() + 0.5f, random::next<float>() + 0.5f, random::next<float>() + 0.5f, 1.0f);
 }
 
-void SpaceObject::InitRender(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat)
+void SpaceObject::InitRender(std::shared_ptr<Material> &__mat)
 {
-    render = std::unique_ptr<QuadSphere>(new QuadSphere(shader, __mat));
+    render = std::unique_ptr<QuadSphere>(new QuadSphere(__mat));
 }
 
 void SpaceObject::BuildVR()

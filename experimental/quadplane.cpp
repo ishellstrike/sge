@@ -57,8 +57,8 @@ void QuadPlane::Render(const Camera &cam,
     {
         parent->basic->Use();
         //float distance = glm::distance(cam.Position(), parent->center);
-        glUniform1f(parent->shader_r, parent->R );
-        glUniform1f(parent->shader_s, parent->s );
+        glUniform1f(parent->basic->vars[0], parent->R );
+        glUniform1f(parent->basic->vars[1], parent->s );
 
         if(status == READY)
         {

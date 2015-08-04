@@ -145,25 +145,7 @@ bool GameWindow::BaseInit()
     Resize(RESX, RESY);
 
     Resources::instance();
-
-    basic = std::make_shared<BasicJargShader>();
-    basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
-    basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
-    basic->Link();
-    basic->Use();
-    basic->Afterlink();
-
-    water = std::make_shared<BasicJargShader>();
-    water->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal_watertest.glsl");
-    water->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal_watertest.glsl");
-    water->Link();
-    water->Use();
-    water->Afterlink();
-
-    m = std::make_shared<Mesh>(Icosahedron::getMesh());
-    //Tesselator::SphereTesselate(4, m);
-    m->shader = basic;
-    m->World = glm::scale(glm::mat4(1), glm::vec3(4,4,4));
+    Resources::instance()->Init();
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
     std::shared_ptr<Texture> texx = std::make_shared<Texture>();
@@ -172,7 +154,6 @@ bool GameWindow::BaseInit()
     texxx->Load("data/aaa.png", true, true);
     mat->texture = texx;
     mat->normal = texxx;
-    m->material = mat;
 
 
     std::shared_ptr<Material> mat_star = std::make_shared<Material>();
@@ -188,9 +169,9 @@ bool GameWindow::BaseInit()
     wm->texture = wt;
     wm->normal = wn;
 
-    qs = std::make_shared<QuadSphere>(basic, mat);
+    qs = std::make_shared<QuadSphere>(mat);
     qs->max_divide = 5;
-    qs_w = std::make_shared<QuadSphere>(water, wm);
+    qs_w = std::make_shared<QuadSphere>(wm);
     qs_w->max_divide = 5;
     qs_w->s = 1;
     qs_w->R = 1010;
@@ -207,7 +188,7 @@ bool GameWindow::BaseInit()
 
     ss.system.push_back(std::make_shared<SpaceObject>(5000.f, 5510.f , glm::vec3{0,0,0}));
     ss.system.back()->dominant = true;
-    ss.system.back()->InitRender(basic, mat);
+    ss.system.back()->InitRender(mat);
 
     for(int i = 0; i < 40; i++)
     {
@@ -218,7 +199,7 @@ bool GameWindow::BaseInit()
                                                                     random::next<float>()*30 - 15}));
 
         ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital(*ss.system[0])*1000);
-        ss.system.back()->InitRender(basic, mat);
+        ss.system.back()->InitRender(mat);
     }
 
     return true;
@@ -238,9 +219,14 @@ void GameWindow::BaseUpdate()
     else
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-    cam->camera_scale = Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 0.1f : 0.01f;
+    if(Mouse::isWheelUp())
+        speed *= 1.1f;
 
-    cam->camera_scale /= Keyboard::isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 10.f : 1.f;
+    if(Mouse::isWheelDown())
+        speed /= 1.1f;
+
+    cam->camera_scale = speed;
+    cam->camera_scale *= Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
 
     if(Keyboard::isKeyDown(GLFW_KEY_W))
         cam->Move(Camera::FORWARD);

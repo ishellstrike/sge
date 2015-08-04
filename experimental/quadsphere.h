@@ -7,7 +7,7 @@
 class QuadSphere : public SphereParamsStorage
 {
 public:
-    QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat);
+    QuadSphere(std::shared_ptr<Material> &__mat);
     ~QuadSphere();
     std::shared_ptr<QuadPlane> plane[6];
 

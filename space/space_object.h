@@ -12,7 +12,7 @@ class SpaceObject
 public:
     SpaceObject();
     SpaceObject(float __mass, float __ro, glm::vec3 p0 = glm::vec3(0));
-    void InitRender(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat);
+    void InitRender(std::shared_ptr<Material> &__mat);
 
     std::unique_ptr<QuadSphere> render;
     glm::dvec3 pos = glm::dvec3(0), speed = glm::dvec3(0), acc = glm::dvec3(0);

@@ -48,7 +48,7 @@ out vec3 positionout;
 void main(void)
 {
     float snoize = decodeFloat(textureLod(material_global_height, texcoord2, 0));
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoord))*100;
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoord))*150;
 
     vec3 newPosition = (R + s * snoize) * position;
     vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
@@ -79,7 +79,7 @@ out vec4 out_color;
 void main(void)
 {
     float snoize = decodeFloat(textureLod(material_height, texcoordout, 0));
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*100;
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*150;
 
     grad = grad / (R + s * snoize);
     grad = transform_N * grad;

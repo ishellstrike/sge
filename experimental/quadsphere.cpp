@@ -2,6 +2,7 @@
 #include "geometry/icosahedron.h"
 #include "glm/gtx/transform.hpp"
 #include "TextureGenerator.h"
+#include "resources/resourcecontroller.h"
 
 //Помещается вершины rldr в меш в прямом порядке
 #define PUSH_FORWARD \
@@ -21,9 +22,8 @@
     Indeces.push_back(dr); \
     Indeces.push_back(dl);
 
-QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr<Material> &__mat)
+QuadSphere::QuadSphere(std::shared_ptr<Material> &__mat)
 {
-    basic = shader;
     mat = __mat;
 
     for(int i = 0; i < 6; i++)
@@ -39,30 +39,15 @@ QuadSphere::QuadSphere(std::shared_ptr<BasicJargShader> &shader, std::shared_ptr
     plane[4]->transformation = glm::rotate(glm::mat4(1), -glm::half_pi<float>(), glm::vec3(1,0,0));
     plane[5]->transformation = glm::rotate(glm::mat4(1), glm::half_pi<float>(), glm::vec3(1,0,0));
 
-    height_shader = std::make_shared<BasicJargShader>();
-    height_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/testgen1.glsl");
-    height_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/testgen1.glsl");
-    height_shader->Link();
-    height_shader->Afterlink();
-
-    grad_shader = std::make_shared<BasicJargShader>();
-    grad_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/gradient_builder.glsl");
-    grad_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/gradient_builder.glsl");
-    grad_shader->Link();
-    grad_shader->Afterlink();
-
-    shader_r = glGetUniformLocation(basic->program, "R");
-    shader_s = glGetUniformLocation(basic->program, "s");
-
     const float res = 2048.0f;
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res}, false);
 
-    noise_map = std::make_shared<Texture>();
-    grad_map = std::make_shared<Texture>();
-    noise_map->Load("data/textures/PerlinPerm2D.png");
-    grad_map->Load("data/textures/PerlinGrad2D.png");
-
+    height_shader = Resources::instance()->Get<BasicJargShader>("height_shader");
+    grad_shader = Resources::instance()->Get<BasicJargShader>("grad_shader");
+    noise_map = Resources::instance()->Get<Texture>("noise_map");
+    grad_map = Resources::instance()->Get<Texture>("grad_map");
+    basic = Resources::instance()->Get<BasicJargShader>("default_planet_render");
 
     tg.SetShader(height_shader);
     tg.AddTexture("samplerPerlinPerm2D", noise_map);
