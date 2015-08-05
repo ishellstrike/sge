@@ -85,7 +85,7 @@ out vec4 out_color;
 void main(void)
 {
     float snoize = decodeFloat(textureLod(material_height, texcoordout, 0));
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout));
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*10;
 
     grad = grad / (R + s * snoize);
     grad = transform_N * grad;
@@ -97,31 +97,25 @@ void main(void)
     vec4 tex;
     vec4 tex2;
 
-    tex = texture2D(material_medium, texcoordout2*10);
-    tex += texture2D(material_medium, texcoordout2*100);
+    tex = texture2D(material_low, texcoordout2*10);
+    tex += texture2D(material_low, texcoordout2*100);
+    tex /= 2;
+    tex2 = texture2D(material_medium, texcoordout2*10);
+    tex2 += texture2D(material_medium, texcoordout2*100);
     tex2 /= 2;
-
-    if(abs(grad.x) + abs(grad.y) < 1.2)
-    {
-        tex = texture2D(material_low, texcoordout2*10);
-        tex += texture2D(material_low, texcoordout2*100);
-
-        //tex = mix(tex, tex3, clamp((abs(grad.x) + abs(grad.y)), 0 ,1));
-    }
-
+    tex = mix(tex, tex2, snoize+0.4);
     if(snoize > 0.6)
     {
         tex = texture2D(material_high, texcoordout2*10);
         tex += texture2D(material_high, texcoordout2*100);
     }
-    tex /= 2;
 
-    if(abs(grad.x) + abs(grad.y) > 2.2)
+    if(abs(grad.x) + abs(grad.y) > 30)
     {
         vec4 tex3 = texture2D(material_side, texcoordout2*10);
         tex3 += texture2D(material_side, texcoordout2*100);
 
-        tex = mix(tex, tex3, clamp((abs(grad.x) + abs(grad.y)-1.5), 0 ,1));
+        tex = mix(tex, tex3, clamp((abs(grad.x) + abs(grad.y)-30), 0 ,1));
     }
 
     vec4 col = material_ambient;
