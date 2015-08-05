@@ -131,8 +131,6 @@ bool GameWindow::BaseInit()
 
     perf = new sge_perfomance(ws.get());
 
-    atlas.LoadAll();
-
     cam1 = std::make_shared<Camera>();
     cam2 = std::make_shared<Camera>();
     cam = cam1.get();
@@ -154,6 +152,9 @@ bool GameWindow::BaseInit()
     texxx->Load("data/aaa.png", true, true);
     mat->texture = texx;
     mat->normal = texxx;
+    mat->low = Resources::instance()->Get<Texture>("grass");
+    mat->medium = Resources::instance()->Get<Texture>("soil");
+    mat->high = Resources::instance()->Get<Texture>("snow");
 
 
     std::shared_ptr<Material> mat_star = std::make_shared<Material>();
@@ -170,9 +171,9 @@ bool GameWindow::BaseInit()
     wm->normal = wn;
 
     qs = std::make_shared<QuadSphere>(mat);
-    qs->max_divide = 5;
+    qs->max_divide = 4;
     qs_w = std::make_shared<QuadSphere>(wm);
-    qs_w->max_divide = 5;
+    qs_w->max_divide = 4;
     qs_w->s = 1;
     qs_w->R = 1010;
     wm->diffuse = Color::SeaBlue;

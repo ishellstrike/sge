@@ -182,16 +182,6 @@ public:
         if(shader->shininess_location != -1)
             glUniform1fv(shader->shininess_location, 1, &material->shininess);
 
-        if(shader->texture_location != -1)
-            glUniform1i(shader->texture_location, 0);
-        if(shader->normal_location != -1)
-            glUniform1i(shader->normal_location, 1);
-        if(shader->height_location != -1)
-            glUniform1i(shader->height_location, 2);
-        if(shader->height_location != -1)
-            glUniform1i(shader->grad_location, 3);
-        if(shader->global_height_location != -1)
-            glUniform1i(shader->global_height_location, 4);
 
         if(material && material->texture != nullptr) {
             glActiveTexture(GL_TEXTURE0);
@@ -212,6 +202,28 @@ public:
         if(material && material->global_height != nullptr) {
             glActiveTexture(GL_TEXTURE4);
             glBindTexture(GL_TEXTURE_2D, material->global_height->textureId);
+        }
+
+
+        if(material && material->detail != nullptr) {
+            glActiveTexture(GL_TEXTURE5);
+            glBindTexture(GL_TEXTURE_2D, material->detail->textureId);
+        }
+        if(material && material->low != nullptr) {
+            glActiveTexture(GL_TEXTURE6);
+            glBindTexture(GL_TEXTURE_2D, material->low->textureId);
+        }
+        if(material && material->medium != nullptr) {
+            glActiveTexture(GL_TEXTURE7);
+            glBindTexture(GL_TEXTURE_2D, material->medium->textureId);
+        }
+        if(material && material->high != nullptr) {
+            glActiveTexture(GL_TEXTURE8);
+            glBindTexture(GL_TEXTURE_2D, material->high->textureId);
+        }
+        if(material && material->side != nullptr) {
+            glActiveTexture(GL_TEXTURE9);
+            glBindTexture(GL_TEXTURE_2D, material->side->textureId);
         }
 
         glBindVertexArray(*vao);

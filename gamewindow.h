@@ -41,7 +41,6 @@ public:
 
     GLFWmonitor *monitor = nullptr;
     GLFWwindow *window = nullptr;
-    TextureAtlas atlas;
     std::shared_ptr<GBuffer> gb;
 
     glm::mat4 view = glm::mat4(1), proj = glm::mat4(1), proj_per = glm::mat4(1), model = glm::mat4(1);

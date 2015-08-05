@@ -15,14 +15,14 @@ float decodeFloat( vec4 rgb ) {
   return dot(rgb.rgb, vec3(1.0, 1/255.0, 1/65025.0));
 }
 
-vec4 encodeNormal2( vec3 v )
+vec4 encodeNormal1( vec3 v )
 {
     vec4 enc = vec4(vec2(1.0, 255.0) * v.x, vec2(1.0, 255.0) * v.y);
     enc = fract(enc);
     return enc;
 }
 
-vec3 decodeNormal2( vec4 rgb )
+vec3 decodeNormal1( vec4 rgb )
 {
     return vec3(dot(rgb.rg, vec2(1.0, 1/255.0)), dot(rgb.ba, vec2(1.0, 1/255.0)), 0);
 }

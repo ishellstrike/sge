@@ -45,4 +45,15 @@ void Resources::Init()
 
     Push("default_planet_render", basic);
     Push("default_water_render", water);
+
+    auto soil = new Texture;
+    auto grass = new Texture;
+    auto snow = new Texture;
+    soil->Load("data/textures/soil.png");
+    grass->Load("data/textures/grass.png");
+    snow->Load("data/textures/snow.png");
+
+    Push("soil", soil);
+    Push("grass", grass);
+    Push("snow", snow);
 }

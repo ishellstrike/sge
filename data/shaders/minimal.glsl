@@ -18,6 +18,12 @@ uniform sampler2D material_height;
 uniform sampler2D material_grad;
 uniform sampler2D material_global_height;
 
+uniform sampler2D material_detail;
+uniform sampler2D material_low;
+uniform sampler2D material_medium;
+uniform sampler2D material_high;
+uniform sampler2D material_side;
+
 uniform vec4  material_ambient;
 uniform vec4  material_diffuse;
 uniform vec4  material_specular;
@@ -88,11 +94,25 @@ void main(void)
     vec3 eye = normalize(transform_N * normal);
     vec3 light = normalize(lightVec);
 
+    vec4 tex;
+    vec4 tex2;
 
-    vec4 tex = texture2D(material_texture, texcoordout2);
-    tex += texture2D(material_texture, texcoordout2*10);
-    tex += texture2D(material_texture, texcoordout2*100);
+    tex = texture2D(material_low, texcoordout2);
+    tex += texture2D(material_low, texcoordout2*10);
+    tex += texture2D(material_low, texcoordout2*100);
+    tex2 = texture2D(material_medium, texcoordout2);
+    tex2 += texture2D(material_medium, texcoordout2*10);
+    tex2 += texture2D(material_medium, texcoordout2*100);
+    tex = mix(tex, tex2, snoize+0.4);
+    if(snoize > 0.6)
+    {
+        tex = texture2D(material_high, texcoordout2);
+        tex += texture2D(material_high, texcoordout2*10);
+        tex += texture2D(material_high, texcoordout2*100);
+    }
     tex /= 3;
+
+
     vec4 col = material_ambient;
 
     //tex = mix(vec4(0,1,0,1), vec4(1,0,0,1), abs(grad.y) + abs(grad.x));

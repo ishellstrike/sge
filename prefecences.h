@@ -51,7 +51,7 @@ public:
     /*!
      * \brief current window resolution
      */
-    glm::ivec2 resolution = glm::ivec2(1200, 1200);
+    glm::ivec2 resolution = glm::ivec2(800, 800);
 
     /*!
      * \brief data dir

@@ -18,9 +18,9 @@ bool QuadPlane::is_terminal() const
     return m_parts[0] == nullptr || m_parts[1] == nullptr || m_parts[2] == nullptr || m_parts[3] == nullptr;
 }
 
+const float res = 256.0f;
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
-    const float res = 256.0f;
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
     std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2{res,res});
@@ -29,9 +29,9 @@ void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsSto
     tg.SetShader(parent->height_shader);
     tg.AddTexture("samplerPerlinPerm2D", parent->noise_map);
     tg.AddTexture("samplerPerlinGrad2D", parent->grad_map);
-    tg.SetParams(offset.x);
-    tg.SetParams(offset.y);
-    tg.SetParams(scale);
+    tg.SetParams(offset.x - (2/res)*scale);
+    tg.SetParams(offset.y - (2/res)*scale);
+    tg.SetParams(scale + (4/res)*scale);
     tg.SetResultTexture(height_map);
     tg.RenderOnTempFbo();
 
@@ -101,7 +101,7 @@ void QuadPlane::Render(const Camera &cam,
                     if(j == -1 || i == -1 || j == size + 1 || i == size +1)
                         a.position *= 0.99;
 
-                    a.uv = {i * (1.0/(float)size), j * (1.0/(float)size) };
+                    a.uv = {i * ((1.0 - 4/res)/(float)size) + 2/res, j * ((1.0 - 4/res)/(float)size) + 2/res };
 
                     a.uv_glob = {xs + i * dd + 0.5f, ys + j * dd + 0.5f};
 

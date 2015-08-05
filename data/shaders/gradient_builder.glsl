@@ -94,6 +94,7 @@ void main(void)
     float x = (col[2] +   col[8] + 2*col[5] - col[0] - 2*col[3] - col[6])/4.0;
     float y = (col[6] + 2*col[7] +   col[8] - col[0] - 2*col[1] - col[2])/4.0;
     vec3 v3 = vec3(x / param2, y / param2, 0);
+    v3 = clamp(v3, 0, 1);
     v3 = v3;
 
     color = encodeNormal(v3);
