@@ -18,7 +18,7 @@ bool QuadPlane::is_terminal() const
     return m_parts[0] == nullptr || m_parts[1] == nullptr || m_parts[2] == nullptr || m_parts[3] == nullptr;
 }
 
-const float res = 256.0f;
+const float res = 512.0f;
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
     TextureGenerator tg;

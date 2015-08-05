@@ -155,6 +155,7 @@ bool GameWindow::BaseInit()
     mat->low = Resources::instance()->Get<Texture>("grass");
     mat->medium = Resources::instance()->Get<Texture>("soil");
     mat->high = Resources::instance()->Get<Texture>("snow");
+    mat->side = Resources::instance()->Get<Texture>("rock");
 
 
     std::shared_ptr<Material> mat_star = std::make_shared<Material>();

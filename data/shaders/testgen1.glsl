@@ -44,6 +44,7 @@ out vec4 color;
 void main(void)
 {
     float p = jordanTurbulence(Vert.texcoord*10, 0, 18);
+    //p = p * p * p;
     p = clamp(p, 0.0, 1.0);
     color = encodeFloat(p);
     //color.w = 1;

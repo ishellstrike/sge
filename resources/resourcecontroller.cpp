@@ -49,11 +49,14 @@ void Resources::Init()
     auto soil = new Texture;
     auto grass = new Texture;
     auto snow = new Texture;
-    soil->Load("data/textures/soil.png");
-    grass->Load("data/textures/grass.png");
-    snow->Load("data/textures/snow.png");
+    auto rock = new Texture;
+    soil->Load("data/textures/soil.png", true, true);
+    grass->Load("data/textures/grass.png", true, true);
+    snow->Load("data/textures/snow.png", true, true);
+    rock->Load("data/textures/rock.png", true, true);
 
     Push("soil", soil);
     Push("grass", grass);
     Push("snow", snow);
+    Push("rock", rock);
 }
