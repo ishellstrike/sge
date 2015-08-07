@@ -12,7 +12,8 @@ vec4 encodeFloat( float v ) {
 }
 
 float decodeFloat( vec4 rgb ) {
-  return dot(rgb.rgb, vec3(1.0, 1/255.0, 1/65025.0));
+  float v = dot(rgb.rgb, vec3(1.0, 1/255.0, 1/65025.0));
+  return v;
 }
 
 vec4 encodeNormal1( vec3 v )

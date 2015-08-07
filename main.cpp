@@ -22,8 +22,18 @@ int main( int argc, char* const argv[] )
                 Log::max_level = fatal;
         }
 
-    GameWindow gw;
-    gw.Mainloop();
+    try {
+        GameWindow gw;
+        gw.Mainloop();
+    }
+    catch( const std::exception& e )
+    {
+        LOG(fatal) << e.what();
+    }
+    catch( ... )
+    {
+        LOG(fatal) << "unknown exception";
+    }
 
     return 0;
 }

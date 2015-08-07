@@ -74,7 +74,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         str.append(std::to_string(i));
         auto uni = glGetUniformLocation(shader->program, str.c_str());
         if(uni == -1)
-            LOG(error) << "Texture generator could't found " << str << " sampler in " << shader->name;
+            LOG(error) << "Texture generator could't found " << str << " sampler in " << shader->name << ". skipped.";
         glUniform1i(uni, i);
     }
 
@@ -85,7 +85,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         const char *s = named_textures[i].first.c_str();
         auto uni = glGetUniformLocation(shader->program, s);
         if(uni == -1)
-            LOG(error) << "Texture generator could't found " << named_textures[i].first << " sampler in " << shader->name;
+            LOG(error) << "Texture generator could't found " << named_textures[i].first << " sampler in " << shader->name << ". skipped.";
         glUniform1i(uni, i + texes.size());
     }
 
@@ -96,7 +96,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         str.append(std::to_string(i));
         auto uni = glGetUniformLocation(shader->program, str.c_str());
         if(uni == -1)
-            LOG(error) << "Texture generator could't found " << str << " uniform in " << shader->name;
+            LOG(error) << "Texture generator could't found " << str << " uniform in " << shader->name << ". skipped.";
         glUniform1f(uni, params[i]);
     }
     
@@ -108,5 +108,24 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     Camera c;
     quad_mesh->Render(c);
     glViewport(0, 0, RESX, RESY);
+
+//    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+//    switch(status)
+//    {
+//    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+//        LOG(fatal) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
+//        break;
+//    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+//        LOG(fatal) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
+//        break;
+//    case GL_FRAMEBUFFER_UNSUPPORTED:
+//        LOG(fatal) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_UNSUPPORTED";
+//        break;
+//    default:
+//        if (status != GL_FRAMEBUFFER_COMPLETE)
+//            LOG(fatal) << "FATAL FRAMEBUFFER ERROR #" << status;
+//        break;
+//    }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

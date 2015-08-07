@@ -83,8 +83,8 @@ out vec4 out_color;
 
 void main(void)
 {
-    float snoize = decodeFloat(textureLod(material_height, texcoordout, 0));
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*100;
+    float snoize = decodeFloat(texture2D(material_height, texcoordout));
+    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout));
 
     grad = grad / (R + s * snoize);
     //grad = transform_N * grad;
@@ -103,23 +103,17 @@ void main(void)
     tex2 += texture2D(material_medium, texcoordout2*100);
     tex2 /= 2;
     tex = mix(tex, tex2, snoize+0.4);
-    if(snoize > 0.6)
+    if(snoize > 0.5)
     {
         tex = texture2D(material_high, texcoordout2*10);
         tex += texture2D(material_high, texcoordout2*100);
     }
 
-    if(abs(grad.x) + abs(grad.y) > 30)
-    {
-        vec4 tex3 = texture2D(material_side, texcoordout2*10);
-        tex3 += texture2D(material_side, texcoordout2*100);
-
-        tex = mix(tex, tex3, clamp((abs(grad.x) + abs(grad.y)-30), 0 ,1));
-    }
+    vec4 tex3 = texture2D(material_side, texcoordout2*10);
+    tex3 += texture2D(material_side, texcoordout2*100);
+    tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x) * 5, 0, 1));
 
     vec4 col = material_ambient;
-
-    //tex = mix(vec4(0,1,0,1), vec4(1,0,0,1), abs(grad.y) + abs(grad.x));
 
     float diffuse_rate = clamp(dot(light, eye), 0, 1);
 

@@ -85,7 +85,7 @@ void Camera::Move(CameraDirection dir) {
 
 void Camera::ReCreateProjectionMatrix()
 {
-    m_projection = glm::perspectiveFov(m_fieldOfView, RESX_float, RESX_float, m_nearPlane, m_farPlane);
+    m_projection = glm::perspectiveFov(m_fieldOfView, RESX_float, RESY_float, m_nearPlane, m_farPlane);
     m_projection_matrix_dirty = false;
 }
 

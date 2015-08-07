@@ -12,9 +12,9 @@ Texture::Texture(GLuint id) :
 {
 }
 
-Texture::Texture(glm::vec2 __size, bool smooth)
+Texture::Texture(glm::vec2 __size, bool smooth /*=false*/, bool _mip /*=false*/, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/, GLuint type /*=GL_UNSIGNED_BYTE*/)
 {
-    Empty(__size, smooth);
+    Empty(__size, smooth, _mip, dim, format, type);
 }
 
 Texture::~Texture()
@@ -45,7 +45,7 @@ void Texture::Load(const std::string &a, bool smooth, bool mip)
  * \param smooth параметр интерполяции текселей (true - GL_LINEAR, false - GL_NEAREST)
  * \param mip параметр генерации мип-карт
  */
-void Texture::Load(const Pixmap &a, bool smooth, bool mip)
+void Texture::Load(const Pixmap &a, bool smooth /*=false*/, bool _mip /*=false*/)
 {
     width = a.width;
     height = a.height;
@@ -55,7 +55,7 @@ void Texture::Load(const Pixmap &a, bool smooth, bool mip)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &a.data[0]);
 
 
-    if(mip)
+    if(_mip)
     {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
@@ -66,9 +66,10 @@ void Texture::Load(const Pixmap &a, bool smooth, bool mip)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
     }
 
-    if(mip)
+    mip = _mip;
+    if(_mip)
     {
-        glGenerateMipmap(GL_TEXTURE_2D);
+        GenMipmap();
     }
 }
 
@@ -78,7 +79,7 @@ void Texture::Load(const Pixmap &a, bool smooth, bool mip)
  * \param dim размерность (GL_TEXTURE_2D)
  * \param format цветовое пространство (GL_RGBA)
  */
-void Texture::Empty(const glm::vec2 &size, bool smooth, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/)
+void Texture::Empty(const glm::vec2 &size, bool smooth /*=false*/, bool _mip /*=false*/, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/, GLuint type /*=GL_UNSIGNED_BYTE*/)
 {
     width = (int) size.x;
     height = (int) size.y;
@@ -86,20 +87,29 @@ void Texture::Empty(const glm::vec2 &size, bool smooth, GLuint dim /*= GL_TEXTUR
 
     glGenTextures(1, &textureId);
     glBindTexture(dim, textureId);
-    glTexImage2D(dim, 0, format, size.x, size.y, 0, format, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(dim, 0, format, size.x, size.y, 0, format, type, NULL);
 
-    if(smooth)
+    if(_mip)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
     }
     else
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
     }
+    mip = _mip;
+}
 
-    glBindTexture(dim, 0);
+void Texture::GenMipmap()
+{
+    if(mip)
+        glGenerateMipmap(GL_TEXTURE_2D);
+    else
+        LOG(error) << "trying to generating mipmap for non mipmap texture. skipped.";
 }
 
 /*!

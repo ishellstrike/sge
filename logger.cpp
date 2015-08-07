@@ -5,6 +5,7 @@
 #include <thread>
 #include "helper.h"
 #include <ostream>
+#include <exception>
 
 Log::Log(int type, const char *file, int line) :
     o_stream(std::cout.rdbuf()),

@@ -22,9 +22,8 @@ const float res = 256.0f;
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
     TextureGenerator tg;
-    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res});
-    std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2{res,res});
-
+    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2(res), true, false, GL_TEXTURE_2D, GL_RGBA32F, GL_FLOAT);
+    std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2(res), true);
 
     tg.SetShader(parent->height_shader);
     tg.AddTexture("samplerPerlinPerm2D", parent->noise_map);
