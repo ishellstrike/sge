@@ -186,4 +186,8 @@ DISTFILES += \
     data/shaders/scattering/irradiance1.glsl \
     data/shaders/scattering/irradianceN.glsl \
     data/shaders/scattering/transmittance.glsl \
-    data/shaders/starfield.glsl
+    data/shaders/starfield.glsl \
+    data/textures/grass.png \
+    data/textures/rock.png \
+    data/textures/snow.png \
+    data/textures/soil.png

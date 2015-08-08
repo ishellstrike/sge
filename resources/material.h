@@ -20,6 +20,8 @@ struct Material
     high = nullptr,
     side = nullptr;
 
+    std::vector<GLuint> GetTextureLocations();
+
     glm::vec4 emission = glm::vec4(0.0f, 0.0f, 0.0f, 1.f);
     glm::vec4 ambient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     glm::vec4 diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);

@@ -111,6 +111,7 @@ public:
     std::shared_ptr<Material> material;
     std::vector<_Ty> vertices;
     std::vector<GLuint> indices;
+    std::vector<std::string> extensions;
     bool assigned = false;
     bool has_errors = false;
     GLint bindtype = GL_STATIC_DRAW;
@@ -183,47 +184,58 @@ public:
             glUniform1fv(shader->shininess_location, 1, &material->shininess);
 
 
-        if(material && material->texture != nullptr) {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, material->texture->textureId);
-        }
-        if(material && material->normal != nullptr) {
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
-        }
-        if(material && material->height != nullptr) {
-            glActiveTexture(GL_TEXTURE2);
-            glBindTexture(GL_TEXTURE_2D, material->height->textureId);
-        }
-        if(material && material->grad != nullptr) {
-            glActiveTexture(GL_TEXTURE3);
-            glBindTexture(GL_TEXTURE_2D, material->grad->textureId);
-        }
-        if(material && material->global_height != nullptr) {
-            glActiveTexture(GL_TEXTURE4);
-            glBindTexture(GL_TEXTURE_2D, material->global_height->textureId);
-        }
+        if(material)
+        {
+            if(GLEW_ARB_multi_bind)
+            {
+                auto texes = material->GetTextureLocations();
+                glBindTextures(0, texes.size(), &texes[0]);
+            }
+            else
+            {
+                if(material && material->texture != nullptr) {
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, material->texture->textureId);
+                }
+                if(material && material->normal != nullptr) {
+                    glActiveTexture(GL_TEXTURE1);
+                    glBindTexture(GL_TEXTURE_2D, material->normal->textureId);
+                }
+                if(material && material->height != nullptr) {
+                    glActiveTexture(GL_TEXTURE2);
+                    glBindTexture(GL_TEXTURE_2D, material->height->textureId);
+                }
+                if(material && material->grad != nullptr) {
+                    glActiveTexture(GL_TEXTURE3);
+                    glBindTexture(GL_TEXTURE_2D, material->grad->textureId);
+                }
+                if(material && material->global_height != nullptr) {
+                    glActiveTexture(GL_TEXTURE4);
+                    glBindTexture(GL_TEXTURE_2D, material->global_height->textureId);
+                }
 
 
-        if(material && material->detail != nullptr) {
-            glActiveTexture(GL_TEXTURE5);
-            glBindTexture(GL_TEXTURE_2D, material->detail->textureId);
-        }
-        if(material && material->low != nullptr) {
-            glActiveTexture(GL_TEXTURE6);
-            glBindTexture(GL_TEXTURE_2D, material->low->textureId);
-        }
-        if(material && material->medium != nullptr) {
-            glActiveTexture(GL_TEXTURE7);
-            glBindTexture(GL_TEXTURE_2D, material->medium->textureId);
-        }
-        if(material && material->high != nullptr) {
-            glActiveTexture(GL_TEXTURE8);
-            glBindTexture(GL_TEXTURE_2D, material->high->textureId);
-        }
-        if(material && material->side != nullptr) {
-            glActiveTexture(GL_TEXTURE9);
-            glBindTexture(GL_TEXTURE_2D, material->side->textureId);
+                if(material && material->detail != nullptr) {
+                    glActiveTexture(GL_TEXTURE5);
+                    glBindTexture(GL_TEXTURE_2D, material->detail->textureId);
+                }
+                if(material && material->low != nullptr) {
+                    glActiveTexture(GL_TEXTURE6);
+                    glBindTexture(GL_TEXTURE_2D, material->low->textureId);
+                }
+                if(material && material->medium != nullptr) {
+                    glActiveTexture(GL_TEXTURE7);
+                    glBindTexture(GL_TEXTURE_2D, material->medium->textureId);
+                }
+                if(material && material->high != nullptr) {
+                    glActiveTexture(GL_TEXTURE8);
+                    glBindTexture(GL_TEXTURE_2D, material->high->textureId);
+                }
+                if(material && material->side != nullptr) {
+                    glActiveTexture(GL_TEXTURE9);
+                    glBindTexture(GL_TEXTURE_2D, material->side->textureId);
+                }
+            }
         }
 
         glBindVertexArray(*vao);

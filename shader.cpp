@@ -20,7 +20,7 @@ bool printLog(GLuint id)
 
     if (infologLength > 0)
     {
-        LOG(error) << infoLog;
+        LOG(fatal) << infoLog;
         return false;
     }
     else
@@ -135,6 +135,15 @@ std::string get_dir(std::string path)
     return path.substr(0, path.find_last_of('/') + 1);
 }
 
+std::string get_filename_headername(const std::string &path)
+{
+    if(path.empty())
+        return "EMPTY_PATHSTRING";
+    auto name = path.substr( max (path.find_last_of("/"), path.find_last_of("\\")));
+    std::replace(name.begin(), name.end(), '.', '_');
+    return name;
+}
+
 std::string Shader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )
 {
     //PrintIndent();
@@ -157,7 +166,9 @@ std::string Shader::preprocessIncludes(const std::string &filename, int level /*
         {
             std::string include_file = matches[1];
 
+           // output << "#ifndef " << get_filename_headername(include_file);
             output << preprocessIncludes(get_dir(filename) + include_file, level + 1) << std::endl;
+           // output << "#endif //" << get_filename_headername(include_file);
         }
         else
         {

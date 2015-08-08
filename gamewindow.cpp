@@ -25,6 +25,7 @@
 #define MAJOR 2
 #define MINOR 1
 #define NO_SCATT
+#define NO_STARFIELD
 
 GameWindow::GameWindow()
 {
@@ -88,6 +89,8 @@ bool GameWindow::BaseInit()
     LOG(info) << "using OpenGL: " << glVersion[0] << "." << glVersion[1];
     LOG(info) << "GLFW: " << glfwGetVersionString();
     LOG(info) << "GLEW: " << glewGetString(GLEW_VERSION);
+    LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
+    LOG(info) << EXT_CHECK(GL_ARB_tessellation_shader);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -146,12 +149,6 @@ bool GameWindow::BaseInit()
     Resources::instance()->Init();
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
-    std::shared_ptr<Texture> texx = std::make_shared<Texture>();
-    texx->Load("data/derevo.png", true, true);
-    std::shared_ptr<Texture> texxx = std::make_shared<Texture>();
-    texxx->Load("data/aaa.png", true, true);
-    mat->texture = texx;
-    mat->normal = texxx;
     mat->low = Resources::instance()->Get<Texture>("grass");
     mat->medium = Resources::instance()->Get<Texture>("soil");
     mat->high = Resources::instance()->Get<Texture>("snow");
@@ -159,17 +156,9 @@ bool GameWindow::BaseInit()
 
 
     std::shared_ptr<Material> mat_star = std::make_shared<Material>();
-    mat_star->texture = texx;
-    mat_star->normal = texxx;
     mat_star->emission = Color::White;
 
     auto wm = std::make_shared<Material>();
-    auto wt = std::make_shared<Texture>();
-    auto wn = std::make_shared<Texture>();
-    wt->Load("data/water.png", true, true);
-    wn->Load("data/normal.png", true, true);
-    wm->texture = wt;
-    wm->normal = wn;
 
     qs = std::make_shared<QuadSphere>(mat);
     qs->max_divide = 4;
@@ -314,77 +303,9 @@ void GameWindow::BaseDraw()
     batch->setUniform(proj * model);
 
     ws->Draw();
-    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});   
+    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
+    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
-
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf((const GLfloat*)&cam->Projection());
-    glMatrixMode(GL_MODELVIEW);
-    glm::mat4 MV = cam->View();
-    glLoadMatrixf((const GLfloat*)&MV[0][0]);
-    glUseProgram(0);
-    glBegin(GL_LINES);
-        glColor3f(1,0,0);
-        glVertex3f(0,0,0);
-        glVertex3f(1,0,0);
-
-        glColor3f(0,1,0);
-        glVertex3f(0,0,0);
-        glVertex3f(0,1,0);
-
-        glColor3f(0,0,1);
-        glVertex3f(0,0,0);
-        glVertex3f(0,0,1);
-    glEnd();
-
-    glEnable(GL_DEPTH_TEST);
-    glBegin(GL_LINES);
-    for(size_t i = 0; i < ss.system.size(); i++)
-    {
-            for(int b = ss.system[i]->cur_h; b < ss.system[i]->max_h + ss.system[i]->cur_h; b++)
-            {
-                auto a = b % ss.system[i]->max_h;
-
-                glColor4fv(&glm::lerp(Color::Clear, ss.system[i]->color - glm::vec4(0,0,0,0.7f), (b - ss.system[i]->cur_h)/(float)ss.system[i]->hist.size())[0]);
-
-                if(a == ss.system[i]->max_h - 1)
-                {
-                    if(ss.system[i]->hist[0] != glm::dvec3(0) && ss.system[i]->hist[ss.system[i]->max_h - 1] != glm::dvec3(0))
-                    {
-                        glVertex3dv(&ss.system[i]->hist[0][0]);
-                        glVertex3dv(&ss.system[i]->hist[ss.system[i]->max_h - 1][0]);
-                    }
-                }
-                else
-                {
-                    if(ss.system[i]->hist[a] != glm::dvec3(0) && ss.system[i]->hist[a+1] != glm::dvec3(0))
-                    {
-                        glVertex3dv(&ss.system[i]->hist[a][0]);
-                        glVertex3dv(&ss.system[i]->hist[a+1][0]);
-                    }
-                }
-            }
-
-//            glColor4fv(&Color::Red[0]);
-//            glVertex3dv(&ss.system[i]->pos[0]);
-//            glVertex3dv(&(ss.system[i]->pos + ss.system[i]->speed)[0]);
-
-//            glColor4fv(&Color::Green[0]);
-//            glVertex3dv(&ss.system[i]->pos[0]);
-//            glVertex3dv(&(ss.system[i]->pos + ss.system[i]->acc)[0]);
-    }
-    glEnd();
-
-//    glEnable(GL_DEPTH_TEST);
-//    glBegin(GL_LINES);
-//        if(tail.size())
-//        for(size_t i = 0; i < tail.size() - 1; ++i)
-//        {
-//            glVertex3fv(&tail[i][0]);
-//            glVertex3fv(&tail[i+1][0]);
-//        }
-//    glEnd();
 
     glfwSwapBuffers(window);
     gt.Update(static_cast<float>(glfwGetTime()));

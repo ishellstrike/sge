@@ -30,6 +30,8 @@
 
 #define HasValue(value) if(value) value
 
+#define EXT_CHECK(b) (std::string(#b)).append( b ? " available" : " unavailable" )
+
 /*!
  * \brief 3d версия алгоритме Брезенхема
  * \param p1 начало отрезка
