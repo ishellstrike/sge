@@ -241,7 +241,7 @@ public:
         glBindVertexArray(*vao);
 
         if(patches) {
-            glPatchParameteri(GL_PATCH_VERTICES, 4);
+            glPatchParameteri(GL_PATCH_VERTICES, 3);
         }
 
         glDrawElements(primitives, loaded_i, GL_UNSIGNED_INT, (void*)0);

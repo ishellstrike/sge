@@ -25,7 +25,7 @@
 #define MAJOR 2
 #define MINOR 1
 #define NO_SCATT
-#define NO_STARFIELD
+//#define NO_STARFIELD
 
 GameWindow::GameWindow()
 {
@@ -181,7 +181,7 @@ bool GameWindow::BaseInit()
     ss.system.back()->dominant = true;
     ss.system.back()->InitRender(mat);
 
-    for(int i = 0; i < 40; i++)
+    for(int i = 0; i < 2; i++)
     {
         ss.system.push_back(std::make_shared<SpaceObject>(random::next<float>()/5.0f,
                                                           3200.f,
@@ -218,6 +218,7 @@ void GameWindow::BaseUpdate()
 
     cam->camera_scale = speed;
     cam->camera_scale *= Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
+    cam->camera_scale *= gt.elapsed;
 
     if(Keyboard::isKeyDown(GLFW_KEY_W))
         cam->Move(Camera::FORWARD);
@@ -269,11 +270,16 @@ void GameWindow::BaseUpdate()
    Mouse::dropState();
 }
 
+void GameWindow::Swap()
+{
+    glfwSwapBuffers(wi->window);
+}
+
 void GameWindow::BaseDraw()
 {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor(0,0,0, 1.f);
+    glClearColor(1,0,0, 1.f);
 
 #ifndef NO_SCATT
     glDisable(GL_DEPTH_TEST);
@@ -307,7 +313,7 @@ void GameWindow::BaseDraw()
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
 
-    glfwSwapBuffers(window);
+    Swap();
     gt.Update(static_cast<float>(glfwGetTime()));
     fps.Update(gt);
     perf->UpdateTimer(fps, gt);

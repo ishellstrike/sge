@@ -30,10 +30,12 @@ void Resources::Init()
 
 
     auto basic = new BasicJargShader;
+    basic->AddExtension("GL_ARB_tessellation_shader");
     basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
     basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
     basic->loadShaderFromSource(GL_TESS_CONTROL_SHADER, "data/shaders/minimal.glsl");
     basic->loadShaderFromSource(GL_TESS_EVALUATION_SHADER, "data/shaders/minimal.glsl");
+    basic->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
     basic->Link();
     basic->Afterlink();
     basic->locateVar("R");

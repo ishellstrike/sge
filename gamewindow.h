@@ -52,7 +52,7 @@ public:
 
     std::shared_ptr<SpriteBatch> batch;
     std::shared_ptr<Texture> tex1;
-    float speed = 0.001;
+    float speed = 1;
 
     bool wire = true;
     std::shared_ptr<Camera> cam1, cam2;
@@ -66,6 +66,7 @@ public:
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
     std::shared_ptr<QuadSphere> qs, qs_w;
+    static void Swap();
 };
 
 #endif // GAMEWINDOW_H

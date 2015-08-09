@@ -23,9 +23,8 @@ public:
     void loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version = GLSLVER);
     bool Link();
     GLint program;
-    bool has_header;
     std::vector<GLint> shaders_;
-    std::string global_header;
+    std::vector<std::string> extensions;
 
     GLint posAttrib, /*!< position attribute */
     colAttrib,       /*!< color attribute */
@@ -36,8 +35,10 @@ public:
     binormalAttrib;  /*!< binormal attribute */
 
     void Afterlink();
-    std::string preprocessIncludes(const std::string &filename, int level = 0);
+
+    void AddExtension(std::string s);
 private:
     GLint locate(const std::string &s);
+    std::string preprocessIncludes(const std::string &filename, int level = 0);
 };
 #endif // JargShader_h__

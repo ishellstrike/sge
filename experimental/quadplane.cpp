@@ -77,6 +77,7 @@ void QuadPlane::Render(const Camera &cam,
 
             terminal_mesh->material = sub_texture;
             terminal_mesh->shader = parent->basic;
+            terminal_mesh->primitives = GL_PATCHES;
 
             int size = parent->tess_size;
             terminal_mesh->indices.reserve(size * size * 6);

@@ -20,7 +20,7 @@ bool printLog(GLuint id)
 
     if (infologLength > 0)
     {
-        LOG(fatal) << infoLog;
+        LOG(error) << infoLog;
         return false;
     }
     else
@@ -30,8 +30,7 @@ bool printLog(GLuint id)
     }
 }
 
-Shader::Shader() :
-    has_header(false)
+Shader::Shader()
 {
     program = glCreateProgram();
 }
@@ -74,12 +73,29 @@ GLint Shader::locateVar(const std::string &s)
 }
 
 std::map<int, std::string> shader_defines = {
-         std::make_pair(GL_FRAGMENT_SHADER, "#define _FRAGMENT_"),
-         std::make_pair(GL_VERTEX_SHADER, "#define _VERTEX_"),
-         std::make_pair(GL_GEOMETRY_SHADER, "#define _GEOMETRY_"),
-         std::make_pair(GL_TESS_EVALUATION_SHADER, "#define _TESSEVAL_"),
-         std::make_pair(GL_TESS_CONTROL_SHADER, "#define _TESSCONTROL_")
+         std::make_pair(GL_FRAGMENT_SHADER, "_FRAGMENT_"),
+         std::make_pair(GL_VERTEX_SHADER, "_VERTEX_"),
+         std::make_pair(GL_GEOMETRY_SHADER, "_GEOMETRY_"),
+         std::make_pair(GL_TESS_EVALUATION_SHADER, "_TESSEVAL_"),
+         std::make_pair(GL_TESS_CONTROL_SHADER, "_TESSCONTROL_")
         };
+
+std::string get_dir(std::string path)
+{
+    return path.substr(0, path.find_last_of('/') + 1);
+}
+
+std::string get_name(std::string path)
+{
+    return path.substr(path.find_last_of('/') + 1);
+}
+
+std::string get_filename_headername(std::string path)
+{
+    std::replace(path.begin(), path.end(), '.', '_');
+    std::transform(path.begin(), path.end(), path.begin(), toupper);
+    return path;
+}
 
 /*!
  * \brief JargShader::loadShaderFromSource
@@ -94,8 +110,12 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     name = filename;
 
     ss << version << std::endl;
+    for(const auto &ext : extensions)
+    {
+        ss << "#extension " << ext << " : enable" << std::endl;
+    }
 
-    ss << shader_defines[type] << std::endl;
+    ss << "#define " << shader_defines[type] << std::endl;
 
     ss << preprocessIncludes(filename);
 
@@ -114,15 +134,16 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     if(has_error)
     {
         LOG(error) << "in file " << filename;
-        int num = GetLastPatternedFilenameNubmer("shader_error_log", ".txt");
-        std::string f_name = string_format("shader_error_log%d.txt", num+1);
+        std::string f_name = string_format("shader_error_log_%s_%s.txt",
+                                           get_filename_headername(get_name(filename)).c_str(),
+                                           shader_defines[type].c_str());
         LOG(error) << "shader error detail saveid in " << f_name;
         std::stringstream out_file;
         out_file << str;
         char infoLog[1024];
         int infologLength = 0;
-        glGetProgramInfoLog(id, 1024, &infologLength, infoLog);
-        out_file << std::endl << "=======ERROR======" << std::endl << infoLog;
+        glGetShaderInfoLog(id, 1024, &infologLength, infoLog);
+        out_file << std::endl << "=======ERROR======" << std::endl << infoLog << std::endl;
         SaveTextFile(f_name, out_file.str());
     }
 
@@ -130,19 +151,6 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     shaders_.push_back(id);
 }
 
-std::string get_dir(std::string path)
-{
-    return path.substr(0, path.find_last_of('/') + 1);
-}
-
-std::string get_filename_headername(const std::string &path)
-{
-    if(path.empty())
-        return "EMPTY_PATHSTRING";
-    auto name = path.substr( max (path.find_last_of("/"), path.find_last_of("\\")));
-    std::replace(name.begin(), name.end(), '.', '_');
-    return name;
-}
 
 std::string Shader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )
 {
@@ -166,9 +174,9 @@ std::string Shader::preprocessIncludes(const std::string &filename, int level /*
         {
             std::string include_file = matches[1];
 
-           // output << "#ifndef " << get_filename_headername(include_file);
+            output << "#ifndef " << get_filename_headername(include_file) << std::endl;
             output << preprocessIncludes(get_dir(filename) + include_file, level + 1) << std::endl;
-           // output << "#endif //" << get_filename_headername(include_file);
+            output << "#endif //" << get_filename_headername(include_file) << std::endl;
         }
         else
         {
@@ -189,7 +197,8 @@ std::string Shader::preprocessIncludes(const std::string &filename, int level /*
 bool Shader::Link() {
     glLinkProgram(program);
     LOG(verbose) << "Program " << std::to_string(program) << " linking";
-    printLog(program);
+    if(!printLog(program))
+        throw;
     LOG(verbose) << "--------------------";
     return true;
 }
@@ -217,5 +226,10 @@ void Shader::Afterlink()
                  "; uv2 = " << uv2Attrib <<
                  "; norm = " << normAttrib <<
                  "; tan = " << tangentAttrib <<
-                 "; bi = " << binormalAttrib << ";";
+                    "; bi = " << binormalAttrib << ";";
+}
+
+void Shader::AddExtension(std::string s)
+{
+    extensions.push_back(std::move(s));
 }
