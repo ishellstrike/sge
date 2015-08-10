@@ -80,8 +80,10 @@ bool GameWindow::BaseInit()
 
 
     int glVersion[2] = {-1, -1};
+    int ntex;
     glGetIntegerv(GL_MAJOR_VERSION, &glVersion[0]);
     glGetIntegerv(GL_MINOR_VERSION, &glVersion[1]);
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &ntex);
     LOG(info) << "Renderer: " << glGetString(GL_RENDERER);
     LOG(info) << "Vendor: " << glGetString(GL_VENDOR);
     LOG(info) << "Version: " << glGetString(GL_VERSION);
@@ -89,6 +91,9 @@ bool GameWindow::BaseInit()
     LOG(info) << "using OpenGL: " << glVersion[0] << "." << glVersion[1];
     LOG(info) << "GLFW: " << glfwGetVersionString();
     LOG(info) << "GLEW: " << glewGetString(GLEW_VERSION);
+    LOG(info) << "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: " << ntex;
+    if(ntex < 16)
+        throw;
     LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
     LOG(info) << EXT_CHECK(GL_ARB_tessellation_shader);
 
@@ -279,7 +284,7 @@ void GameWindow::BaseDraw()
 {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor(1,0,0, 1.f);
+    glClearColor(0,0,0, 1.f);
 
 #ifndef NO_SCATT
     glDisable(GL_DEPTH_TEST);

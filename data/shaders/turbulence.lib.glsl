@@ -8,7 +8,7 @@ uniform sampler2D samplerPerlinGrad2D;
 const float pi = 3.14159265358;
 #define saturate(x) clamp(x, 0.0, 1.0)
 
-float perlinNoise(vec2 p, float seed)
+float perlinNoise( in vec2 p, in float seed)
 {
     // Calculate 2D integer coordinates i and fraction p.
     vec2 i = floor(p);
@@ -41,7 +41,7 @@ float perlinNoise(vec2 p, float seed)
     return n * 1.5;
 }
 
-vec3 perlinNoiseDeriv(vec2 p, float seed)
+vec3 perlinNoiseDeriv( in vec2 p, in float seed)
 {
     // Calculate 2D integer coordinates i and fraction p.
     vec2 i = floor(p);
@@ -89,7 +89,7 @@ vec3 perlinNoiseDeriv(vec2 p, float seed)
     return vec3(n, dx, dy) * 1.5;
 }
 
-vec3 perlinNoisePseudoDeriv(vec2 p, float seed)
+vec3 perlinNoisePseudoDeriv( in vec2 p, in float seed)
 {
     // Calculate 2D integer coordinates i and fraction p.
     vec2 i = floor(p);
@@ -131,7 +131,7 @@ vec3 perlinNoisePseudoDeriv(vec2 p, float seed)
 }
 
 
-float swissTurbulence(vec2 p, float seed, int octaves)
+float swissTurbulence( in vec2 p, in float seed, in int octaves)
 {
      float sum = 0;
      float freq = 1.0, amp = 1.0;
@@ -150,7 +150,7 @@ float swissTurbulence(vec2 p, float seed, int octaves)
     return sum;
 }
 
-float jordanTurbulence(vec2 p, float seed, int octaves)
+float jordanTurbulence( in vec2 p, in float seed, in int octaves)
 {
     float lacunarity = 2.0;
     float gain1 = 0.8; float gain = 0.5;
@@ -181,7 +181,7 @@ float jordanTurbulence(vec2 p, float seed, int octaves)
     return sum;
 }
 
-float turbulence(vec2 p, float seed, int octaves)
+float turbulence( in vec2 p, in float seed, in int octaves)
 {
     float sum = 0;
     float freq = 1.0, amp = 1.0;
@@ -196,17 +196,17 @@ float turbulence(vec2 p, float seed, int octaves)
     return sum;
 }
 
-float billowedNoise(vec2 p, float seed)
+float billowedNoise( in vec2 p, in float seed)
 {
     return abs(perlinNoise(p, seed));
 }
 
-float ridgedNoise(vec2 p, float seed)
+float ridgedNoise( in vec2 p, in float seed)
 {
     return 1.0f-abs(perlinNoise(p, seed));
 }
 
-float iqTurbulence(vec2 p, float seed, int octaves)
+float iqTurbulence( in vec2 p, in float seed, in int octaves)
 {
     float sum = 0.5;
     float freq = 1.0, amp = 1.0;

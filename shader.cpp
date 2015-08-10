@@ -175,6 +175,7 @@ std::string Shader::preprocessIncludes(const std::string &filename, int level /*
             std::string include_file = matches[1];
 
             output << "#ifndef " << get_filename_headername(include_file) << std::endl;
+            output << "// including " << include_file << std::endl;
             output << preprocessIncludes(get_dir(filename) + include_file, level + 1) << std::endl;
             output << "#endif //" << get_filename_headername(include_file) << std::endl;
         }

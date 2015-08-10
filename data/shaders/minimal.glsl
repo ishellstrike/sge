@@ -48,23 +48,16 @@ layout (location = 3) in vec2 texcoord;
 layout (location = 4) in vec2 texcoord2;
 
 
-out Vertex {
+out VS_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
-    vec3 positionout;
-} Vert;
+} vert;
 
 void main(void)
 {
-    //float snoize = decodeFloat(textureLod(material_global_height, texcoord2, 0));
-
-    //vec3 newPosition = (R + s * snoize) * position;
-    //vec4 mvpLocation = vec4(newPosition, 1);
-
     gl_Position = vec4(position, 1);
-    Vert.positionout = position;
-    Vert.texcoordout = texcoord;
-    Vert.texcoordout2 = texcoord2;
+    vert.texcoordout = texcoord;
+    vert.texcoordout2 = texcoord2;
 }
 #endif
 
@@ -74,13 +67,11 @@ layout ( vertices = 3 ) out;
 in VS_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
-    vec3 positionout;
 } tcs_in[];
 
 out TCS_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
-    vec3 positionout;
 } tcs_out[];
 
 void main ()
@@ -92,7 +83,10 @@ void main ()
 
         for (int i = 0; i < 3; i++)
         {
-            vec4 position = transform_VP * transform_M * gl_in[i].gl_Position;
+            float snoize = decodeFloat(textureLod(material_global_height, tcs_in[i].texcoordout2, 0));
+            vec3 pos = gl_in[i].gl_Position.xyz;
+            vec3 newPosition = (R + s * snoize) * pos;
+            vec4 position = transform_VP * transform_M * vec4(newPosition, 1);
 
             if (position.w != 0.0)
             {
@@ -113,7 +107,6 @@ void main ()
 
     tcs_out[gl_InvocationID].texcoordout = tcs_in[gl_InvocationID].texcoordout;
     tcs_out[gl_InvocationID].texcoordout2 = tcs_in[gl_InvocationID].texcoordout2;
-    tcs_out[gl_InvocationID].positionout = tcs_in[gl_InvocationID].positionout;
 
     gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 }
@@ -125,13 +118,11 @@ layout(triangles, fractional_odd_spacing, ccw) in;
 in TCS_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
-    vec3 positionout;
 } tes_in[];
 
 out TES_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
-    vec3 positionout;
 } tes_out;
 
 vec2 interpolateVec2(in vec2 v0, in vec2 v1, in vec2 v2)
@@ -159,11 +150,6 @@ void main(void)
                                            tes_in[1].texcoordout2,
                                            tes_in[2].texcoordout2);
 
-
-    tes_out.positionout = normalize(interpolateVec3(tes_in[0].positionout,
-                                                    tes_in[1].positionout,
-                                                    tes_in[2].positionout));
-
     gl_Position = interpolateVec4(gl_in[0].gl_Position,
                                   gl_in[1].gl_Position,
                                   gl_in[2].gl_Position);
@@ -177,8 +163,7 @@ layout(triangle_strip, max_vertices = 3) out;
 in TES_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
-    vec3 positionout;
-} tes_out[3];
+} geo_in[3];
 
 out GEO_OUT {
     vec2 texcoordout;
@@ -188,20 +173,16 @@ out GEO_OUT {
 
 void main(void)
 {
-    for(int i = 0; i < gl_in.length(); ++i)
+    for(int i = 0; i < 3; ++i)
     {
-        geo_out.texcoordout = tes_out[i].texcoordout;
-        geo_out.texcoordout2 = tes_out[i].texcoordout2;
-        geo_out.positionout = tes_out[i].positionout;
+        geo_out.texcoordout = geo_in[i].texcoordout;
+        geo_out.texcoordout2 = geo_in[i].texcoordout2;
+        float snoize = decodeFloat(textureLod(material_global_height, geo_out.texcoordout2, 0));
+        vec3 pos = gl_in[i].gl_Position.xyz;
+        vec3 newPosition = (R + s * snoize) * pos;
+        vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
 
-        //float displacementOffset = texture(u_normalTexture, v_texCoord).a * u_displacementScale;
-        //vec4 displacement = vec4(normalize(v_g_normal[i]) * displacementOffset, 0.0);
-
-        float snoize = decodeFloat(textureLod(material_global_height, tes_out[i].texcoordout2, 0));
-
-        vec3 newPosition = (R + s * snoize) * normalize(gl_in[i].gl_Position.xyz);
-        vec4 mvpLocation =  vec4(newPosition, 0);
-
+        geo_out.positionout = gl_in[i].gl_Position.xyz;
         gl_Position = mvpLocation;
 
         EmitVertex();
@@ -218,7 +199,7 @@ in GEO_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
     vec3 positionout;
-} geo_in;
+} frag_in;
 
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
 float density = 0.0003;
@@ -229,9 +210,9 @@ layout(location = 0) out vec4 out_color;
 
 void main(void)
 {
-    vec2 texcoordout = geo_in.texcoordout;
-    vec2 texcoordout2 = geo_in.texcoordout2;
-    vec3 positionout = geo_in.positionout;
+    vec2 texcoordout = frag_in.texcoordout;
+    vec2 texcoordout2 = frag_in.texcoordout2;
+    vec3 positionout = frag_in.positionout;
 
     float snoize = decodeFloat(texture2D(material_height, texcoordout));
     vec3 grad = decodeNormal(texture2D(material_grad, texcoordout));
