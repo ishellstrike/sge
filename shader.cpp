@@ -112,6 +112,9 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     ss << version << std::endl;
     for(const auto &ext : extensions)
     {
+        if(ext == std::string("GL_ARB_tessellation_shader"))
+            if(type != GL_TESS_CONTROL_SHADER && type != GL_TESS_EVALUATION_SHADER)
+                continue;
         ss << "#extension " << ext << " : enable" << std::endl;
     }
 

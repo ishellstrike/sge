@@ -3,6 +3,7 @@
 #include "ClassicNoise.h"
 #include "TextureGenerator.h"
 #include "sge_ui/wins.h"
+#include "prefecences.h"
 
 QuadPlane::QuadPlane()
 {
@@ -77,7 +78,7 @@ void QuadPlane::Render(const Camera &cam,
 
             terminal_mesh->material = sub_texture;
             terminal_mesh->shader = parent->basic;
-            terminal_mesh->primitives = GL_PATCHES;
+            //terminal_mesh->primitives = GL_PATCHES;
 
             int size = parent->tess_size;
             terminal_mesh->indices.reserve(size * size * 6);

@@ -227,14 +227,14 @@ void Camera::Viewport(const glm::vec4 &value)
     m_projection_matrix_dirty = true;
 }
 
-glm::vec2 Camera::Project(const glm::vec3 pos)
+glm::vec2 Camera::Project(const glm::vec3 &pos) const
 {
     glm::vec3 v = glm::project(pos, Model() * View(), Projection(), Viewport());
     //v /= v.z;
     return glm::vec2(v.x, RESY - v.y);
 }
 
-glm::ray Camera::unProject(const glm::vec2 pos)
+glm::ray Camera::unProject(const glm::vec2 pos) const
 {
     glm::vec3 near = glm::unProject(glm::vec3(pos.x, RESY-pos.y, 0.f),  Model() * View(), Projection(),
                                     Viewport());

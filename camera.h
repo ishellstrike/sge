@@ -55,8 +55,8 @@ public:
 
     glm::vec3 Up, Forward, Backward, Left, Right;
 
-    glm::vec2 Project(const glm::vec3 pos);
-    glm::ray unProject(const glm::vec2 pos);
+    glm::vec2 Project(const glm::vec3 &pos) const;
+    glm::ray unProject(const glm::vec2 pos) const;
 
     float camera_scale = 1;
 

@@ -61,106 +61,11 @@ void main(void)
 }
 #endif
 
-#ifdef _TESSCONTROL_
-layout ( vertices = 3 ) out;
-
-in VS_OUT {
-    vec2 texcoordout;
-    vec2 texcoordout2;
-} tcs_in[];
-
-out TCS_OUT {
-    vec2 texcoordout;
-    vec2 texcoordout2;
-} tcs_out[];
-
-void main ()
-{
-
-    if (gl_InvocationID == 0)
-    {
-        vec2 screenPos[3];
-
-        for (int i = 0; i < 3; i++)
-        {
-            float snoize = decodeFloat(textureLod(material_global_height, tcs_in[i].texcoordout2, 0));
-            vec3 pos = gl_in[i].gl_Position.xyz;
-            vec3 newPosition = (R + s * snoize) * pos;
-            vec4 position = transform_VP * transform_M * vec4(newPosition, 1);
-
-            if (position.w != 0.0)
-            {
-                position /= position.w;
-            }
-
-            screenPos[i].x = (position.x + 1.0) * 0.5 * 800;
-            screenPos[i].y = (position.y + 1.0) * 0.5 * 800;
-        }
-
-        // Tessellate depending how big the distance is on the screen
-        gl_TessLevelOuter[0] = max(distance(screenPos[1], screenPos[2]) / screenDistance, 1.0);
-        gl_TessLevelOuter[1] = max(distance(screenPos[2], screenPos[0]) / screenDistance, 1.0);
-        gl_TessLevelOuter[2] = max(distance(screenPos[0], screenPos[1]) / screenDistance, 1.0);
-
-        gl_TessLevelInner[0] = (gl_TessLevelOuter[0] + gl_TessLevelOuter[1] + gl_TessLevelOuter[2]) / 3.0;
-    }
-
-    tcs_out[gl_InvocationID].texcoordout = tcs_in[gl_InvocationID].texcoordout;
-    tcs_out[gl_InvocationID].texcoordout2 = tcs_in[gl_InvocationID].texcoordout2;
-
-    gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
-}
-#endif
-
-#ifdef _TESSEVAL_
-layout(triangles, fractional_odd_spacing, ccw) in;
-
-in TCS_OUT {
-    vec2 texcoordout;
-    vec2 texcoordout2;
-} tes_in[];
-
-out TES_OUT {
-    vec2 texcoordout;
-    vec2 texcoordout2;
-} tes_out;
-
-vec2 interpolateVec2(in vec2 v0, in vec2 v1, in vec2 v2)
-{
-    return v0 * gl_TessCoord.x + v1 * gl_TessCoord.y + v2 * gl_TessCoord.z;
-}
-
-vec3 interpolateVec3(in vec3 v0, in vec3 v1, in vec3 v2)
-{
-    return v0 * gl_TessCoord.x + v1 * gl_TessCoord.y + v2 * gl_TessCoord.z;
-}
-
-vec4 interpolateVec4(in vec4 v0, in vec4 v1, in vec4 v2)
-{
-    return v0 * gl_TessCoord.x + v1 * gl_TessCoord.y + v2 * gl_TessCoord.z;
-}
-
-void main(void)
-{
-    tes_out.texcoordout = interpolateVec2(tes_in[0].texcoordout,
-                                          tes_in[1].texcoordout,
-                                          tes_in[2].texcoordout);
-
-    tes_out.texcoordout2 = interpolateVec2(tes_in[0].texcoordout2,
-                                           tes_in[1].texcoordout2,
-                                           tes_in[2].texcoordout2);
-
-    gl_Position = interpolateVec4(gl_in[0].gl_Position,
-                                  gl_in[1].gl_Position,
-                                  gl_in[2].gl_Position);
-}
-#endif
-
 #ifdef _GEOMETRY_
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
-in TES_OUT {
+in VS_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
 } geo_in[3];

@@ -21,7 +21,7 @@ public:
 
     int minimum = 0;
     int max_divide = 8;
-    int tess_size = 6;
+    int tess_size = 32;
     glm::vec3 center = {0,0,0};
 
     GLuint shader_r, shader_s;
