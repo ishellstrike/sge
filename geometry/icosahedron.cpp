@@ -39,8 +39,8 @@ Mesh Icosahedron::getMesh()
         return *sm_mesh;
     }
     Mesh* m = new Mesh();
-    float magicAngle = M_PI * 26.565f / 180.f;
-    float segmentAngle = M_PI * 72.f / 180.f;
+    float magicAngle = glm::pi<float>() * 26.565f / 180.f;
+    float segmentAngle = glm::pi<float>() * 72.f / 180.f;
     float currentAngle = 0;
 
     glm::vec3 v[VERTEXCOUNT];
@@ -54,7 +54,7 @@ Mesh Icosahedron::getMesh()
             0.5f * cos(currentAngle) * cos(magicAngle));
         currentAngle += segmentAngle;
     }
-    currentAngle = M_PI * 36.f / 180.f;
+    currentAngle = glm::pi<float>() * 36.f / 180.f;
     for (int i=6; i<11; ++i)
     {
         v[i] = glm::vec3(0.5 * sin(currentAngle) * cos(-magicAngle),

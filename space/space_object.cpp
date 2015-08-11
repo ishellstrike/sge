@@ -200,7 +200,7 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
     if(render)
     {
         render->world = glm::translate(glm::mat4(1), glm::vec3(pos));
-        render->s = R<float>()/10.0;
+        render->s = R<float>()/10.0f;
         render->R = R<float>();
         render->center = glm::vec3(pos);
         render->Update(cam);

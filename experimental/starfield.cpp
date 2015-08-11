@@ -22,9 +22,8 @@ Starfield::Starfield()
     shader->Link();
     shader->Afterlink();
     field.shader = shader;
-    int a = sizeof(VertPosCol);
 
-    field.Bind();
+    field.ForgetBind();
 }
 
 void Starfield::Render(const Camera &cam)

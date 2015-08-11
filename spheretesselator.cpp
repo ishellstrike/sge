@@ -25,12 +25,12 @@ static const int Seed = 123;
 inline float Noise2D__(float x, float y) {
     int n = (int) (x + y*57);
     n = (n << 13) ^ n;
-    double value = (1.0f - ((n*(n*n*15731 + 789221) + 1376312589) & 0x7fffffff)/1073741824.0f);
-    return abs(value);
+    float value = (1.0f - ((n*(n*n*15731 + 789221) + 1376312589) & 0x7fffffff)/1073741824.0f);
+    return fabs(value);
 }
 
 inline float Noise2D(float x, float y){
-    return Noise2D__(x,y)/10+0.9;
+    return Noise2D__(x,y)/10+0.9f;
 }
 
 inline float SmoothedNoise2D(float x, float y) {
@@ -46,7 +46,7 @@ void Tesselator::SphereSubTesselate(std::shared_ptr<Mesh> &mesh)
     std::shared_ptr<Mesh> m = std::make_shared<Mesh>();
 
     int off = 0;
-    for (int i =0; i< mesh->Indices.size() -2; i+= 3)
+    for (size_t i =0; i< mesh->Indices.size() -2; i+= 3)
     {
         VertPosNormUvUv t;
 
@@ -108,7 +108,7 @@ Mesh* Tesselator::SubTesselate(const Mesh& mesh)
     Mesh* m = new Mesh();
 
     int off = 0;
-    for (int i =0; i< mesh.Indices.size() -2; i+= 3)
+    for (size_t i =0; i< mesh.Indices.size() -2; i+= 3)
     {
         VertPosNormUvUv t;
 

@@ -194,7 +194,7 @@ bool GameWindow::BaseInit()
                                                                     0,
                                                                     random::next<float>()*30 - 15}));
 
-        ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital(*ss.system[0])*1000);
+        ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital<float>(*ss.system[0])*1000);
         ss.system.back()->InitRender(mat);
     }
 

@@ -48,13 +48,11 @@ public:
     std::shared_ptr<Material> material;
     glm::mat4 World = glm::mat4(1);
     std::string id = "";
-    void CalcTB();
     void matf();
     int loaded = 0;
     int vertices = 0;
     void loadSTL(const std::string &path);
     float FarestPoint();
-    bool loadMTL(const std::string &path);
     void BindExistingIBO(GLuint id, int size);
 private:
     GLuint *m_vao = nullptr;

@@ -29,8 +29,8 @@ void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsSto
     tg.SetShader(parent->height_shader);
     tg.AddTexture("samplerPerlinPerm2D", parent->noise_map);
     tg.AddTexture("samplerPerlinGrad2D", parent->grad_map);
-    tg.SetParams(offset.x - (2/res)*scale);
-    tg.SetParams(offset.y - (2/res)*scale);
+    tg.SetParams(static_cast<float>(offset.x) - (2/res)*scale);
+    tg.SetParams(static_cast<float>(offset.y) - (2/res)*scale);
     tg.SetParams(scale + (4/res)*scale);
     tg.SetResultTexture(height_map);
     tg.RenderOnTempFbo();
@@ -41,8 +41,8 @@ void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsSto
     grad_gen.SetShader(parent->grad_shader);
     grad_gen.AddTexture("height_map", height_map);
     grad_gen.SetResultTexture(grad_map);
-    grad_gen.SetParams(height_map->width);
-    grad_gen.SetParams(height_map->height);
+    grad_gen.SetParams(static_cast<float>(height_map->width));
+    grad_gen.SetParams(static_cast<float>(height_map->height));
     grad_gen.SetParams(scale);
     grad_gen.RenderOnTempFbo();
 
@@ -85,9 +85,9 @@ void QuadPlane::Render(const Camera &cam,
             terminal_mesh->vertices.reserve((size + 1) * (size + 1));
             int co = 0;
 
-            float xs = (-0.5 + offset.x); /*< x координата начала сектора сферы с отступом*/
-            float ys = (-0.5 + offset.y); /*< y координата начала сектора сферы с отступом*/
-            float dd = ((1.0*scale)/((float)size)); /*< размер 1 квада сектора сферы*/
+            float xs = (-0.5f + offset.x); /*< x координата начала сектора сферы с отступом*/
+            float ys = (-0.5f + offset.y); /*< y координата начала сектора сферы с отступом*/
+            float dd = ((1.0f * scale)/((float)size)); /*< размер 1 квада сектора сферы*/
 
             //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере сфера приводится к радиусу R
 
@@ -100,9 +100,9 @@ void QuadPlane::Render(const Camera &cam,
 
                     a.position = glm::normalize(a.position);
                     if(j == -1 || i == -1 || j == size + 1 || i == size +1)
-                        a.position *= 0.99;
+                        a.position *= 0.99f;
 
-                    a.uv = {i * ((1.0 - 4/res)/(float)size) + 2/res, j * ((1.0 - 4/res)/(float)size) + 2/res };
+                    a.uv = {i * ((1.0 - 4/res)/(float)size) + 2/res, j * ((1.0f - 4/res)/(float)size) + 2/res };
 
                     a.uv_glob = {xs + i * dd + 0.5f, ys + j * dd + 0.5f};
 

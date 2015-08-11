@@ -45,7 +45,7 @@ void Mesh::Unindex()
 {
     auto temp = std::move(Vertices);
     Vertices.resize(Indices.size()); 
-    for(int i=0; i<Indices.size();i++){
+    for(size_t i = 0; i < Indices.size(); ++i){
         Vertices[i] = temp[Indices[i]];
         Indices[i] = i;
     }
@@ -75,97 +75,16 @@ void CalcTangentBasis(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 
   glm::vec2 et2 = t3 - t1;
   tangent   = glm::vec3(0.0f);
   binormal  = glm::vec3(0.0f);
-  float tmp = 0.0;
+  float tmp = 0.0f;
   if (glm::abs(et1.x*et2.y - et1.y*et2.x)<0.0001f)
     tmp = 1.0f;
   else
-    tmp = 1.0 / (et1.x*et2.y - et1.y*et2.x);
+    tmp = 1.0f / (et1.x*et2.y - et1.y*et2.x);
   tangent  = (e1 * et2.y - e2 * et1.y) * tmp;
   binormal = (e2 * et1.x - e1 * et2.x) * tmp;
   tangent = glm::normalize(tangent);
   binormal = glm::normalize(binormal);
 }
-
-/*!
- * \brief Mesh::CalcTB
- *
- * Calculate tangents and binormals for mesh
- * needs normals
- */
-void Mesh::CalcTB()
-{
-//  for (unsigned int i=0; i < Vertices.size(); i++)
-//  {
-//    Vertices[i].tangent = glm::vec3(0.0f);
-//    Vertices[i].binormal = glm::vec3(0.0f);
-//  }
-//  for (unsigned int i=0; i < (Vertices.size() / 3);i++)
-//  {
-//    unsigned int a = Indices[i * 3 + 0];
-//    unsigned int b = Indices[i * 3 + 1];
-//    unsigned int c = Indices[i * 3 + 2];
-
-//    glm::vec3 bin, tan;
-//    CalcTangentBasis ( Vertices[a].position,
-//                       Vertices[b].position,
-//                       Vertices[c].position,
-//                       Vertices[a].uv,
-//                       Vertices[b].uv,
-//                       Vertices[c].uv,
-//                       tan, bin);
-
-//    Vertices[a].tangent  += tan;
-//    Vertices[b].tangent  += tan;
-//    Vertices[c].tangent  += tan;
-
-//    Vertices[a].binormal += bin;
-//    Vertices[b].binormal += bin;
-//    Vertices[c].binormal += bin;
-//  }
-
-//  for (unsigned int i=0; i < Vertices.size();i++)
-//  {
-//    Vertices[i].tangent = glm::normalize(Vertices[i].tangent);
-//    Vertices[i].binormal = glm::normalize(Vertices[i].binormal);
-
-//    glm::vec3 tmpT = Vertices[i].tangent;
-//    glm::vec3 tmpB = Vertices[i].binormal;
-//    glm::vec3 tmpN = Vertices[i].normal;
-
-//    glm::vec3 newT = tmpT - ((glm::cross(tmpN, tmpT)) * tmpN);
-//    glm::vec3 newB = tmpB - ((glm::cross(tmpN, tmpB)) * tmpN) - ((glm::cross(newT, tmpB))*newT);
-//    newT = glm::normalize(newT);
-//    newB = glm::normalize(newB);
-//    Vertices[i].tangent  = newT;
-//    Vertices[i].binormal = newB;
-
-//    float lenT = newT.length ();
-//    float lenB = newB.length ();
-
-//    if (lenT <= 0.0001 || lenB <= 0.0001)
-//    {
-//      if (lenT > 0.5)
-//        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
-//      else if (lenB > 0.5)
-//        Vertices[i].tangent  = glm::cross(Vertices[i].binormal, tmpN);
-//      else
-//      {
-//        glm::vec3 xAxis (1.0, 0.0, 0.0);
-//        glm::vec3 yAxis (0.0, 1.0, 0.0);
-//        glm::vec3 startAxis;
-//        if ((glm::dot(xAxis, tmpN)) < (glm::dot(yAxis, tmpN)))
-//          startAxis = xAxis;
-//        else
-//          startAxis = yAxis;
-//        Vertices[i].tangent  = glm::cross(tmpN, startAxis);
-//        Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
-//      }
-//    }
-//    else if ((glm::dot(Vertices[i].binormal, Vertices[i].tangent))> 0.9999)
-//      Vertices[i].binormal = glm::cross(tmpN, Vertices[i].tangent);
-//  }
-}
-
 
 /*!
  * \brief Mesh::computeNormal
@@ -317,11 +236,8 @@ bool Mesh::loadOBJ(const std::string &path)
     for(size_t i=0;i<vertexIndices.size();i++){
         Indices[i] = i;
     }
-}
 
-bool Mesh::loadMTL(const std::string &path)
-{
-    return 0;
+    return true;
 }
 
 void Mesh::Bind(int type /* = 0 */)
@@ -556,49 +472,7 @@ void Mesh::loadSTL(const std::string &patch) {
                 file.close();
             }
             else {
-//                var bfile = File.OpenRead(path);
-//                bfile.Read(new byte[80], 0, 80); //80b header
-//                var reader32 = new byte[4];
-//                bfile.Read(reader32, 0, 4);
-//                uint ntri = BitConverter.ToUInt32(reader32, 0);
-//                for (int i = 0; i < ntri; i++) {
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex1.Normal.X = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex1.Normal.Y = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex1.Normal.Z = BitConverter.ToSingle(reader32, 0);
-
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex1.Position.X = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex1.Position.Y = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex1.Position.Z = BitConverter.ToSingle(reader32, 0);
-
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex2.Position.X = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex2.Position.Y = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex2.Position.Z = BitConverter.ToSingle(reader32, 0);
-//                    vertex2.Normal = vertex1.Normal;
-
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex3.Position.X = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex3.Position.Y = BitConverter.ToSingle(reader32, 0);
-//                    bfile.Read(reader32, 0, 4);
-//                    vertex3.Position.Z = BitConverter.ToSingle(reader32, 0);
-//                    vertex3.Normal = vertex1.Normal;
-
-//                    Verteces.Add(vertex1);
-//                    Verteces.Add(vertex2);
-//                    Verteces.Add(vertex3);
-
-//                    bfile.Read(reader32, 0, 2);
-//                }
-//                bfile.Close();
+                //
             }
 
             for (size_t i = 0; i < Vertices.size(); i++) {
@@ -616,33 +490,6 @@ void Mesh::loadSTL(const std::string &patch) {
             }
             return max;
         }
-
-//        public bool saveSTL(string path) {
-//            if (File.Exists(path)) {
-//                File.Delete(path);
-//            }
-//            FileStream file = File.OpenWrite(path);
-//            StreamWriter sr = new StreamWriter(file);
-
-//            sr.WriteLine("solid {0}", path);
-//            for (int i = 0; i < Verteces.Count; i += 3)
-//            {
-
-//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "facet normal", Verteces[i].Normal.X, Verteces[i].Normal.Y, Verteces[i].Normal.Z));
-//                sr.WriteLine(string.Format(ifp, "{0}", "outer loop"));
-//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "vertex", Verteces[i].Position.X, Verteces[i].Position.Y, Verteces[i].Position.Z));
-//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "vertex", Verteces[i + 1].Position.X, Verteces[i + 1].Position.Y, Verteces[i + 1].Position.Z));
-//                sr.WriteLine(string.Format(ifp, "{0} {1} {2} {3}", "vertex", Verteces[i + 2].Position.X, Verteces[i + 2].Position.Y, Verteces[i + 2].Position.Z));
-//                sr.WriteLine(string.Format(ifp, "{0}", "endloop"));
-//                sr.WriteLine(string.Format(ifp, "{0}", "endfacet"));
-//            }
-//            sr.WriteLine("endsolid {0}", path);
-
-//            sr.Flush();
-//            sr.Close();
-//            file.Close();
-//            return true;
-//        }
 
 void Mesh::BuildBounding()
 {

@@ -52,7 +52,7 @@ public:
 
         if(vbo != nullptr) { // rebind
             glBindVertexArray(0);
-            for(int i = 0; i < _Ty::info.attrib.size(); ++i)
+            for(size_t i = 0; i < _Ty::info.attrib.size(); ++i)
             {
                 const VertexAttribute &a = _Ty::info.attrib[i];
                 glDisableVertexAttribArray(a.shader_pos);
@@ -87,7 +87,7 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(_Ty)*vertices.size(), &vertices[0], bindtype);
 
-        for(int i = 0; i < info.attrib.size(); ++i)
+        for(size_t i = 0; i < info.attrib.size(); ++i)
         {
             const VertexAttribute &a = info.attrib[i];
 
@@ -129,7 +129,7 @@ public:
     {
         assert(shader && "need shader to bind");
 
-        for(int i = 0; i < info.attrib.size(); ++i)
+        for(size_t i = 0; i < info.attrib.size(); ++i)
         {
             const VertexAttribute &a = info.attrib[i];
             a.shader_pos = glGetAttribLocation(shader->program, a.name.c_str());
