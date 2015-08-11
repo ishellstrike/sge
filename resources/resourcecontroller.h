@@ -15,7 +15,7 @@ public:
     {
         auto find = data.find(id);
         if(find == data.end())
-            throw;
+            return data["error"];
         return find->second;
     }
 

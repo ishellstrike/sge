@@ -3,6 +3,7 @@
 sge_perfomance::sge_perfomance(WContainer *par) :
     Win(par)
 {
+    text = "sge_perfomance";
     size = {200,220};
     pos = {0,0};
 

@@ -125,6 +125,9 @@ bool GameWindow::BaseInit()
         Mouse::Scroll(b);
     });
 
+    Resources::instance();
+    Resources::instance()->Init();
+
     gb = std::make_shared<GBuffer>();
     gb->Init(RESX, RESY);
 
@@ -138,6 +141,7 @@ bool GameWindow::BaseInit()
     ws->f = f12.get();
 
     perf = new sge_perfomance(ws.get());
+    texlab = new sge_texture_lab(ws.get());
 
     cam1 = std::make_shared<Camera>();
     cam2 = std::make_shared<Camera>();
@@ -149,9 +153,6 @@ bool GameWindow::BaseInit()
     cam2->Position({3000,3000,3000});
     cam2->LookAt({0,0,0});
     Resize(RESX, RESY);
-
-    Resources::instance();
-    Resources::instance()->Init();
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
     mat->low = Resources::instance()->Get<Texture>("grass");
@@ -245,9 +246,17 @@ void GameWindow::BaseUpdate()
 
     if(Keyboard::isKeyDown(GLFW_KEY_F1))
         cam->Position(glm::vec3(1));
-   Mouse::SetFixedPosState(true);
-   cam->Yaw(Mouse::getCursorDelta().x);
-   cam->Pitch(Mouse::getCursorDelta().y);
+
+    if(Mouse::isRightDown())
+        Mouse::SetFixedPosState(true);
+    else
+        Mouse::SetFixedPosState(false);
+
+    if(Mouse::isRightDown())
+    {
+       cam->Yaw(Mouse::getCursorDelta().x);
+       cam->Pitch(Mouse::getCursorDelta().y);
+    }
 
    if (Mouse::isMiddleDown())
    {

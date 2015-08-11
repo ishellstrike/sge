@@ -7,6 +7,7 @@
 
 #ifndef SPRITEBATCH_H
 #define SPRITEBATCH_H
+#define GLM_SWIZZLE
 #include "resources/texture.h"
 #include <string>
 #include <memory>
@@ -51,7 +52,7 @@ public:
 
     void render();
     void drawRect(const glm::vec2 &loc, const glm::vec2 &size, const glm::vec4 &_col);
-    void drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_);
+    void drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv = glm::vec4(0,0,1,1));
     void drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, int apos, const glm::vec4 &col_);
     void drawLine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
     void drawText(const std::string &text, const glm::vec2 &pos, Font *font, const glm::vec4 &col_);

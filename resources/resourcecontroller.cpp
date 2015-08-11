@@ -5,6 +5,11 @@ Resources *Resources::m_inst = nullptr;
 
 void Resources::Init()
 {
+    auto error = new Texture;
+    error->Load("/123123123error.png");
+    Push("error", error);
+
+
     auto height_shader = new BasicJargShader;
     height_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/testgen1.glsl");
     height_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/testgen1.glsl");

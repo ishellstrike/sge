@@ -64,7 +64,10 @@ SOURCES += \
     experimental/starfield.cpp \
     geometry/umesh.cpp \
     geometry/vertex.cpp \
-    geometry/vertexinfo.cpp
+    geometry/vertexinfo.cpp \
+    sge_ui/image_box.cpp \
+    sge_texture_lab.cpp \
+    sge_ui/dragnumbox.cpp
 
 VERSION = 0.1.0
 
@@ -152,7 +155,10 @@ HEADERS += \
     experimental/starfield.h \
     geometry/umesh.h \
     geometry/vertex.h \
-    geometry/vertexinfo.h
+    geometry/vertexinfo.h \
+    sge_ui/image_box.h \
+    sge_texture_lab.h \
+    sge_ui/dragnumbox.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

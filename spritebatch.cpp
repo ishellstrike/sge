@@ -245,7 +245,7 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, 
     cur++;
 }
 
-void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_)
+void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv)
 {
     if(current_program != basic_program)
     {
@@ -271,10 +271,10 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Te
     col[cur*4 + 2] = col_;
     col[cur*4 + 3] = col_;
 
-    uv[cur*4]      = glm::vec2(0, 0);
-    uv[cur*4 + 1]  = glm::vec2(1, 0);
-    uv[cur*4 + 2]  = glm::vec2(1, 1);
-    uv[cur*4 + 3]  = glm::vec2(0, 1);
+    uv[cur*4]      = double_uv.xy();
+    uv[cur*4 + 1]  = double_uv.zy();
+    uv[cur*4 + 2]  = double_uv.zw();
+    uv[cur*4 + 3]  = double_uv.xw();
 
     index[cur*6]     = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
