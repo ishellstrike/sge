@@ -11,7 +11,7 @@ public:
     sge_texture_lab(WContainer *par);
 
     void Draw() const;
-    void Update();
+    void Update(const GameTimer &gt);
     ImageBox *ib;
 
     void* operator new(size_t i)

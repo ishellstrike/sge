@@ -14,7 +14,7 @@ public:
     sge_perfomance(WContainer *par);
 
     void Draw() const;
-    void Update();
+    void Update(const GameTimer &gt);
     void UpdateTimer(const FPSCounter &fps, const GameTimer &gt);
     Graph *gfps, *ggt, *gfps_fast, *ggt_fast;
     Label *fps1, *fps2, *time1, *time2;

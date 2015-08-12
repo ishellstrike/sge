@@ -142,6 +142,7 @@ bool GameWindow::BaseInit()
 
     perf = new sge_perfomance(ws.get());
     texlab = new sge_texture_lab(ws.get());
+    new sge_texture_lab(ws.get());
 
     cam1 = std::make_shared<Camera>();
     cam2 = std::make_shared<Camera>();
@@ -279,7 +280,7 @@ void GameWindow::BaseUpdate()
    qs_w->Update(*cam);
    cam1->Update(gt);
    cam2->Update(gt);
-   ws->Update();
+   ws->Update(gt);
 
    Mouse::dropState();
 }

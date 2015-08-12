@@ -140,12 +140,15 @@ void Mouse::dropState(){
     sm_deltaypos = 0;
     sm_deltaxpos = 0;
     last_offset = offset;
-    if(sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS)
-        sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] = GLFW_REPEAT;
-    if(sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS)
-        sm_buttons[GLFW_MOUSE_BUTTON_LEFT] = GLFW_REPEAT;
-    if(sm_buttons[GLFW_MOUSE_BUTTON_MIDDLE] == GLFW_PRESS)
-        sm_buttons[GLFW_MOUSE_BUTTON_MIDDLE] = GLFW_REPEAT;
+
+    for(auto t : {GLFW_MOUSE_BUTTON_RIGHT, GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_MIDDLE})
+    {
+        if(sm_buttons[t] == GLFW_PRESS)
+            sm_buttons[t] = GLFW_REPEAT;
+
+        if(sm_buttons[t] == GLFW_RELEASE)
+            sm_buttons[t] = 0;
+    }
 }
 
 bool Mouse::isWheelUp()
@@ -181,7 +184,7 @@ bool Mouse::isRightPressed()
     return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS;
 }
 
-bool Mouse::IsLeftDown()
+bool Mouse::isLeftDown()
 {
     return sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_PRESS || sm_buttons[GLFW_MOUSE_BUTTON_LEFT] == GLFW_REPEAT;
 }
@@ -189,6 +192,16 @@ bool Mouse::IsLeftDown()
 bool Mouse::isRightDown()
 {
     return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS || sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_REPEAT;
+}
+
+bool Mouse::isLeftUp()
+{
+    return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_RELEASE;
+}
+
+bool Mouse::isRightUp()
+{
+    return sm_buttons[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_RELEASE;
 }
 
 bool Mouse::isLeftPressed()

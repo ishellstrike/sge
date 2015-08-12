@@ -67,7 +67,8 @@ SOURCES += \
     geometry/vertexinfo.cpp \
     sge_ui/image_box.cpp \
     sge_texture_lab.cpp \
-    sge_ui/dragnumbox.cpp
+    sge_ui/dragnumbox.cpp \
+    sge_ui/connector.cpp
 
 VERSION = 0.1.0
 
@@ -158,7 +159,8 @@ HEADERS += \
     geometry/vertexinfo.h \
     sge_ui/image_box.h \
     sge_texture_lab.h \
-    sge_ui/dragnumbox.h
+    sge_ui/dragnumbox.h \
+    sge_ui/connector.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

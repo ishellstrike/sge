@@ -73,10 +73,12 @@ public:
     static bool isLeftPressed();
     static void dropState();
     static bool isRightDown();
-    static bool IsLeftDown();
+    static bool isLeftDown();
     static bool isWheelDown();
     static bool isWheelUp();
     static bool isMiddleDown();
+    static bool isRightUp();
+    static bool isLeftUp();
 };
 
 

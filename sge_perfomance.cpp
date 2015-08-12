@@ -48,9 +48,9 @@ void sge_perfomance::Draw() const
     Win::Draw();
 }
 
-void sge_perfomance::Update()
+void sge_perfomance::Update(const GameTimer &gt)
 {
-    Win::Update();
+    Win::Update(gt);
 }
 
 void sge_perfomance::UpdateTimer(const FPSCounter &fps, const GameTimer &gt)
