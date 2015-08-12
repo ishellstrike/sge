@@ -3,7 +3,6 @@
 #include "sge_ui/wins.h"
 #include "sge_ui/graph.h"
 #include "sge_ui/label.h"
-#include "sge_ui/image_box.h"
 
 class sge_texture_lab : public Win
 {
@@ -11,8 +10,7 @@ public:
     sge_texture_lab(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt);
-    ImageBox *ib;
+    void Update();
 
     void* operator new(size_t i)
     {

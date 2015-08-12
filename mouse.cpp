@@ -146,8 +146,8 @@ void Mouse::dropState(){
         if(sm_buttons[t] == GLFW_PRESS)
             sm_buttons[t] = GLFW_REPEAT;
 
-        if(sm_buttons[t] == GLFW_RELEASE)
-            sm_buttons[t] = 0;
+        //if(sm_buttons[t] == GLFW_RELEASE)
+        //    sm_buttons[t] = 0;
     }
 }
 

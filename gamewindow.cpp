@@ -141,8 +141,6 @@ bool GameWindow::BaseInit()
     ws->f = f12.get();
 
     perf = new sge_perfomance(ws.get());
-    texlab = new sge_texture_lab(ws.get());
-    new sge_texture_lab(ws.get());
 
     cam1 = std::make_shared<Camera>();
     cam2 = std::make_shared<Camera>();
@@ -155,50 +153,15 @@ bool GameWindow::BaseInit()
     cam2->LookAt({0,0,0});
     Resize(RESX, RESY);
 
-    std::shared_ptr<Material> mat = std::make_shared<Material>();
-    mat->low = Resources::instance()->Get<Texture>("grass");
-    mat->medium = Resources::instance()->Get<Texture>("soil");
-    mat->high = Resources::instance()->Get<Texture>("snow");
-    mat->side = Resources::instance()->Get<Texture>("rock");
+    mesh.vertices = {{{0,0,0},{0,0}},{{1,0,0},{1,0}},{{0,1,0},{0,1}},{{1,1,0},{1,1}}};
+    mesh.indices = {0,1,2,1,3,2};
+    auto mat = std::make_shared<Material>();
+    mat->texture = Resources::instance()->Get<Texture>("grass");
+    mesh.material = mat;
+    mesh.shader = Resources::instance()->Get<BasicJargShader>("test");
+    mesh.Bind();
 
-
-    std::shared_ptr<Material> mat_star = std::make_shared<Material>();
-    mat_star->emission = Color::White;
-
-    auto wm = std::make_shared<Material>();
-
-    qs = std::make_shared<QuadSphere>(mat);
-    qs->max_divide = 4;
-    qs_w = std::make_shared<QuadSphere>(wm);
-    qs_w->max_divide = 4;
-    qs_w->s = 1;
-    qs_w->R = 1010;
-    wm->diffuse = Color::SeaBlue;
-    wm->shininess = 80;
-
-#ifndef NO_SCATT
-    scat.Precompute();
-#endif
-
-#ifndef NO_STARFIELD
-    sf = std::unique_ptr<Starfield>(new Starfield());
-#endif
-
-    ss.system.push_back(std::make_shared<SpaceObject>(5000.f, 5510.f , glm::vec3{0,0,0}));
-    ss.system.back()->dominant = true;
-    ss.system.back()->InitRender(mat);
-
-    for(int i = 0; i < 2; i++)
-    {
-        ss.system.push_back(std::make_shared<SpaceObject>(random::next<float>()/5.0f,
-                                                          3200.f,
-                                                          glm::vec3{random::next<float>()*30 - 15,
-                                                                    0,
-                                                                    random::next<float>()*30 - 15}));
-
-        ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital<float>(*ss.system[0])*1000);
-        ss.system.back()->InitRender(mat);
-    }
+    Mouse::SetFixedPosState(true);
 
     return true;
 }
@@ -248,16 +211,8 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_F1))
         cam->Position(glm::vec3(1));
 
-    if(Mouse::isRightDown())
-        Mouse::SetFixedPosState(true);
-    else
-        Mouse::SetFixedPosState(false);
-
-    if(Mouse::isRightDown())
-    {
        cam->Yaw(Mouse::getCursorDelta().x);
        cam->Pitch(Mouse::getCursorDelta().y);
-    }
 
    if (Mouse::isMiddleDown())
    {
@@ -274,13 +229,9 @@ void GameWindow::BaseUpdate()
        cam->Zoom(cam->Zoom() - 1);
    }
 
-   qs->world = glm::rotate(qs->world, gt.elapsed/100, glm::vec3(1));
-   qs_w->world = glm::rotate(qs_w->world, gt.elapsed/100, glm::vec3(1));
-   qs->Update(*cam);
-   qs_w->Update(*cam);
    cam1->Update(gt);
    cam2->Update(gt);
-   ws->Update(gt);
+   ws->Update();
 
    Mouse::dropState();
 }
@@ -296,27 +247,11 @@ void GameWindow::BaseDraw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glClearColor(0,0,0, 1.f);
 
-#ifndef NO_SCATT
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    scat.redisplayFunc(*cam);
-#endif
 
-#ifndef NO_STARFIELD
-    sf->Render(*cam);
-#endif
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    for(size_t i = 0; i < ss.system.size(); i++)
-    {
-        ss.system[i]->Update(ss, gt, *cam);
-        ss.system[i]->Render(*cam);
-    }
-
-    //water->Use();
-    //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    //qs_w->Render(*cam);
+    mesh.Render(*cam);
 
 
     glDisable(GL_DEPTH_TEST);
@@ -324,8 +259,7 @@ void GameWindow::BaseDraw()
     batch->setUniform(proj * model);
 
     ws->Draw();
-    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
-    batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
+    batch->drawText("Lolchto", {0,0}, f12.get(), {0,0,0,1});
     batch->render();
 
     Swap();

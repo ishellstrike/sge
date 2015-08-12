@@ -25,6 +25,8 @@
 #include "space/spacesystem.h"
 #include "space/space_solver.h"
 #include "experimental/starfield.h"
+#include "geometry/umesh.h"
+#include "geometry/vpnt.h"
 
 class GameWindow {
 public:
@@ -63,6 +65,7 @@ public:
     std::vector<glm::vec3> tail;
     Scattering scat;
     std::unique_ptr<Starfield> sf;
+    UMesh<VertPosUvUv> mesh;
 
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;

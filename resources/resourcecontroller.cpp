@@ -9,6 +9,13 @@ void Resources::Init()
     error->Load("/123123123error.png");
     Push("error", error);
 
+    auto test_shader = new BasicJargShader;
+    test_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/test.glsl");
+    test_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/test.glsl");
+    test_shader->Link();
+    test_shader->Afterlink();
+
+    Push("test", test_shader);
 
     auto height_shader = new BasicJargShader;
     height_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/testgen1.glsl");

@@ -65,10 +65,7 @@ SOURCES += \
     geometry/umesh.cpp \
     geometry/vertex.cpp \
     geometry/vertexinfo.cpp \
-    sge_ui/image_box.cpp \
     sge_texture_lab.cpp \
-    sge_ui/dragnumbox.cpp \
-    sge_ui/connector.cpp
 
 VERSION = 0.1.0
 
@@ -157,10 +154,7 @@ HEADERS += \
     geometry/umesh.h \
     geometry/vertex.h \
     geometry/vertexinfo.h \
-    sge_ui/image_box.h \
     sge_texture_lab.h \
-    sge_ui/dragnumbox.h \
-    sge_ui/connector.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -198,4 +192,5 @@ DISTFILES += \
     data/textures/grass.png \
     data/textures/rock.png \
     data/textures/snow.png \
-    data/textures/soil.png
+    data/textures/soil.png \
+    data/shaders/test.glsl

@@ -50,7 +50,7 @@ void sge_perfomance::Draw() const
 
 void sge_perfomance::Update(const GameTimer &gt)
 {
-    Win::Update(gt);
+    Win::Update();
 }
 
 void sge_perfomance::UpdateTimer(const FPSCounter &fps, const GameTimer &gt)
