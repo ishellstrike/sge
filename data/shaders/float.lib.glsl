@@ -2,7 +2,7 @@
         Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT License.
-        See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
+        See "license.txt"
 *******************************************************************************/
 
 vec4 encodeFloat( in float v ) {

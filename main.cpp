@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT License.
+        See "license.txt"
+*******************************************************************************/
+
 #define GLM_FORCE_RADIANS
 #define _USE_MATH_DEFINES
 #define GLM_SWIZZLE

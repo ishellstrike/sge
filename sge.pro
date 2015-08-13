@@ -198,4 +198,6 @@ DISTFILES += \
     data/textures/grass.png \
     data/textures/rock.png \
     data/textures/snow.png \
-    data/textures/soil.png
+    data/textures/soil.png \
+    license.txt \
+    readme.md

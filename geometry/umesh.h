@@ -21,25 +21,21 @@ public:
     {
         if(vbo)
         {
-            glDeleteBuffers(1, vbo);
-            delete[] vbo;
+            glDeleteBuffers(1, &vbo);
         }
 
         if(ibo)
         {
-            glDeleteBuffers(1, ibo);
-            delete[] ibo;
+            glDeleteBuffers(1, &ibo);
         }
 
         if(vao)
         {
             glBindVertexArray(0);
-            glDeleteVertexArrays(1, vao);
-
-            delete[] vao;
+            glDeleteVertexArrays(1, &vao);
         }
 
-        vao = ibo = vbo = nullptr;
+        vao = ibo = vbo = 0;
     }
     void Bind()
     {
@@ -50,41 +46,22 @@ public:
             return;
         }
 
-        if(vbo != nullptr) { // rebind
+        if(vao) { // rebind
             glBindVertexArray(0);
-            for(size_t i = 0; i < _Ty::info.attrib.size(); ++i)
-            {
-                const VertexAttribute &a = _Ty::info.attrib[i];
-                glDisableVertexAttribArray(a.shader_pos);
-            }
 
-            glDeleteBuffers(1, vbo);
-            glDeleteBuffers(1, ibo);
-            glDeleteVertexArrays(1, vao);
-            vao = ibo = vbo = nullptr;
+            glDeleteBuffers(1, &vbo);
+            glDeleteBuffers(1, &ibo);
+            glDeleteVertexArrays(1, &vao);
+            vao = ibo = vbo = 0;
         }
 
-        if(vao == nullptr){
-            vao = new GLuint[1];
-            glGenVertexArrays(1, vao);
-            glBindVertexArray(*vao);
-            if(vbo){
-                delete[] vbo;
-            }
-            if(ibo){
-                delete[] ibo;
-            }
-            vbo = new GLuint[1];
-            ibo = new GLuint[1];
-            glGenBuffers(1, vbo);
-            glGenBuffers(1, ibo);
-        } else {
-            glBindVertexArray(*vao);
-        }
-
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+        glGenBuffers(1, &vbo);
+        glGenBuffers(1, &ibo);
 
         const GLuint stride = sizeof(_Ty);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(_Ty)*vertices.size(), &vertices[0], bindtype);
 
         for(size_t i = 0; i < info.attrib.size(); ++i)
@@ -96,7 +73,7 @@ public:
         }
 
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[0]);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         if(indices.size())
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(decltype(indices[0]))*indices.size(), &indices[0], bindtype);
         else
@@ -122,9 +99,8 @@ public:
     bool patches = false;
     GLenum primitives = GL_TRIANGLES;
 
-    GLuint *vbo = nullptr;
-    GLuint *ibo = nullptr;
-    GLuint *vao = nullptr;
+    GLuint vbo = 0, ibo = 0, vao = 0;
+
     void Assign()
     {
         assert(shader && "need shader to bind");
@@ -238,7 +214,7 @@ public:
             }
         }
 
-        glBindVertexArray(*vao);
+        glBindVertexArray(vao);
 
         if(patches) {
             glPatchParameteri(GL_PATCH_VERTICES, 3);
