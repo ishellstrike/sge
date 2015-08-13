@@ -119,8 +119,8 @@ void main(void)
     vec2 texcoordout2 = frag_in.texcoordout2;
     vec3 positionout = frag_in.positionout;
 
-    float snoize = decodeFloat(texture2D(material_height, texcoordout));
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout));
+    float snoize = decodeFloat(texture(material_height, texcoordout));
+    vec3 grad = decodeNormal(texture(material_grad, texcoordout));
 
     grad = grad / (R + s * snoize);
     //grad = transform_N * grad;

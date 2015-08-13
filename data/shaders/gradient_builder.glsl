@@ -86,7 +86,7 @@ void main(void)
     int i;
 
     for (i=0; i < NUM; i++) {
-      vec4 tex = texture2D(height_map, Vert.uv + c[i]);
+      vec4 tex = texture(height_map, Vert.uv + c[i]);
       col[i] = decodeFloat(tex);
     }
 

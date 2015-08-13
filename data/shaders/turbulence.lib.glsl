@@ -20,12 +20,12 @@ float perlinNoise( in vec2 p, in float seed)
 
     // Get the four randomly permutated indices from the noise lattice nearest to
     // p and offset these numbers with the seed number.
-    vec4 perm = texture2D(samplerPerlinPerm2D, i / 256) + seed;
+    vec4 perm = texture(samplerPerlinPerm2D, i / 256) + seed;
 
     // Permutate the four offseted indices again and get the 2D gradient for each
     // of the four permutated coordinates-seed pairs.
-    vec4 g1 = texture2D(samplerPerlinGrad2D, perm.xy) * 2 - 1;
-    vec4 g2 = texture2D(samplerPerlinGrad2D, perm.zw) * 2 - 1;
+    vec4 g1 = texture(samplerPerlinGrad2D, perm.xy) * 2 - 1;
+    vec4 g2 = texture(samplerPerlinGrad2D, perm.zw) * 2 - 1;
 
     // Evaluate the four lattice gradients at p
     float a = dot(g1.xy, f);
@@ -59,12 +59,12 @@ vec3 perlinNoiseDeriv( in vec2 p, in float seed)
 
     // Get the four randomly permutated indices from the noise lattice nearest to
     // p and offset these numbers with the seed number.
-    vec4 perm = texture2D(samplerPerlinPerm2D, i / 256) + seed;
+    vec4 perm = texture(samplerPerlinPerm2D, i / 256) + seed;
 
     // Permutate the four offseted indices again and get the 2D gradient for each
     // of the four permutated coordinates-seed pairs.
-    vec4 g1 = texture2D(samplerPerlinGrad2D, perm.xy) * 2 - 1;
-    vec4 g2 = texture2D(samplerPerlinGrad2D, perm.zw) * 2 - 1;
+    vec4 g1 = texture(samplerPerlinGrad2D, perm.xy) * 2 - 1;
+    vec4 g2 = texture(samplerPerlinGrad2D, perm.zw) * 2 - 1;
 
     // Evaluate the four lattice gradients at p
     float a = dot(g1.xy, f);
@@ -104,12 +104,12 @@ vec3 perlinNoisePseudoDeriv( in vec2 p, in float seed)
 
     // Get the four randomly permutated indices from the noise lattice nearest to
     // p and offset these numbers with the seed number.
-    vec4 perm = texture2D(samplerPerlinPerm2D, i / 256) + seed;
+    vec4 perm = texture(samplerPerlinPerm2D, i / 256) + seed;
 
     // Permutate the four offseted indices again and get the 2D gradient for each
     // of the four permutated coordinates-seed pairs.
-    vec4 g1 = texture2D(samplerPerlinGrad2D, perm.xy) * 2 - 1;
-    vec4 g2 = texture2D(samplerPerlinGrad2D, perm.zw) * 2 - 1;
+    vec4 g1 = texture(samplerPerlinGrad2D, perm.xy) * 2 - 1;
+    vec4 g2 = texture(samplerPerlinGrad2D, perm.zw) * 2 - 1;
 
     // Evaluate the four lattice gradients at p
     float a = dot(g1.xy, f);

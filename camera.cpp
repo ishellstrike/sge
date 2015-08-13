@@ -6,6 +6,7 @@
 #include "helper.h"
 #include <glm/gtc/quaternion.hpp>
 #include "prefecences.h"
+#include "logger.h"
 
 Camera::Camera(glm::vec3 __lookAt) :
     m_fieldOfView(glm::quarter_pi<float>()),
@@ -22,7 +23,6 @@ Camera::Camera() :
        m_nearPlane(0.001f),
        m_farPlane(1000)
 {
-
 }
 
 Camera::Camera(float __fieldOfView, glm::vec3 __lookAt, glm::vec3 /*__up*/, float __nearPlane, float __farPlane) :

@@ -106,8 +106,8 @@ vec4 texture4D(sampler3D table, float r, float mu, float muS, float nu)
     float lerp = (nu + 1.0) / 2.0 * (float(RES_NU) - 1.0);
     float uNu = floor(lerp);
     lerp = lerp - uNu;
-    return texture3D(table, vec3((uNu + uMuS) / float(RES_NU), uMu, uR)) * (1.0 - lerp) +
-            texture3D(table, vec3((uNu + uMuS + 1.0) / float(RES_NU), uMu, uR)) * lerp;
+    return texture(table, vec3((uNu + uMuS) / float(RES_NU), uMu, uR)) * (1.0 - lerp) +
+            texture(table, vec3((uNu + uMuS + 1.0) / float(RES_NU), uMu, uR)) * lerp;
 }
 
 void getMuMuSNu(float r, vec4 dhdH, out float mu, out float muS, out float nu) {
@@ -173,7 +173,7 @@ float opticalDepth(float H, float r, float mu, float d) {
 // (mu=cos(view zenith angle)), intersections with ground ignored
 vec3 transmittance(float r, float mu) {
     vec2 uv = getTransmittanceUV(r, mu);
-    return texture2D(transmittanceSampler, uv).rgb;
+    return texture(transmittanceSampler, uv).rgb;
 }
 
 // transmittance(=transparency) of atmosphere for ray (r,mu) of length d
@@ -221,7 +221,7 @@ vec3 transmittance(float r, float mu, float d) {
 
 vec3 irradiance(sampler2D sampler, float r, float muS) {
     vec2 uv = getIrradianceUV(r, muS);
-    return texture2D(sampler, uv).rgb;
+    return texture(sampler, uv).rgb;
 }
 
 // Rayleigh phase function
@@ -387,7 +387,7 @@ uniform sampler2D skySampler;
 uniform float hdrExposure;
 
 vec4 skyRadiance(vec2 u) {
-    return texture2DLod(skySampler, (u * (0.5 / 1.1) + 0.5), 0.0);
+    return textureLod(skySampler, (u * (0.5 / 1.1) + 0.5), 0.0);
 }
 
 vec3 hdr(vec3 L) {
@@ -422,7 +422,7 @@ vec4 cloudColor(vec3 worldP, vec3 worldCamera, vec3 worldSunDir) {
     float g = 1.0;
     float r = 0.0;
     for (float i = 0.0; i < octaves; i += 1.0) {
-        r -= g * (2.0 * texture2D(noiseSampler, st).r - 1.0);
+        r -= g * (2.0 * texture(noiseSampler, st).r - 1.0);
         st = (m * st) * lacunarity;
         g *= gain;
     }

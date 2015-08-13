@@ -40,7 +40,7 @@ void Resources::Init()
     basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
     //basic->loadShaderFromSource(GL_TESS_CONTROL_SHADER, "data/shaders/minimal.glsl");
     //basic->loadShaderFromSource(GL_TESS_EVALUATION_SHADER, "data/shaders/minimal.glsl");
-    basic->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
+    //basic->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
     basic->Link();
     basic->Afterlink();
     basic->locateVar("R");
@@ -68,4 +68,6 @@ void Resources::Init()
     Push("grass", grass);
     Push("snow", snow);
     Push("rock", rock);
+
+    LOG(info) << "resources load end";
 }

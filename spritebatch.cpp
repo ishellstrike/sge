@@ -24,11 +24,6 @@ SpriteBatch::SpriteBatch()
     pos = new glm::vec3[SIZE*4];
     col = new glm::vec4[SIZE*4];
 
-    //char buf[255];
-    //getcwd(buf, 255);
-
-    //LOG(info) << buf;
-
     basic_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/basic.glsl");
     basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/basic.glsl");
     basic_program->Link();
@@ -59,6 +54,8 @@ SpriteBatch::SpriteBatch()
     glUseProgram(0);
 
     glGenBuffers(4, m_vbo);
+
+    LOG(info) << "spritebatch ready";
 }
 
 SpriteBatch::~SpriteBatch()
