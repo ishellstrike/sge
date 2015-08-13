@@ -1,5 +1,5 @@
 // Copyright (C) 2011 Giliam de Carpentier - All rights reserved
-// Licensed under the Simplified BSD license
+// LICENSEd under the Simplified BSD LICENSE
 // http://www.decarpentier.nl/
 
 uniform sampler2D samplerPerlinPerm2D;

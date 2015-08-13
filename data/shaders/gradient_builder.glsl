@@ -1,8 +1,8 @@
 /*******************************************************************************
-        Copyright (C) 2014 Andrey Samsonov
+        Copyright (C) 2015 Samsonov Andrey
 
-        This software is distributed freely under the terms of the MIT License.
-        See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
 *******************************************************************************/
 #include "float.lib.glsl"
 uniform sampler2D height_map;

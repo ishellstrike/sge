@@ -1,8 +1,8 @@
 /*******************************************************************************
         Copyright (C) 2014 Samsonov Andrey
 
-        This software is distributed freely under the terms of the MIT License.
-        See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt" or "http://copyfree.org/LICENSEs/mit/LICENSE.txt".
 *******************************************************************************/
 
 #ifndef SPRITEBATCH_H

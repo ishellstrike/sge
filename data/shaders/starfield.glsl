@@ -1,8 +1,8 @@
 /*******************************************************************************
         Copyright (C) 2015 Samsonov Andrey
 
-        This software is distributed freely under the terms of the MIT License.
-        See "license.txt" or "http://copyfree.org/licenses/mit/license.txt".
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
 *******************************************************************************/
 
 uniform mat4 transform_M; // model matrix

@@ -199,5 +199,5 @@ DISTFILES += \
     data/textures/rock.png \
     data/textures/snow.png \
     data/textures/soil.png \
-    license.txt \
-    readme.md
+    README.md \
+    LICENSE.txt
