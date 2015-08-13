@@ -15,8 +15,8 @@ sge_texture_lab::sge_texture_lab(WContainer *par) :
     auto b = new Connector(this);
     auto c = new Connector(this);
 
-    b->pos = {100, 150};
-    c->pos = {150, 100};
+    b->pos = {100, 100};
+    c->pos = {124, 100};
 }
 
 void sge_texture_lab::Draw() const

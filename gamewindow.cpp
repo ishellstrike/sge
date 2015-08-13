@@ -109,17 +109,11 @@ bool GameWindow::BaseInit()
     glfwSetCursorPosCallback(window, [](GLFWwindow *, double xpos, double ypos){
         Mouse::SetCursorPos(xpos, ypos);
     });
-    glfwSetCursorEnterCallback(window, [](GLFWwindow *, int entered){
-        Mouse::cursorClientArea(entered);
-    });
-    glfwSetWindowFocusCallback(window, [](GLFWwindow *, int focused){
-        Mouse::windowFocus(focused);
-    });
     glfwSetMouseButtonCallback(window, [](GLFWwindow *, int a, int b, int c){
         Mouse::SetButton(a, b, c);
     });
     glfwSetWindowSizeCallback(window, [](GLFWwindow *, int a, int b){
-        GameWindow::Resize(a, b); Mouse::setWindowSize(a, b);
+        GameWindow::Resize(a, b);
     });
     glfwSetScrollCallback(window, [](GLFWwindow *, double , double b){
         Mouse::Scroll(b);
@@ -188,7 +182,7 @@ bool GameWindow::BaseInit()
     ss.system.back()->dominant = true;
     ss.system.back()->InitRender(mat);
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 40; i++)
     {
         ss.system.push_back(std::make_shared<SpaceObject>(random::next<float>()/5.0f,
                                                           3200.f,
@@ -259,7 +253,7 @@ void GameWindow::BaseUpdate()
        cam->Pitch(Mouse::getCursorDelta().y);
     }
 
-   if (Mouse::isMiddleDown())
+   if (Mouse::isMiddleJustPressed())
    {
        cam->Reset();
    }
@@ -341,7 +335,7 @@ void GameWindow::Mainloop()
     {
         BaseUpdate();
         BaseDraw();
-        //std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
     Resources::drop();
 }
