@@ -45,7 +45,7 @@ void main(void)
 {
     float p = jordanTurbulence(Vert.texcoord*10, 0, 18);
     //p = p * p * p;
-    p = clamp(p, 0.0, 0.999);
+    p = clamp(p, 0.0, 0.99999999999);
     color = encodeFloat(p);
     //color.w = 1;
 }

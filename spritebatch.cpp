@@ -496,6 +496,7 @@ void SpriteBatch::render()
 {
     if(cur == 0)
         return;
+    glEnable(GL_BLEND);
     glDisable(GL_CULL_FACE);
     current_program->Use();
     glUniformMatrix4fv(current_program->vars[0], 1, GL_FALSE, &uniform[0][0]);

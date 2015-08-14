@@ -68,7 +68,10 @@ SOURCES += \
     sge_ui/image_box.cpp \
     sge_texture_lab.cpp \
     sge_ui/dragnumbox.cpp \
-    sge_ui/connector.cpp
+    sge_ui/connector.cpp \
+    sge_texture_lab_float_selector.cpp \
+    sge_renderbox.cpp \
+    sge_texlab_rgb_to_luminance.cpp
 
 VERSION = 0.1.0
 
@@ -160,7 +163,10 @@ HEADERS += \
     sge_ui/image_box.h \
     sge_texture_lab.h \
     sge_ui/dragnumbox.h \
-    sge_ui/connector.h
+    sge_ui/connector.h \
+    sge_texture_lab_float_selector.h \
+    sge_renderbox.h \
+    sge_texlab_rgb_to_luminance.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -200,4 +206,6 @@ DISTFILES += \
     data/textures/snow.png \
     data/textures/soil.png \
     README.md \
-    LICENSE.txt
+    LICENSE.txt \
+    data/shaders/rgb_to_luminance.glsl \
+    data/shaders/lerp_rgb_map.glsl

@@ -21,6 +21,8 @@
 #include "space/space_object.h"
 #include "space/spacesystem.h"
 #include <glm/gtx/compatibility.hpp>
+#include "sge_renderbox.h"
+#include "sge_texlab_rgb_to_luminance.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -135,8 +137,13 @@ bool GameWindow::BaseInit()
     ws->f = f12.get();
 
     perf = new sge_perfomance(ws.get());
-    texlab = new sge_texture_lab(ws.get());
-    new sge_texture_lab(ws.get());
+    texlab = new sge_texlab_heightmap(ws.get());
+    new sge_texlab_heightmap(ws.get());
+    new sge_texlab_float_selector(ws.get());
+    new sge_texlab_float_selector(ws.get());
+    new sge_texlab_float_selector(ws.get());
+    new sge_texlab_renderbox(ws.get());
+    new sge_texlab_rgb_to_luminance(ws.get());
 
     cam1 = std::make_shared<Camera>();
     cam2 = std::make_shared<Camera>();
@@ -241,6 +248,9 @@ void GameWindow::BaseUpdate()
 
     if(Keyboard::isKeyDown(GLFW_KEY_F1))
         cam->Position(glm::vec3(1));
+
+    if(Keyboard::isKeyPress(GLFW_KEY_F2))
+        wire = !wire;
 
     if(Mouse::isRightDown())
         Mouse::SetFixedPosState(true);

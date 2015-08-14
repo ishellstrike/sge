@@ -82,7 +82,7 @@ void main(void)
     {
         geo_out.texcoordout = geo_in[i].texcoordout;
         geo_out.texcoordout2 = geo_in[i].texcoordout2;
-        float snoize = decodeFloat(textureLod(material_global_height, geo_out.texcoordout2, 0));
+        float snoize = decodeFloat(texture(material_global_height, geo_out.texcoordout2));
         vec3 pos = gl_in[i].gl_Position.xyz;
         vec3 newPosition = (R + s * snoize) * pos;
         vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
@@ -119,8 +119,8 @@ void main(void)
     vec2 texcoordout2 = frag_in.texcoordout2;
     vec3 positionout = frag_in.positionout;
 
-    float snoize = decodeFloat(texture2D(material_height, texcoordout));
-    vec3 grad = decodeNormal(texture2D(material_grad, texcoordout));
+    float snoize = decodeFloat(texture(material_height, texcoordout));
+    vec3 grad = decodeNormal(texture(material_grad, texcoordout));
 
     grad = grad / (R + s * snoize);
     //grad = transform_N * grad;

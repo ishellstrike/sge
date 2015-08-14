@@ -20,7 +20,7 @@ public:
           s = 100;  /*< Коэффициент деформации сферы*/
 
     int minimum = 0;
-    int max_divide = 8;
+    int max_divide = 10;
     int tess_size = 32;
     glm::vec3 center = {0,0,0};
 

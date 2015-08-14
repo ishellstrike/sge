@@ -5,15 +5,20 @@
         See "LICENSE.txt"
 *******************************************************************************/
 
-vec4 encodeFloat( in float v ) {
-  vec3 enc = vec3(1.0, 255.0, 65025.0) * v;
-  enc = fract(enc);
-  return vec4(enc, 1);
+vec4 encodeFloat( in float depth ) {
+    // See Aras Pranckevičius' post Encoding Floats to RGBA
+    // http://aras-p.info/blog/2009/07/30/encoding-floats-to-rgba-the-final/
+    vec4 enc = vec4(1.0, 255.0, 65025.0, 16581375.0) * depth;
+    enc = fract(enc);
+    enc -= enc.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);
+    enc.w = 1;
+    return enc;
 }
 
-float decodeFloat( in vec4 rgb ) {
-  float v = dot(rgb.rgb, vec3(1.0, 1/255.0, 1/65025.0));
-  return v;
+float decodeFloat( in vec4 packedDepth ) {
+    // See Aras Pranckevičius' post Encoding Floats to RGBA
+    // http://aras-p.info/blog/2009/07/30/encoding-floats-to-rgba-the-final/
+    return dot(packedDepth, vec4(1.0, 1.0 / 255.0, 1.0 / 65025.0, 1.0 / 16581375.0));
 }
 
 vec4 encodeNormal1( in vec3 v )

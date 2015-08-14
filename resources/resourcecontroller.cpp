@@ -68,4 +68,20 @@ void Resources::Init()
     Push("grass", grass);
     Push("snow", snow);
     Push("rock", rock);
+
+    auto rgb_to_luminance = new BasicJargShader;
+    rgb_to_luminance->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/rgb_to_luminance.glsl");
+    rgb_to_luminance->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/rgb_to_luminance.glsl");
+    rgb_to_luminance->Link();
+    rgb_to_luminance->Afterlink();
+
+    Push("rgb_to_luminance", rgb_to_luminance);
+
+    auto lerp_rgb_map = new BasicJargShader;
+    lerp_rgb_map->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/lerp_rgb_map.glsl");
+    lerp_rgb_map->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/lerp_rgb_map.glsl");
+    lerp_rgb_map->Link();
+    lerp_rgb_map->Afterlink();
+
+    Push("lerp_rgb_map", lerp_rgb_map);
 }
