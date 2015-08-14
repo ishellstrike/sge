@@ -76,7 +76,7 @@ void Camera::Move(CameraDirection dir) {
     case FORWARD:
         camera_position_delta += glm::vec3(0, 0, -camera_scale) * m_rotation_quaternion;
         break;
-    case BACK:
+    case BACKWARD:
        camera_position_delta += glm::vec3(0, 0, camera_scale) * m_rotation_quaternion;
         break;
     }

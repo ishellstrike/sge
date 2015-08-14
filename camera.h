@@ -28,10 +28,10 @@ public:
     void CalculateFrustum();
     bool BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max);
     void Update(const GameTimer &gt);
-    void ReCreateViewMatrix(const GameTimer &gt);
-    void ReCreateProjectionMatrix();
-    std::string getFullDebugDescription();
+
     void Reset();
+
+    std::string getFullDebugDescription();
 
     const glm::mat4 &Projection() const;
     const glm::mat4 &View() const;
@@ -100,6 +100,9 @@ private:
     };
     float m_clipMatrix[16];
     float m_frustum[6][4];
+
+    void ReCreateViewMatrix(const GameTimer &gt);
+    void ReCreateProjectionMatrix();
 
 };
 #endif // Camera_h_
