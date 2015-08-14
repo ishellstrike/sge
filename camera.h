@@ -22,7 +22,7 @@ public:
     Camera();
 
     enum CameraDirection {
-        UP, DOWN, LEFT, RIGHT, FORWARD, BACK
+        UP, DOWN, LEFT, RIGHT, FORWARD, BACKWARD
     };
 
     void CalculateFrustum();

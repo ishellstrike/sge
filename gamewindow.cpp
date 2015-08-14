@@ -233,7 +233,7 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_A))
         cam->Move(Camera::LEFT);
     if(Keyboard::isKeyDown(GLFW_KEY_S))
-        cam->Move(Camera::BACK);
+        cam->Move(Camera::BACKWARD);
     if(Keyboard::isKeyDown(GLFW_KEY_D))
         cam->Move(Camera::RIGHT);
     if(Keyboard::isKeyDown(GLFW_KEY_Q))
