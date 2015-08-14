@@ -51,7 +51,7 @@ void main() {
 
 void main() {
     vec2 uv = gl_FragCoord.xy / vec2(SKY_W, SKY_H);
-    gl_FragColor = k * texture2D(deltaESampler, uv); // k=0 for line 4, k=1 for line 10
+    gl_FragColor = k * texture(deltaESampler, uv); // k=0 for line 4, k=1 for line 10
 }
 
 #endif

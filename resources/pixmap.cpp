@@ -10,7 +10,16 @@
  */
 Pixmap::Pixmap(const std::string &name)
 {
-    auto error = lodepng::decode(data, width, height, name);
+    unsigned error;
+    try
+    {
+        error = lodepng::decode(data, width, height, name);
+    }
+    catch (...)
+    {
+
+    }
+
     if(error)
     {
         LOG(info) << "png error " << error << ": " << lodepng_error_text(error) << " for " << name;

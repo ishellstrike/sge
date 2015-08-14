@@ -40,6 +40,7 @@ public:
     void initFreeType(int size);
     void renderAtlas();
     unsigned short spacing;
+    int m_size;
 };
 
 #endif // FONT_H

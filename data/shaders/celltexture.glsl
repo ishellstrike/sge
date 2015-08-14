@@ -36,7 +36,7 @@ vec4 gpuGetCell3D(const in int x, const in int y, const in int z)
 {
     float u = (x + y * 31) / 256.0;
     float v = (z - x * 3) / 256.0;
-    return(texture2D(inputTex0, vec2(u, v)));
+    return(texture(inputTex0, vec2(u, v)));
 }
 
 vec2 gpuCellNoise3D(const in vec3 xyz)

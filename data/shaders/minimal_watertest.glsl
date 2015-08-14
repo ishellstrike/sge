@@ -110,7 +110,7 @@ void main(void)
     vec3 grad;
     float snoize = snoise(offsetedPosition(positionout, time), grad);
     float snoize_terr = decodeFloat(textureLod(material_global_height, texcoordout2, 0));
-    //vec3 grad = decodeNormal(texture2D(material_grad, texcoordout))*100;
+    //vec3 grad = decodeNormal(texture(material_grad, texcoordout))*100;
     float deff = abs((snoize_terr*100 + 1000) - (snoize*s + 1010))/100;
 
     grad = grad / (R + s * snoize);
@@ -122,8 +122,8 @@ void main(void)
     vec3 view = normalize(viewDir);
     vec3 halfWay = normalize(light + view);
 
-    vec4 tex_col = texture2D(material_texture, texcoordout2*100);
-    vec4 col2 = texture2D(material_texture, texcoordout2*R/10);
+    vec4 tex_col = texture(material_texture, texcoordout2*100);
+    vec4 col2 = texture(material_texture, texcoordout2*R/10);
 
     tex_col = (tex_col + col2)/2.0;
     vec4 color = material_ambient;

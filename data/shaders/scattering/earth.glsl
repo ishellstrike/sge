@@ -139,7 +139,7 @@ vec3 groundColor(vec3 x, float t, vec3 v, vec3 s, float r, float mu, vec3 attenu
         float r0 = length(x0);
         vec3 n = x0 / r0;
         vec2 coords = vec2(atan(n.y, n.x), acos(n.z)) * vec2(0.5, 1.0) / M_PI + vec2(0.5, 0.0);
-        vec4 reflectance = texture2D(reflectanceSampler, coords) * vec4(0.2, 0.2, 0.2, 1.0);
+        vec4 reflectance = texture(reflectanceSampler, coords) * vec4(0.2, 0.2, 0.2, 1.0);
         if (r0 > Rg + 0.01) {
             reflectance = vec4(0.4, 0.4, 0.4, 0.0);
         }
@@ -221,9 +221,9 @@ void main() {
     gl_FragColor = vec4(HDR(sunColor + groundColor + inscatterColor), 1.0); // Eq (16)
 
 
-    //gl_FragColor = texture3D(inscatterSampler,vec3(coords,(s.x+1.0)/2.0));
-    //gl_FragColor = vec4(texture2D(irradianceSampler,coords).rgb*5.0, 1.0);
-    //gl_FragColor = texture2D(transmittanceSampler,coords);
+    //gl_FragColor = texture(inscatterSampler,vec3(coords,(s.x+1.0)/2.0));
+    //gl_FragColor = vec4(tex2D(irradianceSampler,coords).rgb*5.0, 1.0);
+    //gl_FragColor = tex2D(transmittanceSampler,coords);
 }
 
 #endif

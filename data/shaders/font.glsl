@@ -15,7 +15,7 @@ out vec4 out_color;
 
 void main(void)
 {
-    out_color = col * vec4(1, 1, 1, texture2D(colorTexture, fragTexcoord).a);
+    out_color = col * vec4(1, 1, 1, texture(colorTexture, fragTexcoord).a);
 }
 
 #endif
