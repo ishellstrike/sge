@@ -63,9 +63,8 @@ struct VertexAttribute
 
 struct VertexInfo
 {
-    VertexInfo(std::vector<VertexAttribute> a) : attrib(a)
+    VertexInfo(const std::vector<VertexAttribute> &a) : attrib(a)
     {
-
     }
     std::vector<VertexAttribute> attrib;
 };
