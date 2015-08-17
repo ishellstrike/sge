@@ -31,6 +31,7 @@ void TextureGenerator::AddTexture(std::string __name, std::shared_ptr<Texture> &
 void TextureGenerator::Reset(){
     texes.clear();
     params.clear();
+    named_textures.clear();
 }
 
 void TextureGenerator::SetParams(float tex)
@@ -59,6 +60,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo.FBO); 
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glDisable(GL_BLEND);
     glViewport(0, 0, target->width, target->height);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0,0,0,1);
@@ -100,7 +102,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     
     func();
 
-    auto quad_mesh = Quad::getMesh(2);
+    const auto &quad_mesh = Quad::getMesh(2);
     quad_mesh->shader = shader;
     quad_mesh->Bind();
     Camera c;

@@ -66,12 +66,14 @@ SOURCES += \
     geometry/vertex.cpp \
     geometry/vertexinfo.cpp \
     sge_ui/image_box.cpp \
-    sge_texture_lab.cpp \
     sge_ui/dragnumbox.cpp \
     sge_ui/connector.cpp \
-    sge_texture_lab_float_selector.cpp \
     sge_renderbox.cpp \
-    sge_texlab_rgb_to_luminance.cpp
+    sge_texlab_rgb_to_luminance.cpp \
+    sge_texlab.cpp \
+    sge_texlab_float_selector.cpp \
+    sge_texlab_toolbox.cpp \
+    sge_texlab_lerp_by_map.cpp
 
 VERSION = 0.1.0
 
@@ -166,7 +168,9 @@ HEADERS += \
     sge_ui/connector.h \
     sge_texture_lab_float_selector.h \
     sge_renderbox.h \
-    sge_texlab_rgb_to_luminance.h
+    sge_texlab_rgb_to_luminance.h \
+    sge_texlab_toolbox.h \
+    sge_texlab_lerp_by_map.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -177,7 +181,6 @@ DISTFILES += \
     data/shaders/minimal.glsl \
     sge_ui/.git \
     data/shaders/noise.lib.glsl \
-    data/shaders/atmosphere.lib.glsl \
     data/shaders/test1.glsl \
     data/shaders/test2.glsl \
     data/shaders/minimal_watertest.glsl \

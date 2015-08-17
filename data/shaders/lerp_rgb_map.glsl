@@ -6,7 +6,7 @@
 *******************************************************************************/
 uniform sampler2D rgb_map;
 uniform sampler2D rgb_map2;
-uniform float lerp_factor;
+uniform sampler2D lerp_map;
 
 #ifdef _VERTEX_
 
@@ -37,7 +37,8 @@ void main(void)
 {
     vec4 rgb = texture(rgb_map, Vert.uv);
     vec4 rgb2 = texture(rgb_map2, Vert.uv);
+    float factor = texture(lerp_map, Vert.uv).r;
 
-    color = mix(rgb, rgb2, lerp_factor);
+    color = mix(rgb, rgb2, factor);
 }
 #endif

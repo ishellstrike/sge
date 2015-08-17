@@ -218,12 +218,16 @@ void main() {
     vec3 inscatterColor = inscatter(x, t, v, s, r, mu, attenuation); //S[L]-T(x,xs)S[l]|xs
     vec3 groundColor = groundColor(x, t, v, s, r, mu, attenuation); //R[L0]+R[L*]
     vec3 sunColor = sunColor(x, t, v, s, r, mu); //L0
-    gl_FragColor = vec4(HDR(sunColor + groundColor + inscatterColor), 1.0); // Eq (16)
+    vec4 outc = vec4(HDR(sunColor + inscatterColor), 1.0); // Eq (16)
+    const vec3 W = vec3(0.2125, 0.7154, 0.0721);
+    float lum = dot(outc.xyz, W);
+    outc = vec4(outc.xyz, lum);
+    gl_FragColor = outc;
 
 
     //gl_FragColor = texture(inscatterSampler,vec3(coords,(s.x+1.0)/2.0));
-    //gl_FragColor = vec4(tex2D(irradianceSampler,coords).rgb*5.0, 1.0);
-    //gl_FragColor = tex2D(transmittanceSampler,coords);
+    //gl_FragColor = vec4(texture(irradianceSampler,coords).rgb*5.0, 1.0);
+    //gl_FragColor = texture(transmittanceSampler, coords);
 }
 
 #endif

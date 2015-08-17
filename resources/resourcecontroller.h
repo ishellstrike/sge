@@ -13,7 +13,7 @@ class ResourceDictionary
 public:
     std::shared_ptr<_Ty> &operator[](const std::string &id)
     {
-        auto find = data.find(id);
+        const auto & find = data.find(id);
         if(find == data.end())
             return data["error"];
         return find->second;

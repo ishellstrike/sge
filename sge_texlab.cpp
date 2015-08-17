@@ -25,10 +25,6 @@ sge_texlab_heightmap::sge_texlab_heightmap(WContainer *par) :
     offsety->name = "y";
     offsety->pos = {0, 100};
 
-    offsety = new Connector<float>(this);
-    offsety->name = "y";
-    offsety->pos = {0, 100};
-
     out = new Connector<std::shared_ptr<Texture>>(this);
     out->pos = {155, 20};
     out->name = "out";

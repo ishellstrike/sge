@@ -21,8 +21,7 @@
 #include "space/space_object.h"
 #include "space/spacesystem.h"
 #include <glm/gtx/compatibility.hpp>
-#include "sge_renderbox.h"
-#include "sge_texlab_rgb_to_luminance.h"
+#include "sge_texlab_toolbox.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -70,7 +69,8 @@ bool GameWindow::BaseInit()
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(0);
+    glfwSwapInterval(1);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     int err = glewInit();
     if (err != GLEW_OK)
@@ -98,6 +98,7 @@ bool GameWindow::BaseInit()
         throw;
     LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
     LOG(info) << EXT_CHECK(GLEW_ARB_tessellation_shader);
+    LOG(info) << EXT_CHECK(GLEW_EXT_geometry_shader4);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -137,13 +138,7 @@ bool GameWindow::BaseInit()
     ws->f = f12.get();
 
     perf = new sge_perfomance(ws.get());
-    texlab = new sge_texlab_heightmap(ws.get());
-    new sge_texlab_heightmap(ws.get());
-    new sge_texlab_float_selector(ws.get());
-    new sge_texlab_float_selector(ws.get());
-    new sge_texlab_float_selector(ws.get());
-    new sge_texlab_renderbox(ws.get());
-    new sge_texlab_rgb_to_luminance(ws.get());
+    new sge_texlab_toolbox(ws.get());
 
     cam1 = std::make_shared<Camera>();
     cam2 = std::make_shared<Camera>();
@@ -166,7 +161,7 @@ bool GameWindow::BaseInit()
     std::shared_ptr<Material> mat_star = std::make_shared<Material>();
     mat_star->emission = Color::White;
 
-    auto wm = std::make_shared<Material>();
+    auto &wm = std::make_shared<Material>();
 
     qs = std::make_shared<QuadSphere>(mat);
     qs->max_divide = 4;
@@ -300,12 +295,6 @@ void GameWindow::BaseDraw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glClearColor(0,0,0, 1.f);
 
-#ifndef NO_SCATT
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    scat.redisplayFunc(*cam);
-#endif
-
 #ifndef NO_STARFIELD
     sf->Render(*cam);
 #endif
@@ -317,6 +306,13 @@ void GameWindow::BaseDraw()
         ss.system[i]->Update(ss, gt, *cam);
         ss.system[i]->Render(*cam);
     }
+
+#ifndef NO_SCATT
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    scat.redisplayFunc(*cam);
+#endif
 
     //water->Use();
     //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);

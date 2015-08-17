@@ -100,7 +100,7 @@ void QuadPlane::Render(const Camera &cam,
 
                     a.position = glm::normalize(a.position);
                     if(j == -1 || i == -1 || j == size + 1 || i == size +1)
-                        a.position *= 0.99f;
+                        a.position *= 0.999f;
 
                     a.uv = {i * ((1.0 - 4/res)/(float)size) + 2/res, j * ((1.0f - 4/res)/(float)size) + 2/res };
 

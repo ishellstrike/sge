@@ -39,7 +39,7 @@ QuadSphere::QuadSphere(std::shared_ptr<Material> &__mat)
     plane[4]->transformation = glm::rotate(glm::mat4(1), -glm::half_pi<float>(), glm::vec3(1,0,0));
     plane[5]->transformation = glm::rotate(glm::mat4(1), glm::half_pi<float>(), glm::vec3(1,0,0));
 
-    const float res = 1024.0f;
+    const float res = 2048.0f;
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res}, true);
 
@@ -114,7 +114,7 @@ QuadSphere::~QuadSphere()
 
 void QuadSphere::Render(const Camera &cam)
 {
-    glDisable(GL_BLEND);
+    //glDisable(GL_BLEND);
     for(int i = 0; i < 6; i++)
     {
         plane[i]->Render(cam, i, this);

@@ -34,9 +34,9 @@ Camera::Camera(float __fieldOfView, glm::vec3 __lookAt, glm::vec3 /*__up*/, floa
 }
 
 void Camera::ReCreateViewMatrix(const GameTimer &gt) {
-    auto yawq = glm::angleAxis(m_yaw, glm::vec3(0,1,0));
-    auto pitchq = glm::angleAxis(m_pitch, glm::vec3(1,0,0));
-    auto rollq = glm::angleAxis(m_roll, glm::vec3(0,0,1));
+    const auto &yawq = glm::angleAxis(m_yaw, glm::vec3(0,1,0));
+    const auto &pitchq = glm::angleAxis(m_pitch, glm::vec3(1,0,0));
+    const auto &rollq = glm::angleAxis(m_roll, glm::vec3(0,0,1));
 
     m_rotation_quaternion = rollq * pitchq * yawq * m_rotation_quaternion;
     m_rotation_quaternion = normalize(m_rotation_quaternion);

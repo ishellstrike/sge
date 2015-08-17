@@ -19,8 +19,6 @@
 #include "gbuffer.h"
 #include "sge_ui/wins.h"
 #include "sge_perfomance.h"
-#include "sge_texture_lab.h"
-#include "sge_texture_lab_float_selector.h"
 #include "experimental/quadsphere.h"
 #include "experimental/scattering.h"
 #include "space/spacesystem.h"
@@ -68,7 +66,6 @@ public:
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
-    sge_texlab_heightmap *texlab;
     std::shared_ptr<QuadSphere> qs, qs_w;
     static void Swap();
 };

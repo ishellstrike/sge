@@ -29,6 +29,7 @@
  */
 using namespace std;
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 using namespace glm;
 #include "scattering.h"
 #include <fstream>
@@ -36,6 +37,7 @@ using namespace glm;
 #include <vector>
 #include "data/shaders/scattering/scatter_params.h"
 #include "prefecences.h"
+#include "random.h"
 
 Scattering::Scattering()
 {
@@ -425,27 +427,27 @@ void Scattering::Precompute()
     LOG(verbose) << "ready.";
 }
 
-glm::vec3 s(0.0, -1.0, 0.0);
+glm::vec3 s(0.0, -1, 0.0);
 float exposure = 0.4f;
 
 void Scattering::redisplayFunc(const Camera & cam)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0,0,0,1);
+   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   // glClearColor(0,0,0,1);
 
     glm::mat4 iproj = glm::inverse(cam.Projection());
     glm::mat4 iview = glm::inverse(cam.View());
-    glm::vec4 c = iview * glm::vec4(0.f, 0.f, 0.f, 0.f);
-    glm::mat4 iviewf = glm::mat4(iview[0][0], iview[0][1], iview[0][2], iview[0][3],
-            iview[1][0], iview[1][1], iview[1][2], iview[1][3],
-            iview[2][0], iview[2][1], iview[2][2], iview[2][3],
-            iview[3][0], iview[3][1], iview[3][2], iview[3][3]);
+
+    //glm::vec4 c = iview * glm::vec4(0.f, 0.f, 0.f, 1.f); //same
+    glm::vec4 c = glm::vec4(cam.Position(), 1);
+
+    s = glm::vec3(1,0,0);
 
     glUseProgram(drawProg);
     glUniform3f(glGetUniformLocation(drawProg, "c"), c.x, c.y, c.z);
     glUniform3f(glGetUniformLocation(drawProg, "s"), s.x, s.y, s.z);
-    glUniformMatrix4fv(glGetUniformLocation(drawProg, "projInverse"), 1, true, &iproj[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(drawProg, "viewInverse"), 1, true, &iviewf[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(drawProg, "projInverse"), 1, GL_FALSE, &iproj[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(drawProg, "viewInverse"), 1, GL_FALSE, &iview[0][0]);
     glUniform1f(glGetUniformLocation(drawProg, "exposure"), exposure);
     drawQuad();
     glFinish();

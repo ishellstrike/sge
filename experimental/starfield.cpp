@@ -8,13 +8,13 @@ Starfield::Starfield()
     {
         VertPosCol vpc;
         vpc.pos = ssolver::sphere_surface(100.f);
-        vpc.col = lerp(Color::White, Color::DarkBlue, random::norm<float>()-0.5f);
+        vpc.col = lerp(Color::White,Color::Clear, random::norm<float>()-0.5f);
         field.vertices.push_back(vpc);
         field.indices.push_back(i);
     }
     field.primitives = GL_POINTS;
 
-    auto mat = std::make_shared<Material>();
+    const auto &mat = std::make_shared<Material>();
     std::shared_ptr<BasicJargShader> shader = std::make_shared<BasicJargShader>();
     field.material = mat;
     shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/starfield.glsl");

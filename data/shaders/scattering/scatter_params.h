@@ -1,12 +1,12 @@
-const float SUN_INTENSITY = 100.0;
+const float SUN_INTENSITY = 100;
 
-const vec3 earthPos = vec3(0.0, 0.0, 9000.0);
+const vec3 earthPos = vec3(0.0, 0.00, 0.0);
 
 // ----------------------------------------------------------------------------
 // PHYSICAL MODEL PARAMETERS
 // ----------------------------------------------------------------------------
 
-const float SCALE = 1000;
+const float SCALE = 0.0001000;
 
 const float Rg = 6360.0 * SCALE;
 const float Rt = 6420.0 * SCALE;
