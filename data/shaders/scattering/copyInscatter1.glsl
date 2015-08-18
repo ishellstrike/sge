@@ -43,7 +43,7 @@ uniform sampler3D deltaSMSampler;
 
 #ifdef _VERTEX_
 
-in vec3 position;
+layout (location = 0) in vec3 position;
 
 void main() {
     gl_Position = vec4(position, 1);
@@ -52,16 +52,15 @@ void main() {
 #endif
 
 #ifdef _GEOMETRY_
-#extension GL_EXT_geometry_shader4 : enable
 
 void main() {
-    gl_Position = gl_PositionIn[0];
+    gl_Position = gl_in[0].gl_Position;
     gl_Layer = layer;
     EmitVertex();
-    gl_Position = gl_PositionIn[1];
+    gl_Position = gl_in[1].gl_Position;
     gl_Layer = layer;
     EmitVertex();
-    gl_Position = gl_PositionIn[2];
+    gl_Position = gl_in[2].gl_Position;
     gl_Layer = layer;
     EmitVertex();
     EndPrimitive();

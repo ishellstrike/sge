@@ -28,13 +28,8 @@ SOURCES += \
     json/json_valueiterator.inl \
     main.cpp \
     basicjargshader.cpp \
-    SphereTesselator.cpp \
     ClassicNoise.cpp \
     camera.cpp \
-    geometry/cube.cpp \
-    geometry/icosahedron.cpp \
-    geometry/mesh.cpp \
-    geometry/quad.cpp \
     geometry/vpnt.cpp \
     geometry/model.cpp \
     sge_ui/button.cpp \
@@ -115,16 +110,11 @@ HEADERS += \
     utfcpp/utf8/unchecked.h \
     basicjargshader.h \
     tangentcalc.h \
-    SphereTesselator.h \
     utfcpp/utf8.h \
     helper.h \
     ClassicNoise.h \
     camera.h \
-    geometry/icosahedron.h \
-    geometry/cube.h \
-    geometry/mesh.h \
     geometry/geometry.hpp \
-    geometry/quad.h \
     geometry/vpnt.h \
     geometry/model.h \
     sge_ui/button.h \

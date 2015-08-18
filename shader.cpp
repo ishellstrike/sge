@@ -107,7 +107,7 @@ std::string get_filename_headername(std::string path)
 void Shader::loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version/* = GLSLVER*/) {
 
     std::stringstream ss;
-    name = filename;
+    shaderfile_name = filename;
 
     ss << version << std::endl;
     for(const auto &ext : extensions)
@@ -178,7 +178,7 @@ std::string Shader::preprocessIncludes(const std::string &filename, int level /*
             std::string include_file = matches[1];
 
             output << "#ifndef " << get_filename_headername(include_file) << std::endl;
-            output << "// including " << include_file << std::endl;
+            output << "#define " << get_filename_headername(include_file) << std::endl;
             output << preprocessIncludes(get_dir(filename) + include_file, level + 1) << std::endl;
             output << "#endif //" << get_filename_headername(include_file) << std::endl;
         }
@@ -207,33 +207,178 @@ bool Shader::Link() {
     return true;
 }
 
-/*!
- * \brief JargShader::Afterlink
- *
- * search basic uniforms
- * uniforms uses in #Mesh class
- */
-void Shader::Afterlink()
-{
-    Use();
-    posAttrib = glGetAttribLocation(program, "position");
-    uvAttrib = glGetAttribLocation(program, "texcoord");
-    uv2Attrib = glGetAttribLocation(program, "texcoord2");
-    colAttrib = glGetAttribLocation(program, "color");
-    normAttrib = glGetAttribLocation(program, "normal");
-    tangentAttrib = glGetAttribLocation(program, "tangent");
-    binormalAttrib = glGetAttribLocation(program, "binormal");
-
-    LOG(verbose) << "pos = " << posAttrib <<
-                 "; col = " << colAttrib <<
-                 "; uv = " << uvAttrib <<
-                 "; uv2 = " << uv2Attrib <<
-                 "; norm = " << normAttrib <<
-                 "; tan = " << tangentAttrib <<
-                    "; bi = " << binormalAttrib << ";";
-}
-
 void Shader::AddExtension(std::string s)
 {
     extensions.push_back(std::move(s));
+}
+
+void Shader::SetUniform_(const glm::mat4 &val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniformMatrix4fv(loc, 1, GL_FALSE, &val[0][0]);
+    }
+    else
+    {
+        glUniformMatrix4fv(m_uniforms[uni_name], 1, GL_FALSE, &val[0][0]);
+    }
+}
+
+void Shader::SetUniform_(const glm::mat3 &val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniformMatrix3fv(loc, 1, GL_FALSE, &val[0][0]);
+    }
+    else
+    {
+        glUniformMatrix3fv(m_uniforms[uni_name], 1, GL_FALSE, &val[0][0]);
+    }
+}
+
+void Shader::SetUniform_(const glm::mat2 &val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniformMatrix2fv(loc, 1, GL_FALSE, &val[0][0]);
+    }
+    else
+    {
+        glUniformMatrix2fv(m_uniforms[uni_name], 1, GL_FALSE, &val[0][0]);
+    }
+}
+
+void Shader::SetUniform_(int val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniform1i(loc, val);
+    }
+    else
+    {
+        glUniform1i(m_uniforms[uni_name], val);
+    }
+}
+
+void Shader::SetUniform_(unsigned int val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniform1ui(loc, val);
+    }
+    else
+    {
+        glUniform1ui(m_uniforms[uni_name], val);
+    }
+}
+
+void Shader::SetUniform_(const glm::vec4 &val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniform4fv(loc, 1, &val[0]);
+    }
+    else
+    {
+        glUniform4fv(m_uniforms[uni_name], 1, &val[0]);
+    }
+}
+
+void Shader::SetUniform_(const glm::vec3 &val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniform3fv(loc, 1, &val[0]);
+    }
+    else
+    {
+        glUniform3fv(m_uniforms[uni_name], 1, &val[0]);
+    }
+}
+
+void Shader::SetUniform_(const glm::vec2 &val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniform2fv(loc, 1, &val[0]);
+    }
+    else
+    {
+        glUniform2fv(m_uniforms[uni_name], 1, &val[0]);
+    }
+}
+
+void Shader::SetUniform_(const float &val, const std::string &uni_name)
+{
+    const auto &search = m_uniforms.find(uni_name);
+    if(search == m_uniforms.end())
+    {
+        GLuint loc = glGetUniformLocation(program, uni_name.c_str());
+        if(loc == -1)
+        {
+            LOG(error) << uni_name << " missed in " << shaderfile_name;
+        }
+        m_uniforms[uni_name] = loc;
+        glUniform1f(loc, val);
+    }
+    else
+    {
+        glUniform1f(m_uniforms[uni_name], val);
+    }
 }

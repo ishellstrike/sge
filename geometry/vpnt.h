@@ -12,19 +12,6 @@ struct VertexPositionTexture{
     VertexPositionTexture(glm::vec3 __v, glm::vec3 __p , glm::vec2 __u);
     VertexPositionTexture();
     ~VertexPositionTexture();
-
-    VertexPositionTexture operator + (VertexPositionTexture __a) const
-    {
-        VertexPositionTexture b;
-        b.position = position + __a.position;
-        b.uv = __a.uv + uv; return b;
-    }
-    VertexPositionTexture operator / (float __a) const
-    {
-        VertexPositionTexture b;
-        b.position = position / __a;
-        b.uv = uv / __a; return b;
-    }
 };
 
 /**
@@ -41,31 +28,11 @@ struct VertPosNormUvUv{
     VertPosNormUvUv();
     ~VertPosNormUvUv();
 
-    VertPosNormUvUv operator + (VertPosNormUvUv __a) const
-    {
-        VertPosNormUvUv b;
-        b.position = position + __a.position;
-        b.uv = __a.uv + uv;
-        b.uv_glob = __a.uv_glob + uv_glob;
-        b.normal = normal + __a.normal;
-        return b;
-    }
-
-    VertPosNormUvUv operator / (float __a) const
-    {
-        VertPosNormUvUv b;
-        b.position = position / __a;
-        b.uv = uv / __a;
-        b.uv_glob = uv_glob / __a;
-        b.normal = normal / __a;
-        return b;
-    }
-
     static VertexInfo info;
 };
 
 /**
- * @brief The VPNTBT struct. Vertex position normal tangent binormal texture
+ * @brief The VPNTBT struct. Vertex position texture texture
  */
 struct VertPosUvUv{
     glm::vec3 position;
@@ -76,23 +43,30 @@ struct VertPosUvUv{
     VertPosUvUv();
     ~VertPosUvUv();
 
-    VertPosUvUv operator + (VertPosUvUv __a) const
-    {
-        VertPosUvUv b;
-        b.position = position + __a.position;
-        b.uv = __a.uv + uv;
-        b.uv_glob = __a.uv_glob + uv_glob;
-        return b;
-    }
+    static VertexInfo info;
+};
 
-    VertPosUvUv operator / (float __a) const
-    {
-        VertPosUvUv b;
-        b.position = position / __a;
-        b.uv = uv / __a;
-        b.uv_glob = uv_glob / __a;
-        return b;
-    }
+/**
+ * @brief The VPNTBT struct. Vertex position texture
+ */
+struct VertPosUv{
+    glm::vec3 position;
+    glm::vec2 uv;
+    VertPosUv(glm::vec3 __pos, glm::vec2 __uv);
+    VertPosUv();
+    ~VertPosUv();
+
+    static VertexInfo info;
+};
+
+/**
+ * @brief The VPNTBT struct. Vertex position
+ */
+struct VertPos{
+    glm::vec3 position;
+    VertPos(glm::vec3 __pos);
+    VertPos();
+    ~VertPos();
 
     static VertexInfo info;
 };
@@ -109,22 +83,6 @@ public:
     VertPosMininormTex(glm::vec3 __pos, glm::vec2 __uv);
     VertPosMininormTex();
     ~VertPosMininormTex();
-
-    VertPosMininormTex operator + (VertPosMininormTex __a) const
-    {
-        VertPosMininormTex b;
-        b.position = position + __a.position;
-        b.uv = __a.uv + uv;
-        return b;
-    }
-
-    VertPosMininormTex operator / (float __a) const
-    {
-        VertPosMininormTex b;
-       b.position = position / __a;
-       b.uv = uv / __a;
-       return b;
-    }
 };
 
 class VertexPositionColor{

@@ -1,5 +1,4 @@
 #include "quadsphere.h"
-#include "geometry/icosahedron.h"
 #include "glm/gtx/transform.hpp"
 #include "TextureGenerator.h"
 #include "resources/resourcecontroller.h"

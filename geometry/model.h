@@ -1,6 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
-#include "mesh.h"
+#include "umesh.h"
 #include "../resources/material.h"
 #include "../basicjargshader.h"
 
@@ -8,7 +8,7 @@ class Model
 {
 public:
     Model();
-    std::vector<Mesh> meshes;
+    std::vector<UMesh<int>> meshes;
     std::vector<Material> materials;
     std::vector<BasicJargShader> shaders;
 

@@ -18,6 +18,7 @@ public:
     void RenderOnTempFbo(std::function<void()> func = [](){}) const;
     void SetParams(float tex);
     void Reset();
+    void drawQuad(const glm::vec4 &view = glm::vec4(-1,-1,1,1)) const;
 private:
     std::vector<std::shared_ptr<Texture>> texes;
     std::vector<float> params;

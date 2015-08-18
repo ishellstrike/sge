@@ -1,8 +1,10 @@
-#ifndef JargShader_h__
+﻿#ifndef JargShader_h__
 #define JargShader_h__
 #include <string>
 #include <vector>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <unordered_map>
 #define GLSLVER "#version 330 core"
 
 /*!
@@ -16,7 +18,7 @@ class Shader{
 public:
     Shader();
     ~Shader(void);
-    std::string name;
+    std::string shaderfile_name;
     std::vector<int> vars; /*!< stored uniforms locations */
     void Use() const;
     GLint locateVar(const std::string &s);
@@ -26,19 +28,30 @@ public:
     std::vector<GLint> shaders_;
     std::vector<std::string> extensions;
 
-    GLint posAttrib, /*!< position attribute */
-    colAttrib,       /*!< color attribute */
-    uvAttrib,        /*!< texcoord attribute */
-    uv2Attrib,       /*!< texcoord2 attribute */
-    normAttrib,      /*!< normal attribute */
-    tangentAttrib,   /*!< tangent attribute */
-    binormalAttrib;  /*!< binormal attribute */
-
-    void Afterlink();
+    template<class T>
+    void SetUniform(const std::string &name, const T &val)
+    {
+      SetUniform_(val, name);
+    }
 
     void AddExtension(std::string s);
 private:
     GLint locate(const std::string &s);
     std::string preprocessIncludes(const std::string &filename, int level = 0);
+
+    void SetUniform_(const glm::mat4 &val, const std::string &uni_name);
+    void SetUniform_(const glm::mat3 &val, const std::string &uni_name);
+    void SetUniform_(const glm::mat2 &val, const std::string &uni_name);
+
+    void SetUniform_(int val,              const std::string &uni_name);
+    void SetUniform_(unsigned int val,     const std::string &uni_name);
+
+    void SetUniform_(const glm::vec4 &val, const std::string &uni_name);
+    void SetUniform_(const glm::vec3 &val, const std::string &uni_name);
+    void SetUniform_(const glm::vec2 &val, const std::string &uni_name);
+
+    void SetUniform_(const float &val,     const std::string &uni_name);
+
+    std::unordered_map <std::string, GLuint> m_uniforms;
 };
 #endif // JargShader_h__

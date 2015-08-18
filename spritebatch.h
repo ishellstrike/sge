@@ -30,24 +30,6 @@ public:
     SpriteBatch();
     ~SpriteBatch();
 
-    glm::vec3 *pos = nullptr;
-    glm::vec2 *uv = nullptr;
-    glm::vec4 *col = nullptr;
-
-    GLuint *index = nullptr;
-    unsigned int cur = 0;
-
-    GLuint current = 0;
-    GLuint m_vbo[4];
-
-    glm::mat4 uniform;
-
-    std::shared_ptr<Shader> font_program = std::shared_ptr<Shader>(new Shader()),
-                                basic_program = std::shared_ptr<Shader>(new Shader()),
-                                color_program = std::shared_ptr<Shader>(new Shader()),
-                                current_program;
-    glm::vec2 scis_min, scis_size;
-
     void setUniform(const glm::mat4 &uni);
 
     void render();
@@ -65,5 +47,24 @@ private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
                        Font *font, const glm::vec4 &col_, bool no_draw = false);
     void drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, const Texture &tex, const glm::vec4 &color);
+
+    std::shared_ptr<Shader> font_program = std::shared_ptr<Shader>(new Shader()),
+                                basic_program = std::shared_ptr<Shader>(new Shader()),
+                                color_program = std::shared_ptr<Shader>(new Shader()),
+                                current_program;
+    glm::vec2 scis_min, scis_size;
+    glm::vec3 *pos = nullptr;
+    glm::vec2 *uv = nullptr;
+    glm::vec4 *col = nullptr;
+
+    GLuint *index = nullptr;
+    unsigned int cur = 0;
+
+    GLuint current = 0;
+    GLuint m_vbo[4];
+
+    glm::mat4 uniform;
+
+    GLuint p_loc, c_loc, uv_loc;
 };
 #endif // SPRITEBATCH_H

@@ -146,7 +146,7 @@ public:
         glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
         const glm::mat3 normal = glm::mat3(glm::transpose(glm::inverse(Model)));
         glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
-        glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(200000,234560,9850000)[0]);
+        glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(0,1,0)[0]);
 
         if(shader->ambient_location != -1)
             glUniform4fv(shader->ambient_location,   1, &material->ambient[0]);

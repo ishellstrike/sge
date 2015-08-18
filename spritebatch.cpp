@@ -30,7 +30,6 @@ SpriteBatch::SpriteBatch()
     basic_program->Use();
     basic_program->locateVar("MVP");
     basic_program->locateVar("colorTexture");
-    basic_program->Afterlink();
     glUniform1i(basic_program->vars[1], 0);
 
     font_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/font.glsl");
@@ -39,7 +38,6 @@ SpriteBatch::SpriteBatch()
     font_program->Use();
     font_program->locateVar("MVP");
     font_program->locateVar("colorTexture");
-    font_program->Afterlink();
     glUniform1i(font_program->vars[1], 0);
 
     color_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/color.glsl");
@@ -47,13 +45,18 @@ SpriteBatch::SpriteBatch()
     color_program->Link();
     color_program->Use();
     color_program->locateVar("MVP");
-    color_program->Afterlink();
 
     current_program = basic_program;
 
     glUseProgram(0);
 
     glGenBuffers(4, m_vbo);
+
+    p_loc = 0;
+
+    uv_loc = 1;
+
+    c_loc = 3;
 
     LOG(info) << "spritebatch ready";
 }
@@ -503,18 +506,18 @@ void SpriteBatch::render()
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*cur*4, &pos[0], GL_STREAM_DRAW);
-    glEnableVertexAttribArray(current_program->posAttrib);
-    glVertexAttribPointer(current_program->posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(p_loc);
+    glVertexAttribPointer(p_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*cur*4, &uv[0], GL_STREAM_DRAW);
-    glEnableVertexAttribArray(current_program->uvAttrib);
-    glVertexAttribPointer(current_program->uvAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(uv_loc);
+    glVertexAttribPointer(uv_loc, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[2]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4)*cur*4, &col[0], GL_STREAM_DRAW);
-    glEnableVertexAttribArray(current_program->colAttrib);
-    glVertexAttribPointer(current_program->colAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(c_loc);
+    glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[3]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*cur*6, &index[0], GL_STREAM_DRAW);

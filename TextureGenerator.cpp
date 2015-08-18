@@ -1,12 +1,12 @@
 #include "TextureGenerator.h"
 #include <stdarg.h>
 #include "helper.h"
-#include "geometry/quad.h"
-#include "geometry/mesh.h"
 #include "BasicJargShader.h"
 #include <functional>
 #include "prefecences.h"
 #include "logger.h"
+#include "geometry/umesh.h"
+#include "geometry/vpnt.h"
 
 // TODO: наследуемые классы текстурного генератора, с перегрузкой функции OtherUniforms, которая вызывается перед рендером
 TextureGenerator::TextureGenerator(void)
@@ -49,6 +49,23 @@ void TextureGenerator::SetShader(std::shared_ptr<BasicJargShader> _shader)
     shader = _shader;
 }
 
+void TextureGenerator::drawQuad(const glm::vec4 &view ) const
+{
+    glBegin(GL_TRIANGLE_STRIP);
+        glTexCoord2f(0,0);
+        glVertex2f(view.x, view.y);
+
+        glTexCoord2f(1,0);
+        glVertex2f(view.z, view.y);
+
+        glTexCoord2f(0,1);
+        glVertex2f(view.x, view.w);
+
+        glTexCoord2f(1,1);
+        glVertex2f(view.z, view.w);
+    glEnd();
+}
+
 /*!
  * \brief TextureGenerator::RenderOnTempFbo
  * \param func
@@ -74,7 +91,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         str.append(std::to_string(i));
         auto uni = glGetUniformLocation(shader->program, str.c_str());
         if(uni == -1)
-            LOG(error) << "Texture generator could't found " << str << " sampler in " << shader->name << ". skipped.";
+            LOG(error) << "Texture generator could't found " << str << " sampler in " << shader->shaderfile_name << ". skipped.";
         glUniform1i(uni, i);
     }
 
@@ -85,7 +102,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         const char *s = named_textures[i].first.c_str();
         auto uni = glGetUniformLocation(shader->program, s);
         if(uni == -1)
-            LOG(error) << "Texture generator could't found " << named_textures[i].first << " sampler in " << shader->name << ". skipped.";
+            LOG(error) << "Texture generator could't found " << named_textures[i].first << " sampler in " << shader->shaderfile_name << ". skipped.";
         glUniform1i(uni, i + texes.size());
     }
 
@@ -96,19 +113,23 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         str.append(std::to_string(i));
         auto uni = glGetUniformLocation(shader->program, str.c_str());
         if(uni == -1)
-            LOG(error) << "Texture generator could't found " << str << " uniform in " << shader->name << ". skipped.";
+            LOG(error) << "Texture generator could't found " << str << " uniform in " << shader->shaderfile_name << ". skipped.";
         glUniform1f(uni, params[i]);
     }
     
     func();
 
-    const auto &quad_mesh = Quad::getMesh(2);
-    quad_mesh->shader = shader;
-    quad_mesh->Bind();
+    UMesh<VertPosUv> mesh;
+    mesh.vertices = {{{-1,-1,0},{0,0}},{{1,-1,0},{1,0}},{{-1,1,0},{0,1}},{{1,1,0},{1,1}}};
+    mesh.indices = {0,1,2,1,3,2};
+    mesh.shader = shader;
+    mesh.ForgetBind();
     Camera c;
-    quad_mesh->Render(c);
+    mesh.Render(c);
+
     glViewport(0, 0, RESX, RESY);
 
+//    Radeon driver bug =(
 //    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 //    switch(status)
 //    {

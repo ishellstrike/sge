@@ -88,3 +88,42 @@ VertexInfo VertPosUvUv::info = VertexInfo({VERTEX_ATTRIBUTE("position",  glm::ve
                                            VERTEX_ATTRIBUTE("texcoord",  glm::vec2, uv,       VertPosUvUv),
                                            VERTEX_ATTRIBUTE("texcoord2", glm::vec2, uv_glob,  VertPosUvUv)
                                           });
+
+
+VertPosUv::VertPosUv(glm::vec3 __pos, glm::vec2 __uv) : position(__pos), uv(__uv)
+{
+
+}
+
+VertPosUv::VertPosUv()
+{
+
+}
+
+VertPosUv::~VertPosUv()
+{
+
+}
+
+VertexInfo VertPosUv::info = VertexInfo({VERTEX_ATTRIBUTE("position",  glm::vec3, position, VertPosUv),
+                                         VERTEX_ATTRIBUTE("texcoord",  glm::vec2, uv,       VertPosUv),
+                                          });
+
+
+VertPos::VertPos(glm::vec3 __pos) : position(__pos)
+{
+
+}
+
+VertPos::VertPos()
+{
+
+}
+
+VertPos::~VertPos()
+{
+
+}
+
+VertexInfo VertPos::info = VertexInfo({VERTEX_ATTRIBUTE("position",  glm::vec3, position, VertPosUv)
+                                          });

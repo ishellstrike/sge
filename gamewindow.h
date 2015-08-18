@@ -14,7 +14,6 @@
 #include "gametimer.h"
 #include "textureatlas.h"
 #include "font.h"
-#include "geometry/mesh.h"
 #include "camera.h"
 #include "gbuffer.h"
 #include "sge_ui/wins.h"

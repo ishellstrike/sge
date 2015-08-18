@@ -9,9 +9,6 @@
 #include "textureatlas.h"
 #include <thread>
 #include <chrono>
-#include "geometry/cube.h"
-#include "geometry/icosahedron.h"
-#include "SphereTesselator.h"
 #include <algorithm>
 #include "ClassicNoise.h"
 #include "geometry/model.h"

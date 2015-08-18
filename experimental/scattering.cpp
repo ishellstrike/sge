@@ -38,6 +38,8 @@ using namespace glm;
 #include "data/shaders/scattering/scatter_params.h"
 #include "prefecences.h"
 #include "random.h"
+#include "geometry/umesh.h"
+#include "geometry/vpnt.h"
 
 Scattering::Scattering()
 {
@@ -110,6 +112,7 @@ unsigned int loadProgram(const vector<string> &files)
         glProgramParameteriEXT(programId, GL_GEOMETRY_INPUT_TYPE_EXT, GL_TRIANGLES);
         glProgramParameteriEXT(programId, GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_TRIANGLE_STRIP);
         glProgramParameteriEXT(programId, GL_GEOMETRY_VERTICES_OUT_EXT, 3);
+        LOG(verbose) << "with geometry shader";
     }
 
     lines[0] = "#version 330 core\n#define _FRAGMENT_\n";
@@ -130,12 +133,28 @@ unsigned int loadProgram(const vector<string> &files)
 
 void drawQuad(const vec4 &view = vec4(-1,-1,1,1))
 {
-    glBegin(GL_TRIANGLE_STRIP);
-    glVertex2f(view.x, view.y);
-    glVertex2f(view.z, view.y);
-    glVertex2f(view.x, view.w);
-    glVertex2f(view.z, view.w);
-    glEnd();
+    glm::vec3 vert[] = {{-1,-1,0},{1,-1,0},{-1,1,0},{1,1,0}};
+    GLuint ind[] = {0,1,2,1,3,2};
+
+    GLuint vbo, ibo;
+
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ibo);
+
+    const GLuint stride = sizeof(glm::vec3);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*4, &vert[0], GL_STREAM_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*6, &ind[0], GL_STREAM_DRAW);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ibo);
 }
 
 void Scattering::setLayer(unsigned int prog, int layer)
@@ -301,18 +320,18 @@ void Scattering::Precompute()
     LOG(verbose) << "precomputations...";
 
     glGenFramebuffers(1, &fbo);
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-    glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-    glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
     // computes transmittance texture T (line 1 in algorithm 4.1)
-    glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, transmittanceTexture, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, transmittanceTexture, 0);
     glViewport(0, 0, TRANSMITTANCE_W, TRANSMITTANCE_H);
     glUseProgram(transmittanceProg);
     drawQuad();
 
     // computes irradiance texture deltaE (line 2 in algorithm 4.1)
-    glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, deltaETexture, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
     glViewport(0, 0, SKY_W, SKY_H);
     glUseProgram(irradiance1Prog);
     glUniform1i(glGetUniformLocation(irradiance1Prog, "transmittanceSampler"), transmittanceUnit);
@@ -320,9 +339,9 @@ void Scattering::Precompute()
 
     // computes single scattering texture deltaS (line 3 in algorithm 4.1)
     // Rayleigh and Mie separated in deltaSR + deltaSM
-    glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, deltaSRTexture, 0);
-    glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT1_EXT, deltaSMTexture, 0);
-    unsigned int bufs[2] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT };
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, deltaSMTexture, 0);
+    unsigned int bufs[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
     glDrawBuffers(2, bufs);
     glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
     glUseProgram(inscatter1Prog);
@@ -331,11 +350,11 @@ void Scattering::Precompute()
         setLayer(inscatter1Prog, layer);
         drawQuad();
     }
-    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_TEXTURE_2D, 0, 0);
-    glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, 0, 0);
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
     // copies deltaE into irradiance texture E (line 4 in algorithm 4.1)
-    glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, irradianceTexture, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, irradianceTexture, 0);
     glViewport(0, 0, SKY_W, SKY_H);
     glUseProgram(copyIrradianceProg);
     glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 0.0);
@@ -343,7 +362,7 @@ void Scattering::Precompute()
     drawQuad();
 
     // copies deltaS into inscatter texture S (line 5 in algorithm 4.1)
-    glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, inscatterTexture, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
     glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
     glUseProgram(copyInscatter1Prog);
     glUniform1i(glGetUniformLocation(copyInscatter1Prog, "deltaSRSampler"), deltaSRUnit);
@@ -357,7 +376,7 @@ void Scattering::Precompute()
     for (int order = 2; order <= 4; ++order) {
 
         // computes deltaJ (line 7 in algorithm 4.1)
-        glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, deltaJTexture, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaJTexture, 0);
         glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
         glUseProgram(jProg);
         glUniform1f(glGetUniformLocation(jProg, "first"), order == 2 ? 1.0 : 0.0);
@@ -371,7 +390,7 @@ void Scattering::Precompute()
         }
 
         // computes deltaE (line 8 in algorithm 4.1)
-        glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, deltaETexture, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
         glViewport(0, 0, SKY_W, SKY_H);
         glUseProgram(irradianceNProg);
         glUniform1f(glGetUniformLocation(irradianceNProg, "first"), order == 2 ? 1.0 : 0.0);
@@ -381,7 +400,7 @@ void Scattering::Precompute()
         drawQuad();
 
         // computes deltaS (line 9 in algorithm 4.1)
-        glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, deltaSRTexture, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
         glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
         glUseProgram(inscatterNProg);
         glUniform1f(glGetUniformLocation(inscatterNProg, "first"), order == 2 ? 1.0 : 0.0);
@@ -397,7 +416,7 @@ void Scattering::Precompute()
         glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE);
 
         // adds deltaE into irradiance texture E (line 10 in algorithm 4.1)
-        glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, irradianceTexture, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, irradianceTexture, 0);
         glViewport(0, 0, SKY_W, SKY_H);
         glUseProgram(copyIrradianceProg);
         glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 1.0);
@@ -405,7 +424,7 @@ void Scattering::Precompute()
         drawQuad();
 
         // adds deltaS into inscatter texture S (line 11 in algorithm 4.1)
-        glFramebufferTextureEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, inscatterTexture, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
         glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
         glUseProgram(copyInscatterNProg);
         glUniform1i(glGetUniformLocation(copyInscatterNProg, "deltaSSampler"), deltaSRUnit);
@@ -418,7 +437,7 @@ void Scattering::Precompute()
     }
 
     glFinish();
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, RESX, RESY);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -441,9 +460,11 @@ void Scattering::redisplayFunc(const Camera & cam)
     //glm::vec4 c = iview * glm::vec4(0.f, 0.f, 0.f, 1.f); //same
     glm::vec4 c = glm::vec4(cam.Position(), 1);
 
-    s = glm::vec3(1,0,0);
+    s = glm::vec3(0,1,0);
 
     glUseProgram(drawProg);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
     glUniform3f(glGetUniformLocation(drawProg, "c"), c.x, c.y, c.z);
     glUniform3f(glGetUniformLocation(drawProg, "s"), s.x, s.y, s.z);
     glUniformMatrix4fv(glGetUniformLocation(drawProg, "projInverse"), 1, GL_FALSE, &iproj[0][0]);
