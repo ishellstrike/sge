@@ -15,7 +15,7 @@ const float RL = 6421.0 * SCALE;
 const float AVERAGE_GROUND_REFLECTANCE = 0.1;
 
 // Rayleigh
-const float HR = 8.0 * SCALE;
+const float HR = 18.0 * SCALE;
 const vec3 betaR = vec3(5.8e-3, 1.35e-2, 3.31e-2) / SCALE;
 
 // Mie

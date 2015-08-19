@@ -82,7 +82,7 @@ void main(void)
     {
         geo_out.texcoordout = geo_in[i].texcoordout;
         geo_out.texcoordout2 = geo_in[i].texcoordout2;
-        float snoize = decodeFloat(texture(material_global_height, geo_out.texcoordout2));
+        float snoize = 0.6;//decodeFloat(texture(material_global_height, geo_out.texcoordout2));
         vec3 pos = gl_in[i].gl_Position.xyz;
         vec3 newPosition = (R + s * snoize) * pos;
         vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
