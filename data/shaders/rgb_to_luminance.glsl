@@ -11,29 +11,24 @@ uniform sampler2D rgb_map;
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texcoord;
 
-out VERT_OUT {
-    vec3  position;
-    vec2  uv;
-} vert_out;
+out vec2  uv;
 
 void main(void)
 {
-    vert_out.uv   = texcoord;
+    uv   = texcoord;
     gl_Position   = vec4(position, 1.0);
 }
 #endif
 
 #ifdef _FRAGMENT_
 
-in FRAG_IN {
-    vec2  uv;
-} frag_in;
+in vec2 uv;
 
 layout (location = 0) out vec4 color;
 
 void main(void)
 {
-    vec4 rgb = texture(rgb_map, frag_in.uv);
+    vec4 rgb = texture(rgb_map, uv);
     const vec3 W = vec3(0.2125, 0.7154, 0.0721);
     float lum = dot(rgb.xyz, W);
     color = vec4(lum, lum, lum, rgb.a);
