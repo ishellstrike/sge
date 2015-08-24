@@ -22,8 +22,8 @@
 
 #define MAJOR 2
 #define MINOR 1
-//#define NO_SCATT
-//#define NO_STARFIELD
+#define NO_SCATT
+#define NO_STARFIELD
 
 GameWindow::GameWindow()
 {
@@ -286,17 +286,12 @@ void GameWindow::Swap()
     glfwSwapBuffers(wi->window);
 }
 
-void GameWindow::BaseDraw()
+void GameWindow::DeferendStep()
 {
+    gb->BindForWriting();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glClearColor(0,0,0, 1.f);
-
-#ifndef NO_STARFIELD
-    sf->Render(*cam);
-#endif
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
 
     for(size_t i = 0; i < ss.system.size(); i++)
     {
@@ -304,17 +299,51 @@ void GameWindow::BaseDraw()
         ss.system[i]->Render(*cam);
     }
 
+    //water->Use();
+    //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
+    //qs_w->Render(*cam);
+}
+
+void GameWindow::AfterEffect()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    gb->BindForReading();
+
+    GLsizei HalfWidth = (GLsizei)(RESX_float / 2.0f);
+    GLsizei HalfHeight = (GLsizei)(RESY_float / 2.0f);
+
+    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+    glBlitFramebuffer(0, 0, RESX, RESY,
+                    0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+    glBlitFramebuffer(0, 0, RESX, RESY,
+                    0, HalfHeight, HalfWidth, RESY, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+    glBlitFramebuffer(0, 0, RESX, RESY,
+                    HalfWidth, HalfHeight, RESX, RESY, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
+    glBlitFramebuffer(0, 0, RESX, RESY,
+                    HalfWidth, 0, RESX, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+}
+
+void GameWindow::BaseDraw()
+{
+    DeferendStep();
+    AfterEffect();
+
+#ifndef NO_STARFIELD
+    sf->Render(*cam);
+#endif
+
 #ifndef NO_SCATT
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     scat.redisplayFunc(*cam);
 #endif
-
-    //water->Use();
-    //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    //qs_w->Render(*cam);
-
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);

@@ -225,7 +225,7 @@ void main() {
     gl_FragColor = outc;
 
 
-    //gl_FragColor = texture(inscatterSampler,vec3(coords,(s.x+1.0)/2.0));
+    //gl_FragColor = texture(inscatterSampler,vec3(coords,(s.x+1.0)/2.0))*100;
     //gl_FragColor = vec4(texture(irradianceSampler,coords).rgb*5.0, 1.0);
     //gl_FragColor = texture(transmittanceSampler, coords);
 }

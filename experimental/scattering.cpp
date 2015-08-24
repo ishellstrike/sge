@@ -40,6 +40,7 @@ using namespace glm;
 #include "random.h"
 #include "geometry/umesh.h"
 #include "geometry/vpnt.h"
+#include "helper.h"
 
 Scattering::Scattering()
 {
@@ -129,32 +130,6 @@ unsigned int loadProgram(const vector<string> &files)
     delete[] lines;
 
     return programId;
-}
-
-void drawQuad(const vec4 &view = vec4(-1,-1,1,1))
-{
-    glm::vec3 vert[] = {{-1,-1,0},{1,-1,0},{-1,1,0},{1,1,0}};
-    GLuint ind[] = {0,1,2,1,3,2};
-
-    GLuint vbo, ibo;
-
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ibo);
-
-    const GLuint stride = sizeof(glm::vec3);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*4, &vert[0], GL_STREAM_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*6, &ind[0], GL_STREAM_DRAW);
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
-
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ibo);
 }
 
 void Scattering::setLayer(unsigned int prog, int layer)
@@ -328,14 +303,14 @@ void Scattering::Precompute()
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, transmittanceTexture, 0);
     glViewport(0, 0, TRANSMITTANCE_W, TRANSMITTANCE_H);
     glUseProgram(transmittanceProg);
-    drawQuad();
+    drawScreenQuad();
 
     // computes irradiance texture deltaE (line 2 in algorithm 4.1)
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
     glViewport(0, 0, SKY_W, SKY_H);
     glUseProgram(irradiance1Prog);
     glUniform1i(glGetUniformLocation(irradiance1Prog, "transmittanceSampler"), transmittanceUnit);
-    drawQuad();
+    drawScreenQuad();
 
     // computes single scattering texture deltaS (line 3 in algorithm 4.1)
     // Rayleigh and Mie separated in deltaSR + deltaSM
@@ -348,7 +323,7 @@ void Scattering::Precompute()
     glUniform1i(glGetUniformLocation(inscatter1Prog, "transmittanceSampler"), transmittanceUnit);
     for (int layer = 0; layer < RES_R; ++layer) {
         setLayer(inscatter1Prog, layer);
-        drawQuad();
+        drawScreenQuad();
     }
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, 0, 0);
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
@@ -359,7 +334,7 @@ void Scattering::Precompute()
     glUseProgram(copyIrradianceProg);
     glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 0.0);
     glUniform1i(glGetUniformLocation(copyIrradianceProg, "deltaESampler"), deltaEUnit);
-    drawQuad();
+    drawScreenQuad();
 
     // copies deltaS into inscatter texture S (line 5 in algorithm 4.1)
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
@@ -369,7 +344,7 @@ void Scattering::Precompute()
     glUniform1i(glGetUniformLocation(copyInscatter1Prog, "deltaSMSampler"), deltaSMUnit);
     for (int layer = 0; layer < RES_R; ++layer) {
         setLayer(copyInscatter1Prog, layer);
-        drawQuad();
+        drawScreenQuad();
     }
 
     // loop for each scattering order (line 6 in algorithm 4.1)
@@ -386,7 +361,7 @@ void Scattering::Precompute()
         glUniform1i(glGetUniformLocation(jProg, "deltaSMSampler"), deltaSMUnit);
         for (int layer = 0; layer < RES_R; ++layer) {
             setLayer(jProg, layer);
-            drawQuad();
+            drawScreenQuad();
         }
 
         // computes deltaE (line 8 in algorithm 4.1)
@@ -397,7 +372,7 @@ void Scattering::Precompute()
         glUniform1i(glGetUniformLocation(irradianceNProg, "transmittanceSampler"), transmittanceUnit);
         glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSRSampler"), deltaSRUnit);
         glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSMSampler"), deltaSMUnit);
-        drawQuad();
+        drawScreenQuad();
 
         // computes deltaS (line 9 in algorithm 4.1)
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
@@ -408,7 +383,7 @@ void Scattering::Precompute()
         glUniform1i(glGetUniformLocation(inscatterNProg, "deltaJSampler"), deltaJUnit);
         for (int layer = 0; layer < RES_R; ++layer) {
             setLayer(inscatterNProg, layer);
-            drawQuad();
+            drawScreenQuad();
         }
 
         glEnable(GL_BLEND);
@@ -421,7 +396,7 @@ void Scattering::Precompute()
         glUseProgram(copyIrradianceProg);
         glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 1.0);
         glUniform1i(glGetUniformLocation(copyIrradianceProg, "deltaESampler"), deltaEUnit);
-        drawQuad();
+        drawScreenQuad();
 
         // adds deltaS into inscatter texture S (line 11 in algorithm 4.1)
         glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
@@ -430,7 +405,7 @@ void Scattering::Precompute()
         glUniform1i(glGetUniformLocation(copyInscatterNProg, "deltaSSampler"), deltaSRUnit);
         for (int layer = 0; layer < RES_R; ++layer) {
             setLayer(copyInscatterNProg, layer);
-            drawQuad();
+            drawScreenQuad();
         }
 
         glDisable(GL_BLEND);
@@ -470,7 +445,7 @@ void Scattering::redisplayFunc(const Camera & cam)
     glUniformMatrix4fv(glGetUniformLocation(drawProg, "projInverse"), 1, GL_FALSE, &iproj[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(drawProg, "viewInverse"), 1, GL_FALSE, &iview[0][0]);
     glUniform1f(glGetUniformLocation(drawProg, "exposure"), exposure);
-    drawQuad();
+    drawScreenQuad();
     glFinish();
     glFlush();
 }

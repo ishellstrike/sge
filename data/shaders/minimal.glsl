@@ -82,7 +82,7 @@ void main(void)
     {
         geo_out.texcoordout = geo_in[i].texcoordout;
         geo_out.texcoordout2 = geo_in[i].texcoordout2;
-        float snoize = 0.6;//decodeFloat(texture(material_global_height, geo_out.texcoordout2));
+        float snoize = decodeFloat(texture(material_global_height, geo_out.texcoordout2));
         vec3 pos = gl_in[i].gl_Position.xyz;
         vec3 newPosition = (R + s * snoize) * pos;
         vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
@@ -111,7 +111,10 @@ float density = 0.0003;
 const float LOG2 = 1.442695;
 const vec4 colc = vec4(0.5, 0.5, 0.5, 1);
 
-layout(location = 0) out vec4 out_color;
+layout (location = 0) out vec3 WorldPosOut;
+layout (location = 1) out vec3 DiffuseOut;
+layout (location = 2) out vec3 NormalOut;
+layout (location = 3) out vec3 TexCoordOut;
 
 void main(void)
 {
@@ -120,10 +123,9 @@ void main(void)
     vec3 positionout = frag_in.positionout;
 
     float snoize = decodeFloat(texture(material_height, texcoordout));
-    vec3 grad = decodeNormal(texture(material_grad, texcoordout));
+    vec3 grad = -decodeNormal(texture(material_grad, texcoordout))*5;
 
     grad = grad / (R + s * snoize);
-    //grad = transform_N * grad;
     vec3 plane = grad - (grad * positionout) * positionout;
     vec3 normal = positionout - s * plane;
     vec3 eye = normalize(transform_N * normal);
@@ -149,17 +151,9 @@ void main(void)
     tex3 += texture2D(material_side, texcoordout2*100);
     tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x) * 5, 0, 1));
 
-    vec4 col = material_ambient;
-
-    float diffuse_rate = clamp(dot(light, eye), 0, 1);
-
-    col += material_diffuse * diffuse_rate;
-
-    //float z = gl_FragCoord.z / gl_FragCoord.w;
-    //float fogFactor = exp2( -density * density * z * z * LOG2 );
-    //fogFactor = clamp(fogFactor, 0.0, 1.0);
-    //col = mix(fog, col, fogFactor);
-    out_color = col * tex + material_emission;
-    //out_color.a = 1;
+    DiffuseOut = tex.xyz;
+    TexCoordOut = vec3(texcoordout2, 0);
+    NormalOut = eye;
+    WorldPosOut = positionout;
 }
 #endif

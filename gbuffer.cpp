@@ -57,11 +57,16 @@ void GBuffer::Resize(unsigned int WindowWidth, unsigned int WindowHeight)
 
 void GBuffer::BindForWriting()
 {
-
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 }
 
 void GBuffer::BindForReading()
 {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+}
 
+void GBuffer::SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType)
+{
+    glReadBuffer(GL_COLOR_ATTACHMENT0 + TextureType);
 }
 

@@ -26,6 +26,7 @@ public:
 
     void BindForReading();
 
+    void SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
 private:
 
     GLuint m_fbo;

@@ -5,6 +5,8 @@
 #define _USE_MATH_DEFINES
 #define GLM_FORCE_RADIANS
 #define GLM_SWIZZLE
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <memory>
@@ -31,6 +33,32 @@
 #define HasValue(value) if(value) value
 
 #define EXT_CHECK(b) (std::string(#b)).append( b ? " available" : " unavailable" )
+
+static void drawScreenQuad()
+{
+    static glm::vec3 vert[] = {{-1,-1,0},{1,-1,0},{-1,1,0},{1,1,0}};
+    static GLuint ind[] = {0,1,2,1,3,2};
+
+    GLuint vbo, ibo;
+
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ibo);
+
+    const GLuint stride = sizeof(glm::vec3);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*4, &vert[0], GL_STREAM_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*6, &ind[0], GL_STREAM_DRAW);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ibo);
+}
 
 /*!
  * \brief 3d версия алгоритме Брезенхема

@@ -3,7 +3,9 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
-CONFIG +=  -E -dD
+CONFIG += precompile_header
+
+PRECOMPILED_HEADER  = helper.h
 
 SOURCES += \
     logger.cpp \
