@@ -67,9 +67,9 @@ public:
     sge_perfomance *perf;
     std::shared_ptr<QuadSphere> qs, qs_w;
     static void Swap();
-    void DeferendStep();
-    void AfterEffect();
-    void ShadeStep();
+    void GeometryPass();
+    void BlitGBuffer();
+    void ShadingPass();
     void BeginLightPasses();
 };
 

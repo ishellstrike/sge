@@ -35,16 +35,11 @@ void Resources::Init()
 
 
     const auto & basic = new BasicJargShader;
-    //basic->AddExtension("GL_ARB_tessellation_shader");
     basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
     basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
-    //basic->loadShaderFromSource(GL_TESS_CONTROL_SHADER, "data/shaders/minimal.glsl");
-    //basic->loadShaderFromSource(GL_TESS_EVALUATION_SHADER, "data/shaders/minimal.glsl");
     basic->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
     basic->Link();
     basic->Afterlink();
-    basic->locateVar("R");
-    basic->locateVar("s");
 
     const auto & water = new BasicJargShader;
     water->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal_watertest.glsl");
@@ -58,23 +53,10 @@ void Resources::Init()
     defered->Link();
     defered->Afterlink();
 
-    defered->Use();
-    auto uni = glGetUniformLocation(defered->program, "material_world_pos");
-    if(uni == -1)
-        LOG(info) << "no material_world_pos";
-    glUniform1i(uni, 0);
-    uni = glGetUniformLocation(defered->program, "material_diffuse");
-    if(uni == -1)
-        LOG(info) << "no material_diffuse";
-    glUniform1i(uni, 1);
-    uni = glGetUniformLocation(defered->program, "material_normal");
-    if(uni == -1)
-        LOG(info) << "no material_normal";
-    glUniform1i(uni, 2);
-    uni = glGetUniformLocation(defered->program, "material_tex_coord");
-    if(uni == -1)
-        LOG(info) << "no material_tex_coord";
-    glUniform1i(uni, 3);
+    defered->SetUniform("buffer_world_pos", 0);
+    defered->SetUniform("buffer_diffuse", 1);
+    defered->SetUniform("buffer_normal", 2);
+    defered->SetUniform("buffer_tex_coord", 3);
 
     Push("default_planet_render", basic);
     Push("default_water_render", water);
@@ -117,4 +99,13 @@ void Resources::Init()
     starnest->Afterlink();
 
     Push("starnest", starnest);
+
+    const auto & corona = new BasicJargShader;
+    corona->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/corona.glsl");
+    corona->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/corona.glsl");
+    corona->Link();
+    corona->Afterlink();
+    corona->SetUniform("samplerPerlinPerm2D", 0);
+
+    Push("corona", corona);
 }

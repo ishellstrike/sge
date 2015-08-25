@@ -23,7 +23,7 @@
 #define MAJOR 2
 #define MINOR 1
 //#define NO_SCATT
-//#define NO_STARFIELD
+#define NO_STARFIELD
 
 GameWindow::GameWindow()
 {
@@ -79,10 +79,11 @@ bool GameWindow::BaseInit()
 
 
     int glVersion[2] = {-1, -1};
-    int ntex;
+    int ntex, nuni;
     glGetIntegerv(GL_MAJOR_VERSION, &glVersion[0]);
     glGetIntegerv(GL_MINOR_VERSION, &glVersion[1]);
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &ntex);
+    glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &nuni);
     LOG(info) << "Renderer: " << glGetString(GL_RENDERER);
     LOG(info) << "Vendor: " << glGetString(GL_VENDOR);
     LOG(info) << "Version: " << glGetString(GL_VERSION);
@@ -91,6 +92,7 @@ bool GameWindow::BaseInit()
     LOG(info) << "GLFW: " << glfwGetVersionString();
     LOG(info) << "GLEW: " << glewGetString(GLEW_VERSION);
     LOG(info) << "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: " << ntex;
+    LOG(info) << "GL_MAX_UNIFORM_LOCATIONS: " << nuni;
     if(ntex < 16)
         throw;
     LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
@@ -286,12 +288,12 @@ void GameWindow::Swap()
     glfwSwapBuffers(wi->window);
 }
 
-void GameWindow::DeferendStep()
+void GameWindow::GeometryPass()
 {
     gb->BindForWriting();
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0,0,0, 1.f);
+    glClearColor(0, 0, 0, 0.f);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
@@ -312,7 +314,7 @@ void GameWindow::DeferendStep()
     glDisable(GL_DEPTH_TEST);
 }
 
-void GameWindow::AfterEffect()
+void GameWindow::BlitGBuffer()
 {
     gb->BindForReading();
 
@@ -336,21 +338,29 @@ void GameWindow::AfterEffect()
                     HalfWidth, 0, RESX, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
-void GameWindow::ShadeStep()
+void GameWindow::ShadingPass()
 {
     gb->BindForReading();
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
+    glDisable(GL_DEPTH_TEST);
 
     Resources::instance()->Get<BasicJargShader>("starnest")->Use();
-    glUniformMatrix4fv(glGetUniformLocation(Resources::instance()->Get<BasicJargShader>("starnest")->program, "transform_VP"), 1, GL_FALSE, &cam->VP()[0][0]);
+    Resources::instance()->Get<BasicJargShader>("starnest")->SetUniform("transform_VP", cam->View());
     drawScreenQuad();
 
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    Resources::instance()->Get<BasicJargShader>("corona")->Use();
+    Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("transform_VP", cam->View());
+    Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("iGlobalTime", gt.current);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Resources::instance()->Get<Texture>("noise_map")->textureId);
+    drawScreenQuad();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Resources::instance()->Get<BasicJargShader>("defered")->Use();
-    glUniform3fv(glGetUniformLocation(Resources::instance()->Get<BasicJargShader>("defered")->program, "transform_lightPos"), 1, &glm::vec3(0,1,0)[0]);
+    Resources::instance()->Get<BasicJargShader>("defered")->SetUniform("transform_lightPos", glm::vec3(0,1,0));
     drawScreenQuad();
 
 #ifndef NO_SCATT
@@ -363,12 +373,12 @@ void GameWindow::ShadeStep()
 
 void GameWindow::BaseDraw()
 {
-    DeferendStep();
+    GeometryPass();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    ShadeStep();
+    ShadingPass();
 
 
 

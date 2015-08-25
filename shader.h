@@ -19,9 +19,7 @@ public:
     Shader();
     ~Shader(void);
     std::string shaderfile_name;
-    std::vector<int> vars; /*!< stored uniforms locations */
     void Use() const;
-    GLint locateVar(const std::string &s);
     void loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version = GLSLVER);
     bool Link();
     GLint program;
@@ -33,6 +31,8 @@ public:
     {
       SetUniform_(val, name);
     }
+
+    GLuint GetUniformLocation(const std::string &uni_name);
 
     void AddExtension(std::string s);
 private:

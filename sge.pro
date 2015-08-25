@@ -205,4 +205,5 @@ DISTFILES += \
     data/shaders/rgb_to_luminance.glsl \
     data/shaders/lerp_rgb_map.glsl \
     data/shaders/defered.glsl \
-    data/shaders/starnest.glsl
+    data/shaders/starnest.glsl \
+    data/shaders/corona.glsl

@@ -6,10 +6,10 @@
 *******************************************************************************/
 #include "float.lib.glsl"
 
-uniform sampler2D material_world_pos;
-uniform sampler2D material_diffuse;
-uniform sampler2D material_normal;
-uniform sampler2D material_tex_coord;
+uniform sampler2D buffer_world_pos;
+uniform sampler2D buffer_diffuse;
+uniform sampler2D buffer_normal;
+uniform sampler2D buffer_tex_coord;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
@@ -41,9 +41,11 @@ in vec2 texcoord;
 
 void main(void)
 {
-    vec4 dif = texture(material_diffuse, texcoord);
-    vec3 eye = texture(material_normal, texcoord).xyz;
+    vec4 dif = texture(buffer_diffuse, texcoord);
+    vec3 eye = texture(buffer_normal, texcoord).xyz;
     vec3 light = normalize(transform_lightPos);
+
+    if(length(dif) <= 1.00) discard;
 
     color = vec4(0,0,0,1);
     float diffuse_rate = clamp(dot(light, eye), 0, 1);

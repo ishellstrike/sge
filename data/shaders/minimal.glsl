@@ -76,7 +76,7 @@ void main(void)
     {
         geo_out.texcoordout = geo_in[i].texcoordout;
         geo_out.texcoordout2 = geo_in[i].texcoordout2;
-        float snoize = decodeFloat(texture(material_global_height, geo_out.texcoordout2));
+        float snoize = 0.6;//decodeFloat(texture(material_global_height, geo_out.texcoordout2));
         vec3 pos = gl_in[i].gl_Position.xyz;
         vec3 newPosition = (R + s * snoize) * pos;
         vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
@@ -149,7 +149,7 @@ void main(void)
 
     DiffuseOut = tex;
     TexCoordOut = vec4(texcoordout2, 0, 1);
-    NormalOut = vec4(eye,1);
+    NormalOut = vec4(eye, 1);
     WorldPosOut = vec4(positionout, 1);
 }
 #endif

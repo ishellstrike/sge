@@ -28,23 +28,18 @@ SpriteBatch::SpriteBatch()
     basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/basic.glsl");
     basic_program->Link();
     basic_program->Use();
-    basic_program->locateVar("MVP");
-    basic_program->locateVar("colorTexture");
-    glUniform1i(basic_program->vars[1], 0);
+    basic_program->SetUniform("colorTexture", 0);
 
     font_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/font.glsl");
     font_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/font.glsl");
     font_program->Link();
     font_program->Use();
-    font_program->locateVar("MVP");
-    font_program->locateVar("colorTexture");
-    glUniform1i(font_program->vars[1], 0);
+    font_program->SetUniform("colorTexture", 0);
 
     color_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/color.glsl");
     color_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/color.glsl");
     color_program->Link();
     color_program->Use();
-    color_program->locateVar("MVP");
 
     current_program = basic_program;
 
@@ -499,7 +494,7 @@ void SpriteBatch::render()
     glEnable(GL_BLEND);
     glDisable(GL_CULL_FACE);
     current_program->Use();
-    glUniformMatrix4fv(current_program->vars[0], 1, GL_FALSE, &uniform[0][0]);
+    current_program->SetUniform("MVP", uniform);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, current);

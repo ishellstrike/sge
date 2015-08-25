@@ -19,12 +19,6 @@
 #define distfading 0.730
 #define saturation 0.850
 
-
-uniform sampler2D material_world_pos;
-uniform sampler2D material_diffuse;
-uniform sampler2D material_normal;
-uniform sampler2D material_tex_coord;
-
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
 uniform mat3 transform_N; // normal matrix
