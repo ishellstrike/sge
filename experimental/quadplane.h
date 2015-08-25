@@ -22,7 +22,8 @@ class QuadPlane
 
     enum Status {
         ERROR,
-        READY
+        READY,
+        TEXTURE_READY
     };
 public:
      enum PARTS {
@@ -52,6 +53,7 @@ public:
     void Update(const Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent);
     std::vector<QuadPlane *> getRoute();
     void GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent);
+     std::shared_ptr<Material> sub_texture;
 };
 
 #endif // QUADPLANE_H

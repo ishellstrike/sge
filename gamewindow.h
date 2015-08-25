@@ -69,6 +69,8 @@ public:
     static void Swap();
     void DeferendStep();
     void AfterEffect();
+    void ShadeStep();
+    void BeginLightPasses();
 };
 
 #endif // GAMEWINDOW_H

@@ -75,12 +75,9 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     FrameBuffer fbo;
     fbo.bindTexture(*target);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.FBO); 
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo.FBO);
     glDisable(GL_BLEND);
     glViewport(0, 0, target->width, target->height);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0,0,0,1);
     shader->Use();
 
     for (int i=0; i<texes.size(); i++)
@@ -127,8 +124,6 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     Camera c;
     mesh.Render(c);
 
-    glViewport(0, 0, RESX, RESY);
-
 //    Radeon driver bug =(
 //    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 //    switch(status)
@@ -148,5 +143,6 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
 //        break;
 //    }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glViewport(0, 0, RESX, RESY);
 }

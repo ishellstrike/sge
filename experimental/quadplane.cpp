@@ -22,6 +22,8 @@ bool QuadPlane::is_terminal() const
 const float res = 256.0f;
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
+    glFinish();
+    glFlush();
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2(res), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
     std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2(res), true);
@@ -69,12 +71,8 @@ void QuadPlane::Render(const Camera &cam,
             //quadtree vis
             //WinS::ws->sb->drawRect(glm::vec2(10,10) + pre_size*offset + glm::vec2(pre_size,0)*(float)(side/2) + glm::vec2(0,pre_size)*(float)(side%2), glm::vec2(pre_size)*scale, glm::vec4(rand()%255/255.0,rand()%255/255.0,rand()%255/255.0,1 ));
         }
-        else
+        else if(status == TEXTURE_READY)
         {
-            std::shared_ptr<Material> sub_texture = std::make_shared<Material>(*parent->mat);
-            GenerateSubTexture(sub_texture, parent);
-            sub_texture->texture = parent->mat->texture;
-            sub_texture->global_height = parent->mat->global_height;
 
             terminal_mesh->material = sub_texture;
             terminal_mesh->shader = parent->basic;
@@ -170,6 +168,17 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
     for(int i = 0; i < 4; i++)
     {
         cent[i] = glm::vec3(parent->world * glm::vec4(subsurface_centers[i] + parent->center, 0));
+    }
+
+    if(status == ERROR)
+    {
+        sub_texture = std::make_shared<Material>(*parent->mat);
+        GenerateSubTexture(sub_texture, parent);
+        sub_texture->texture = parent->mat->texture;
+        sub_texture->global_height = parent->mat->global_height;
+
+        status = TEXTURE_READY;
+        return;
     }
 
     if(is_terminal() &&

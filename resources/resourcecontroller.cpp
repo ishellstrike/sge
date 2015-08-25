@@ -52,8 +52,33 @@ void Resources::Init()
     water->Link();
     water->Afterlink();
 
+    const auto & defered = new BasicJargShader;
+    defered->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/defered.glsl");
+    defered->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/defered.glsl");
+    defered->Link();
+    defered->Afterlink();
+
+    defered->Use();
+    auto uni = glGetUniformLocation(defered->program, "material_world_pos");
+    if(uni == -1)
+        LOG(info) << "no material_world_pos";
+    glUniform1i(uni, 0);
+    uni = glGetUniformLocation(defered->program, "material_diffuse");
+    if(uni == -1)
+        LOG(info) << "no material_diffuse";
+    glUniform1i(uni, 1);
+    uni = glGetUniformLocation(defered->program, "material_normal");
+    if(uni == -1)
+        LOG(info) << "no material_normal";
+    glUniform1i(uni, 2);
+    uni = glGetUniformLocation(defered->program, "material_tex_coord");
+    if(uni == -1)
+        LOG(info) << "no material_tex_coord";
+    glUniform1i(uni, 3);
+
     Push("default_planet_render", basic);
     Push("default_water_render", water);
+    Push("defered", defered);
 
     const auto & soil = new Texture;
     const auto & grass = new Texture;
@@ -84,4 +109,12 @@ void Resources::Init()
     lerp_rgb_map->Afterlink();
 
     Push("lerp_rgb_map", lerp_rgb_map);
+
+    const auto & starnest = new BasicJargShader;
+    starnest->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/starnest.glsl");
+    starnest->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/starnest.glsl");
+    starnest->Link();
+    starnest->Afterlink();
+
+    Push("starnest", starnest);
 }

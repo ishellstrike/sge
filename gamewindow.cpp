@@ -22,8 +22,8 @@
 
 #define MAJOR 2
 #define MINOR 1
-#define NO_SCATT
-#define NO_STARFIELD
+//#define NO_SCATT
+//#define NO_STARFIELD
 
 GameWindow::GameWindow()
 {
@@ -289,9 +289,11 @@ void GameWindow::Swap()
 void GameWindow::DeferendStep()
 {
     gb->BindForWriting();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glDepthMask(GL_TRUE);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0,0,0, 1.f);
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
 
     for(size_t i = 0; i < ss.system.size(); i++)
     {
@@ -302,11 +304,16 @@ void GameWindow::DeferendStep()
     //water->Use();
     //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
     //qs_w->Render(*cam);
+
+    // When we get here the depth buffer is already populated and the stencil pass
+    // depends on it, but it does not write to it.
+
+    glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
 }
 
 void GameWindow::AfterEffect()
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     gb->BindForReading();
 
     GLsizei HalfWidth = (GLsizei)(RESX_float / 2.0f);
@@ -329,14 +336,22 @@ void GameWindow::AfterEffect()
                     HalfWidth, 0, RESX, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
-void GameWindow::BaseDraw()
+void GameWindow::ShadeStep()
 {
-    DeferendStep();
-    AfterEffect();
+    gb->BindForReading();
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
 
-#ifndef NO_STARFIELD
-    sf->Render(*cam);
-#endif
+    Resources::instance()->Get<BasicJargShader>("starnest")->Use();
+    glUniformMatrix4fv(glGetUniformLocation(Resources::instance()->Get<BasicJargShader>("starnest")->program, "transform_VP"), 1, GL_FALSE, &cam->VP()[0][0]);
+    drawScreenQuad();
+
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    Resources::instance()->Get<BasicJargShader>("defered")->Use();
+    glUniform3fv(glGetUniformLocation(Resources::instance()->Get<BasicJargShader>("defered")->program, "transform_lightPos"), 1, &glm::vec3(0,1,0)[0]);
+    drawScreenQuad();
 
 #ifndef NO_SCATT
     glDisable(GL_DEPTH_TEST);
@@ -344,9 +359,24 @@ void GameWindow::BaseDraw()
     glEnable(GL_BLEND);
     scat.redisplayFunc(*cam);
 #endif
+}
+
+void GameWindow::BaseDraw()
+{
+    DeferendStep();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    ShadeStep();
+
+
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
     batch->setUniform(proj * model);
 
     ws->Draw();

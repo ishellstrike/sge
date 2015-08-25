@@ -4,12 +4,6 @@
         This software is distributed freely under the terms of the MIT LICENSE.
         See "LICENSE.txt"
 *******************************************************************************/
-#define VERT_POSITION 0
-#define VERT_TEXCOORD 1
-#define VERT_NORMAL 2
-#define VERT_COLOR 3
-#define FRAG_OUTPUT0 0
-
 #include "float.lib.glsl"
 
 uniform sampler2D material_texture;
@@ -111,10 +105,10 @@ float density = 0.0003;
 const float LOG2 = 1.442695;
 const vec4 colc = vec4(0.5, 0.5, 0.5, 1);
 
-layout (location = 0) out vec3 WorldPosOut;
-layout (location = 1) out vec3 DiffuseOut;
-layout (location = 2) out vec3 NormalOut;
-layout (location = 3) out vec3 TexCoordOut;
+layout (location = 0) out vec4 WorldPosOut;
+layout (location = 1) out vec4 DiffuseOut;
+layout (location = 2) out vec4 NormalOut;
+layout (location = 3) out vec4 TexCoordOut;
 
 void main(void)
 {
@@ -123,10 +117,10 @@ void main(void)
     vec3 positionout = frag_in.positionout;
 
     float snoize = decodeFloat(texture(material_height, texcoordout));
-    vec3 grad = -decodeNormal(texture(material_grad, texcoordout))*5;
+    vec3 grad = -decodeNormal(texture(material_grad, texcoordout));
 
     grad = grad / (R + s * snoize);
-    vec3 plane = grad - (grad * positionout) * positionout;
+    vec3 plane = grad*10 - (grad*10 * positionout) * positionout;
     vec3 normal = positionout - s * plane;
     vec3 eye = normalize(transform_N * normal);
     vec3 light = normalize(transform_lightPos);
@@ -145,15 +139,17 @@ void main(void)
     {
         tex = texture2D(material_high, texcoordout2*10);
         tex += texture2D(material_high, texcoordout2*100);
+        tex /= 2;
     }
 
     vec4 tex3 = texture2D(material_side, texcoordout2*10);
     tex3 += texture2D(material_side, texcoordout2*100);
+    tex3 /= 2;
     tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x) * 5, 0, 1));
 
-    DiffuseOut = tex.xyz;
-    TexCoordOut = vec3(texcoordout2, 0);
-    NormalOut = eye;
-    WorldPosOut = positionout;
+    DiffuseOut = tex;
+    TexCoordOut = vec4(texcoordout2, 0, 1);
+    NormalOut = vec4(eye,1);
+    WorldPosOut = vec4(positionout, 1);
 }
 #endif
