@@ -14,6 +14,7 @@ Texture::Texture(glm::vec2 __size,
                  GLuint type /*=GL_UNSIGNED_BYTE*/,
                  GLuint format /*= GL_RGBA*/)
 {
+    m_dim = dim;
     Empty(__size, smooth, _mip, dim, internal_format, type, format);
 }
 
@@ -36,6 +37,7 @@ void Texture::Load(const std::string &a, bool smooth, bool mip)
     Pixmap p(a);
     auto slpos = a.find_last_of('/');
     name = a.substr(slpos, a.length() - slpos);
+    m_dim = GL_TEXTURE_2D;
     Load(p, smooth, mip);
 }
 
@@ -51,19 +53,19 @@ void Texture::Load(const Pixmap &a, bool smooth /*=false*/, bool _mip /*=false*/
     height = a.height;
 
     glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &a.data[0]);
+    glBindTexture(m_dim, textureId);
+    glTexImage2D(m_dim, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &a.data[0]);
 
 
     if(_mip)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
+        glTexParameteri(m_dim, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
+        glTexParameteri(m_dim, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
     }
     else
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
+        glTexParameteri(m_dim, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
+        glTexParameteri(m_dim, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
     }
 
     mip = _mip;
@@ -110,6 +112,12 @@ void Texture::GenMipmap()
         glGenerateMipmap(GL_TEXTURE_2D);
     else
         LOG(error) << "trying to generating mipmap for non mipmap texture. skipped.";
+}
+
+void Texture::Bind(GLuint slot)
+{
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
 /*!
