@@ -75,6 +75,11 @@ public:
     {
         LOG(verbose) << "pushing \"" << name << "\" BasicJargShader resource";
         shaders.Push(name, res);
+    }template<>
+    void Push(const std::string &name, Shader *res)
+    {
+        LOG(verbose) << "pushing \"" << name << "\" Shader resource";
+        u_shaders.Push(name, res);
     }
     template<>
     void Push(const std::string &name, Material *res)
@@ -93,6 +98,11 @@ public:
     std::shared_ptr<_Ty>& Get(const std::string &name)
     {
         static_assert(0, "not implemented");
+    }
+    template<>
+    std::shared_ptr<Shader>& Get(const std::string &name)
+    {
+        return u_shaders[name];
     }
     template<>
     std::shared_ptr<BasicJargShader>& Get(const std::string &name)
@@ -118,6 +128,7 @@ private:
     Resources &operator=(const Resources &) = delete;
 
     ResourceDictionary<BasicJargShader> shaders;
+    ResourceDictionary<Shader> u_shaders;
     ResourceDictionary<Material> materials;
     ResourceDictionary<Texture> textures;
 };

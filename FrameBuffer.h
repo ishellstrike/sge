@@ -9,5 +9,6 @@ public:
     void bindTexture(const Texture& tex, GLuint attach = GL_COLOR_ATTACHMENT0);
     GLuint FBO;
     bool depth;
+    void Bind();
 };
 

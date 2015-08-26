@@ -7,15 +7,7 @@
 #include "float.lib.glsl"
 #include "turbulence.lib.glsl"
 
-uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
-uniform mat3 transform_N; // normal matrix
-uniform vec3 transform_viewPos;
-uniform vec3 transform_lightPos;
-
-uniform float R = 1000;
-uniform float s = 100;
-uniform float screenDistance = 100;
 
 uniform float iGlobalTime;
 

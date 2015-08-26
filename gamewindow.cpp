@@ -98,6 +98,7 @@ bool GameWindow::BaseInit()
     LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
     LOG(info) << EXT_CHECK(GLEW_ARB_tessellation_shader);
     LOG(info) << EXT_CHECK(GLEW_EXT_geometry_shader4);
+    LOG(info) << EXT_CHECK(GLEW_ARB_texture_float);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -156,6 +157,17 @@ bool GameWindow::BaseInit()
     mat->high = Resources::instance()->Get<Texture>("snow");
     mat->side = Resources::instance()->Get<Texture>("rock");
 
+    fbo_blur = std::make_shared<FrameBuffer>();
+    fbo_main = std::make_shared<FrameBuffer>();
+    fbo_extract = std::make_shared<FrameBuffer>();
+
+    texture_main    = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
+    texture_blur    = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
+    texture_extract = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA32F, GL_FLOAT, GL_RGBA);
+
+    fbo_main->bindTexture(*texture_main);
+    fbo_blur->bindTexture(*texture_blur);
+    fbo_extract->bindTexture(*texture_extract);
 
     std::shared_ptr<Material> mat_star = std::make_shared<Material>();
     mat_star->emission = Color::White;
@@ -341,6 +353,11 @@ void GameWindow::BlitGBuffer()
 void GameWindow::ShadingPass()
 {
     gb->BindForReading();
+    fbo_main->Bind();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0, 0, 0, 0.f);
+
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
@@ -371,15 +388,37 @@ void GameWindow::ShadingPass()
 #endif
 }
 
+void GameWindow::AftereffectPass()
+{
+    fbo_extract->Bind();
+    glClampColor( GL_CLAMP_VERTEX_COLOR, GL_FALSE );
+    Resources::instance()->Get<Shader>("extract_glow")->Use();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_main->textureId);
+    drawScreenQuad();
+
+
+    fbo_blur->Bind();
+    Resources::instance()->Get<Shader>("gausian_blur")->Use();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_extract->textureId);
+    drawScreenQuad();
+
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    Resources::instance()->Get<Shader>("tone_maping")->Use();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_main->textureId);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_blur->textureId);
+    drawScreenQuad();
+}
+
 void GameWindow::BaseDraw()
 {
     GeometryPass();
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
     ShadingPass();
-
+    AftereffectPass();
 
 
     glDisable(GL_DEPTH_TEST);

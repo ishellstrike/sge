@@ -19,15 +19,7 @@
 #define distfading 0.730
 #define saturation 0.850
 
-uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
-uniform mat3 transform_N; // normal matrix
-uniform vec3 transform_viewPos;
-uniform vec3 transform_lightPos;
-
-uniform float R = 1000;
-uniform float s = 100;
-uniform float screenDistance = 100;
 
 #ifdef _VERTEX_
 layout (location = 0) in vec3 position;

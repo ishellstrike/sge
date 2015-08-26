@@ -108,4 +108,32 @@ void Resources::Init()
     corona->SetUniform("samplerPerlinPerm2D", 0);
 
     Push("corona", corona);
+
+    const auto & extract_glow = new Shader;
+    extract_glow->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/extract_glow.glsl");
+    extract_glow->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/extract_glow.glsl");
+    extract_glow->Link();
+    extract_glow->Use();
+    extract_glow->SetUniform("mainMap", 0);
+
+    Push("extract_glow", extract_glow);
+
+    const auto & tone_maping = new Shader;
+    tone_maping->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/tone_maping.glsl");
+    tone_maping->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/tone_maping.glsl");
+    tone_maping->Link();
+    tone_maping->Use();
+    tone_maping->SetUniform("mainMap", 0);
+    tone_maping->SetUniform("blurMap", 1);
+
+    Push("tone_maping", tone_maping);
+
+    const auto & gausian_blur = new Shader;
+    gausian_blur->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/gausian_blur.glsl");
+    gausian_blur->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/gausian_blur.glsl");
+    gausian_blur->Link();
+    gausian_blur->Use();
+    gausian_blur->SetUniform("mainMap", 0);
+
+    Push("gausian_blur", gausian_blur);
 }

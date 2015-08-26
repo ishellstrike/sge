@@ -70,7 +70,8 @@ SOURCES += \
     sge_texlab.cpp \
     sge_texlab_float_selector.cpp \
     sge_texlab_toolbox.cpp \
-    sge_texlab_lerp_by_map.cpp
+    sge_texlab_lerp_by_map.cpp \
+    helper.cpp
 
 VERSION = 0.1.0
 
@@ -206,4 +207,7 @@ DISTFILES += \
     data/shaders/lerp_rgb_map.glsl \
     data/shaders/defered.glsl \
     data/shaders/starnest.glsl \
-    data/shaders/corona.glsl
+    data/shaders/corona.glsl \
+    data/shaders/tone_maping.glsl \
+    data/shaders/gausian_blur.glsl \
+    data/shaders/extract_glow.glsl

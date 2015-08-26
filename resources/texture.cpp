@@ -6,15 +6,15 @@ Texture::Texture()
 {
 }
 
-Texture::Texture(GLuint id) :
-    textureId(id),
-    name("fromID " + std::to_string(id))
+Texture::Texture(glm::vec2 __size,
+                 bool smooth /*=false*/,
+                 bool _mip /*=false*/,
+                 GLuint dim /*= GL_TEXTURE_2D*/,
+                 GLuint internal_format /*= GL_RGBA*/,
+                 GLuint type /*=GL_UNSIGNED_BYTE*/,
+                 GLuint format /*= GL_RGBA*/)
 {
-}
-
-Texture::Texture(glm::vec2 __size, bool smooth /*=false*/, bool _mip /*=false*/, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/, GLuint type /*=GL_UNSIGNED_BYTE*/)
-{
-    Empty(__size, smooth, _mip, dim, format, type);
+    Empty(__size, smooth, _mip, dim, internal_format, type, format);
 }
 
 Texture::~Texture()
@@ -79,7 +79,7 @@ void Texture::Load(const Pixmap &a, bool smooth /*=false*/, bool _mip /*=false*/
  * \param dim размерность (GL_TEXTURE_2D)
  * \param format цветовое пространство (GL_RGBA)
  */
-void Texture::Empty(const glm::vec2 &size, bool smooth /*=false*/, bool _mip /*=false*/, GLuint dim /*= GL_TEXTURE_2D*/, GLuint format /*= GL_RGBA*/, GLuint type /*=GL_UNSIGNED_BYTE*/)
+void Texture::Empty(const glm::vec2 &size, bool smooth /*=false*/, bool _mip /*=false*/, GLuint dim /*= GL_TEXTURE_2D*/, GLuint internal_format /*= GL_RGBA*/, GLuint type /*=GL_UNSIGNED_BYTE*/, GLuint format /*= GL_RGBA*/)
 {
     width = (int) size.x;
     height = (int) size.y;
@@ -87,7 +87,7 @@ void Texture::Empty(const glm::vec2 &size, bool smooth /*=false*/, bool _mip /*=
 
     glGenTextures(1, &textureId);
     glBindTexture(dim, textureId);
-    glTexImage2D(dim, 0, format, size.x, size.y, 0, format, type, NULL);
+    glTexImage2D(dim, 0, internal_format, size.x, size.y, 0, format, type, NULL);
 
     if(_mip)
     {

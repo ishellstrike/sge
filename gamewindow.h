@@ -23,6 +23,7 @@
 #include "space/spacesystem.h"
 #include "space/space_solver.h"
 #include "experimental/starfield.h"
+#include "FrameBuffer.h"
 
 class GameWindow {
 public:
@@ -62,6 +63,9 @@ public:
     Scattering scat;
     std::unique_ptr<Starfield> sf;
 
+    std::shared_ptr<FrameBuffer> fbo_blur, fbo_extract, fbo_main;
+    std::shared_ptr<Texture> texture_blur, texture_extract, texture_main;
+
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
@@ -71,6 +75,7 @@ public:
     void BlitGBuffer();
     void ShadingPass();
     void BeginLightPasses();
+    void AftereffectPass();
 };
 
 #endif // GAMEWINDOW_H

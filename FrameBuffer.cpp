@@ -25,3 +25,8 @@ void FrameBuffer::bindTexture(const Texture& tex, GLuint attach/*GL_COLOR_ATTACH
     glFramebufferTexture(GL_FRAMEBUFFER, attach, tex.textureId, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
+void FrameBuffer::Bind()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+}
