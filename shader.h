@@ -1,4 +1,11 @@
-﻿#ifndef JargShader_h__
+﻿/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
+#ifndef JargShader_h__
 #define JargShader_h__
 #include <string>
 #include <vector>

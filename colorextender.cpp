@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #include "colorextender.h"
 
 const glm::vec4 Color::AliceBlue = glm::vec4(240/255.f, 248/255.f, 255/255.f, 1.f);

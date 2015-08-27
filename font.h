@@ -1,8 +1,8 @@
 /*******************************************************************************
-        Copyright (C) 2014 Samsonov Andrey
+        Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT LICENSE.
-        See "LICENSE.txt" or "http://copyfree.org/LICENSEs/mit/LICENSE.txt".
+        See "LICENSE.txt"
 *******************************************************************************/
 
 #ifndef FONT_H

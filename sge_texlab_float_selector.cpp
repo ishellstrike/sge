@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #include "sge_texture_lab_float_selector.h"
 
 sge_texlab_float_selector::sge_texlab_float_selector(WContainer *par) :

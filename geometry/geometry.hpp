@@ -1,11 +1,15 @@
+/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #ifndef GEOMETRY_HPP
 #define GEOMETRY_HPP
 
-#include "mesh.h"
 #include "vpnt.h"
-#include "cube.h"
-#include "icosahedron.h"
-#include "quad.h"
+#include "umesh.h"
 
 #endif // GEOMETRY_HPP
 
