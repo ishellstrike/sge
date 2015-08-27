@@ -45,8 +45,8 @@ in vec2 fragCoord;
 #define MODE normalize
 // #define MODE
 
-#define MODE3 *
-// #define MODE3 +
+//#define MODE3 *
+ #define MODE3 +
 
 #define MODE2 r +
 // #define MODE2
@@ -98,7 +98,7 @@ void main( void )
     float val;
     val = fbm(vec2(MODE2 y * ray_density, MODE2 x MODE3 ray_density)); // GENERATES THE FLARING
         val = smoothstep(gamma * 0.02 - 0.1, ray_brightness + (gamma * 0.02 - 0.1) + 0.001, val);
-        val = sqrt(val); // WE DON'T REALLY NEED SQRT HERE, CHANGE TO 15. * val FOR PERFORMANCE
+        val = 15. * val; // WE DON'T REALLY NEED SQRT HERE, CHANGE TO 15. * val FOR PERFORMANCE
 
         vec3 col = val INVERT vec3(red, green, blue);
         col = 1.-col; // WE DO NOT NEED TO CLAMP THIS LIKE THE NIMITZ SHADER DOES!

@@ -93,7 +93,7 @@ void QuadPlane::Render(const Camera &cam,
             {
                 for(int i = -1; i < size + 2; i++)
                 {
-                    VertPosUvUv a;
+                    VertexType a;
                     a.position = {xs + i * dd, ys + j * dd, 0.5f};
 
                     a.position = glm::normalize(a.position);
@@ -189,7 +189,7 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
             && level < max_divide)
     {
         m_parts[0] = std::make_shared<QuadPlane>();
-        m_parts[0]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
+        m_parts[0]->terminal_mesh = std::make_shared< UMesh<VertexType> >();
         m_parts[0]->offset = offset;
         m_parts[0]->scale = scale/2.0f;
         m_parts[0]->level = level + 1;
@@ -197,7 +197,7 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
         m_parts[0]->parent = this;
 
         m_parts[1] = std::make_shared<QuadPlane>();
-        m_parts[1]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
+        m_parts[1]->terminal_mesh = std::make_shared< UMesh<VertexType> >();
         m_parts[1]->offset = offset + glm::vec2(0.5f, 0) * scale;
         m_parts[1]->scale = scale/2.0f;
         m_parts[1]->level = level + 1;
@@ -205,7 +205,7 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
         m_parts[1]->parent = this;
 
         m_parts[2] = std::make_shared<QuadPlane>();
-        m_parts[2]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
+        m_parts[2]->terminal_mesh = std::make_shared< UMesh<VertexType> >();
         m_parts[2]->offset = offset + glm::vec2(0, 0.5f) * scale;
         m_parts[2]->scale = scale/2.0f;
         m_parts[2]->level = level + 1;
@@ -213,7 +213,7 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
         m_parts[2]->parent = this;
 
         m_parts[3] = std::make_shared<QuadPlane>();
-        m_parts[3]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
+        m_parts[3]->terminal_mesh = std::make_shared< UMesh<VertexType> >();
         m_parts[3]->offset = offset + glm::vec2(0.5f, 0.5f) * scale;
         m_parts[3]->scale = scale/2.0f;
         m_parts[3]->level = level + 1;

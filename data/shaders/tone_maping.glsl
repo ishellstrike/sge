@@ -33,7 +33,7 @@ void main( void )
     vec4 blur = texture(blurMap, fragCoord)/3;
     vec4 color = base + 5.0 * blur;
 
-    fragColor.rgb = vec3 ( 1.0 ) - exp ( -exposure * color.rgb );
+    fragColor.rgb = vec3 ( 1.0 ) - exp ( -1/textureLod(mainMap, vec2(0.5, 0.5), 99).x * color.rgb );
     fragColor.a   = 1.0;
 }
 #endif

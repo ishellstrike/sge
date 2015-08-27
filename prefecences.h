@@ -109,6 +109,9 @@ public:
     {
         return data_dir + json_data_subdir;
     }
+
+    bool hdr_on = false;
+    bool defered_debug = false;
 };
 
 #endif // PREFECENCES_H

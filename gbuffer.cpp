@@ -74,6 +74,11 @@ void GBuffer::BindForReading()
     }
 }
 
+void GBuffer::BindForBlit()
+{
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+}
+
 void GBuffer::SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType)
 {
     glReadBuffer(GL_COLOR_ATTACHMENT0 + TextureType);

@@ -136,4 +136,13 @@ void Resources::Init()
     gausian_blur->SetUniform("mainMap", 0);
 
     Push("gausian_blur", gausian_blur);
+
+    const auto & gausian_blur2 = new Shader;
+    gausian_blur2->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/gausian_blur2.glsl");
+    gausian_blur2->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/gausian_blur2.glsl");
+    gausian_blur2->Link();
+    gausian_blur2->Use();
+    gausian_blur2->SetUniform("mainMap", 0);
+
+    Push("gausian_blur2", gausian_blur2);
 }

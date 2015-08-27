@@ -26,6 +26,8 @@ public:
 
     void BindForReading();
 
+    void BindForBlit();
+
     void SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
 private:
 

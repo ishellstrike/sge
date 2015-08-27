@@ -6,6 +6,8 @@
 #include "sphereparamstorage.h"
 #include "geometry/vpnt.h"
 
+typedef VertPosUvUv VertexType;
+
 class QuadPlane
 {    enum Neighbours {
         TOP_N,
@@ -38,7 +40,7 @@ public:
     QuadPlane *parent = nullptr;
     void getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours that_neib);
 
-    std::shared_ptr< UMesh<VertPosUvUv> > terminal_mesh;
+    std::shared_ptr< UMesh<VertexType> > terminal_mesh;
     glm::mat4 transformation; // матрица, поворачивающие каждлую из 6 граней квадрата в соответствующую сторону
     glm::vec3 subsurface_centers[4]; //центры виртуальных поддеревьев
     Status status = ERROR;

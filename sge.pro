@@ -210,4 +210,6 @@ DISTFILES += \
     data/shaders/corona.glsl \
     data/shaders/tone_maping.glsl \
     data/shaders/gausian_blur.glsl \
-    data/shaders/extract_glow.glsl
+    data/shaders/extract_glow.glsl \
+    data/shaders/gausian_blur2.glsl \
+    data/shaders/wireframe.lib.glsl

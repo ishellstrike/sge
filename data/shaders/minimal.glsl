@@ -5,6 +5,7 @@
         See "LICENSE.txt"
 *******************************************************************************/
 #include "float.lib.glsl"
+#include "wireframe.lib.glsl"
 
 uniform sampler2D material_texture;
 uniform sampler2D material_normal;
@@ -41,7 +42,6 @@ layout (location = 2) in vec3 normal;
 layout (location = 3) in vec2 texcoord;
 layout (location = 4) in vec2 texcoord2;
 
-
 out VS_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
@@ -68,14 +68,18 @@ out GEO_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
     vec3 positionout;
+    vec3 barycentricout;
 } geo_out;
 
 void main(void)
 {
+    const vec3 arr[] = vec3[](vec3(1,0,0), vec3(0,1,0), vec3(0,0,1));
     for(int i = 0; i < 3; ++i)
     {
         geo_out.texcoordout = geo_in[i].texcoordout;
         geo_out.texcoordout2 = geo_in[i].texcoordout2;
+        geo_out.barycentricout = arr[i];
+
         float snoize = 0.6;//decodeFloat(texture(material_global_height, geo_out.texcoordout2));
         vec3 pos = gl_in[i].gl_Position.xyz;
         vec3 newPosition = (R + s * snoize) * pos;
@@ -98,6 +102,7 @@ in GEO_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
     vec3 positionout;
+    vec3 barycentricout;
 } frag_in;
 
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
@@ -147,7 +152,7 @@ void main(void)
     tex3 /= 2;
     tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x) * 5, 0, 1));
 
-    DiffuseOut = tex;
+    DiffuseOut = mix(vec4(1/255.0, 1/255.0, 1/255.0, 1), tex, edgeFactor(frag_in.barycentricout));// tex;
     TexCoordOut = vec4(texcoordout2, 0, 1);
     NormalOut = vec4(eye, 1);
     WorldPosOut = vec4(positionout, 1);

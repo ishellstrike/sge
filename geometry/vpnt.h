@@ -47,6 +47,21 @@ struct VertPosUvUv{
 };
 
 /**
+ * @brief The VPNTBT struct. Vertex position texture texture barycentric
+ */
+struct VertPosUvUvBa{
+    glm::vec3 position;
+    glm::vec2 uv;
+    glm::vec2 uv_glob;
+    glm::vec3 bary;
+    VertPosUvUvBa(glm::vec3 __pos, glm::vec2 __uv, glm::vec2 __uv2, glm::vec3 __bary);
+    VertPosUvUvBa();
+    ~VertPosUvUvBa();
+
+    static VertexInfo info;
+};
+
+/**
  * @brief The VPNTBT struct. Vertex position texture
  */
 struct VertPosUv{

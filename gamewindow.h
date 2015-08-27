@@ -63,8 +63,9 @@ public:
     Scattering scat;
     std::unique_ptr<Starfield> sf;
 
-    std::shared_ptr<FrameBuffer> fbo_blur, fbo_extract, fbo_main;
-    std::shared_ptr<Texture> texture_blur, texture_extract, texture_main;
+    std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
+    std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
+    std::shared_ptr<Texture> texture_pipeline;
 
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
@@ -76,6 +77,8 @@ public:
     void ShadingPass();
     void BeginLightPasses();
     void AftereffectPass();
+    void PreloadHdr();
+    void DropHdr();
 };
 
 #endif // GAMEWINDOW_H

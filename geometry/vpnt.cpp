@@ -107,7 +107,7 @@ VertPosUv::~VertPosUv()
 
 VertexInfo VertPosUv::info = VertexInfo({VERTEX_ATTRIBUTE("position",  glm::vec3, position, VertPosUv),
                                          VERTEX_ATTRIBUTE("texcoord",  glm::vec2, uv,       VertPosUv),
-                                          });
+                                        });
 
 
 VertPos::VertPos(glm::vec3 __pos) : position(__pos)
@@ -126,4 +126,25 @@ VertPos::~VertPos()
 }
 
 VertexInfo VertPos::info = VertexInfo({VERTEX_ATTRIBUTE("position",  glm::vec3, position, VertPosUv)
-                                          });
+                                      });
+
+VertPosUvUvBa::VertPosUvUvBa(glm::vec3 __pos, glm::vec2 __uv, glm::vec2 __uv2, glm::vec3 __bary) : position(__pos), uv(__uv), uv_glob(__uv2), bary(__bary)
+{
+
+}
+
+VertPosUvUvBa::VertPosUvUvBa()
+{
+
+}
+
+VertPosUvUvBa::~VertPosUvUvBa()
+{
+
+}
+
+VertexInfo VertPosUvUvBa::info = VertexInfo({VERTEX_ATTRIBUTE("position",    glm::vec3, position, VertPosUvUvBa),
+                                             VERTEX_ATTRIBUTE("texcoord",    glm::vec2, uv,       VertPosUvUvBa),
+                                             VERTEX_ATTRIBUTE("texcoord2",   glm::vec2, uv_glob,  VertPosUvUvBa),
+                                             VERTEX_ATTRIBUTE("barycentric", glm::vec3, bary,     VertPosUvUvBa)
+                                            });

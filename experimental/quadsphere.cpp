@@ -28,7 +28,7 @@ QuadSphere::QuadSphere(std::shared_ptr<Material> &__mat)
     for(int i = 0; i < 6; i++)
     {
         plane[i] = std::make_shared<QuadPlane>();
-        plane[i]->terminal_mesh = std::make_shared< UMesh<VertPosUvUv> >();
+        plane[i]->terminal_mesh = std::make_shared< UMesh<VertexType> >();
     }
 
 
