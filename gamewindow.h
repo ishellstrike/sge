@@ -31,6 +31,7 @@
 #include "space/space_solver.h"
 #include "experimental/starfield.h"
 #include "FrameBuffer.h"
+#include "geometry/ubillboard.h"
 
 class GameWindow {
 public:
@@ -69,6 +70,8 @@ public:
     std::vector<glm::vec3> tail;
     Scattering scat;
     std::unique_ptr<Starfield> sf;
+
+    UBillboard<VertPosUv> bill;
 
     std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
     std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;

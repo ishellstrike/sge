@@ -60,10 +60,11 @@ public:
     const glm::vec4 &Viewport() const;
     void Viewport(const glm::vec4 &value);
 
-    glm::vec3 Up, Forward, Backward, Left, Right;
-
     glm::vec2 Project(const glm::vec3 &pos) const;
     glm::ray unProject(const glm::vec2 pos) const;
+
+    glm::vec3 Up() const;
+    glm::vec3 Right() const;
 
     float camera_scale = 1;
 
@@ -89,7 +90,11 @@ private:
     glm::vec3 m_position;
     glm::vec3 m_lookAt;
 
-    glm::vec3 m_camera_direction = glm::vec3(1, 0, 0), m_camera_position, m_camera_up = glm::vec3(0, 1, 0), m_camera_look_at = glm::vec3(1, 0, 0);
+    glm::vec3 m_camera_direction = glm::vec3(1, 0, 0),
+              m_camera_position,
+              m_camera_up = glm::vec3(0, 1, 0),
+              m_camera_right,
+              m_camera_look_at = glm::vec3(1, 0, 0);
 
 
     bool m_projection_matrix_dirty = true, m_view_matrix_dirty = true;

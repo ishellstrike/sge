@@ -80,7 +80,7 @@ void main(void)
         geo_out.texcoordout2 = geo_in[i].texcoordout2;
         geo_out.barycentricout = arr[i];
 
-        float snoize = 0.6;//decodeFloat(texture(material_global_height, geo_out.texcoordout2));
+        float snoize = texture(material_global_height, geo_out.texcoordout2).r;
         vec3 pos = gl_in[i].gl_Position.xyz;
         vec3 newPosition = (R + s * snoize) * pos;
         vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
@@ -133,23 +133,15 @@ void main(void)
     vec4 tex;
     vec4 tex2;
 
-    tex = texture2D(material_low, texcoordout2*10);
-    tex += texture2D(material_low, texcoordout2*100);
-    tex /= 2;
-    tex2 = texture2D(material_medium, texcoordout2*10);
-    tex2 += texture2D(material_medium, texcoordout2*100);
-    tex2 /= 2;
+    tex = texture2D(material_low, texcoordout2*100);
+    tex2 = texture2D(material_medium, texcoordout2*100);
     tex = mix(tex, tex2, snoize+0.4);
     if(snoize > 0.5)
     {
-        tex = texture2D(material_high, texcoordout2*10);
-        tex += texture2D(material_high, texcoordout2*100);
-        tex /= 2;
+        tex = texture2D(material_high, texcoordout2*100);
     }
 
-    vec4 tex3 = texture2D(material_side, texcoordout2*10);
-    tex3 += texture2D(material_side, texcoordout2*100);
-    tex3 /= 2;
+    vec4 tex3 = texture2D(material_side, texcoordout2*100);
     tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x) * 5, 0, 1));
 
     DiffuseOut = mix(vec4(1/255.0, 1/255.0, 1/255.0, 1), tex, edgeFactor(frag_in.barycentricout));// tex;

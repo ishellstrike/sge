@@ -71,7 +71,8 @@ SOURCES += \
     sge_texlab_float_selector.cpp \
     sge_texlab_toolbox.cpp \
     sge_texlab_lerp_by_map.cpp \
-    helper.cpp
+    helper.cpp \
+    geometry/ubillboard.cpp
 
 VERSION = 0.1.0
 
@@ -163,7 +164,8 @@ HEADERS += \
     sge_renderbox.h \
     sge_texlab_rgb_to_luminance.h \
     sge_texlab_toolbox.h \
-    sge_texlab_lerp_by_map.h
+    sge_texlab_lerp_by_map.h \
+    geometry/ubillboard.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

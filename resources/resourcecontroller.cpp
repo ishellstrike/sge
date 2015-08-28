@@ -7,7 +7,7 @@ void Resources::Init()
 {
     const auto &error = new Texture;
     error->Load("/123123123error.png");
-    Push("error", error);
+    PUSH_NVP(error);
 
 
     const auto & height_shader = new BasicJargShader;
@@ -15,52 +15,48 @@ void Resources::Init()
     height_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/testgen1.glsl");
     height_shader->Link();
     height_shader->Afterlink();
+    PUSH_NVP(height_shader);
 
     const auto & grad_shader = new BasicJargShader;
     grad_shader->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/gradient_builder.glsl");
     grad_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/gradient_builder.glsl");
     grad_shader->Link();
     grad_shader->Afterlink();
-
-    Push("height_shader", height_shader);
-    Push("grad_shader", grad_shader);
+    PUSH_NVP(grad_shader);
 
     const auto & noise_map = new Texture;
     const auto & grad_map = new Texture;
     noise_map->Load("data/textures/PerlinPerm2D.png");
     grad_map->Load("data/textures/PerlinGrad2D.png");
+    PUSH_NVP(noise_map);
+    PUSH_NVP(grad_map);
 
-    Push("noise_map", noise_map);
-    Push("grad_map", grad_map);
 
+    const auto & default_planet_render = new BasicJargShader;
+    default_planet_render->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render->Link();
+    default_planet_render->Afterlink();
+    PUSH_NVP(default_planet_render);
 
-    const auto & basic = new BasicJargShader;
-    basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
-    basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
-    basic->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
-    basic->Link();
-    basic->Afterlink();
-
-    const auto & water = new BasicJargShader;
-    water->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal_watertest.glsl");
-    water->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal_watertest.glsl");
-    water->Link();
-    water->Afterlink();
+    const auto & default_water_render = new BasicJargShader;
+    default_water_render->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal_watertest.glsl");
+    default_water_render->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal_watertest.glsl");
+    default_water_render->Link();
+    default_water_render->Afterlink();
+    PUSH_NVP(default_water_render);
 
     const auto & defered = new BasicJargShader;
     defered->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/defered.glsl");
     defered->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/defered.glsl");
     defered->Link();
     defered->Afterlink();
-
     defered->SetUniform("buffer_world_pos", 0);
     defered->SetUniform("buffer_diffuse", 1);
     defered->SetUniform("buffer_normal", 2);
     defered->SetUniform("buffer_tex_coord", 3);
-
-    Push("default_planet_render", basic);
-    Push("default_water_render", water);
-    Push("defered", defered);
+    PUSH_NVP(defered);
 
     const auto & soil = new Texture;
     const auto & grass = new Texture;
@@ -70,35 +66,31 @@ void Resources::Init()
     grass->Load("data/textures/grass.png", true, true);
     snow->Load("data/textures/snow.png", true, true);
     rock->Load("data/textures/rock.png", true, true);
-
-    Push("soil", soil);
-    Push("grass", grass);
-    Push("snow", snow);
-    Push("rock", rock);
+    PUSH_NVP(soil);
+    PUSH_NVP(grass);
+    PUSH_NVP(snow);
+    PUSH_NVP(rock);
 
     const auto & rgb_to_luminance = new BasicJargShader;
     rgb_to_luminance->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/rgb_to_luminance.glsl");
     rgb_to_luminance->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/rgb_to_luminance.glsl");
     rgb_to_luminance->Link();
     rgb_to_luminance->Afterlink();
-
-    Push("rgb_to_luminance", rgb_to_luminance);
+    PUSH_NVP(rgb_to_luminance);
 
     const auto & lerp_rgb_map = new BasicJargShader;
     lerp_rgb_map->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/lerp_rgb_map.glsl");
     lerp_rgb_map->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/lerp_rgb_map.glsl");
     lerp_rgb_map->Link();
     lerp_rgb_map->Afterlink();
-
-    Push("lerp_rgb_map", lerp_rgb_map);
+    PUSH_NVP(lerp_rgb_map);
 
     const auto & starnest = new BasicJargShader;
     starnest->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/starnest.glsl");
     starnest->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/starnest.glsl");
     starnest->Link();
     starnest->Afterlink();
-
-    Push("starnest", starnest);
+    PUSH_NVP(starnest);
 
     const auto & corona = new BasicJargShader;
     corona->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/corona.glsl");
@@ -106,8 +98,7 @@ void Resources::Init()
     corona->Link();
     corona->Afterlink();
     corona->SetUniform("samplerPerlinPerm2D", 0);
-
-    Push("corona", corona);
+    PUSH_NVP(corona);
 
     const auto & extract_glow = new Shader;
     extract_glow->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/extract_glow.glsl");
@@ -115,8 +106,7 @@ void Resources::Init()
     extract_glow->Link();
     extract_glow->Use();
     extract_glow->SetUniform("mainMap", 0);
-
-    Push("extract_glow", extract_glow);
+    PUSH_NVP(extract_glow);
 
     const auto & tone_maping = new Shader;
     tone_maping->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/tone_maping.glsl");
@@ -125,8 +115,7 @@ void Resources::Init()
     tone_maping->Use();
     tone_maping->SetUniform("mainMap", 0);
     tone_maping->SetUniform("blurMap", 1);
-
-    Push("tone_maping", tone_maping);
+    PUSH_NVP(tone_maping);
 
     const auto & gausian_blur = new Shader;
     gausian_blur->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/gausian_blur.glsl");
@@ -134,8 +123,7 @@ void Resources::Init()
     gausian_blur->Link();
     gausian_blur->Use();
     gausian_blur->SetUniform("mainMap", 0);
-
-    Push("gausian_blur", gausian_blur);
+    PUSH_NVP(gausian_blur);
 
     const auto & gausian_blur2 = new Shader;
     gausian_blur2->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/gausian_blur2.glsl");
@@ -143,6 +131,31 @@ void Resources::Init()
     gausian_blur2->Link();
     gausian_blur2->Use();
     gausian_blur2->SetUniform("mainMap", 0);
+    PUSH_NVP(gausian_blur2);
 
-    Push("gausian_blur2", gausian_blur2);
+
+    const auto & basic = new BasicJargShader;
+    basic->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/basic.glsl");
+    basic->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/basic.glsl");
+    basic->Link();
+    basic->Afterlink();
+    basic->Use();
+    basic->SetUniform("material_texture", 0);
+    PUSH_NVP(basic);
+
+    const auto & font = new BasicJargShader;
+    font->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/font.glsl");
+    font->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/font.glsl");
+    font->Link();
+    font->Afterlink();
+    font->Use();
+    font->SetUniform("material_texture", 0);
+    PUSH_NVP(font);
+
+    const auto & color = new BasicJargShader;
+    color->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/color.glsl");
+    color->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/color.glsl");
+    color->Link();
+    color->Afterlink();
+    PUSH_NVP(color);
 }

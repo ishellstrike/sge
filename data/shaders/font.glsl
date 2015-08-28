@@ -7,7 +7,7 @@
 
 #ifdef _FRAGMENT_
 
-uniform sampler2D colorTexture;
+uniform sampler2D material_texture;
 in vec2 fragTexcoord;
 in vec4 col;
 
@@ -15,7 +15,7 @@ out vec4 out_color;
 
 void main(void)
 {
-    out_color = col * vec4(1, 1, 1, texture(colorTexture, fragTexcoord).a);
+    out_color = col * vec4(1, 1, 1, texture(material_texture, fragTexcoord).a);
 }
 
 #endif

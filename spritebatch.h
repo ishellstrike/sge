@@ -11,7 +11,7 @@
 #include "resources/texture.h"
 #include <string>
 #include <memory>
-#include "shader.h"
+#include "basicjargshader.h"
 #include "unordered_map"
 #include "font.h"
 
@@ -48,10 +48,10 @@ private:
                        Font *font, const glm::vec4 &col_, bool no_draw = false);
     void drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, const Texture &tex, const glm::vec4 &color);
 
-    std::shared_ptr<Shader> font_program = std::shared_ptr<Shader>(new Shader()),
-                                basic_program = std::shared_ptr<Shader>(new Shader()),
-                                color_program = std::shared_ptr<Shader>(new Shader()),
-                                current_program;
+    std::shared_ptr<BasicJargShader> font_program,
+                                     basic_program,
+                                     color_program,
+                                     current_program;
     glm::vec2 scis_min, scis_size;
     glm::vec3 *pos = nullptr;
     glm::vec2 *uv = nullptr;

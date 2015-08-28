@@ -12,6 +12,7 @@
 #include "prefecences.h"
 #include <GL/glew.h>
 #include "colorextender.h"
+#include "resources/resourcecontroller.h"
 
 typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
@@ -24,22 +25,9 @@ SpriteBatch::SpriteBatch()
     pos = new glm::vec3[SIZE*4];
     col = new glm::vec4[SIZE*4];
 
-    basic_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/basic.glsl");
-    basic_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/basic.glsl");
-    basic_program->Link();
-    basic_program->Use();
-    basic_program->SetUniform("colorTexture", 0);
-
-    font_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/font.glsl");
-    font_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/font.glsl");
-    font_program->Link();
-    font_program->Use();
-    font_program->SetUniform("colorTexture", 0);
-
-    color_program->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/color.glsl");
-    color_program->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/color.glsl");
-    color_program->Link();
-    color_program->Use();
+    basic_program = Resources::instance()->Get<BasicJargShader>("basic");
+    color_program = Resources::instance()->Get<BasicJargShader>("color");
+    font_program = Resources::instance()->Get<BasicJargShader>("font");
 
     current_program = basic_program;
 

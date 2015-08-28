@@ -189,6 +189,7 @@ bool GameWindow::BaseInit()
     Resize(RESX, RESY);
 
     std::shared_ptr<Material> mat = std::make_shared<Material>();
+    mat->texture = Resources::instance()->Get<Texture>("grass");
     mat->low = Resources::instance()->Get<Texture>("grass");
     mat->medium = Resources::instance()->Get<Texture>("soil");
     mat->high = Resources::instance()->Get<Texture>("snow");
@@ -234,6 +235,13 @@ bool GameWindow::BaseInit()
         ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital<float>(*ss.system[0])*1000);
         ss.system.back()->InitRender(mat);
     }
+
+    bill.vertices = {{{0,0,0},{0,0}},{{0,0,0},{1,0}},{{0,0,0},{1,1}},{{0,0,0},{0,1}}};
+    bill.indices = {0,1,2,0,2,3};
+    bill.billboards = {{{1, 1},{0,0,0}}};
+    bill.material = mat;
+    bill.shader = Resources::instance()->Get<BasicJargShader>("basic");
+    bill.Bind();
 
     return true;
 }
@@ -494,6 +502,10 @@ void GameWindow::BaseDraw()
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
+
+    bill.Prepare(*cam);
+    bill.Bind();
+    bill.Render(*cam);
 
     Swap();
     gt.Update(static_cast<float>(glfwGetTime()));

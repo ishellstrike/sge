@@ -14,6 +14,10 @@
 #include "resources/texture.h"
 #include "basicjargshader.h"
 
+#define _STRINGIFY(t) #t
+#define STRINGIFY(t) _STRINGIFY(t)
+#define PUSH_NVP(a) Push(STRINGIFY(a), a)
+
 template<typename _Ty>
 class ResourceDictionary
 {
@@ -99,6 +103,12 @@ public:
     {
         LOG(verbose) << "pushing \"" << name << "\" Texture resource";
         textures.Push(name, res);
+    }
+
+    template<typename _Ty>
+    void Push(std::pair<std::string, _Ty> val)
+    {
+        Push(val.first, val.second);
     }
 
     template<typename _Ty>
