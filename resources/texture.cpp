@@ -7,15 +7,66 @@ Texture::Texture()
 }
 
 Texture::Texture(glm::vec2 __size,
-                 bool smooth /*=false*/,
-                 bool _mip /*=false*/,
-                 GLuint dim /*= GL_TEXTURE_2D*/,
-                 GLuint internal_format /*= GL_RGBA*/,
-                 GLuint type /*=GL_UNSIGNED_BYTE*/,
-                 GLuint format /*= GL_RGBA*/)
+                 bool smooth,
+                 bool _mip,
+                 GLuint dim,
+                 GLuint internal_format,
+                 GLuint type,
+                 GLuint format)
 {
     m_dim = dim;
     Empty(__size, smooth, _mip, dim, internal_format, type, format);
+}
+
+Texture::Texture(glm::vec2 __size,
+                 bool smooth,
+                 bool _mip,
+                 GLuint dim,
+                 GLuint internal_format,
+                 GLuint type)
+{
+    m_dim = dim;
+    Empty(__size, smooth, _mip, dim, internal_format, type, internal_format);
+}
+
+Texture::Texture(glm::vec2 __size,
+                 bool smooth,
+                 bool _mip,
+                 GLuint dim,
+                 GLuint internal_format)
+{
+    m_dim = dim;
+    Empty(__size, smooth, _mip, dim, internal_format, GL_UNSIGNED_BYTE, internal_format);
+}
+
+Texture::Texture(glm::vec2 __size,
+                 bool smooth,
+                 bool _mip,
+                 GLuint dim)
+{
+    m_dim = dim;
+    Empty(__size, smooth, _mip, dim, GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA);
+}
+
+Texture::Texture(glm::vec2 __size,
+                 bool smooth,
+                 bool _mip)
+{
+    m_dim = GL_TEXTURE_2D;
+    Empty(__size, smooth, _mip, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA);
+}
+
+Texture::Texture(glm::vec2 __size,
+                 bool smooth)
+{
+    m_dim = GL_TEXTURE_2D;
+    Empty(__size, smooth, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA);
+}
+
+Texture::Texture(glm::vec2 __size)
+{
+    m_dim = GL_TEXTURE_2D;
+    Empty(__size, false, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA);
 }
 
 Texture::~Texture()

@@ -150,6 +150,6 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
 //        break;
 //    }
 
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, RESX, RESY);
 }

@@ -482,7 +482,7 @@ void SpriteBatch::render()
     glEnable(GL_BLEND);
     glDisable(GL_CULL_FACE);
     current_program->Use();
-    current_program->SetUniform("MVP", uniform);
+    current_program->SetUniform("transform_VP", uniform);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, current);

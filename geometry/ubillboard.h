@@ -21,14 +21,14 @@ public:
 
     void Prepare(const Camera &cam)
     {
-        static const glm::vec3 vert[] = {{0,0,0},{1,0,0},{1,1,0},{0,1,0}};
+        static const glm::vec3 vert[] = {{-0.5,-0.5,0},{0.5,-0.5,0},{0.5,0.5,0},{-0.5,0.5,0}};
 
         int j = 0;
         for(const auto &a : billboards)
         {
             for(int i = 0; i < 4; ++i)
             {
-                vertices[j*4 + i].position = a.center + cam.Right() * vert[i].x * a.size.x + cam.Up() * vert[i].y * a.size.y;
+                vertices[j*4 + i].position = a.center + cam.Up() * vert[i].x * a.size.x + cam.Right() * vert[i].y * a.size.y;
             }
             ++j;
         }

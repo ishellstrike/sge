@@ -22,7 +22,13 @@ public:
     bool mip = false;
 
     Texture();
-    Texture(glm::vec2 __size, bool smooth = false, bool _mip = false, GLuint dim = GL_TEXTURE_2D, GLuint internal_format = GL_RGBA, GLuint type = GL_UNSIGNED_BYTE, GLuint format = GL_RGBA);
+    Texture(glm::vec2 __size, bool smooth, bool _mip, GLuint dim, GLuint internal_format, GLuint type, GLuint format);
+    Texture(glm::vec2 __size, bool smooth, bool _mip, GLuint dim, GLuint internal_format, GLuint type);
+    Texture(glm::vec2 __size, bool smooth, bool _mip, GLuint dim, GLuint internal_format);
+    Texture(glm::vec2 __size, bool smooth, bool _mip, GLuint dim);
+    Texture(glm::vec2 __size, bool smooth, bool _mip);
+    Texture(glm::vec2 __size, bool smooth);
+    Texture(glm::vec2 __size);
     ~Texture();
     GLuint m_dim = -1;
 

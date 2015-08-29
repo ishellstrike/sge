@@ -411,7 +411,7 @@ void Scattering::Precompute()
         glDisable(GL_BLEND);
     }
 
-    glFinish();
+    //glFinish();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, RESX, RESY);
     glEnable(GL_BLEND);
@@ -446,6 +446,6 @@ void Scattering::redisplayFunc(const Camera & cam)
     glUniformMatrix4fv(glGetUniformLocation(drawProg, "viewInverse"), 1, GL_FALSE, &iview[0][0]);
     glUniform1f(glGetUniformLocation(drawProg, "exposure"), exposure);
     drawScreenQuad();
-    glFinish();
-    glFlush();
+    //glFinish();
+    //glFlush();
 }

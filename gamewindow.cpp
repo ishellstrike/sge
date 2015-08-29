@@ -59,6 +59,11 @@ void GameWindow::PreloadHdr()
     fbo_blur->bindTexture(*texture_blur);
     fbo_blur2->bindTexture(*texture_blur2);
     fbo_extract->bindTexture(*texture_extract);
+
+    fbo_main->CheckErrors();
+    fbo_blur->CheckErrors();
+    fbo_blur2->CheckErrors();
+    fbo_extract->CheckErrors();
 }
 
 void GameWindow::DropHdr()
@@ -238,7 +243,7 @@ bool GameWindow::BaseInit()
 
     bill.vertices = {{{0,0,0},{0,0}},{{0,0,0},{1,0}},{{0,0,0},{1,1}},{{0,0,0},{0,1}}};
     bill.indices = {0,1,2,0,2,3};
-    bill.billboards = {{{1, 1},{0,0,0}}};
+    bill.billboards = {{{2, 2},{0,0,0}}};
     bill.material = mat;
     bill.shader = Resources::instance()->Get<BasicJargShader>("basic");
     bill.Bind();
@@ -491,6 +496,11 @@ void GameWindow::BaseDraw()
     }
 
 
+    bill.Prepare(*cam);
+    bill.Bind();
+    bill.Render(*cam);
+
+
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -502,10 +512,6 @@ void GameWindow::BaseDraw()
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
-
-    bill.Prepare(*cam);
-    bill.Bind();
-    bill.Render(*cam);
 
     Swap();
     gt.Update(static_cast<float>(glfwGetTime()));

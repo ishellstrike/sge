@@ -28,14 +28,14 @@ layout (location = 1) in vec2 texcoord;
 layout (location = 2) in vec3 normal;
 layout (location = 3) in vec4 color;
 
-uniform mat4 MVP;
+uniform mat4 transform_VP;
 
 out vec2 fragTexcoord;
 out vec4 col;
 
 void main(void)
 {
-    gl_Position = MVP * vec4(position, 1);
+    gl_Position = transform_VP * vec4(position, 1);
     fragTexcoord = texcoord;
     col = color;
 }

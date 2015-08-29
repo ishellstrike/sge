@@ -6,6 +6,7 @@
 *******************************************************************************/
 
 #include "FrameBuffer.h"
+#include "logger.h"
 
 FrameBuffer::FrameBuffer(bool _depth)
 {
@@ -36,4 +37,27 @@ void FrameBuffer::bindTexture(const Texture& tex, GLuint attach/*GL_COLOR_ATTACH
 void FrameBuffer::Bind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+}
+
+void FrameBuffer::CheckErrors()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    switch(status)
+    {
+    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+        LOG(error) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
+        break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+        LOG(error) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
+        break;
+    case GL_FRAMEBUFFER_UNSUPPORTED:
+        LOG(error) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_UNSUPPORTED";
+        break;
+    default:
+        if (status != GL_FRAMEBUFFER_COMPLETE)
+            LOG(error) << "FATAL FRAMEBUFFER ERROR #" << status;
+        break;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

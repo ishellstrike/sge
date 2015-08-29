@@ -26,7 +26,7 @@ layout (location = 1) in vec2 texcoord;
 layout (location = 2) in vec3 normal;
 layout (location = 3) in vec4 color;
 
-uniform mat4 MVP;
+uniform mat4 transform_VP;
 
 out vec4 fragColor;
 out vec2 uv;
@@ -34,7 +34,7 @@ out vec2 uv;
 
 void main(void)
 {
-    gl_Position = MVP * vec4(position, 1);
+    gl_Position = transform_VP * vec4(position, 1);
     fragColor = color;
     uv = texcoord;
 }

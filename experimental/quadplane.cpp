@@ -29,8 +29,6 @@ bool QuadPlane::is_terminal() const
 const float res = 256.0f;
 void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
 {
-    glFinish();
-    glFlush();
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2(res), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
     std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2(res), true);

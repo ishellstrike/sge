@@ -17,5 +17,6 @@ public:
     GLuint FBO;
     bool depth;
     void Bind();
+    void CheckErrors();
 };
 

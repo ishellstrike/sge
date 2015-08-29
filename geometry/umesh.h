@@ -118,7 +118,7 @@ public:
             a.shader_pos = glGetAttribLocation(shader->program, a.name.c_str());
             if(a.shader_pos == -1)
             {
-                LOG(error) << a.name << " missed!";
+                LOG(error) << a.name << " in UMesh<" << typeid(_Ty).name() << "> for \"" << shader->shaderfile_name << "\" missed!";
                 has_errors = true;
             }
         }
