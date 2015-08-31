@@ -21,19 +21,10 @@ FPSCounter::~FPSCounter(void)
 
 void FPSCounter::Update(GameTimer gt)
 {
-    float frameTime = gt.elapsed;
-
-    fpsTime += frameTime;
-    fpsStack.push_back(frameTime);
-
-    while(fpsTime > 1)
-    {
-        fpsTime -= fpsStack.front();
-        fpsStack.pop_front();
-    }
+    fpsTime = 1.0 / gt.elapsed;
 }
 
 unsigned int FPSCounter::GetCount() const
 {
-        return fpsStack.size();
+        return fpsTime;
 }

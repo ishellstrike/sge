@@ -26,7 +26,7 @@ public:
     {
         const auto & find = data.find(id);
         if(find == data.end())
-            return data["error"];
+            LOG(fatal) << typeid(_Ty).name() << id << " missed";
         return find->second;
     }
 

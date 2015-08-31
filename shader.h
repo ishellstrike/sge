@@ -32,6 +32,7 @@ public:
     GLint program;
     std::vector<GLint> shaders_;
     std::vector<std::string> extensions;
+    std::vector<std::string> defines;
 
     template<class T>
     void SetUniform(const std::string &name, const T &val)
@@ -42,9 +43,11 @@ public:
     GLuint GetUniformLocation(const std::string &uni_name);
 
     void AddExtension(std::string s);
+    void AddDefine(std::string s);
 private:
+    void LogDumpError(const std::string &filename, GLenum type, const std::string &str, GLuint shader = -1);
     GLint locate(const std::string &s);
-    std::string preprocessIncludes(const std::string &filename, int level = 0);
+    void preprocessIncludes(std::stringstream &ss, const std::string &filename, GLenum type, int level = 0);
 
     void SetUniform_(const glm::mat4 &val, const std::string &uni_name);
     void SetUniform_(const glm::mat3 &val, const std::string &uni_name);

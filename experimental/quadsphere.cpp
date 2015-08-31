@@ -53,7 +53,7 @@ QuadSphere::QuadSphere(std::shared_ptr<Material> &__mat)
     grad_shader = Resources::instance()->Get<BasicJargShader>("grad_shader");
     noise_map = Resources::instance()->Get<Texture>("noise_map");
     grad_map = Resources::instance()->Get<Texture>("grad_map");
-    basic = Resources::instance()->Get<BasicJargShader>("default_planet_render");
+    basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_nowire");
 
     tg.SetShader(height_shader);
     tg.AddTexture("samplerPerlinPerm2D", noise_map);

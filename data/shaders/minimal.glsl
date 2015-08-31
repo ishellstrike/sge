@@ -5,7 +5,9 @@
         See "LICENSE.txt"
 *******************************************************************************/
 #include "float.lib.glsl"
+#ifdef WIREFRAME
 #include "wireframe.lib.glsl"
+#endif
 
 uniform sampler2D material_texture;
 uniform sampler2D material_normal;
@@ -68,7 +70,9 @@ out GEO_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
     vec3 positionout;
+#ifdef WIREFRAME
     vec3 barycentricout;
+#endif
 } geo_out;
 
 void main(void)
@@ -78,7 +82,9 @@ void main(void)
     {
         geo_out.texcoordout = geo_in[i].texcoordout;
         geo_out.texcoordout2 = geo_in[i].texcoordout2;
+#ifdef WIREFRAME
         geo_out.barycentricout = arr[i];
+#endif
 
         float snoize = texture(material_global_height, geo_out.texcoordout2).r;
         vec3 pos = gl_in[i].gl_Position.xyz;
@@ -102,7 +108,9 @@ in GEO_OUT {
     vec2 texcoordout;
     vec2 texcoordout2;
     vec3 positionout;
+#ifdef WIREFRAME
     vec3 barycentricout;
+#endif
 } frag_in;
 
 const vec4 fog = vec4(100/255.f, 149/255.f, 237/255.f, 1.f);
@@ -133,20 +141,28 @@ void main(void)
     vec4 tex;
     vec4 tex2;
 
-    tex = texture2D(material_low, texcoordout2*100);
-    tex2 = texture2D(material_medium, texcoordout2*100);
+    tex = texture2D(material_low, texcoordout2*1000);
+    tex2 = texture2D(material_medium, texcoordout2*1000);
     tex = mix(tex, tex2, snoize+0.4);
     if(snoize > 0.5)
     {
-        tex = texture2D(material_high, texcoordout2*100);
+        tex = texture2D(material_high, texcoordout2*1000);
     }
 
-    vec4 tex3 = texture2D(material_side, texcoordout2*100);
+    vec4 tex3 = texture2D(material_side, texcoordout2*1000);
+    tex3 += texture2D(material_side, texcoordout2*100);
+    tex3 /= 1.5;
     tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x) * 5, 0, 1));
 
-    DiffuseOut = mix(vec4(1/255.0, 1/255.0, 1/255.0, 1), tex, edgeFactor(frag_in.barycentricout));// tex;
+#ifdef WIREFRAME
+    DiffuseOut = mix(vec4(1/255.0, 1/255.0, 1/255.0, 1), tex, edgeFactor(frag_in.barycentricout, 0.1));
+    DiffuseOut = mix(DiffuseOut, vec4(1/255.0, 1/255.0, 1/255.0, 1), edgeFactor(frag_in.texcoordout, 0.01));
+#else
+    DiffuseOut = tex;
+#endif
     TexCoordOut = vec4(texcoordout2, 0, 1);
     NormalOut = vec4(eye, 1);
     WorldPosOut = vec4(positionout, 1);
 }
 #endif
+//DUMP_SOURCE

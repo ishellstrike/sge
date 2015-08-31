@@ -63,7 +63,7 @@ public:
     std::shared_ptr<Texture> tex1;
     float speed = 1;
 
-    bool wire = true;
+    bool wire = false;
     std::shared_ptr<Camera> cam1, cam2;
     Camera *cam;
     glm::vec3 moving;

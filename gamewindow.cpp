@@ -29,7 +29,7 @@
 
 #define MAJOR 2
 #define MINOR 1
-//#define NO_SCATT
+#define NO_SCATT
 #define NO_STARFIELD
 
 GameWindow::GameWindow()
@@ -90,7 +90,7 @@ bool GameWindow::BaseInit()
         LOG(error) << "glfwInit error " << glfwErrorCode;
         return false;
     }
-    //glfwWindowHint(GLFW_SAMPLES, 16);
+    glfwWindowHint(GLFW_SAMPLES, 16);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
@@ -242,15 +242,16 @@ bool GameWindow::BaseInit()
     }
 
     bill.vertices = {{{0,0,0},{0,0}},{{0,0,0},{1,0}},{{0,0,0},{1,1}},{{0,0,0},{0,1}}};
-    bill.indices = {0,1,2,0,2,3};
-    bill.billboards = {{{2, 2},{0,0,0}}};
+    bill.indices = {0,2,1,0,3,2};
+    bill.billboards = {{{2, 2},{3,3,3}}};
     bill.material = mat;
-    bill.shader = Resources::instance()->Get<BasicJargShader>("basic");
+    bill.shader = Resources::instance()->Get<BasicJargShader>("fake_planet");
     bill.Bind();
 
     return true;
 }
 
+//template<int is_debug = false>
 void GameWindow::BaseUpdate()
 {
     glfwPollEvents();
@@ -258,7 +259,23 @@ void GameWindow::BaseUpdate()
     //m->World = glm::rotate(m->World, (float)gt.elapsed / 100, glm::vec3(0.f,1.f,0.f));
 
     if(Keyboard::isKeyPress(GLFW_KEY_F2))
+    {
         wire = !wire;
+        if(wire)
+        {
+            for(size_t i = 0; i < ss.system.size(); i++)
+            {
+                ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_wire");
+            }
+        }
+        else
+        {
+            for(size_t i = 0; i < ss.system.size(); i++)
+            {
+                ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_nowire");
+            }
+        }
+    }
 
     if(Keyboard::isKeyPress(GLFW_KEY_F5))
         Prefecences::Instance()->hdr_on = Prefecences::Instance()->hdr_on ? (DropHdr(), false) : (PreloadHdr(), true);
@@ -267,10 +284,6 @@ void GameWindow::BaseUpdate()
         Prefecences::Instance()->defered_debug = !Prefecences::Instance()->defered_debug;
 
     glEnable(GL_CULL_FACE);
-    if(wire)
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-    else
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     if(Mouse::isWheelUp())
         speed *= 1.1f;
@@ -332,6 +345,11 @@ void GameWindow::BaseUpdate()
        cam->Zoom(cam->Zoom() - 1);
    }
 
+   for(size_t i = 0; i < ss.system.size(); i++)
+   {
+       ss.system[i]->Update(ss, gt, *cam);
+   }
+
    qs->world = glm::rotate(qs->world, gt.elapsed/100, glm::vec3(1));
    qs_w->world = glm::rotate(qs_w->world, gt.elapsed/100, glm::vec3(1));
    qs->Update(*cam);
@@ -359,7 +377,6 @@ void GameWindow::GeometryPass()
 
     for(size_t i = 0; i < ss.system.size(); i++)
     {
-        ss.system[i]->Update(ss, gt, *cam);
         ss.system[i]->Render(*cam);
     }
 
@@ -367,9 +384,13 @@ void GameWindow::GeometryPass()
     //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
     //qs_w->Render(*cam);
 
+
+    bill.Prepare(*cam);
+    bill.Bind();
+    bill.Render(*cam);
+
     // When we get here the depth buffer is already populated and the stencil pass
     // depends on it, but it does not write to it.
-
     glDepthMask(GL_FALSE);
     glDisable(GL_DEPTH_TEST);
 }
@@ -481,6 +502,7 @@ void GameWindow::AftereffectPass()
     }
 }
 
+//template<int is_debug = false>
 void GameWindow::BaseDraw()
 {
     GeometryPass();
@@ -495,16 +517,9 @@ void GameWindow::BaseDraw()
         BlitGBuffer();
     }
 
-
-    bill.Prepare(*cam);
-    bill.Bind();
-    bill.Render(*cam);
-
-
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
     batch->setUniform(proj * model);
 
@@ -512,11 +527,6 @@ void GameWindow::BaseDraw()
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
-
-    Swap();
-    gt.Update(static_cast<float>(glfwGetTime()));
-    fps.Update(gt);
-    perf->UpdateTimer(fps, gt);
 }
 
 void GameWindow::Mainloop()
@@ -525,7 +535,21 @@ void GameWindow::Mainloop()
     while(!glfwWindowShouldClose(window))
     {
         BaseUpdate();
+
+        static int ii = 0, jj = 0;
+        ii++;
+        if(ii >= 10) { ii = 0; jj++;}
+        if(jj >= 10) {jj = 0; }
+        glScissor(ii*RESX/10,jj*RESY/10,RESX/10,RESY/10);
+        glEnable(GL_SCISSOR_TEST);
+
         BaseDraw();
+
+        Swap();
+
+        gt.Update(static_cast<float>(glfwGetTime()));
+        fps.Update(gt);
+        perf->UpdateTimer(fps, gt);
        // std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
     Resources::drop();
@@ -542,7 +566,6 @@ void GameWindow::Resize(int w, int h)
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     GameWindow::wi->model = glm::mat4(1.f);
-    glViewport(0, 0, w, h);
 
     if(GameWindow::wi->gb)
         GameWindow::wi->gb->Resize(RESX, RESY);

@@ -32,13 +32,22 @@ void Resources::Init()
     PUSH_NVP(grad_map);
 
 
-    const auto & default_planet_render = new BasicJargShader;
-    default_planet_render->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
-    default_planet_render->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
-    default_planet_render->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
-    default_planet_render->Link();
-    default_planet_render->Afterlink();
-    PUSH_NVP(default_planet_render);
+    const auto & default_planet_render_nowire = new BasicJargShader;
+    default_planet_render_nowire->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render_nowire->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render_nowire->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render_nowire->Link();
+    default_planet_render_nowire->Afterlink();
+    PUSH_NVP(default_planet_render_nowire);
+
+    const auto & default_planet_render_wire = new BasicJargShader;
+    default_planet_render_wire->AddDefine("WIREFRAME");
+    default_planet_render_wire->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render_wire->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render_wire->loadShaderFromSource(GL_GEOMETRY_SHADER, "data/shaders/minimal.glsl");
+    default_planet_render_wire->Link();
+    default_planet_render_wire->Afterlink();
+    PUSH_NVP(default_planet_render_wire);
 
     const auto & default_water_render = new BasicJargShader;
     default_water_render->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/minimal_watertest.glsl");
@@ -158,4 +167,11 @@ void Resources::Init()
     color->Link();
     color->Afterlink();
     PUSH_NVP(color);
+
+    const auto & fake_planet = new BasicJargShader;
+    fake_planet->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/fake_planet.glsl");
+    fake_planet->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/fake_planet.glsl");
+    fake_planet->Link();
+    fake_planet->Afterlink();
+    PUSH_NVP(fake_planet);
 }

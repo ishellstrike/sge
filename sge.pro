@@ -214,4 +214,5 @@ DISTFILES += \
     data/shaders/gausian_blur.glsl \
     data/shaders/extract_glow.glsl \
     data/shaders/gausian_blur2.glsl \
-    data/shaders/wireframe.lib.glsl
+    data/shaders/wireframe.lib.glsl \
+    data/shaders/fake_planet.glsl

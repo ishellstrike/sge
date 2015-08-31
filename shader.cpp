@@ -86,6 +86,37 @@ std::string get_filename_headername(std::string path)
     return path;
 }
 
+void Shader::LogDumpError(const std::string &filename, GLenum type, const std::string &str, GLuint shader)
+{
+    std::string f_name;
+    if(shader != -1)
+    {
+        f_name = string_format("shader_error_log_%s_%s.txt",
+                               get_filename_headername(get_name(filename)).c_str(),
+                               shader_defines[type].c_str());
+        LOG(error) << "in file " << filename;
+        LOG(error) << "shader error detail saveid in " << f_name;
+    }
+    else
+    {
+        f_name = string_format("shader_force_dump_%s_%s.txt",
+                               get_filename_headername(get_name(filename)).c_str(),
+                               shader_defines[type].c_str());
+        LOG(verbose) << filename << " force dump to " << f_name;
+    }
+
+    std::stringstream out_file;
+    out_file << str;
+    if(shader != -1)
+    {
+        char infoLog[1024];
+        int infologLength = 0;
+        glGetShaderInfoLog(shader, 1024, &infologLength, infoLog);
+        out_file << std::endl << "=======ERROR======" << std::endl << infoLog << std::endl;
+    }
+    SaveTextFile(f_name, out_file.str());
+}
+
 /*!
  * \brief JargShader::loadShaderFromSource
  * \param type shader type
@@ -99,6 +130,11 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     shaderfile_name = filename;
 
     ss << version << std::endl;
+    for(const auto &def : defines)
+    {
+        ss << "#define " << def << std::endl;
+    }
+
     for(const auto &ext : extensions)
     {
         if(ext == std::string("GL_ARB_tessellation_shader"))
@@ -108,8 +144,9 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     }
 
     ss << "#define " << shader_defines[type] << std::endl;
+    ss << "//end of runtime header" << std::endl;
 
-    ss << preprocessIncludes(filename);
+    preprocessIncludes(ss, filename, type);
 
     std::string str = ss.str();
     //LOG(verbose) << str;
@@ -125,18 +162,7 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     bool has_error = !printLog(id);
     if(has_error)
     {
-        LOG(error) << "in file " << filename;
-        std::string f_name = string_format("shader_error_log_%s_%s.txt",
-                                           get_filename_headername(get_name(filename)).c_str(),
-                                           shader_defines[type].c_str());
-        LOG(error) << "shader error detail saveid in " << f_name;
-        std::stringstream out_file;
-        out_file << str;
-        char infoLog[1024];
-        int infologLength = 0;
-        glGetShaderInfoLog(id, 1024, &infologLength, infoLog);
-        out_file << std::endl << "=======ERROR======" << std::endl << infoLog << std::endl;
-        SaveTextFile(f_name, out_file.str());
+        LogDumpError(filename, type, str, id);
     }
 
     glAttachShader(program, id);
@@ -144,15 +170,14 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
 }
 
 
-std::string Shader::preprocessIncludes(const std::string &filename, int level /*= 0 */ )
+void Shader::preprocessIncludes(std::stringstream &ss, const std::string &filename, GLenum type , int level /*= 0 */)
 {
-    //PrintIndent();
     if(level > 32)
         LOG(fatal) << "header inclusion depth limit reached, might be caused by cyclic header inclusion";
 
     static const std::regex re("^[ ]*#[ ]*include[ ]+[\"<](.*)[\">].*");
+    static const std::regex rdump("^[ ]*//DUMP_SOURCE.*");
     std::stringstream input;
-    std::stringstream output;
 
     input << LoadTextFile(filename);
 
@@ -166,19 +191,22 @@ std::string Shader::preprocessIncludes(const std::string &filename, int level /*
         {
             std::string include_file = matches[1];
 
-            output << "#ifndef " << get_filename_headername(include_file) << std::endl;
-            output << "#define " << get_filename_headername(include_file) << std::endl;
-            output << preprocessIncludes(get_dir(filename) + include_file, level + 1) << std::endl;
-            output << "#endif //" << get_filename_headername(include_file) << std::endl;
+            ss << "#ifndef " << get_filename_headername(include_file) << std::endl;
+            ss << "#define " << get_filename_headername(include_file) << std::endl;
+            preprocessIncludes(ss, get_dir(filename) + include_file, type, level + 1);
+            ss << "#endif //" << get_filename_headername(include_file) << std::endl;
         }
         else
         {
-            output <<  line << std::endl;
+            ss <<  line << std::endl;
+        }
+
+        if(std::regex_search(line, matches, rdump))
+        {
+            LogDumpError(filename, type, ss.str());
         }
         ++line_number;
     }
-    //PrintUnindent();
-    return output.str();
 }
 
 /*!
@@ -218,6 +246,11 @@ GLuint Shader::GetUniformLocation(const std::string &uni_name)
 void Shader::AddExtension(std::string s)
 {
     extensions.push_back(std::move(s));
+}
+
+void Shader::AddDefine(std::string s)
+{
+    defines.push_back(std::move(s));
 }
 
 void Shader::SetUniform_(const glm::mat4 &val, const std::string &uni_name)
