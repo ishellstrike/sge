@@ -28,19 +28,19 @@ public:
     std::string shaderfile_name;
     void Use() const;
     void loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version = GLSLVER);
-    bool Link();
+    bool Link() const;
     GLint program;
     std::vector<GLint> shaders_;
     std::vector<std::string> extensions;
     std::vector<std::string> defines;
 
     template<class T>
-    void SetUniform(const std::string &name, const T &val)
+    void SetUniform(const std::string &name, const T &val) const
     {
       SetUniform_(val, name);
     }
 
-    GLuint GetUniformLocation(const std::string &uni_name);
+    GLuint GetUniformLocation(const std::string &uni_name) const;
 
     void AddExtension(std::string s);
     void AddDefine(std::string s);
@@ -49,19 +49,20 @@ private:
     GLint locate(const std::string &s);
     void preprocessIncludes(std::stringstream &ss, const std::string &filename, GLenum type, int level = 0);
 
-    void SetUniform_(const glm::mat4 &val, const std::string &uni_name);
-    void SetUniform_(const glm::mat3 &val, const std::string &uni_name);
-    void SetUniform_(const glm::mat2 &val, const std::string &uni_name);
+    void SetUniform_(const glm::mat4 &val, const std::string &uni_name) const;
+    void SetUniform_(const glm::mat3 &val, const std::string &uni_name) const;
+    void SetUniform_(const glm::mat2 &val, const std::string &uni_name) const;
 
-    void SetUniform_(int val,              const std::string &uni_name);
-    void SetUniform_(unsigned int val,     const std::string &uni_name);
+    void SetUniform_(int val,              const std::string &uni_name) const;
+    void SetUniform_(unsigned int val,     const std::string &uni_name) const;
 
-    void SetUniform_(const glm::vec4 &val, const std::string &uni_name);
-    void SetUniform_(const glm::vec3 &val, const std::string &uni_name);
-    void SetUniform_(const glm::vec2 &val, const std::string &uni_name);
+    void SetUniform_(const glm::vec4 &val, const std::string &uni_name) const;
+    void SetUniform_(const glm::vec3 &val, const std::string &uni_name) const;
+    void SetUniform_(const glm::vec2 &val, const std::string &uni_name) const;
 
-    void SetUniform_(const float &val,     const std::string &uni_name);
+    void SetUniform_(const float &val,     const std::string &uni_name) const;
 
-    std::unordered_map <std::string, GLuint> m_uniforms;
+    mutable std::unordered_map <std::string, GLuint> m_uniforms;
+    bool source_loaded = false;
 };
 #endif // JargShader_h__

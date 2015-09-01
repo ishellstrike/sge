@@ -101,6 +101,7 @@ public:
         update = [=](){BaseUpdate<true>();};
         draw = [=](){BaseDraw<true>();};
         main_is_debug = true;
+        glfwWindowHint(GLFW_SAMPLES, 1);
     }
 
     void make_release()
@@ -108,6 +109,7 @@ public:
         update = [=](){BaseUpdate<false>();};
         draw = [=](){BaseDraw<false>();};
         main_is_debug = false;
+        glfwWindowHint(GLFW_SAMPLES, 1);
     }
 
     void make_spartial()
@@ -115,6 +117,7 @@ public:
         update = [=](){BaseUpdate<spartial_rendering>();};
         draw = [=](){BaseDraw<spartial_rendering>();};
         main_is_debug = spartial_rendering;
+        glfwWindowHint(GLFW_SAMPLES, 16);
     }
 
     bool BaseInit()
@@ -181,7 +184,6 @@ public:
             throw;
         LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
         LOG(info) << EXT_CHECK(GLEW_ARB_tessellation_shader);
-        LOG(info) << EXT_CHECK(GLEW_EXT_geometry_shader4);
         LOG(info) << EXT_CHECK(GLEW_ARB_texture_float);
 
         glEnable(GL_BLEND);
@@ -228,10 +230,10 @@ public:
         cam2 = std::make_shared<Camera>();
         cam = cam1.get();
 
-        cam1->Position({3000,3000,3000});
+        cam1->Position({3,3,3});
         cam1->LookAt({0,0,0});
 
-        cam2->Position({3000,3000,3000});
+        cam2->Position({3,3,3});
         cam2->LookAt({0,0,0});
         Resize(RESX, RESY);
 
@@ -285,9 +287,9 @@ public:
 
         bill.vertices = {{{0,0,0},{0,0}},{{0,0,0},{1,0}},{{0,0,0},{1,1}},{{0,0,0},{0,1}}};
         bill.indices = {0,2,1,0,3,2};
-        bill.billboards = {{{2, 2},{3,3,3}}};
+        bill.billboards = {{{1, 1},{0,1,0}}};
         bill.material = mat;
-        bill.shader = Resources::instance()->Get<BasicJargShader>("fake_planet");
+        bill.shader = Resources::instance()->Get<BasicJargShader>("corona");
         bill.Bind();
 
         return true;
@@ -582,21 +584,26 @@ public:
         glBlendFunc(GL_ONE, GL_ONE);
         glDisable(GL_DEPTH_TEST);
 
-        Resources::instance()->Get<BasicJargShader>("starnest")->Use();
-        Resources::instance()->Get<BasicJargShader>("starnest")->SetUniform("transform_VP", cam->View());
-        drawScreenQuad();
+        if(Prefecences::Instance()->starnest_on)
+        {
+            const auto &nest = Resources::instance()->Get<BasicJargShader>("starnest");
+            nest->Use();
+            nest->SetUniform("transform_VP", cam->View());
+            drawScreenQuad();
+        }
 
-        Resources::instance()->Get<BasicJargShader>("corona")->Use();
-        Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("transform_VP", cam->View());
-        Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("iGlobalTime", gt.current);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, Resources::instance()->Get<Texture>("noise_map")->textureId);
-        drawScreenQuad();
+        //Resources::instance()->Get<BasicJargShader>("corona")->Use();
+        //Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("transform_VP", cam->View());
+        //Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("iGlobalTime", gt.current);
+        //glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, Resources::instance()->Get<Texture>("noise_map")->textureId);
+        //drawScreenQuad();
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        Resources::instance()->Get<BasicJargShader>("defered")->Use();
-        Resources::instance()->Get<BasicJargShader>("defered")->SetUniform("transform_lightPos", glm::vec3(0,1,0));
+        const auto &deff = Resources::instance()->Get<BasicJargShader>("defered");
+        deff->Use();
+        deff->SetUniform("transform_lightPos", glm::vec3(0,1,0));
         drawScreenQuad();
 
 #ifndef NO_SCATT

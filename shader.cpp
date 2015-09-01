@@ -167,6 +167,7 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
 
     glAttachShader(program, id);
     shaders_.push_back(id);
+    source_loaded = true;
 }
 
 
@@ -215,7 +216,7 @@ void Shader::preprocessIncludes(std::stringstream &ss, const std::string &filena
  *
  * link compiled shaders to program
  */
-bool Shader::Link() {
+bool Shader::Link() const {
     glLinkProgram(program);
     LOG(verbose) << "Program " << std::to_string(program) << " linking";
     if(!printLog(program))
@@ -224,7 +225,7 @@ bool Shader::Link() {
     return true;
 }
 
-GLuint Shader::GetUniformLocation(const std::string &uni_name)
+GLuint Shader::GetUniformLocation(const std::string &uni_name) const
 {
     const auto &search = m_uniforms.find(uni_name);
     if(search == m_uniforms.end())
@@ -245,55 +246,59 @@ GLuint Shader::GetUniformLocation(const std::string &uni_name)
 
 void Shader::AddExtension(std::string s)
 {
+    if(source_loaded)
+        LOG(fatal) << "extensions must be added before source loading";
     extensions.push_back(std::move(s));
 }
 
 void Shader::AddDefine(std::string s)
 {
+    if(source_loaded)
+        LOG(fatal) << "defines must be added before source loading";
     defines.push_back(std::move(s));
 }
 
-void Shader::SetUniform_(const glm::mat4 &val, const std::string &uni_name)
+void Shader::SetUniform_(const glm::mat4 &val, const std::string &uni_name) const
 {
     glUniformMatrix4fv(GetUniformLocation(uni_name), 1, GL_FALSE, &val[0][0]);
 }
 
-void Shader::SetUniform_(const glm::mat3 &val, const std::string &uni_name)
+void Shader::SetUniform_(const glm::mat3 &val, const std::string &uni_name) const
 {
     glUniformMatrix3fv(GetUniformLocation(uni_name), 1, GL_FALSE, &val[0][0]);
 }
 
-void Shader::SetUniform_(const glm::mat2 &val, const std::string &uni_name)
+void Shader::SetUniform_(const glm::mat2 &val, const std::string &uni_name) const
 {
     glUniformMatrix2fv(GetUniformLocation(uni_name), 1, GL_FALSE, &val[0][0]);
 }
 
-void Shader::SetUniform_(int val, const std::string &uni_name)
+void Shader::SetUniform_(int val, const std::string &uni_name) const
 {
     glUniform1i(GetUniformLocation(uni_name), val);
 }
 
-void Shader::SetUniform_(unsigned int val, const std::string &uni_name)
+void Shader::SetUniform_(unsigned int val, const std::string &uni_name) const
 {
     glUniform1ui(GetUniformLocation(uni_name), val);
 }
 
-void Shader::SetUniform_(const glm::vec4 &val, const std::string &uni_name)
+void Shader::SetUniform_(const glm::vec4 &val, const std::string &uni_name) const
 {
     glUniform4fv(GetUniformLocation(uni_name), 1, &val[0]);
 }
 
-void Shader::SetUniform_(const glm::vec3 &val, const std::string &uni_name)
+void Shader::SetUniform_(const glm::vec3 &val, const std::string &uni_name) const
 {
     glUniform3fv(GetUniformLocation(uni_name), 1, &val[0]);
 }
 
-void Shader::SetUniform_(const glm::vec2 &val, const std::string &uni_name)
+void Shader::SetUniform_(const glm::vec2 &val, const std::string &uni_name) const
 {
     glUniform2fv(GetUniformLocation(uni_name), 1, &val[0]);
 }
 
-void Shader::SetUniform_(const float &val, const std::string &uni_name)
+void Shader::SetUniform_(const float &val, const std::string &uni_name) const
 {
     glUniform1f(GetUniformLocation(uni_name), val);
 }
