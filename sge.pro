@@ -72,7 +72,9 @@ SOURCES += \
     sge_texlab_toolbox.cpp \
     sge_texlab_lerp_by_map.cpp \
     helper.cpp \
-    geometry/ubillboard.cpp
+    geometry/ubillboard.cpp \
+    resources/umaterial.cpp \
+    geometry/ring.cpp
 
 VERSION = 0.1.0
 
@@ -165,7 +167,9 @@ HEADERS += \
     sge_texlab_rgb_to_luminance.h \
     sge_texlab_toolbox.h \
     sge_texlab_lerp_by_map.h \
-    geometry/ubillboard.h
+    geometry/ubillboard.h \
+    resources/umaterial.h \
+    geometry/ring.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

@@ -1,0 +1,44 @@
+#ifndef UMATERIAL_H
+#define UMATERIAL_H
+#include <unordered_map>
+#include "texture.h"
+
+class material_uniform
+{
+    virtual void Bind() const
+    {
+
+    }
+};
+
+class texture_uniform : public material_uniform
+{
+    void Bind() const override
+    {
+
+    }
+};
+
+class color_uniform : public material_uniform
+{
+    void Bind() const override
+    {
+
+    }
+};
+
+class umaterial
+{
+public:
+    umaterial();
+
+    std::unordered_map<std::string, std::shared_ptr<material_uniform>> uniforms;
+
+    void SetUniform( const std::string &name, std::shared_ptr<Texture> &u )
+    {
+        //auto a = std::make_shared<texture_uniform>();
+       // uniforms[name] = u;
+    }
+};
+
+#endif // UMATERIAL_H
