@@ -7,7 +7,7 @@
 
 #ifndef SPACE_SOLVER_H
 #define SPACE_SOLVER_H
-#include "space_object.h"
+#include "object.h"
 #include "helper.h"
 #include <glm/gtx/rotate_vector.hpp>
 
@@ -33,28 +33,28 @@ namespace ssolver
     }
 
     template<typename _Ty = double>
-    _Ty v_1( const SpaceObject &o )
+    _Ty v_1( const Object &o )
     {
         //v_1=\sqrt{G\frac{M}{R}}
         return sqrt( G<_Ty>() * ( o.mass<_Ty>() / o.R<_Ty>() ) );
     }
 
     template<typename _Ty = double>
-    _Ty v_2( const SpaceObject &o )
+    _Ty v_2( const Object &o )
     {
         //v_2=\sqrt{2G\frac{M}{R}}
         return sqrt( 2 * G<_Ty>() * ( o.mass<_Ty>() / o.R<_Ty>() ) );
     }
 
     template<typename _Ty = double>
-    _Ty v_3( const SpaceObject &o )
+    _Ty v_3( const Object &o )
     {
         //v_3=\sqrt{(\sqrt{2}-1)^2 v^2+v_2^2}
         return sqrt( pow((sqrt(2) - 1), 2) * pow(v_1<_Ty>(o), 2) + pow(v_2<_Ty>(o), 2));
     }
 
     template<typename _Ty = double>
-    _Ty randomize_orbital( const SpaceObject &o )
+    _Ty randomize_orbital( const Object &o )
     {
         _Ty r  = random::next<_Ty>( );
         _Ty v1 =          v_1<_Ty>(o);
@@ -64,7 +64,7 @@ namespace ssolver
     }
 
     template<typename _Ty = double>
-    glm::tvec3<_Ty, glm::defaultp> make_orbital_vector(const SpaceObject &cen, const SpaceObject &sat, _Ty speed)
+    glm::tvec3<_Ty, glm::defaultp> make_orbital_vector(const Object &cen, const Object &sat, _Ty speed)
     {
         typedef glm::tvec3<_Ty, glm::defaultp> vec;
 

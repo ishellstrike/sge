@@ -5,14 +5,22 @@
         See "LICENSE.txt"
 *******************************************************************************/
 
-#include "space_object.h"
+#include "object.h"
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/fast_square_root.hpp>
 #include "helper.h"
 #include "gametimer.h"
 #include <random>
 
-SpaceObject::SpaceObject()
+#define ZERO_FIX
+
+#ifdef ZERO_FIX
+#define if_not_zero_r if(r > m_R + a.m_R)
+#else
+#define is_not_zero_distance
+#endif
+
+Object::Object()
 {
 
 }
@@ -23,104 +31,104 @@ SpaceObject::SpaceObject()
  * \param __ro density in kg/m^3
  * \param p0
  */
-SpaceObject::SpaceObject(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0) */) : m_mass(__mass), m_ro(__ro), pos(p0)
+Object::Object(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0) */) : m_mass(__mass), m_ro(__ro), pos(p0)
 {
     BuildVR();
     hist.resize(max_h);
     color = glm::vec4(random::next<float>() + 0.5f, random::next<float>() + 0.5f, random::next<float>() + 0.5f, 1.0f);
 }
 
-void SpaceObject::InitRender(std::shared_ptr<Material> &__mat)
+void Planet::InitRender(std::shared_ptr<Material> &__mat)
 {
     render = std::unique_ptr<QuadSphere>(new QuadSphere(__mat));
 }
 
-void SpaceObject::BuildVR()
+void Object::BuildVR()
 {
     m_V = m_mass / m_ro;
     m_R = pow( ( ( ( 3.0 * V() ) / (4.0 * glm::pi<double>() ) ) ), 1.0 / 3.0 );
 }
 
-void SpaceObject::mass(double __mass)
+void Object::mass(double __mass)
 {
     m_mass = __mass;
     BuildVR();
 }
 
-double SpaceObject::ro() const
+double Object::ro() const
 {
     return m_ro;
 }
-double SpaceObject::ro_si() const
+double Object::ro_si() const
 {
     return m_ro / 1000.0;
 }
-void SpaceObject::ro(double __ro)
+void Object::ro(double __ro)
 {
     m_ro = __ro;
     BuildVR();
 }
-void SpaceObject::ro_si(double __ro)
+void Object::ro_si(double __ro)
 {
     m_ro = __ro * 1000.0;
     BuildVR();
 }
 
-double SpaceObject::fx(double local_x, SpaceSystem &syst)
+double Object::fx(double local_x, SpaceSystem &syst)
 {
     double d = 0;
     for (auto A : syst.system)
     {
         if(A.get() == this) continue;
-        SpaceObject &a = *A;
+        Object &a = *A;
         double dx = a.pos.x - local_x;
         double dy = a.pos.y - pos.y;
         double dz = a.pos.z - pos.z;
-        double r = sqrt( dx*dx + dy*dy + dz*dz );
-        //if(r > m_R + a.m_R)
+        double r = glm::sqrt( dx*dx + dy*dy + dz*dz );
+        if_not_zero_r
             d +=  a.mass() * ( a.pos.x - local_x ) / pow( r, 3.0 );
     }
 
     return d;
 }
 
-double SpaceObject::fy(double local_y, SpaceSystem &syst)
+double Object::fy(double local_y, SpaceSystem &syst)
 {
     double d = 0;
     for (auto A : syst.system)
     {
         if(A.get() == this) continue;
-        SpaceObject &a = *A;
+        Object &a = *A;
         double dx = a.pos.x - pos.x;
         double dy = a.pos.y - local_y;
         double dz = a.pos.z - pos.z;
-        double r = sqrt( dx*dx + dy*dy + dz*dz );
-        //if(r > m_R + a.m_R)
+        double r = glm::sqrt( dx*dx + dy*dy + dz*dz );
+        if_not_zero_r
             d +=  a.mass() * ( a.pos.y - local_y ) / pow( r, 3.0 );
     }
 
     return d;
 }
 
-double SpaceObject::fz(double local_z, SpaceSystem &syst)
+double Object::fz(double local_z, SpaceSystem &syst)
 {
     double d = 0;
     for (auto A : syst.system)
     {
         if(A.get() == this) continue;
-        SpaceObject &a = *A;
+        Object &a = *A;
         double dx = a.pos.x - pos.x;
         double dy = a.pos.y - pos.y;
         double dz = a.pos.z - local_z;
-        double r = sqrt( dx*dx + dy*dy + dz*dz );
-        //if(r > m_R + a.m_R)
+        double r = glm::sqrt( dx*dx + dy*dy + dz*dz );
+        if_not_zero_r
             d +=  a.mass() * ( a.pos.z - local_z ) / pow( r, 3.0 );
     }
 
     return d;
 }
 
-void SpaceObject::rk4_x(SpaceSystem &syst, GameTimer &)
+void Object::rk4_x(SpaceSystem &syst, GameTimer &)
 {
     double k1 = T * fx(pos.x, syst);
     double q1 = T * speed.x;
@@ -139,7 +147,7 @@ void SpaceObject::rk4_x(SpaceSystem &syst, GameTimer &)
     pos.x += (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0;
 }
 
-void SpaceObject::rk4_y(SpaceSystem &syst, GameTimer &)
+void Object::rk4_y(SpaceSystem &syst, GameTimer &)
 {
     double k1 = T * fy(pos.y, syst);
     double q1 = T * speed.y;
@@ -158,7 +166,7 @@ void SpaceObject::rk4_y(SpaceSystem &syst, GameTimer &)
     pos.y += (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0;
 }
 
-void SpaceObject::rk4_z(SpaceSystem &syst, GameTimer &)
+void Object::rk4_z(SpaceSystem &syst, GameTimer &)
 {
     double k1 = T * fz(pos.z, syst);
     double q1 = T * speed.z;
@@ -177,7 +185,7 @@ void SpaceObject::rk4_z(SpaceSystem &syst, GameTimer &)
     pos.z += (q1 + 2.0 * q2 + 2.0 * q3 + q4) / 6.0;
 }
 
-void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
+void Object::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
 {
     glm::dvec3 lpos = pos;
 
@@ -203,7 +211,34 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
         moving = 0;
         last = 0;
     }
+}
 
+void Object::Render(Camera &camera) const
+{
+
+}
+
+/*!
+ * \brief SpaceObject::SpaceObject
+ * \param __mass mass in kg
+ * \param __ro density in kg/m^3
+ * \param p0
+ */
+Planet::Planet(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0) */) : Object(__mass, __ro, p0)
+{
+}
+
+void Planet::Render(Camera &camera) const
+{
+    if(render)
+    {
+        render->Render(camera);
+    }
+}
+
+void Planet::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
+{
+    Object::Update(syst, gt, cam);
     if(render)
     {
         render->world = glm::translate(glm::mat4(1), glm::vec3(pos));
@@ -214,15 +249,7 @@ void SpaceObject::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
     }
 }
 
-void SpaceObject::Render(Camera &camera)
-{
-    if(render)
-    {
-        render->Render(camera);
-    }
-}
-
-std::string SpaceObject::GetDebugInfo()
+std::string Object::GetDebugInfo()
 {
     return string_format("pos:%s\nv:%s\na:%s\nmass:%g\ndensiry:%g\nvolume:%g\nradius:%g",
                          std::to_string(pos).c_str(),
@@ -233,3 +260,6 @@ std::string SpaceObject::GetDebugInfo()
                          m_V,
                          m_R);
 }
+
+#undef ZERO_FIX
+#undef if_not_zero_r

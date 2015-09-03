@@ -11,17 +11,17 @@
 #include <glm/gtx/common.hpp>
 #include "spacesystem.h"
 #include "gametimer.h"
-#include "space_solver.h"
+#include "solver.h"
 #include "experimental/quadsphere.h"
+#include "camera.h"
 
-class SpaceObject
+class Object
 {
 public:
-    SpaceObject();
-    SpaceObject(float __mass, float __ro, glm::vec3 p0 = glm::vec3(0));
-    void InitRender(std::shared_ptr<Material> &__mat);
+    Object();
+    Object(float __mass, float __ro, glm::vec3 p0 = glm::vec3(0));
 
-    std::unique_ptr<QuadSphere> render;
+
     glm::dvec3 pos = glm::dvec3(0), speed = glm::dvec3(0), acc = glm::dvec3(0);
     std::vector<glm::dvec3> hist;
     float last = 0;
@@ -68,8 +68,9 @@ public:
 
     std::string GetDebugInfo();
 
-    void Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam);
-    void Render(Camera &camera);
+    virtual void Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam);
+    virtual void Render(Camera &camera) const;
+
 private:
     double m_mass = 1.0;
     double m_R = 1.0;
@@ -77,6 +78,18 @@ private:
     double m_V = 1.0;
 
     void BuildVR();
+};
+
+class Planet : public Object
+{
+public:
+    Planet(float __mass, float __ro, glm::vec3 p0 = glm::vec3(0));
+
+    void InitRender(std::shared_ptr<Material> &__mat);
+    std::unique_ptr<QuadSphere> render;
+
+    void Render(Camera &camera) const override;
+    void Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam) override;
 };
 
 #endif // SPACE_OBJECT_H

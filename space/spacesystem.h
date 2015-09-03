@@ -10,13 +10,13 @@
 #include <vector>
 #include <memory>
 
-class SpaceObject;
+class Object;
 
 class SpaceSystem
 {
 public:
     SpaceSystem();
-    std::vector<std::shared_ptr<SpaceObject>> system;
+    std::vector<std::shared_ptr<Object>> system;
 };
 
 #endif // SPACESYSTEM_H

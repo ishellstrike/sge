@@ -174,4 +174,11 @@ void Resources::Init()
     fake_planet->Link();
     fake_planet->Afterlink();
     PUSH_NVP(fake_planet);
+
+    const auto & planet_ring = new BasicJargShader;
+    planet_ring->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/planet_ring.glsl");
+    planet_ring->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/planet_ring.glsl");
+    planet_ring->Link();
+    planet_ring->Afterlink();
+    PUSH_NVP(planet_ring);
 }

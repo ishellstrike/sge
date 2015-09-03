@@ -55,7 +55,6 @@ SOURCES += \
     FrameBuffer.cpp \
     TextureGenerator.cpp \
     experimental/scattering.cpp \
-    space/space_object.cpp \
     space/spacesystem.cpp \
     random.cpp \
     experimental/starfield.cpp \
@@ -74,7 +73,9 @@ SOURCES += \
     helper.cpp \
     geometry/ubillboard.cpp \
     resources/umaterial.cpp \
-    geometry/ring.cpp
+    geometry/ring.cpp \
+    space/structure.cpp \
+    space/object.cpp
 
 VERSION = 0.1.0
 
@@ -150,9 +151,7 @@ HEADERS += \
     experimental/sphereparamstorage.h \
     experimental/scattering.h \
     data/shaders/scattering/scatter_params.h \
-    space/space_object.h \
     space/spacesystem.h \
-    space/space_solver.h \
     random.h \
     experimental/starfield.h \
     geometry/umesh.h \
@@ -169,7 +168,10 @@ HEADERS += \
     sge_texlab_lerp_by_map.h \
     geometry/ubillboard.h \
     resources/umaterial.h \
-    geometry/ring.h
+    geometry/ring.h \
+    space/structure.h \
+    space/object.h \
+    space/solver.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -219,4 +221,5 @@ DISTFILES += \
     data/shaders/extract_glow.glsl \
     data/shaders/gausian_blur2.glsl \
     data/shaders/wireframe.lib.glsl \
-    data/shaders/fake_planet.glsl
+    data/shaders/fake_planet.glsl \
+    data/shaders/planet_ring.glsl

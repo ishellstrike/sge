@@ -205,28 +205,30 @@ bool GameWindow::BaseInit()
     sf = std::unique_ptr<Starfield>(new Starfield());
 #endif
 
-    ss.system.push_back(std::make_shared<SpaceObject>(5000.f, 5510.f , glm::vec3{0,0,0}));
-    ss.system.back()->dominant = true;
-    ss.system.back()->InitRender(mat);
+    auto t = std::make_shared<Planet>(5000.f, 5510.f , glm::vec3{0,0,0});
+    ss.system.push_back(t);
+    t->dominant = true;
+    t->InitRender(mat);
 
     for(int i = 0; i < 2; i++)
     {
-        ss.system.push_back(std::make_shared<SpaceObject>(random::next<float>()/5.0f,
-                                                          3200.f,
-                                                          glm::vec3{random::next<float>()*30 - 15,
-                                                                    0,
-                                                                    random::next<float>()*30 - 15}));
+        auto t = std::make_shared<Planet>(random::next<float>()/5.0f,
+                                               3200.f,
+                                               glm::vec3{random::next<float>()*30 - 15,
+                                                         0,
+                                                         random::next<float>()*30 - 15});
+        ss.system.push_back(t);
 
-        ss.system.back()->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital<float>(*ss.system[0])*1000);
-        ss.system.back()->InitRender(mat);
+        t->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital<float>(*ss.system[0])*1000);
+        t->InitRender(mat);
     }
 
-    auto aaa = GenerateRing<VertPosUv>(2, 0.5, 100);
+    auto aaa = GenerateRing<VertPosUv>(2, 0.5, 1000);
     bill.vertices = aaa->vertices;
     bill.indices = aaa->indices;
     //bill.billboards = {{{3, 3},{0,0,0}}};
     bill.material = mat;
-    bill.shader = Resources::instance()->Get<BasicJargShader>("fake_planet");
+    bill.shader = Resources::instance()->Get<BasicJargShader>("planet_ring");
     bill.Bind();
 
     return true;
@@ -275,7 +277,9 @@ void GameWindow::GeometryPass()
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0, 0, 0, 0.f);
-    glDisable(GL_BLEND);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
     for(size_t i = 0; i < ss.system.size(); i++)
@@ -287,6 +291,9 @@ void GameWindow::GeometryPass()
     //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
     //qs_w->Render(*cam);
 
+    //bill.Prepare(*cam);
+    bill.Bind();
+    bill.Render(*cam);
 
     // When we get here the depth buffer is already populated and the stencil pass
     // depends on it, but it does not write to it.
@@ -337,7 +344,7 @@ void GameWindow::ShadingPass()
 
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_ONE, GL_ONE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
 
     if(Prefecences::Instance()->starnest_on)
@@ -446,9 +453,6 @@ void GameWindow::BaseDraw()
 {
     GeometryPass();
 
-    //bill.Prepare(*cam);
-    bill.Bind();
-    bill.Render(*cam);
 
     if(!Prefecences::Instance()->defered_debug)
     {
@@ -486,14 +490,14 @@ void GameWindow::BaseUpdate()
         {
             for(size_t i = 0; i < ss.system.size(); i++)
             {
-                ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_wire");
+                //ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_wire");
             }
         }
         else
         {
             for(size_t i = 0; i < ss.system.size(); i++)
             {
-                ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_nowire");
+                //ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_nowire");
             }
         }
     }

@@ -10,7 +10,7 @@
 #define volsteps 20
 #define stepsize 0.1
 
-#define zoom   0.800
+#define zoom   1.800
 #define tile   0.850
 #define speed  0.010
 
@@ -39,7 +39,7 @@ layout (location = 0) out vec4 fragColor;
 
 in vec2 fragCoord;
 
-const vec2 iResolution = vec2(2,2);
+const vec2 iResolution = vec2(1,1);
 const vec2 iMouse = vec2(0);
 float iGlobalTime = 0;
 
@@ -51,22 +51,10 @@ void main(void)
     //get coords and direction
     vec2 uv = fragCoord.xy / iResolution.xy - 0.5;
     uv.y *= iResolution.y / iResolution.x;
-    vec3 dir = vec3(uv*zoom, 1);
+    vec3 dir = (transform_VP * vec4(1,0,0,1)).xyz - vec3(uv, 0);
     float time = iGlobalTime * speed + 0.25;
 
-    //mouse rotation
-    float a1 = 0.5 + iMouse.x / iResolution.x * 2;
-    float a2 = 0.8 + iMouse.y / iResolution.y * 2;
-    mat2 rot1 = mat2(cos(a1), sin(a1), -sin(a1), cos(a1));
-    mat2 rot2 = mat2(cos(a2), sin(a2), -sin(a2), cos(a2));
-    dir.xz *= rot1;
-    dir.xy *= rot2;
-    vec3 from = vec3(1, 0.5, 0.5);
-    from += vec3(time * 2, time, -2);
-    from.xz *= rot1;
-    from.xy *= rot2;
-
-    dir = (transform_VP * vec4(dir, 1)).xyz;
+    vec3 from = (transform_VP * vec4(0, 0, 0, 1)).xyz;
 
     //volumetric rendering
     float s = 0.1, fade = 1;

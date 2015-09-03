@@ -7,7 +7,7 @@
 
 #include "starfield.h"
 #include "random.h"
-#include "space/space_solver.h"
+#include "space/solver.h"
 
 Starfield::Starfield()
 {
