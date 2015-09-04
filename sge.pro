@@ -75,7 +75,12 @@ SOURCES += \
     resources/umaterial.cpp \
     geometry/ring.cpp \
     space/structure.cpp \
-    space/object.cpp
+    space/object.cpp \
+    space/planet_model/country.cpp \
+    space/planet_model/planet_population.cpp \
+    space/planet_model/city.cpp \
+    space/planet_model/resource.cpp \
+    space/objectbase.cpp
 
 VERSION = 0.1.0
 
@@ -171,7 +176,12 @@ HEADERS += \
     geometry/ring.h \
     space/structure.h \
     space/object.h \
-    space/solver.h
+    space/solver.h \
+    space/planet_model/country.h \
+    space/planet_model/city.h \
+    space/planet_model/resource.h \
+    space/planet_model/planet_population.h \
+    space/objectbase.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

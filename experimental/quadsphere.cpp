@@ -12,21 +12,21 @@
 
 //Помещается вершины rldr в меш в прямом порядке
 #define PUSH_FORWARD \
-    Indeces.push_back(tl); \
-    Indeces.push_back(tr); \
-    Indeces.push_back(dl); \
-    Indeces.push_back(tr); \
-    Indeces.push_back(dr); \
-    Indeces.push_back(dl);
+    indices.push_back(tl); \
+    indices.push_back(tr); \
+    indices.push_back(dl); \
+    indices.push_back(tr); \
+    indices.push_back(dr); \
+    indices.push_back(dl);
 
 //Помещается вершины rldr в меш в альтернативном порядке
 #define PUSH_BACKWARD \
-    Indeces.push_back(tl); \
-    Indeces.push_back(tr); \
-    Indeces.push_back(dr); \
-    Indeces.push_back(tl); \
-    Indeces.push_back(dr); \
-    Indeces.push_back(dl);
+    indices.push_back(tl); \
+    indices.push_back(tr); \
+    indices.push_back(dr); \
+    indices.push_back(tl); \
+    indices.push_back(dr); \
+    indices.push_back(dl);
 
 QuadSphere::QuadSphere(std::shared_ptr<Material> &__mat)
 {
@@ -107,7 +107,7 @@ QuadSphere::QuadSphere(std::shared_ptr<Material> &__mat)
 
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*Indeces.size(), &Indeces[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
 }
 
 QuadSphere::~QuadSphere()

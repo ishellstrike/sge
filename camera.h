@@ -65,6 +65,7 @@ public:
 
     glm::vec3 Up() const;
     glm::vec3 Right() const;
+    glm::vec3 Forward() const;
 
     float camera_scale = 1;
 

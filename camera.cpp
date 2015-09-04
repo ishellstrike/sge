@@ -58,9 +58,9 @@ void Camera::ReCreateViewMatrix(const GameTimer &gt) {
     camera_position_delta = camera_position_delta * 0.f;
 
     m_view = translate(mat4_cast(m_rotation_quaternion), -m_position);//glm::lookAt(position, look_at, up);
-    m_camera_right = glm::vec3(1,0,0) * m_rotation_quaternion;
-    m_camera_up = glm::vec3(0,1,0) * m_rotation_quaternion;
-    m_camera_direction = glm::vec3(0,0,1) * m_rotation_quaternion;
+    m_camera_right = glm::normalize(glm::vec3(1,0,0) * m_rotation_quaternion);
+    m_camera_up = glm::normalize(glm::vec3(0,1,0) * m_rotation_quaternion);
+    m_camera_direction = glm::normalize(glm::vec3(0,0,1) * m_rotation_quaternion);
     m_MVP = m_projection * m_view * m_model;
 
     if(camera_position_delta.x + camera_position_delta.y + camera_position_delta.z + m_pitch + m_yaw < 0.01)
@@ -260,6 +260,11 @@ glm::vec3 Camera::Up() const
 glm::vec3 Camera::Right() const
 {
     return m_camera_right;
+}
+
+glm::vec3 Camera::Forward() const
+{
+    return m_camera_direction;
 }
 
 

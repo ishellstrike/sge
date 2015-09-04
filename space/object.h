@@ -14,15 +14,19 @@
 #include "solver.h"
 #include "experimental/quadsphere.h"
 #include "camera.h"
+#include "objectbase.h"
 
-class Object
+class Object : public ObjectBase
 {
 public:
     Object();
     Object(float __mass, float __ro, glm::vec3 p0 = glm::vec3(0));
 
+    enum ObjectType {
+        ERROR,
+        PLANET
+    } type;
 
-    glm::dvec3 pos = glm::dvec3(0), speed = glm::dvec3(0), acc = glm::dvec3(0);
     std::vector<glm::dvec3> hist;
     float last = 0;
     float moving = 0;
@@ -37,27 +41,6 @@ public:
     double ro_si() const; /*< density g/cm^3*/
     void ro_si(double __ro);
 
-    template <typename _Ty = double>
-    _Ty V() const /*< volume (indirect)*/
-    {
-        return _Ty(m_V);
-    }
-
-    template <typename _Ty = double>
-    _Ty R() const /*< radius (indirect)*/
-    {
-        return _Ty(m_R);
-    }
-
-    template <typename _Ty = double>
-    _Ty mass() const /*< mass*/
-    {
-        return _Ty(m_mass);
-    }
-
-
-    void mass(double __mass);
-
     double fx(double local_x, SpaceSystem &syst);
     double fy(double local_y, SpaceSystem &syst);
     double fz(double local_y, SpaceSystem &syst);
@@ -70,14 +53,6 @@ public:
 
     virtual void Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam);
     virtual void Render(Camera &camera) const;
-
-private:
-    double m_mass = 1.0;
-    double m_R = 1.0;
-    double m_ro = 1.0;
-    double m_V = 1.0;
-
-    void BuildVR();
 };
 
 class Planet : public Object

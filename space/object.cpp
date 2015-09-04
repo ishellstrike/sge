@@ -22,7 +22,7 @@
 
 Object::Object()
 {
-
+    type = ERROR;
 }
 
 /*!
@@ -31,8 +31,10 @@ Object::Object()
  * \param __ro density in kg/m^3
  * \param p0
  */
-Object::Object(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0) */) : m_mass(__mass), m_ro(__ro), pos(p0)
+Object::Object(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0) */) : ObjectBase(__mass, __ro, p0)
 {
+    type = ERROR;
+
     BuildVR();
     hist.resize(max_h);
     color = glm::vec4(random::next<float>() + 0.5f, random::next<float>() + 0.5f, random::next<float>() + 0.5f, 1.0f);
@@ -43,17 +45,9 @@ void Planet::InitRender(std::shared_ptr<Material> &__mat)
     render = std::unique_ptr<QuadSphere>(new QuadSphere(__mat));
 }
 
-void Object::BuildVR()
-{
-    m_V = m_mass / m_ro;
-    m_R = pow( ( ( ( 3.0 * V() ) / (4.0 * glm::pi<double>() ) ) ), 1.0 / 3.0 );
-}
 
-void Object::mass(double __mass)
-{
-    m_mass = __mass;
-    BuildVR();
-}
+
+
 
 double Object::ro() const
 {
@@ -80,7 +74,7 @@ double Object::fx(double local_x, SpaceSystem &syst)
     for (auto A : syst.system)
     {
         if(A.get() == this) continue;
-        Object &a = *A;
+        ObjectBase &a = *A;
         double dx = a.pos.x - local_x;
         double dy = a.pos.y - pos.y;
         double dz = a.pos.z - pos.z;
@@ -98,7 +92,7 @@ double Object::fy(double local_y, SpaceSystem &syst)
     for (auto A : syst.system)
     {
         if(A.get() == this) continue;
-        Object &a = *A;
+        ObjectBase &a = *A;
         double dx = a.pos.x - pos.x;
         double dy = a.pos.y - local_y;
         double dz = a.pos.z - pos.z;
@@ -116,7 +110,7 @@ double Object::fz(double local_z, SpaceSystem &syst)
     for (auto A : syst.system)
     {
         if(A.get() == this) continue;
-        Object &a = *A;
+        ObjectBase &a = *A;
         double dx = a.pos.x - pos.x;
         double dy = a.pos.y - pos.y;
         double dz = a.pos.z - local_z;
@@ -226,6 +220,7 @@ void Object::Render(Camera &camera) const
  */
 Planet::Planet(float __mass, float __ro, glm::vec3 p0 /* = glm::vec(0) */) : Object(__mass, __ro, p0)
 {
+    type = PLANET;
 }
 
 void Planet::Render(Camera &camera) const
@@ -255,7 +250,7 @@ std::string Object::GetDebugInfo()
                          std::to_string(pos).c_str(),
                          std::to_string(speed).c_str(),
                          std::to_string(acc).c_str(),
-                         m_mass,
+                         mass(),
                          m_ro,
                          m_V,
                          m_R);

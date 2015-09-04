@@ -210,7 +210,7 @@ bool GameWindow::BaseInit()
     t->dominant = true;
     t->InitRender(mat);
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 30; i++)
     {
         auto t = std::make_shared<Planet>(random::next<float>()/5.0f,
                                                3200.f,
@@ -470,6 +470,15 @@ void GameWindow::BaseDraw()
 
     batch->setUniform(proj * model);
 
+    auto aa = ss.GetSystemSnap(cam->Position(), cam->Forward(), cam->Right());
+    batch->drawRect({300, 300}, {210, 210}, Color::DarkRed);
+    batch->drawRect({400, 400}, {10, 10}, Color::DarkGreen);
+    for(const auto &a : aa)
+    {
+        glm::vec2 post = {cos(a.longitude)*a.log_distance*100+400, sin(a.longitude)*a.log_distance*100+400};
+        batch->drawLine(post, post + glm::vec2(0.f, a.z_offset*100), 2, Color::Red);
+        batch->drawRect(post + glm::vec2(-5.f, a.z_offset*100-5.f), {10,10}, Color::Red);
+    }
     ws->Draw();
     //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});

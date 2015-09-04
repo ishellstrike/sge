@@ -86,6 +86,14 @@ inline std::vector<std::string> &split(const std::string &s, char delim, std::ve
     return elems;
 }
 
+template<typename _Ty>
+inline _Ty log_clamp(_Ty val, _Ty min = _Ty(0), _Ty max = _Ty(1))
+{
+    if(val > 0)
+        return (_Ty(1) - glm::exp( -val * 0.1))*(max - min) + min;
+    else
+        return -(_Ty(1) - glm::exp( val * 0.1))*(max - min) + min;
+}
 
 inline std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> elems;
@@ -288,6 +296,27 @@ namespace glm {
      * @note t1 > t0, max[i] > min[i]
      */
     bool intersect(const glm::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max);
+
+    struct plane {
+    public:
+        plane();
+        plane(const glm::vec3& a,      const glm::vec3& b, const glm::vec3& c);
+        plane(const glm::vec3& normal, const glm::vec3& point);
+        plane(const glm::vec3& normal, const float constant);
+
+        plane(float _a, float _b, float _c, float _d);
+
+        static plane normalize(const plane &pl);
+
+        float     distance(const glm::vec3 &point) const;
+        glm::vec3 closest_point(const glm::vec3 &point) const;
+        glm::vec3 normal() const;
+
+        float a, b, c, d;
+        void normalize_this();
+    };
+
+    float distance(const plane &pl, const glm::vec3 &point);
 }
 
 namespace std

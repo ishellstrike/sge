@@ -164,3 +164,77 @@ void Bresencham3D(const glm::vec3 &p1, const glm::vec3 &p2, std::vector<glm::vec
 
 
 
+
+namespace glm {
+
+plane::plane() : a(0), b(0), c(0), d(0)
+{
+
+}
+
+plane::plane(const glm::vec3 &center, const glm::vec3 &vec1, const glm::vec3 &vec2)
+{
+    glm::vec3 normal = glm::cross(vec1, vec2);
+
+    glm::vec3 n = glm::normalize(normal);
+    a = n.x;
+    b = n.y;
+    c = n.z;
+    d = -glm::dot(center, n);
+}
+
+plane::plane(const glm::vec3& normal, const glm::vec3& point)
+{
+    glm::vec3 n = glm::normalize(normal);
+    a = n.x;
+    b = n.y;
+    c = n.z;
+    d = -glm::dot(point, n);
+}
+
+plane::plane(float _a, float _b, float _c, float _d) : a(_a), b(_b), c(_c), d(_d)
+{
+}
+
+plane plane::normalize(const plane &pl)
+{
+    plane res;
+    float dist = glm::sqrt(pl.a * pl.a + pl.b * pl.b + pl.c * pl.c);
+    res.a = pl.a / dist;
+    res.b = pl.b / dist;
+    res.c = pl.c / dist;
+    res.d = pl.d / dist;
+    return res;
+}
+
+void plane::normalize_this()
+{
+    plane t = normalize(*this);
+
+    a = t.a;
+    b = t.b;
+    c = t.c;
+    d = t.d;
+}
+
+glm::vec3 plane::closest_point(const glm::vec3 &point) const
+{
+    return (point - normal() * distance(point));
+}
+
+float plane::distance(const glm::vec3 &point) const
+{
+    return (a * point.x + b * point.y + c * point.z + d);
+}
+
+glm::vec3 plane::normal() const
+{
+    return glm::vec3(a, b, c);
+}
+
+float distance(const plane &pl, const vec3 &point)
+{
+    return (pl.a * point.x + pl.b * point.y + pl.c * point.z + pl.d);
+}
+
+}

@@ -94,6 +94,7 @@ void QuadPlane::Render(const Camera &cam,
 
             //Генерация R=1 сферы. Нормализуемые плоскости имеют координаты [-0.5, 0.5]. В шейдере сфера приводится к радиусу R
 
+            terminal_mesh->vertices.reserve((size+3)*(size+3));
             for(int j = -1; j < size + 2; j++)
             {
                 for(int i = -1; i < size + 2; i++)
@@ -152,7 +153,7 @@ void QuadPlane::Render(const Camera &cam,
                                                              )
                                               );
 
-            terminal_mesh->indices = parent->Indeces;
+            terminal_mesh->indices = parent->indices;
             terminal_mesh->ForgetBind();
             //terminal_mesh->BindExistingIBO(parent->ibo, parent->Indeces.size());
             status = READY;
