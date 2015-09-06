@@ -157,14 +157,8 @@ float Camera::Pitch() const
 }
 void Camera::Pitch(float degrees)
 {
-    if(degrees == 0) return;
     degrees = degrees/1000.f;
 
-    if (degrees < -max_pitch_rate) {
-        degrees = -max_pitch_rate;
-    } else if (degrees > max_pitch_rate) {
-        degrees = max_pitch_rate;
-    }
     m_pitch += degrees;
 
     if (m_pitch > glm::two_pi<float>()) {
@@ -180,13 +174,7 @@ float Camera::Yaw() const
 }
 void Camera::Yaw(float degrees)
 {
-    if(degrees == 0) return;
     degrees = degrees/1000.f;
-    if (degrees < -max_yaw_rate) {
-        degrees = -max_yaw_rate;
-    } else if (degrees > max_yaw_rate) {
-        degrees = max_yaw_rate;
-    }
 
     if (m_pitch > glm::half_pi<float>() && m_pitch < glm::three_over_two_pi<float>() ||
             (m_pitch < -glm::half_pi<float>() && m_pitch > -glm::three_over_two_pi<float>())) {
@@ -267,8 +255,7 @@ glm::vec3 Camera::Forward() const
     return m_camera_direction;
 }
 
-
-void Camera::Update(const GameTimer &gt)
+void Camera::Update(const GameTimer &gt, bool update_frustum)
 {
     bool mvp_recalc = false;
     if(m_projection_matrix_dirty)
@@ -278,6 +265,11 @@ void Camera::Update(const GameTimer &gt)
     }
     if(m_view_matrix_dirty)
     {
+        if(update_frustum)
+        {
+            CalculateFrustum();
+        }
+
         ReCreateViewMatrix(gt);
         mvp_recalc = true;
     }
@@ -360,7 +352,7 @@ void Camera::CalculateFrustum() {
     NormalizePlane(m_frustum, FRONT_PLANE);
 }
 
-bool Camera::BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max) {
+bool Camera::BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max) const {
     for(int i = 0; i < 6; i++) {
         if((m_frustum[i][0] * min.x + m_frustum[i][1] * min.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&
            (m_frustum[i][0] * max.x + m_frustum[i][1] * min.y + m_frustum[i][2] * min.z + m_frustum[i][3] <= 0.0F) &&

@@ -181,7 +181,8 @@ HEADERS += \
     space/planet_model/city.h \
     space/planet_model/resource.h \
     space/planet_model/planet_population.h \
-    space/objectbase.h
+    space/objectbase.h \
+    geometry/aabb.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

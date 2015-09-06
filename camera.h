@@ -26,8 +26,8 @@ public:
     };
 
     void CalculateFrustum();
-    bool BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max);
-    void Update(const GameTimer &gt);
+    bool BoxWithinFrustum(const glm::vec3 &min, const glm::vec3 &max) const;
+    void Update(const GameTimer &gt, bool update_frustum = false);
 
     void Reset();
 
@@ -85,7 +85,7 @@ private:
 
     float MinZoom = 5;
     float MaxZoom = 100;
-    float zoom = 30, max_pitch_rate = 5, max_yaw_rate = 5;
+    float zoom = 30;
     glm::quat m_rotation_quaternion;
 
     glm::vec3 m_position;

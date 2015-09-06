@@ -210,7 +210,7 @@ bool GameWindow::BaseInit()
     t->dominant = true;
     t->InitRender(mat);
 
-    for(int i = 0; i < 30; i++)
+    for(int i = 0; i < 3; i++)
     {
         auto t = std::make_shared<Planet>(random::next<float>()/5.0f,
                                                3200.f,
@@ -278,8 +278,8 @@ void GameWindow::GeometryPass()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0, 0, 0, 0.f);
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
     for(size_t i = 0; i < ss.system.size(); i++)
@@ -499,14 +499,14 @@ void GameWindow::BaseUpdate()
         {
             for(size_t i = 0; i < ss.system.size(); i++)
             {
-                //ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_wire");
+                std::static_pointer_cast<Planet>(ss.system[i])->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_wire");
             }
         }
         else
         {
             for(size_t i = 0; i < ss.system.size(); i++)
             {
-                //ss.system[i]->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_nowire");
+                std::static_pointer_cast<Planet>(ss.system[i])->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_nowire");
             }
         }
     }
@@ -595,7 +595,7 @@ void GameWindow::BaseUpdate()
     qs_w->world = glm::rotate(qs_w->world, gt.elapsed/100, glm::vec3(1));
     qs->Update(*cam);
     qs_w->Update(*cam);
-    cam1->Update(gt);
+    cam1->Update(gt, true);
     cam2->Update(gt);
     ws->Update(gt);
 

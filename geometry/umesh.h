@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "vpnt.h"
 #include "logger.h"
+#include "aabb.h"
 
 template <class _Ty = VertPosNormUvUv>
 class UMesh
@@ -44,6 +45,8 @@ public:
 
         vao = ibo = vbo = 0;
     }
+
+    template<int aabb_culling = false>
     void Bind()
     {
         assert(shader && "need shader to bind");
@@ -124,6 +127,7 @@ public:
         }
         assigned = true;
     }
+
     void ForgetBind()
     {
         Bind();
@@ -132,8 +136,46 @@ public:
         vertices.clear();
         vertices.shrink_to_fit();
     }
+
+    AABB aabb;
+    template<typename _Ty, typename T>
+    void ComputeAABB(const T _Ty::*field, float scale = 1.0f)
+    {
+        aabb.builded = false;
+        if(!vertices.size())
+            return;
+
+        aabb.min = aabb.max = vertices[0].*field;
+        for(const auto &a : vertices)
+        {
+            const auto p = glm::vec3(World * glm::vec4(a.position, 1)) * scale;
+
+            if(aabb.min.x > p.x)
+                aabb.min.x = p.x;
+            if(aabb.min.y > p.y)
+                aabb.min.y = p.y;
+            if(aabb.min.z > p.z)
+                aabb.min.z = p.z;
+
+            if(aabb.max.x < p.x)
+                aabb.max.x = p.x;
+            if(aabb.max.y < p.y)
+                aabb.max.y = p.y;
+            if(aabb.max.z < p.z)
+                aabb.max.z = p.z;
+        }
+        aabb.builded = true;
+    }
+
+    template<int aabb_culling = true>
     void Render(const Camera &cam, const glm::mat4 &world = glm::mat4(1))
     {
+        if(aabb_culling && aabb.builded)
+        {
+            if( !cam.BoxWithinFrustum(aabb.min, aabb.max))
+                return;
+        }
+
         const glm::mat4 &MVP = cam.MVP();
 
         if(vertices.size() == 0 && !loaded_v){

@@ -152,7 +152,7 @@ void main(void)
     vec4 tex3 = texture2D(material_side, texcoordout2*1000);
     tex3 += texture2D(material_side, texcoordout2*100);
     tex3 /= 1.5;
-    tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x) * 5, 0, 1));
+    tex = mix(tex, tex3, clamp(abs(grad.y) + abs(grad.x), 0, 1));
 
 #ifdef WIREFRAME
     DiffuseOut = mix(vec4(1/255.0, 1/255.0, 1/255.0, 1), tex, edgeFactor(frag_in.barycentricout, 0.1));
