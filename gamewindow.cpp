@@ -332,7 +332,6 @@ void GameWindow::ShadingPass()
     if(Prefecences::Instance()->hdr_on)
     {
         fbo_main->Bind();
-        texture_pipeline = texture_main;
     }
     else
     {
@@ -344,7 +343,7 @@ void GameWindow::ShadingPass()
 
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_ONE, GL_ONE);
     glDisable(GL_DEPTH_TEST);
 
     if(Prefecences::Instance()->starnest_on)
@@ -385,7 +384,7 @@ void GameWindow::AftereffectPass()
         glClampColor( GL_CLAMP_VERTEX_COLOR, GL_FALSE );
         Resources::instance()->Get<Shader>("extract_glow")->Use();
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture_pipeline->textureId);
+        glBindTexture(GL_TEXTURE_2D, texture_main->textureId);
         drawScreenQuad();
 
 

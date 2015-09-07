@@ -29,7 +29,6 @@ uniform float material_shininess;
 
 uniform mat4 transform_M; // model matrix
 uniform mat4 transform_VP; // view * projection matrix
-uniform mat3 transform_N; // normal matrix
 uniform vec3 transform_viewPos;
 uniform vec3 transform_lightPos;
 
@@ -136,7 +135,7 @@ void main(void)
     grad = grad / (R + s * snoize);
     vec3 plane = grad*10 - (grad*10 * positionout) * positionout;
     vec3 normal = positionout - s * plane;
-    vec3 eye = normalize(transform_N * normal);
+    vec3 eye = normalize(normal);
     vec3 light = normalize(transform_lightPos);
 
     vec4 tex;
