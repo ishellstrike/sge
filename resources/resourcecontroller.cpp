@@ -168,6 +168,13 @@ void Resources::Init()
     color->Afterlink();
     PUSH_NVP(color);
 
+    const auto & defered_color = new BasicJargShader;
+    defered_color->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/defered_color.glsl");
+    defered_color->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/defered_color.glsl");
+    defered_color->Link();
+    defered_color->Afterlink();
+    PUSH_NVP(defered_color);
+
     const auto & fake_planet = new BasicJargShader;
     fake_planet->loadShaderFromSource(GL_VERTEX_SHADER, "data/shaders/fake_planet.glsl");
     fake_planet->loadShaderFromSource(GL_FRAGMENT_SHADER, "data/shaders/fake_planet.glsl");

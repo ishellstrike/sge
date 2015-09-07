@@ -24,7 +24,7 @@
 class Shader{
 public:
     Shader();
-    ~Shader(void);
+    virtual ~Shader(void);
     std::string shaderfile_name;
     void Use() const;
     void loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version = GLSLVER);

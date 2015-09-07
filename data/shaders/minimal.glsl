@@ -89,9 +89,10 @@ void main(void)
         float snoize = texture(material_global_height, geo_out.texcoordout2).r;
         vec3 pos = gl_in[i].gl_Position.xyz;
         vec3 newPosition = (R + s * snoize) * pos;
-        vec4 mvpLocation = transform_VP * transform_M * vec4(newPosition, 1);
+        vec4 mLocation = transform_M * vec4(newPosition, 1);
+        vec4 mvpLocation = transform_VP * mLocation;
 
-        geo_out.positionout = gl_in[i].gl_Position.xyz;
+        geo_out.positionout = mLocation.xyz;
         gl_Position = mvpLocation;
 
         EmitVertex();
@@ -160,9 +161,8 @@ void main(void)
 #else
     DiffuseOut = tex;
 #endif
-    TexCoordOut = vec4(texcoordout2, 0, 1);
+    TexCoordOut = vec4(texcoordout, 0, 1);
     NormalOut = vec4(eye, 1);
     WorldPosOut = vec4(positionout, 1);
 }
 #endif
-//DUMP_SOURCE

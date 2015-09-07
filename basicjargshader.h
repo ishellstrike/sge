@@ -20,7 +20,7 @@ class BasicJargShader : public Shader
 {
 public:
     BasicJargShader();
-    ~BasicJargShader();
+    virtual ~BasicJargShader();
 
     GLuint ambient_location,
     diffuse_location,

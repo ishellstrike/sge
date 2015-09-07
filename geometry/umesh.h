@@ -25,7 +25,7 @@ public:
     {
     }
 
-    ~UMesh()
+    virtual ~UMesh()
     {
         if(vbo)
         {
@@ -92,6 +92,8 @@ public:
         loaded_i = indices.size();
         loaded_v = vertices.size();
         glBindVertexArray(0);
+
+        OPENGL_CHECK_ERRORS();
     }
 
     std::shared_ptr<BasicJargShader> shader;
@@ -106,7 +108,6 @@ public:
     VertexInfo info;
 
     unsigned int loaded_i = 0, loaded_v = 0;
-    bool patches = false;
     GLenum primitives = GL_TRIANGLES;
 
     GLuint vbo = 0, ibo = 0, vao = 0;
@@ -261,16 +262,25 @@ public:
                     glBindTexture(GL_TEXTURE_2D, material->side->textureId);
                 }
             }
+
+            OPENGL_CHECK_ERRORS();
         }
 
         glBindVertexArray(vao);
 
-        if(patches) {
+        if(primitives == GL_PATCHES) {
             glPatchParameteri(GL_PATCH_VERTICES, 3);
         }
 
         glDrawElements(primitives, loaded_i, GL_UNSIGNED_INT, (void*)0);
         glBindVertexArray(0);
+
+        OPENGL_CHECK_ERRORS();
+    }
+
+    void DrawAABB(const Camera &cam)
+    {
+        drawWireCube(aabb.min, aabb.max, cam.MVP());
     }
 };
 

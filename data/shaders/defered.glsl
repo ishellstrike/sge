@@ -43,6 +43,7 @@ void main(void)
 {
     vec4 dif = texture(buffer_diffuse, texcoord);
     vec3 eye = texture(buffer_normal, texcoord).xyz;
+    vec3 pos = texture(buffer_world_pos, texcoord).xyz;
     vec3 light = normalize(transform_lightPos);
 
     if(length(dif) <= 1.00) discard;

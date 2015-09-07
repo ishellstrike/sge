@@ -26,8 +26,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include "random.h"
+#include "logger.h"
+#include "resources/resourcecontroller.h"
 
-#ifdef NNNDEBUG
+#ifdef _DEBUG
 #define OPENGL_CHECK_ERRORS() \
     while( unsigned int openGLError = glGetError()) \
     { \
@@ -51,20 +53,70 @@ static void drawScreenQuad()
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &ibo);
 
-    const GLuint stride = sizeof(glm::vec3);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*4, &vert[0], GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vert), &vert[0], GL_STREAM_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*6, &ind[0], GL_STREAM_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ind), &ind[0], GL_STREAM_DRAW);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ibo);
+
+    OPENGL_CHECK_ERRORS();
+}
+
+static void drawWireCube(const glm::vec3 &min, const glm::vec3 &max, const glm::mat4 &mvp, const glm::vec4 &color = Color::Red)
+{
+    glm::vec3 vert[] = {{min.x, min.y, min.z},
+                        {max.x, min.y, min.z},
+                        {max.x, max.y, min.z},
+                        {min.x, max.y, min.z},
+                        {min.x, min.y, max.z},
+                        {max.x, min.y, max.z},
+                        {max.x, max.y, max.z},
+                        {min.x, max.y, max.z}};
+
+    glm::vec4 colors[] = {color,color,color,color,color,color,color,color};
+
+    static GLubyte ind[] = {0, 1, 2, 3,
+                            4, 5, 6, 7,
+                            0, 4, 1, 5, 2, 6, 3, 7};
+
+    GLuint vbo[2], ibo;
+
+    auto shader = Resources::instance()->Get<BasicJargShader>("defered_color");
+    shader->Use();
+    shader->SetUniform("transform_VP", mvp);
+
+    glGenBuffers(2, vbo);
+    glGenBuffers(1, &ibo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STREAM_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STREAM_DRAW);
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ind), ind, GL_STREAM_DRAW);
+
+    glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, (GLvoid*)(4*sizeof(GLubyte)));
+    glDrawElements(GL_LINES, 8, GL_UNSIGNED_BYTE, (GLvoid*)(8*sizeof(GLubyte)));
+
+    glDeleteBuffers(2, vbo);
+    glDeleteBuffers(1, &ibo);
+
+    OPENGL_CHECK_ERRORS();
 }
 
 /*!

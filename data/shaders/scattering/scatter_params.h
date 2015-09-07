@@ -6,7 +6,7 @@ const vec3 earthPos = vec3(0.0, 0.00, 0.0);
 // PHYSICAL MODEL PARAMETERS
 // ----------------------------------------------------------------------------
 
-const float SCALE = 0.0001000;
+const float SCALE = 0.0000950;
 
 const float Rg = 6360.0 * SCALE;
 const float Rt = 6420.0 * SCALE;

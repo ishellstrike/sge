@@ -114,18 +114,22 @@ const glm::mat4 &Camera::Projection() const
 {
     return m_projection;
 }
+
 const glm::mat4 &Camera::View() const
 {
     return m_view;
 }
+
 const glm::mat4 &Camera::Model() const
 {
     return m_model;
 }
+
 const glm::mat4 &Camera::MVP() const
 {
     return m_MVP;
 }
+
 const glm::mat4 &Camera::VP() const
 {
     return m_VP;
@@ -155,39 +159,36 @@ float Camera::Pitch() const
 {
     return m_pitch;
 }
+
 void Camera::Pitch(float degrees)
 {
     degrees = degrees/1000.f;
 
     m_pitch += degrees;
 
-    if (m_pitch > glm::two_pi<float>()) {
-        m_pitch -= glm::two_pi<float>();
-    } else if (m_pitch < -glm::two_pi<float>()) {
-        m_pitch += glm::two_pi<float>();
-    }
+    if (glm::abs(m_pitch) > glm::two_pi<float>())
+        m_yaw -= glm::sign(m_pitch) * glm::two_pi<float>();
 }
 
 float Camera::Yaw() const
 {
     return m_yaw;
 }
+
 void Camera::Yaw(float degrees)
 {
     degrees = degrees/1000.f;
 
     if (m_pitch > glm::half_pi<float>() && m_pitch < glm::three_over_two_pi<float>() ||
-            (m_pitch < -glm::half_pi<float>() && m_pitch > -glm::three_over_two_pi<float>())) {
+            (m_pitch < -glm::half_pi<float>() && m_pitch > -glm::three_over_two_pi<float>()))
         m_yaw -= degrees;
-    } else {
+    else
         m_yaw += degrees;
-    }
 
-    if (m_yaw > glm::two_pi<float>()) {
-        m_yaw -= glm::two_pi<float>();
-    } else if (m_yaw < -glm::two_pi<float>()) {
-        m_yaw += glm::two_pi<float>();
-    }
+
+    if (glm::abs(m_yaw) > glm::two_pi<float>())
+        m_yaw -= glm::sign(m_yaw) * glm::two_pi<float>();
+
     m_view_matrix_dirty = true;
 }
 

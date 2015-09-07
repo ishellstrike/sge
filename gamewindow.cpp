@@ -71,7 +71,7 @@ bool GameWindow::BaseInit()
         LOG(error) << "glfwInit error " << glfwErrorCode;
         return false;
     }
-    glfwWindowHint(GLFW_SAMPLES, 16);
+    //glfwWindowHint(GLFW_SAMPLES, 16);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
@@ -277,8 +277,6 @@ void GameWindow::GeometryPass()
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0, 0, 0, 0.f);
-
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
@@ -324,6 +322,8 @@ void GameWindow::BlitGBuffer()
     gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
     glBlitFramebuffer(0, 0, RESX, RESY,
                       HalfWidth, 0, RESX, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    OPENGL_CHECK_ERRORS();
 }
 
 void GameWindow::ShadingPass()
@@ -471,7 +471,7 @@ void GameWindow::BaseDraw()
     batch->setUniform(proj * model);
 
     auto aa = ss.GetSystemSnap(cam->Position(), cam->Forward(), cam->Right());
-    batch->drawRect({300, 300}, {210, 210}, Color::DarkRed);
+    //batch->drawRect({300, 300}, {210, 210}, Color::DarkRed);
     batch->drawRect({400, 400}, {10, 10}, Color::DarkGreen);
     for(const auto &a : aa)
     {

@@ -45,6 +45,11 @@ QuadSphere::QuadSphere(std::shared_ptr<Material> &__mat)
     plane[4]->transformation = glm::rotate(glm::mat4(1), -glm::half_pi<float>(), glm::vec3(1,0,0));
     plane[5]->transformation = glm::rotate(glm::mat4(1), glm::half_pi<float>(), glm::vec3(1,0,0));
 
+    for(auto &pl : plane)
+    {
+       // pl->transformation = glm::scale(pl->transformation, glm::vec3(10));
+    }
+
     const float res = 2048.0f;
     TextureGenerator tg;
     std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2{res,res}, true);

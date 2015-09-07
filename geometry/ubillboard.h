@@ -9,7 +9,7 @@ class UBillboard : public UMesh<_Ty>
 {
 public:
     UBillboard() : UMesh(){}
-    ~UBillboard(){}
+    virtual ~UBillboard(){}
 
     struct billboard_data {
         billboard_data(glm::vec2 s, glm::vec3 c) : size(s), center(c) {}

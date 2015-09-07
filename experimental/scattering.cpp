@@ -42,6 +42,8 @@ using namespace glm;
 #include "geometry/vpnt.h"
 #include "helper.h"
 
+#define SAVE_INSCATTER
+
 Scattering::Scattering()
 {
 
@@ -148,6 +150,9 @@ void Scattering::setLayer(unsigned int prog, int layer)
 
 void Scattering::Precompute()
 {
+
+#ifndef LOAD_INSCATTER
+    LOG(verbose) << "initialization...";
     glActiveTexture(GL_TEXTURE0 + transmittanceUnit);
     glGenTextures(1, &transmittanceTexture);
     glBindTexture(GL_TEXTURE_2D, transmittanceTexture);
@@ -416,9 +421,22 @@ void Scattering::Precompute()
     glViewport(0, 0, RESX, RESY);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
     LOG(verbose) << "ready.";
+#endif //LOAD_INSCATTER
+
+#ifdef SAVE_INSCATTER
+    LOG(info) << "Inscatter save enabled. Uploading...";
+    int s = (RES_MU_S * RES_NU) * (RES_MU) * (RES_R) * 4 * 2;
+    char *data = new char[ s ];
+    glGetTexImage(inscatterUnit, 0, GL_RGBA16F_ARB, GL_FLOAT, data );
+    std::ofstream os("test.bin");
+    os << data;
+    LOG(info) << "Done. Saving...";
+    FILE *my_file = fopen("test.bin", "wb");
+    fwrite(&data, s, 1, my_file);
+    fclose(my_file);
+    LOG(info) << "Done.";
+#endif //SAVE_INSCATTER
 }
 
 glm::vec3 s(0.0, -1, 0.0);

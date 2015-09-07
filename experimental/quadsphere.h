@@ -15,7 +15,7 @@ class QuadSphere : public SphereParamsStorage
 {
 public:
     QuadSphere(std::shared_ptr<Material> &__mat);
-    ~QuadSphere();
+    virtual ~QuadSphere();
     std::shared_ptr<QuadPlane> plane[6];
 
     void Render(const Camera &cam);

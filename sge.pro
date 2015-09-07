@@ -233,4 +233,5 @@ DISTFILES += \
     data/shaders/gausian_blur2.glsl \
     data/shaders/wireframe.lib.glsl \
     data/shaders/fake_planet.glsl \
-    data/shaders/planet_ring.glsl
+    data/shaders/planet_ring.glsl \
+    data/shaders/defered_color.glsl
