@@ -54,6 +54,8 @@
 #include <glm/gtx/compatibility.hpp>
 #include "sge_texlab_toolbox.h"
 #include "geometry/ring.h"
+#include "experimental/marchingcubes.h"
+#include "experimental/voxelstructure.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -124,11 +126,12 @@ public:
     Scattering scat;
     std::unique_ptr<Starfield> sf;
 
-    UMesh<VertPosUv> bill;
+    UMesh<VertPosNormUvUv> bill;
 
     std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
     std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
     std::shared_ptr<Texture> texture_pipeline;
+    VoxelStructure vs;
 
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;

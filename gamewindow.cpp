@@ -223,12 +223,18 @@ bool GameWindow::BaseInit()
         t->InitRender(mat);
     }
 
-    auto aaa = GenerateRing<VertPosUv>(2, 0.5, 1000);
-    bill.vertices = aaa->vertices;
-    bill.indices = aaa->indices;
+    //auto aaa = GenerateRing<VertPosUv>(2, 0.5, 1000);
+
+    vs = VoxelStructure(20,20,20);
+    vs.fillsphere();
+    auto ttt = MarchingCubes::generate<VertPosNormUvUv>(vs);
+    bill.vertices = ttt.vertices;
+    bill.indices = ttt.indices;
+
     //bill.billboards = {{{3, 3},{0,0,0}}};
     bill.material = mat;
     bill.shader = Resources::instance()->Get<BasicJargShader>("planet_ring");
+    bill.computeNormal();
     bill.Bind();
 
     return true;
@@ -273,6 +279,8 @@ void GameWindow::Swap()
 
 void GameWindow::GeometryPass()
 {
+    if(wire)
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     gb->BindForWriting();
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -290,13 +298,15 @@ void GameWindow::GeometryPass()
     //qs_w->Render(*cam);
 
     //bill.Prepare(*cam);
-    bill.Bind();
+    bill.World = glm::rotate(bill.World, gt.elapsed, glm::vec3(0.1f, 0.2f, 0.7f));
     bill.Render(*cam);
+
 
     // When we get here the depth buffer is already populated and the stencil pass
     // depends on it, but it does not write to it.
     glDepthMask(GL_FALSE);
     glDisable(GL_DEPTH_TEST);
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 void GameWindow::BlitGBuffer()
@@ -494,20 +504,6 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyPress(GLFW_KEY_F2))
     {
         wire = !wire;
-        if(wire)
-        {
-            for(size_t i = 0; i < ss.system.size(); i++)
-            {
-                std::static_pointer_cast<Planet>(ss.system[i])->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_wire");
-            }
-        }
-        else
-        {
-            for(size_t i = 0; i < ss.system.size(); i++)
-            {
-                std::static_pointer_cast<Planet>(ss.system[i])->render->basic = Resources::instance()->Get<BasicJargShader>("default_planet_render_nowire");
-            }
-        }
     }
 
     if(Keyboard::isKeyPress(GLFW_KEY_F5))
@@ -524,6 +520,43 @@ void GameWindow::BaseUpdate()
         make_spartial();
 
     glEnable(GL_CULL_FACE);
+
+    if(Keyboard::isKeyDown(GLFW_KEY_P))
+    {
+        glm::ray r = cam->unProject(Mouse::getCursorPos());
+        glm::mat4 inv_v = glm::inverse(cam->View());
+        glm::vec3 D = glm::vec3(glm::vec4(r.origin, 1) );
+        glm::vec3 V = glm::vec3(glm::vec4(r.dir, 1)    );
+
+        for(int i = 0; i < bill.vertices.size(); i+=3)
+        {
+            glm::vec3 v0 = glm::vec3(bill.World * glm::vec4(bill.vertices[i+0].position, 1)),
+                      v1 = glm::vec3(bill.World * glm::vec4(bill.vertices[i+1].position, 1)),
+                      v2 = glm::vec3(bill.World * glm::vec4(bill.vertices[i+2].position, 1));
+
+            glm::vec3 E1 = v1 - v0;
+            glm::vec3 E2 = v2 - v0;
+            glm::vec3 T = D + v0;
+            glm::vec3 P = glm::cross(V, E2);
+            glm::vec3 Q = glm::cross(T, E1);
+
+            glm::vec3 z = (1.f/glm::dot(P, E1)) * glm::vec3(glm::dot(Q, E2), glm::dot(P, T), glm::dot(Q, V));
+            if(glm::all(glm::greaterThan(z, glm::vec3(0))))
+            {
+                vs.blocks[bill.vertices[i].position.x]
+                         [bill.vertices[i].position.y]
+                         [bill.vertices[i].position.z].data = 0;
+            }
+        }
+
+        auto ttt = MarchingCubes::generate<VertPosNormUvUv>(vs);
+        bill.vertices = ttt.vertices;
+        bill.indices = ttt.indices;
+        bill.clean();
+        bill.computeNormal();
+        //bill.MergeVerteces();
+        bill.Bind();
+    }
 
     if(Mouse::isWheelUp())
         speed *= 1.1f;

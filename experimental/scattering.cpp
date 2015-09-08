@@ -42,7 +42,7 @@ using namespace glm;
 #include "geometry/vpnt.h"
 #include "helper.h"
 
-#define SAVE_INSCATTER
+//#define SAVE_INSCATTER
 
 Scattering::Scattering()
 {

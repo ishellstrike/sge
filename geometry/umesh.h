@@ -194,6 +194,9 @@ public:
 
         glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &Model[0][0]);
         glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
+
+        glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(Model)));
+        glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
         glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(0,1,0)[0]);
 
         if(shader->ambient_location != -1)
@@ -279,6 +282,75 @@ public:
     void DrawAABB(const Camera &cam)
     {
         drawWireCube(aabb.min, aabb.max, cam.MVP());
+    }
+
+    void clean()
+    {
+        std::vector<_Ty> v = std::vector<_Ty>();
+        v.reserve(vertices.size());
+        std::vector<GLuint> ii = std::vector<GLuint>();
+        ii.reserve(indices.size());
+
+        for(size_t i=0; i < vertices.size();i+=3){
+            if(vertices[i].position != vertices[i+1].position && vertices[i+1].position != vertices[i+2].position && vertices[i].position != vertices[i+2].position)
+            {
+                v.push_back(vertices[i]);
+                v.push_back(vertices[i+1]);
+                v.push_back(vertices[i+2]);
+
+                ii.push_back(v.size()-3);
+                ii.push_back(v.size()-2);
+                ii.push_back(v.size()-1);
+            }
+        }
+        vertices = v;
+        indices = ii;
+    }
+
+    void computeNormal()
+    {
+        for(size_t i=0; i < vertices.size();i+=3){
+            glm::vec3 const & a = vertices[i].position;
+            glm::vec3 const & b = vertices[i+1].position;
+            glm::vec3 const & c = vertices[i+2].position;
+            auto t = glm::normalize(glm::cross(c - a, b - a));
+            vertices[i].normal = vertices[i+1].normal = vertices[i+2].normal = t;
+        }
+    }
+
+    void MergeVerteces()
+    {
+        for (size_t i=0;i<vertices.size();i++)
+        {
+            auto n = vertices[i].normal;
+            float nn = 1.0f;
+            std::vector<int> same;
+            same.reserve(10);
+            for (size_t j=i+1;j<vertices.size();j++)
+            {
+                if(vertices[i].position == vertices[j].position){
+                    n += vertices[j].normal;
+                    nn++;
+                    same.push_back(j);
+                }
+            }
+            n /= nn;
+            vertices[i].normal = n;
+            if(same.size() > 0)
+                for(size_t j=0; j<same.size(); j++){
+                    vertices[same[j]].normal = n;
+                }
+        }
+    }
+
+    void Unindex()
+    {
+        auto temp = std::move(vertices);
+        vertices.resize(indices.size());
+        for(int i=0; i<indices.size();i++){
+            vertices[i] = temp[indices[i]];
+            indices[i] = i;
+        }
     }
 };
 

@@ -9,6 +9,8 @@
 
 in vec2 fragTexcoord;
 in vec4 col;
+in vec3 norm;
+in vec3 pos;
 
 uniform float iGlobalTime;
 
@@ -29,7 +31,8 @@ void main(void)
 
     DiffuseOut = col;
     TexCoordOut = vec4(fragTexcoord, 0, 1);
-    NormalOut = vec4(0,1,0,1);
+    NormalOut = vec4(norm, 1);
+    WorldPosOut = vec4(pos, 1);
 }
 
 #endif
@@ -42,16 +45,23 @@ layout (location = 1) in vec2 texcoord;
 layout (location = 2) in vec3 normal;
 layout (location = 3) in vec4 color;
 
+uniform mat4 transform_M;
 uniform mat4 transform_VP;
+uniform mat3 transform_N;
 
 out vec2 fragTexcoord;
 out vec4 col;
+out vec3 norm;
+out vec3 pos;
 
 void main(void)
 {
-    gl_Position = transform_VP * vec4(position, 1);
+    vec4 pos4 = transform_M * vec4(position, 1);
+    pos = pos4.xyz;
+    gl_Position = transform_VP * pos4;
     fragTexcoord = texcoord;
     col = color;
+    norm = transform_N * normal;
 }
 
 #endif

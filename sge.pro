@@ -80,7 +80,9 @@ SOURCES += \
     space/planet_model/planet_population.cpp \
     space/planet_model/city.cpp \
     space/planet_model/resource.cpp \
-    space/objectbase.cpp
+    space/objectbase.cpp \
+    experimental/voxelstructure.cpp \
+    experimental/marchingcubes.cpp
 
 VERSION = 0.1.0
 
@@ -182,7 +184,10 @@ HEADERS += \
     space/planet_model/resource.h \
     space/planet_model/planet_population.h \
     space/objectbase.h \
-    geometry/aabb.h
+    geometry/aabb.h \
+    experimental/voxelstructure.h \
+    experimental/marchingcubes.h \
+    experimental/marchingcubeshelper.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -234,4 +239,5 @@ DISTFILES += \
     data/shaders/wireframe.lib.glsl \
     data/shaders/fake_planet.glsl \
     data/shaders/planet_ring.glsl \
-    data/shaders/defered_color.glsl
+    data/shaders/defered_color.glsl \
+    data/shaders/normal.glsl
