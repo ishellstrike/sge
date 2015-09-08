@@ -42,7 +42,7 @@ using namespace glm;
 #include "geometry/vpnt.h"
 #include "helper.h"
 
-//#define SAVE_INSCATTER
+#define SAVE_INSCATTER
 
 Scattering::Scattering()
 {
@@ -427,14 +427,35 @@ void Scattering::Precompute()
 #ifdef SAVE_INSCATTER
     LOG(info) << "Inscatter save enabled. Uploading...";
     int s = (RES_MU_S * RES_NU) * (RES_MU) * (RES_R) * 4 * 2;
-    char *data = new char[ s ];
-    glGetTexImage(inscatterUnit, 0, GL_RGBA16F_ARB, GL_FLOAT, data );
-    std::ofstream os("test.bin");
-    os << data;
+    unsigned char *data = new unsigned char[ s ];
+    glGetTexImage(inscatterTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data );
     LOG(info) << "Done. Saving...";
-    FILE *my_file = fopen("test.bin", "wb");
-    fwrite(&data, s, 1, my_file);
+    FILE *my_file = fopen("inscatter.bin", "wb");
+    fwrite(data, s, 1, my_file);
     fclose(my_file);
+    delete[] data;
+    LOG(info) << "Done.";
+
+    LOG(info) << "Transmittance save enabled. Uploading...";
+    s = (TRANSMITTANCE_W * TRANSMITTANCE_H) * 4 * 2;
+    data = new unsigned char[ s ];
+    glGetTexImage(transmittanceTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data );
+    LOG(info) << "Done. Saving...";
+    my_file = fopen("transmittance.bin", "wb");
+    fwrite(data, s, 1, my_file);
+    fclose(my_file);
+    delete[] data;
+    LOG(info) << "Done.";
+
+    LOG(info) << "Irradiance save enabled. Uploading...";
+    s = (SKY_W * SKY_H) * 4 * 2;
+    data = new unsigned char[ s ];
+    glGetTexImage(irradianceTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data );
+    LOG(info) << "Done. Saving...";
+    my_file = fopen("irradiance.bin", "wb");
+    fwrite(data, s, 1, my_file);
+    fclose(my_file);
+    delete[] data;
     LOG(info) << "Done.";
 #endif //SAVE_INSCATTER
 }
