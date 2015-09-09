@@ -29,7 +29,7 @@
 #include "logger.h"
 #include "resources/resourcecontroller.h"
 
-#ifdef _DEBUG
+#ifdef g_DEBUG
 #define OPENGL_CHECK_ERRORS() \
     while( unsigned int openGLError = glGetError()) \
     { \
