@@ -85,7 +85,9 @@ SOURCES += \
     experimental/marchingcubes.cpp \
     scene.cpp \
     light.cpp \
-    geometry/meshbase.cpp
+    geometry/meshbase.cpp \
+    space/logic/item.cpp \
+    space/logic/itemstorage.cpp
 
 VERSION = 0.1.0
 
@@ -193,7 +195,9 @@ HEADERS += \
     experimental/marchingcubeshelper.h \
     scene.h \
     light.h \
-    geometry/meshbase.h
+    geometry/meshbase.h \
+    space/logic/item.h \
+    space/logic/itemstorage.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

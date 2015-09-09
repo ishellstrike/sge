@@ -1,6 +1,6 @@
 #ifndef COUNTRY_H
 #define COUNTRY_H
-#include <vector>
+#include <list>
 #include "city.h"
 
 class Country
@@ -8,7 +8,7 @@ class Country
 public:
     Country();
 
-    std::vector<City> cities;
+    std::list<City> cities;
 };
 
 #endif // COUNTRY_H
