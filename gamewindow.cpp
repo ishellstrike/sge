@@ -225,8 +225,9 @@ bool GameWindow::BaseInit()
 
     //auto aaa = GenerateRing<VertPosUv>(2, 0.5, 1000);
 
-    vs = VoxelStructure(20,20,20);
-    vs.fillsphere();
+    vs = VoxelStructure(120,120,10);
+   // vs.fillsphere();
+    vs.fillnoise();
     auto ttt = MarchingCubes::generate<VertPosNormUvUv>(vs);
     bill.vertices = ttt.vertices;
     bill.indices = ttt.indices;
@@ -234,7 +235,9 @@ bool GameWindow::BaseInit()
     //bill.billboards = {{{3, 3},{0,0,0}}};
     bill.material = mat;
     bill.shader = Resources::instance()->Get<BasicJargShader>("planet_ring");
+    bill.clean();
     bill.computeNormal();
+    //bill.MergeVerteces();
     bill.Bind();
 
     return true;

@@ -82,7 +82,10 @@ SOURCES += \
     space/planet_model/resource.cpp \
     space/objectbase.cpp \
     experimental/voxelstructure.cpp \
-    experimental/marchingcubes.cpp
+    experimental/marchingcubes.cpp \
+    scene.cpp \
+    light.cpp \
+    geometry/meshbase.cpp
 
 VERSION = 0.1.0
 
@@ -187,7 +190,10 @@ HEADERS += \
     geometry/aabb.h \
     experimental/voxelstructure.h \
     experimental/marchingcubes.h \
-    experimental/marchingcubeshelper.h
+    experimental/marchingcubeshelper.h \
+    scene.h \
+    light.h \
+    geometry/meshbase.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

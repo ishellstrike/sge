@@ -16,9 +16,10 @@
 #include "vpnt.h"
 #include "logger.h"
 #include "aabb.h"
+#include "meshbase.h"
 
 template <class _Ty = VertPosNormUvUv>
-class UMesh
+class UMesh : public MeshBase
 {
 public:
     UMesh() : info(_Ty::info)
@@ -47,7 +48,7 @@ public:
     }
 
     template<int aabb_culling = false>
-    void Bind()
+    void Bind() override
     {
         assert(shader && "need shader to bind");
         if(!assigned) Assign();
@@ -129,7 +130,7 @@ public:
         assigned = true;
     }
 
-    void ForgetBind()
+    void ForgetBind() override
     {
         Bind();
         indices.clear();
@@ -140,7 +141,7 @@ public:
 
     AABB aabb;
     template<typename _Ty, typename T>
-    void ComputeAABB(const T _Ty::*field, float scale = 1.0f)
+    void ComputeAABB(const T _Ty::*field) override
     {
         aabb.builded = false;
         if(!vertices.size())
@@ -169,7 +170,7 @@ public:
     }
 
     template<int aabb_culling = true>
-    void Render(const Camera &cam, const glm::mat4 &world = glm::mat4(1))
+    void Render(const Camera &cam) override
     {
         if(aabb_culling && aabb.builded)
         {
@@ -190,12 +191,10 @@ public:
         shader->Use();
         glUniform3fv(shader->viewPosition_location, 1, &cam.Position()[0]);
 
-        const glm::mat4 Model = world * World;
-
-        glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &Model[0][0]);
+        glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &World[0][0]);
         glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
 
-        glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(Model)));
+        glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(World)));
         glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
         glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(0,1,0)[0]);
 
