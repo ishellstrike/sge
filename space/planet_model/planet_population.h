@@ -1,6 +1,6 @@
 #ifndef POPULATION_H
 #define POPULATION_H
-#include <vector>
+#include <list>
 #include "country.h"
 
 class Population
@@ -8,7 +8,7 @@ class Population
 public:
     Population();
 
-    std::vector<Country> countries;
+    std::list<Country> countries;
 };
 
 #endif // POPULATION_H

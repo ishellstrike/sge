@@ -10,7 +10,7 @@ public:
 
     virtual void Bind() = 0;
     virtual void ForgetBind() = 0;
-    virtual void Render(const Camera &cam, const glm::mat4 &world = glm::mat4(1)) = 0;
+    virtual void Render(const Camera &cam) = 0;
 
     template<typename _Ty, typename T>
     void ComputeAABB(const T _Ty::*field) = 0;

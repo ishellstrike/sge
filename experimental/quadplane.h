@@ -45,7 +45,6 @@ public:
     QuadPlane();
     std::shared_ptr<QuadPlane> m_parts[4];
     QuadPlane *parent = nullptr;
-    void getRoute(QuadPlane *from, std::vector<PARTS> &path, Neighbours that_neib);
 
     std::shared_ptr< UMesh<VertexType> > terminal_mesh;
     glm::mat4 transformation; // матрица, поворачивающие каждлую из 6 граней квадрата в соответствующую сторону
@@ -60,7 +59,6 @@ public:
                 int side,
                 SphereParamsStorage *parent);
     void Update(const Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent);
-    std::vector<QuadPlane *> getRoute();
     void GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent);
      std::shared_ptr<Material> sub_texture;
 };
