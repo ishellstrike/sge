@@ -7,9 +7,9 @@ ItemStorage::ItemStorage()
 
 multiitem ItemStorage::pop_by_type(const std::string &s)
 {
-    for(auto &d : data)
+    for(auto d = data.begin(); d != data.end(); ++d)
     {
-        if((*d)->id == s)
+        if(std::get<0>(*d)->id == s)
         {
             data.erase(d);
             return *d;
@@ -21,11 +21,11 @@ multiitem ItemStorage::pop_by_type(const std::string &s)
 
 multiitem ItemStorage::pick_by_type(const std::string &s)
 {
-    for(auto &d : data)
+    for(multiitem &d : data)
     {
-        if((*d)->id == s)
+        if(std::get<0>(d)->id == s)
         {
-            return *d;
+            return d;
         }
     }
 
@@ -34,15 +34,15 @@ multiitem ItemStorage::pick_by_type(const std::string &s)
 
 void ItemStorage::push(std::shared_ptr<Item> &item)
 {
-    push(std::tuple<item, 1>);
+    push(std::make_tuple(item, 1));
 }
 
 void ItemStorage::push(multiitem &item)
 {
-    auto &d = pick_by_type(item.first->id);
-    if(d.second != 0)
+    auto &d = pick_by_type(std::get<0>(item)->id);
+    if(std::get<0>(d) != 0)
     {
-        d.second += item.second;
+        std::get<1>(d) += std::get<1>(item);
         return;
     }
 

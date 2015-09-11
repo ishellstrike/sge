@@ -87,7 +87,10 @@ SOURCES += \
     light.cpp \
     geometry/meshbase.cpp \
     space/logic/item.cpp \
-    space/logic/itemstorage.cpp
+    space/logic/itemstorage.cpp \
+    geometry/memorychunkcontroller.cpp \
+    core/uniqueid.cpp \
+    geometry/multimesh.cpp
 
 VERSION = 0.1.0
 
@@ -96,6 +99,7 @@ unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -l
 unix:INCLUDEPATH += /usr/include/freetype2
 
 win32:INCLUDEPATH += $$PWD/3rdparty/include
+win32:INCLUDEPATH += $$PWD/3rdparty/boost_1_58_0
 win32:DEPENDPATH += $$PWD/3rdparty/include
 
 HEADERS += \
@@ -197,7 +201,10 @@ HEADERS += \
     light.h \
     geometry/meshbase.h \
     space/logic/item.h \
-    space/logic/itemstorage.h
+    space/logic/itemstorage.h \
+    geometry/memorychunkcontroller.h \
+    core/uniqueid.h \
+    geometry/multimesh.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

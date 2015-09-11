@@ -6,11 +6,12 @@
 #include <memory>
 #include <vector>
 
+
+typedef std::tuple<std::shared_ptr<Item>, int> multiitem;
+
 class ItemStorage
 {
 public:
-    typedef std::tuple<std::shared_ptr<Item>, int> multiitem;
-
     ItemStorage();
 
     std::list<multiitem> data;

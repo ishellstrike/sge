@@ -18,11 +18,11 @@
 #include "aabb.h"
 #include "meshbase.h"
 
-template <class _Ty = VertPosNormUvUv>
+template <class _Vert = VertPosNormUvUv>
 class UMesh : public MeshBase
 {
 public:
-    UMesh() : info(_Ty::info)
+    UMesh() : MeshBase(_Vert::info)
     {
     }
 
@@ -47,7 +47,16 @@ public:
         vao = ibo = vbo = 0;
     }
 
-    template<int aabb_culling = false>
+    std::shared_ptr<Material> material;
+    std::vector<_Vert> vertices;
+    std::vector<GLuint> indices;
+
+    GLint bindtype = GL_STATIC_DRAW;
+    glm::mat4 World = glm::mat4(1);
+    GLenum primitives = GL_TRIANGLES;
+
+    unsigned int loaded_i = 0, loaded_v = 0;
+
     void Bind() override
     {
         assert(shader && "need shader to bind");
@@ -71,9 +80,9 @@ public:
         glGenBuffers(1, &vbo);
         glGenBuffers(1, &ibo);
 
-        const GLuint stride = sizeof(_Ty);
+        const GLuint stride = sizeof(_Vert);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(_Ty)*vertices.size(), &vertices[0], bindtype);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(_Vert)*vertices.size(), &vertices[0], bindtype);
 
         for(size_t i = 0; i < info.attrib.size(); ++i)
         {
@@ -97,39 +106,6 @@ public:
         OPENGL_CHECK_ERRORS();
     }
 
-    std::shared_ptr<BasicJargShader> shader;
-    std::shared_ptr<Material> material;
-    std::vector<_Ty> vertices;
-    std::vector<GLuint> indices;
-    std::vector<std::string> extensions;
-    bool assigned = false;
-    bool has_errors = false;
-    GLint bindtype = GL_STATIC_DRAW;
-    glm::mat4 World = glm::mat4(1);
-    VertexInfo info;
-
-    unsigned int loaded_i = 0, loaded_v = 0;
-    GLenum primitives = GL_TRIANGLES;
-
-    GLuint vbo = 0, ibo = 0, vao = 0;
-
-    void Assign()
-    {
-        assert(shader && "need shader to bind");
-
-        for(size_t i = 0; i < info.attrib.size(); ++i)
-        {
-            const VertexAttribute &a = info.attrib[i];
-            a.shader_pos = glGetAttribLocation(shader->program, a.name.c_str());
-            if(a.shader_pos == -1)
-            {
-                LOG(error) << a.name << " in UMesh<" << typeid(_Ty).name() << "> for \"" << shader->shaderfile_name << "\" missed!";
-                has_errors = true;
-            }
-        }
-        assigned = true;
-    }
-
     void ForgetBind() override
     {
         Bind();
@@ -141,7 +117,7 @@ public:
 
     AABB aabb;
     template<typename _Ty, typename T>
-    void ComputeAABB(const T _Ty::*field) override
+    void ComputeAABB(const T _Ty::*field)
     {
         aabb.builded = false;
         if(!vertices.size())
@@ -150,7 +126,7 @@ public:
         aabb.min = aabb.max = vertices[0].*field;
         for(const auto &a : vertices)
         {
-            const auto p = glm::vec3(World * glm::vec4(a.position, 1)) * scale;
+            const auto p = glm::vec3(World * glm::vec4(a.position, 1));
 
             if(aabb.min.x > p.x)
                 aabb.min.x = p.x;
@@ -169,8 +145,7 @@ public:
         aabb.builded = true;
     }
 
-    template<int aabb_culling = true>
-    void Render(const Camera &cam) override
+    void Render(const Camera &cam, const glm::mat4 &mod = glm::mat4(1), bool aabb_culling = false) override
     {
         if(aabb_culling && aabb.builded)
         {
@@ -191,10 +166,11 @@ public:
         shader->Use();
         glUniform3fv(shader->viewPosition_location, 1, &cam.Position()[0]);
 
-        glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &World[0][0]);
+        glm::mat4 model = World * mod;
+        glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &model[0][0]);
         glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
 
-        glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(World)));
+        glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(model)));
         glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);
         glUniform3fv(shader->lightPosition_location, 1, &glm::vec3(0,1,0)[0]);
 
@@ -285,7 +261,7 @@ public:
 
     void clean()
     {
-        std::vector<_Ty> v = std::vector<_Ty>();
+        std::vector<_Vert> v = std::vector<_Vert>();
         v.reserve(vertices.size());
         std::vector<GLuint> ii = std::vector<GLuint>();
         ii.reserve(indices.size());

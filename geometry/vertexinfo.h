@@ -70,10 +70,11 @@ struct VertexAttribute
 
 struct VertexInfo
 {
-    VertexInfo(const std::vector<VertexAttribute> &a) : attrib(a)
+    VertexInfo(const std::vector<VertexAttribute> &a, const std::string &_n = "unnamed") : attrib(a), name(_n)
     {
     }
     std::vector<VertexAttribute> attrib;
+    std::string name;
 };
 
 #endif // VERTEXINFO_H

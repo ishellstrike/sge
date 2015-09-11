@@ -154,7 +154,7 @@ void QuadPlane::Render(const Camera &cam,
                                               );
 
             terminal_mesh->indices = parent->indices;
-            terminal_mesh->ComputeAABB(&VertexType::position, parent->R);
+            terminal_mesh->ComputeAABB(&VertexType::position);
             terminal_mesh->ForgetBind();
             //terminal_mesh->BindExistingIBO(parent->ibo, parent->Indeces.size());
             status = READY;
