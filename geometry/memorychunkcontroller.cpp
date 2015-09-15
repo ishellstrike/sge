@@ -13,24 +13,32 @@ void MemoryChunkController::LoadOne()
 
 }
 
-MemoryChunk MemoryChunkController::Store(void *chunk, size_t size)
+MemoryChunk MemoryChunkController::Store(void *chunk, size_t chunk_size)
 {
     MemoryChunk t;
     t.size = size;
     t.data = chunk;
 
-    auto beg = loaded.get<1>().begin();
+    auto beg = loaded.get<MemoryChunk::ByOffset>().begin();
     auto next = beg;
     for(;;)
     {
         ++next;
-        if(next == loaded.get<1>().end())
+        if(next == loaded.get<MemoryChunk::ByOffset>().end())
         {
             size_t endpoint = beg->offset + beg->size;
-            if(endpoint >= size)
+            if(size - endpoint >= chunk_size)
                 return {0,0,0};
             t.offset = endpoint;
+            loaded.insert(t);
+            return t;
+        }
 
+        size_t empty_start = beg->offset + beg->size;
+        size_t empty_end = next->offset;
+        if(empty_end - empty_start < chunk_size)
+        {
+            t.offset = empty_start;
             loaded.insert(t);
             return t;
         }

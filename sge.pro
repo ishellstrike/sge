@@ -90,7 +90,10 @@ SOURCES += \
     space/logic/itemstorage.cpp \
     geometry/memorychunkcontroller.cpp \
     core/uniqueid.cpp \
-    geometry/multimesh.cpp
+    geometry/multimesh.cpp \
+    space/ship_model/hull.cpp \
+    space/ship_model/attachpoint.cpp \
+    space/ship_model/resource.cpp
 
 VERSION = 0.1.0
 
@@ -204,7 +207,10 @@ HEADERS += \
     space/logic/itemstorage.h \
     geometry/memorychunkcontroller.h \
     core/uniqueid.h \
-    geometry/multimesh.h
+    geometry/multimesh.h \
+    space/ship_model/hull.h \
+    space/ship_model/attachpoint.h \
+    space/ship_model/resource.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

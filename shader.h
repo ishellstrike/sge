@@ -44,6 +44,9 @@ public:
 
     void AddExtension(std::string s);
     void AddDefine(std::string s);
+
+    void SaveBinary(const std::string &name);
+    void LoadBinary(const std::string &name);
 private:
     void LogDumpError(const std::string &filename, GLenum type, const std::string &str, GLuint shader = -1);
     GLint locate(const std::string &s);

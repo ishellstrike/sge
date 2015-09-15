@@ -22,7 +22,6 @@ public:
      struct ByOffset {}; struct ById {};
 };
 
-using namespace boost;
 using namespace boost::multi_index;
 
 class MemoryChunkController
@@ -46,7 +45,7 @@ public:
     OffsetIdOrdered loaded;
 
     void LoadOne();
-    MemoryChunk Store(void* chunk, size_t size);
+    MemoryChunk Store(void* chunk, size_t chunk_size);
     bool Unstore(uniqId id);
 };
 

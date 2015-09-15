@@ -121,6 +121,7 @@ bool GameWindow::BaseInit()
     LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
     LOG(info) << EXT_CHECK(GLEW_ARB_tessellation_shader);
     LOG(info) << EXT_CHECK(GLEW_ARB_texture_float);
+    LOG(info) << EXT_CHECK(GLEW_ARB_get_program_binary);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

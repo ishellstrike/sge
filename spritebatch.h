@@ -38,14 +38,14 @@ public:
     void drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, int apos, const glm::vec4 &col_);
     void drawLine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
     void drawText(const std::string &text, const glm::vec2 &pos, Font *font, const glm::vec4 &col_);
-    void drawText(const std::string &text, const glm::vec2 &pos, const glm::vec2 &size, Font *font, const glm::vec4 &col_, ALIGN align);
+    void drawText(const std::string &text, const glm::vec2 &pos, const glm::vec2 &size, Font *font, const glm::vec4 &col_, ALIGN align = ALIGN_LEFT);
     void reduceScissor(glm::vec2 loc, glm::vec2 size);
     void resetScissor();
     glm::vec2 measureText(const std::string &text, Font *font);
     void drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
-                       Font *font, const glm::vec4 &col_, bool no_draw = false);
+                       Font *font, const glm::vec4 &col_, bool no_draw);
     void drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, const Texture &tex, const glm::vec4 &color);
 
     std::shared_ptr<BasicJargShader> font_program,

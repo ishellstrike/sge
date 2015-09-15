@@ -76,7 +76,7 @@ void SpriteBatch::drawText(const std::string &text, const glm::vec2 &pos,
     utf8::utf8to32(text.begin(), text.end(), std::back_inserter(text32));
 
     glm::vec2 a = drawText(text32, pos.x, pos.y, font, col_, true);
-    drawText(text32, pos.x, pos.y + font->spacing, font, col_);
+    drawText(text32, pos.x, pos.y + font->spacing, font, col_, false);
 }
 
 /*!
@@ -103,15 +103,15 @@ void SpriteBatch::drawText(const std::string &text, const glm::vec2 &pos, const 
     case ALIGN_CENTER:
         half = pos + size / 2.f;
         half -= a / 2.f;
-        drawText(text32, half.x, half.y + font->spacing, font, col_);
+        drawText(text32, half.x, half.y + font->spacing, font, col_, false);
         break;
     case ALIGN_HOR_CENTER:
         half = pos + size / 2.f;
         half -= a / 2.f;
-        drawText(text32, half.x, pos.y + font->spacing, font, col_);
+        drawText(text32, half.x, pos.y + font->spacing, font, col_, false);
         break;
     default: //LEFT
-        drawText(text32, pos.x, pos.y + font->spacing, font, col_);
+        drawText(text32, pos.x, pos.y + font->spacing, font, col_, false);
         break;
     }
 }
@@ -123,6 +123,16 @@ glm::vec2 SpriteBatch::measureText(const std::string &text, Font *font)
     return drawText(text32, 0, 0, font, glm::vec4(0), true);
 }
 
+glm::vec2 SpriteBatch::drawFormatted(const std::string &format, glm::vec2 pos, Font *font)
+{
+
+}
+
+glm::vec2 SpriteBatch::drawFormatted(const  &format, glm::vec2 pos, Font *font)
+{
+
+}
+
 glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
                                 Font *font, const glm::vec4 &col_, bool no_draw)
 {
@@ -130,22 +140,26 @@ glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
     float y_start = y;
     float x_max = 0;
     const char32_t *p;
+    bool color_code = false;
 
     for(p = &text32[0]; *p; p++)
     {
         Font::CharInfo cc = font->chars[*p];
-        if(*p == '\n')
+        switch(*p)
         {
+        case '\n':
             y += font->spacing;
             x = x_start;
-            continue;
+            break;
+
+        default:
+            if(!no_draw)
+                drawQuadText(glm::vec2(x, y), cc, *font->font, col_);
+
+            x += cc.advance.x;
+            x_max = glm::max(static_cast<float>(x), x_max);
+            break;
         }
-
-        if(!no_draw)
-            drawQuadText(glm::vec2(x, y), cc, *font->font, col_);
-
-        x += cc.advance.x;
-        x_max = glm::max(static_cast<float>(x), x_max);
     }
     y += font->spacing;
     return glm::vec2(x_max - x_start, y - y_start);

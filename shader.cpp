@@ -258,6 +258,16 @@ void Shader::AddDefine(std::string s)
     defines.push_back(std::move(s));
 }
 
+void Shader::SaveBinary(const std::string &name)
+{
+
+}
+
+void Shader::LoadBinary(const std::string &name)
+{
+
+}
+
 void Shader::SetUniform_(const glm::mat4 &val, const std::string &uni_name) const
 {
     glUniformMatrix4fv(GetUniformLocation(uni_name), 1, GL_FALSE, &val[0][0]);
