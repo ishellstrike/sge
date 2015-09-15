@@ -14,6 +14,7 @@
 #include "basicjargshader.h"
 #include "unordered_map"
 #include "font.h"
+#include "json/json.h"
 
 #define SIZE 10000
 class SpriteBatch
@@ -43,6 +44,7 @@ public:
     void resetScissor();
     glm::vec2 measureText(const std::string &text, Font *font);
     void drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
+    glm::vec2 drawFormatted(const std::string &format, glm::vec2 pos, Font *font);
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
                        Font *font, const glm::vec4 &col_, bool no_draw);

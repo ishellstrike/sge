@@ -125,12 +125,7 @@ glm::vec2 SpriteBatch::measureText(const std::string &text, Font *font)
 
 glm::vec2 SpriteBatch::drawFormatted(const std::string &format, glm::vec2 pos, Font *font)
 {
-
-}
-
-glm::vec2 SpriteBatch::drawFormatted(const  &format, glm::vec2 pos, Font *font)
-{
-
+    return {0,0};
 }
 
 glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
