@@ -8,11 +8,14 @@
 #define GLM_FORCE_RADIANS
 #define _USE_MATH_DEFINES
 #define GLM_SWIZZLE
+#define SOCI_USE_BOOST
 
 #include "gamewindow.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "experimental/starfield.h"
+
+#include "soci.h"
+#include "soci-postgresql.h"
 
 int main( int argc, char* const argv[] )
 {
@@ -41,6 +44,9 @@ int main( int argc, char* const argv[] )
     {
         LOG(fatal) << "unknown exception";
     }
+
+    //soci::session con(soci::postgresql, "dbname=sge user=postgres password=postgres");
+    //con << "create table test;";
 
     void* v1 = new GameWindow();
     std::shared_ptr<void> v = std::shared_ptr<void>(v1);

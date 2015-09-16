@@ -16,7 +16,7 @@
 #include "font.h"
 #include "json/json.h"
 
-#define SIZE 10000
+#define SIZE 32000
 class SpriteBatch
 {
 public:
@@ -45,6 +45,9 @@ public:
     glm::vec2 measureText(const std::string &text, Font *font);
     void drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
     glm::vec2 drawFormatted(const std::string &format, glm::vec2 pos, Font *font);
+
+    void resetDc();
+    int getDc();
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
                        Font *font, const glm::vec4 &col_, bool no_draw);
@@ -59,7 +62,7 @@ private:
     glm::vec2 *uv = nullptr;
     glm::vec4 *col = nullptr;
 
-    GLuint *index = nullptr;
+    GLushort *index = nullptr;
     unsigned int cur = 0;
 
     GLuint current = 0;
@@ -68,5 +71,6 @@ private:
     glm::mat4 uniform;
 
     GLuint p_loc, c_loc, uv_loc;
+    int dc = 0, last_dc = 0;
 };
 #endif // SPRITEBATCH_H

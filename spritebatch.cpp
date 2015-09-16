@@ -20,7 +20,7 @@ typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
 SpriteBatch::SpriteBatch()
 {
-    index = new GLuint[SIZE*6];
+    index = new GLushort[SIZE*6];
     uv = new glm::vec2[SIZE*4];
     pos = new glm::vec3[SIZE*4];
     col = new glm::vec4[SIZE*4];
@@ -126,6 +126,17 @@ glm::vec2 SpriteBatch::measureText(const std::string &text, Font *font)
 glm::vec2 SpriteBatch::drawFormatted(const std::string &format, glm::vec2 pos, Font *font)
 {
     return {0,0};
+}
+
+void SpriteBatch::resetDc()
+{
+    last_dc = dc;
+    dc = 0;
+}
+
+int SpriteBatch::getDc()
+{
+    return last_dc;
 }
 
 glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
@@ -514,10 +525,11 @@ void SpriteBatch::render()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[3]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*cur*6, &index[0], GL_STREAM_DRAW);
 
-    glDrawElements(GL_TRIANGLES, cur*6, GL_UNSIGNED_INT, NULL);
+    glDrawElements(GL_TRIANGLES, cur*6, GL_UNSIGNED_SHORT, NULL);
     glBindTexture(GL_TEXTURE_2D, 0);
     glEnable(GL_CULL_FACE);
 
+    dc++;
     cur = 0;
 }
 

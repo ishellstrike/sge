@@ -18,6 +18,13 @@
 #include "aabb.h"
 #include "meshbase.h"
 
+struct UMeshDc
+{
+    static int dc, last_dc;
+    static void resetDc();
+    static int getDc();
+};
+
 template <class _Vert = VertPosNormUvUv>
 class UMesh : public MeshBase
 {
@@ -252,6 +259,7 @@ public:
         glBindVertexArray(0);
 
         OPENGL_CHECK_ERRORS();
+        UMeshDc::dc++;
     }
 
     void DrawAABB(const Camera &cam)

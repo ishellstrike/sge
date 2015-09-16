@@ -8,3 +8,18 @@
 #include "umesh.h"
 #include "logger.h"
 
+
+
+void UMeshDc::resetDc()
+{
+    last_dc = dc;
+    dc = 0;
+}
+
+int UMeshDc::getDc()
+{
+    return last_dc;
+}
+
+int UMeshDc::dc = 0;
+int UMeshDc::last_dc = 0;

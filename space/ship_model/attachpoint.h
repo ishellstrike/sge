@@ -11,7 +11,6 @@ public:
     glm::vec3 offset;
 
     float size;
-    std::bitset
 };
 
 #endif // ATTACHPOINT_H

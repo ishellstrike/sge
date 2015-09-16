@@ -483,8 +483,16 @@ void GameWindow::BaseDraw()
 
     batch->setUniform(proj * model);
 
+
+    if(is_debug)
+    {
+        batch->drawText(string_format("%d dc UI", batch->getDc()), {RESX-70, 2}, f12.get(), Color::White);
+        batch->drawText(string_format("%d dc UM", UMeshDc::getDc()), {RESX-70, 2+20}, f12.get(), Color::White);
+
+        batch->drawText(string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
+    }
+
     auto aa = ss.GetSystemSnap(cam->Position(), cam->Forward(), cam->Right());
-    //batch->drawRect({300, 300}, {210, 210}, Color::DarkRed);
     batch->drawRect({400, 400}, {10, 10}, Color::DarkGreen);
     for(const auto &a : aa)
     {
@@ -496,6 +504,12 @@ void GameWindow::BaseDraw()
     //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
+
+    if(is_debug)
+    {
+        batch->resetDc();
+        UMeshDc::resetDc();
+    }
 }
 
 template<int is_debug>
