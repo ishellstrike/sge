@@ -14,8 +14,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "soci.h"
-#include "soci-postgresql.h"
+#include "sql.h"
 
 int main( int argc, char* const argv[] )
 {
@@ -45,8 +44,7 @@ int main( int argc, char* const argv[] )
         LOG(fatal) << "unknown exception";
     }
 
-    //soci::session con(soci::postgresql, "dbname=sge user=postgres password=postgres");
-    //con << "create table test;";
+    SQL s;
 
     void* v1 = new GameWindow();
     std::shared_ptr<void> v = std::shared_ptr<void>(v1);

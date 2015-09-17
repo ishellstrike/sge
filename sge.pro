@@ -93,17 +93,17 @@ SOURCES += \
     geometry/multimesh.cpp \
     space/ship_model/hull.cpp \
     space/ship_model/attachpoint.cpp \
-    space/ship_model/resource.cpp
+    space/ship_model/resource.cpp \
+    sql.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/soci-3.2.3/lib/Debug \
--L$$PWD/3rdparty/PostgreSQL/9.1/lib \
 -L$$PWD/3rdparty/boost_1_58_0/bin.v2/libs/date_time/build/msvc-12.0/debug/link-static/threading-multi \
 -llibboost_date_time-vc120-mt-gd-1_58 \
--lopengl32 -lglew32 -lglfw3dll -lfreetype -llibsoci_core_3_2 -llibpq #-lassimp-vc120-mtd
+-lopengl32 -lglew32 -lglfw3dll -lfreetype -lmysqlcppconn -lmysqlclient #-lassimp-vc120-mtd
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -112,7 +112,6 @@ win32:INCLUDEPATH += $$PWD/3rdparty/include
 win32:INCLUDEPATH += $$PWD/3rdparty/boost_1_58_0
 win32:INCLUDEPATH += $$PWD/3rdparty/soci-3.2.3/backends/postgresql
 win32:INCLUDEPATH += $$PWD/3rdparty/soci-3.2.3/core
-win32:INCLUDEPATH += $$PWD/3rdparty/PostgreSQL/9.1/include
 
 HEADERS += \
     logger.h \
@@ -219,7 +218,8 @@ HEADERS += \
     geometry/multimesh.h \
     space/ship_model/hull.h \
     space/ship_model/attachpoint.h \
-    space/ship_model/resource.h
+    space/ship_model/resource.h \
+    sql.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
