@@ -18,7 +18,7 @@ public:
     sge_texlab_lerp_by_map(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt);
+    void Update(const GameTimer &gt, const MouseState &ms) override;
     ImageBox *ib;
     Connector<std::shared_ptr<Texture>> *map1, *map2, *lerp;
     Connector<std::shared_ptr<Texture>> *out;

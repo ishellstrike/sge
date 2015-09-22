@@ -18,7 +18,7 @@ public:
     sge_texlab_rgb_to_luminance(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt);
+    void Update(const GameTimer &gt, const MouseState &ms) override;
     ImageBox *ib;
     Connector<std::shared_ptr<Texture>> *in;
     Connector<std::shared_ptr<Texture>> *out;

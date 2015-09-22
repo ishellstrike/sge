@@ -17,7 +17,7 @@ public:
     sge_texlab_float_selector(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt);
+    void Update(const GameTimer &gt, const MouseState &ms) override;
     DragNumbox *d;
     Connector<float> *c;
 

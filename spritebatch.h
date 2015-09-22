@@ -44,7 +44,7 @@ public:
     void resetScissor();
     glm::vec2 measureText(const std::string &text, Font *font);
     void drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
-    glm::vec2 drawFormatted(const std::string &format, glm::vec2 pos, Font *font);
+    glm::vec2 drawFormatted(const std::string &, glm::vec2, Font *);
 
     void resetDc();
     int getDc();

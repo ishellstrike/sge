@@ -123,7 +123,7 @@ glm::vec2 SpriteBatch::measureText(const std::string &text, Font *font)
     return drawText(text32, 0, 0, font, glm::vec4(0), true);
 }
 
-glm::vec2 SpriteBatch::drawFormatted(const std::string &format, glm::vec2 pos, Font *font)
+glm::vec2 SpriteBatch::drawFormatted(const std::string &, glm::vec2 , Font *)
 {
     return {0,0};
 }

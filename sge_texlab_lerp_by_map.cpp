@@ -42,7 +42,7 @@ void sge_texlab_lerp_by_map::Draw() const
     Win::Draw();
 }
 
-void sge_texlab_lerp_by_map::Update(const GameTimer &gt)
+void sge_texlab_lerp_by_map::Update(const GameTimer &gt, const MouseState &ms)
 {
     if(!map1->linked.expired() && !map2->linked.expired() && !lerp->linked.expired())
     {
@@ -63,5 +63,5 @@ void sge_texlab_lerp_by_map::Update(const GameTimer &gt)
 
     out->linked_value = ib->tex;
 
-    Win::Update(gt);
+    Win::Update(gt, ms);
 }

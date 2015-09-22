@@ -6,23 +6,23 @@ const vec3 earthPos = vec3(0.0, 0.00, 0.0);
 // PHYSICAL MODEL PARAMETERS
 // ----------------------------------------------------------------------------
 
-const float SCALE = 0.0000950;
+const float SCALE = 0.0000950f;
 
-const float Rg = 6360.0 * SCALE;
-const float Rt = 6420.0 * SCALE;
-const float RL = 6421.0 * SCALE;
+const float Rg = 6360.0f * SCALE;
+const float Rt = 6420.0f * SCALE;
+const float RL = 6421.0f * SCALE;
 
-const float AVERAGE_GROUND_REFLECTANCE = 0.1;
+const float AVERAGE_GROUND_REFLECTANCE = 0.1f;
 
 // Rayleigh
-const float HR = 18.0 * SCALE;
-const vec3 betaR = vec3(5.8e-3, 1.35e-2, 3.31e-2) / SCALE;
+const float HR = 18.0f * SCALE;
+const vec3 betaR = vec3(5.8e-3f, 1.35e-2f, 3.31e-2f) / SCALE;
 
 // Mie
 // DEFAULT
-const float HM = 1.2 * SCALE;
+const float HM = 1.2f * SCALE;
 
-const float mieG = 0.8;
+const float mieG = 0.8f;
 // CLEAR SKY
 /*const float HM = 1.2 * SCALE;
 const vec3 betaMSca = vec3(20e-3) / SCALE;

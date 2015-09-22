@@ -46,7 +46,7 @@ void sge_texlab_heightmap::Draw() const
     Win::Draw();
 }
 
-void sge_texlab_heightmap::Update(const GameTimer &gt)
+void sge_texlab_heightmap::Update(const GameTimer &gt, const MouseState &ms)
 {
     std::shared_ptr<Texture> textu = std::make_shared<Texture>(glm::vec2{128,128},true);
     tg.SetShader(Resources::instance()->Get<BasicJargShader>("height_shader"));
@@ -62,6 +62,6 @@ void sge_texlab_heightmap::Update(const GameTimer &gt)
     ib->tex = textu;
     out->linked_value = ib->tex;
 
-    Win::Update(gt);
+    Win::Update(gt, ms);
 }
 

@@ -33,7 +33,7 @@ sge_perfomance::sge_perfomance(WContainer *par) :
     ggt_fast = new Graph(this);
     gfps_fast = new Graph(this);
 
-    onResize = [=](){
+    onResize.connect([=]{
         glm::vec2 size = this->size - glm::vec2(0,20);
         ggt->size = gfps->size = ggt_fast->size = gfps_fast->size = size/2.f;
         gfps->pos = {size.x/2.f, 0};
@@ -45,7 +45,7 @@ sge_perfomance::sge_perfomance(WContainer *par) :
         fps2->pos = gfps_fast->pos;
         time1->pos = ggt->pos;
         time2->pos = ggt_fast->pos;
-    };
+    });
 
     onResize();
 }
@@ -55,9 +55,9 @@ void sge_perfomance::Draw() const
     Win::Draw();
 }
 
-void sge_perfomance::Update(const GameTimer &gt)
+void sge_perfomance::Update(const GameTimer &gt, const MouseState &ms)
 {
-    Win::Update(gt);
+    Win::Update(gt, ms);
 }
 
 void sge_perfomance::UpdateTimer(const FPSCounter &fps, const GameTimer &gt)

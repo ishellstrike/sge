@@ -9,6 +9,7 @@
 #ifndef Mouse_h__
 #define Mouse_h__
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <chrono>
@@ -17,6 +18,14 @@ struct Key
 {
     bool pressed = false;
     bool last_pressed = false;
+};
+
+struct ClickHandler
+{
+    ClickHandler(glm::vec2 p, int b) : pos(p), button(b){}
+    glm::vec2 pos = glm::vec2(0);
+    int button = GLFW_MOUSE_BUTTON_LEFT;
+    bool repeat = false;
 };
 
 class Mouse

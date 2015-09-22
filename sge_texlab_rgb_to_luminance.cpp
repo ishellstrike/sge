@@ -37,7 +37,7 @@ void sge_texlab_rgb_to_luminance::Draw() const
     Win::Draw();
 }
 
-void sge_texlab_rgb_to_luminance::Update(const GameTimer &gt)
+void sge_texlab_rgb_to_luminance::Update(const GameTimer &gt, const MouseState &ms)
 {
     if(!in->linked.expired())
     {
@@ -54,5 +54,5 @@ void sge_texlab_rgb_to_luminance::Update(const GameTimer &gt)
 
     out->linked_value = ib->tex;
 
-    Win::Update(gt);
+    Win::Update(gt, ms);
 }

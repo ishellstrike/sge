@@ -2,6 +2,7 @@
 #define UMATERIAL_H
 #include <unordered_map>
 #include "texture.h"
+#include <memory>
 
 class material_uniform
 {

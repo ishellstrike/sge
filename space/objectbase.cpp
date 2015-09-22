@@ -5,6 +5,7 @@
         See "LICENSE.txt"
 *******************************************************************************/
 #include "objectbase.h"
+#include <glm/gtc/constants.hpp>
 
 ObjectBase::ObjectBase()
 {

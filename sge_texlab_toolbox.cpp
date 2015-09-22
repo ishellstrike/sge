@@ -16,23 +16,23 @@ sge_texlab_toolbox::sge_texlab_toolbox(WContainer *par) :
 
     auto t = new Label(lc);
     t->text("renderbox");
-    t->onLeftPress = [=](){ new sge_texlab_renderbox(par); };
+    t->onMouseClick.connect( [=](const ClickHandler&)->bool{ new sge_texlab_renderbox(par); return true;});
 
     t = new Label(lc);
     t->text("rgb to luminance");
-    t->onLeftPress = [=](){ new sge_texlab_rgb_to_luminance(par); };
+    t->onMouseClick.connect( [=](const ClickHandler&)->bool{ new sge_texlab_rgb_to_luminance(par); return true;});
 
     t = new Label(lc);
     t->text("heightmap");
-    t->onLeftPress = [=](){ new sge_texlab_heightmap(par); };
+    t->onMouseClick.connect( [=](const ClickHandler&)->bool{ new sge_texlab_heightmap(par); return true;});
 
     t = new Label(lc);
     t->text("float selector");
-    t->onLeftPress = [=](){ new sge_texlab_float_selector(par); };
+    t->onMouseClick.connect( [=](const ClickHandler&)->bool{ new sge_texlab_float_selector(par); return true;});
 
     t = new Label(lc);
     t->text("lerp by map");
-    t->onLeftPress = [=](){ new sge_texlab_lerp_by_map(par); };
+    t->onMouseClick.connect( [=](const ClickHandler&)->bool{ new sge_texlab_lerp_by_map(par); return true;});
 
     resizable = true;
 }
@@ -42,9 +42,9 @@ void sge_texlab_toolbox::Draw() const
     Win::Draw();
 }
 
-void sge_texlab_toolbox::Update(const GameTimer &gt)
+void sge_texlab_toolbox::Update(const GameTimer &gt, const MouseState &ms)
 {
     lc->size = size - glm::vec2(0,20);
-    Win::Update(gt);
+    Win::Update(gt, ms);
 }
 

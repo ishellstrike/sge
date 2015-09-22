@@ -21,7 +21,7 @@ public:
     sge_texlab_renderbox(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt);
+    void Update(const GameTimer &gt, const MouseState &ms) override;
     ImageBox *ib;
     Connector<std::shared_ptr<Texture>> *in;
     Label *label;

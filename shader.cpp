@@ -258,12 +258,12 @@ void Shader::AddDefine(std::string s)
     defines.push_back(std::move(s));
 }
 
-void Shader::SaveBinary(const std::string &name)
+void Shader::SaveBinary(const std::string &)
 {
 
 }
 
-void Shader::LoadBinary(const std::string &name)
+void Shader::LoadBinary(const std::string &)
 {
 
 }

@@ -26,7 +26,7 @@ void sge_texlab_renderbox::Draw() const
     Win::Draw();
 }
 
-void sge_texlab_renderbox::Update(const GameTimer &gt)
+void sge_texlab_renderbox::Update(const GameTimer &gt, const MouseState &ms)
 {
     ib->size = size - glm::vec2(5 + 20, 5 - 20);
     ib->pos = {20, 20};
@@ -41,5 +41,5 @@ void sge_texlab_renderbox::Update(const GameTimer &gt)
 
     in->pos = {0, (size/2.f).y - (in->size/2.f).y};
 
-    Win::Update(gt);
+    Win::Update(gt, ms);
 }

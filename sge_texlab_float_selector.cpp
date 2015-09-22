@@ -33,11 +33,11 @@ void sge_texlab_float_selector::Draw() const
     Win::Draw();
 }
 
-void sge_texlab_float_selector::Update(const GameTimer &gt)
+void sge_texlab_float_selector::Update(const GameTimer &gt, const MouseState &ms)
 {
     c->linked_value = d->value;
 
-    Win::Update(gt);
+    Win::Update(gt, ms);
 }
 
 

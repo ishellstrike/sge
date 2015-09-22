@@ -142,9 +142,9 @@ template<typename _Ty>
 inline _Ty log_clamp(_Ty val, _Ty min = _Ty(0), _Ty max = _Ty(1))
 {
     if(val > 0)
-        return (_Ty(1) - glm::exp( -val * 0.1))*(max - min) + min;
+        return (_Ty(1) - glm::exp( -val * _Ty(0.1)))*(max - min) + min;
     else
-        return -(_Ty(1) - glm::exp( val * 0.1))*(max - min) + min;
+        return -(_Ty(1) - glm::exp( val * _Ty(0.1)))*(max - min) + min;
 }
 
 inline std::vector<std::string> split(const std::string &s, char delim) {

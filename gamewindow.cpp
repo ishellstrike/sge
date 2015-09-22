@@ -501,6 +501,15 @@ void GameWindow::BaseDraw()
         batch->drawRect(post + glm::vec2(-5.f, a.z_offset*100-5.f), {10,10}, Color::Red);
     }
     ws->Draw();
+    switch(Mouse::state)
+    {
+    case Mouse::STATE_RESIZE:
+        batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_resize"), Color::White);
+        break;
+    default:
+        batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_mouse"), Color::White);
+        break;
+    }
     //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
@@ -515,6 +524,7 @@ void GameWindow::BaseDraw()
 template<int is_debug>
 void GameWindow::BaseUpdate()
 {
+    Mouse::state = Mouse::STATE_MOUSE;
     glfwPollEvents();
 
     //m->World = glm::rotate(m->World, (float)gt.elapsed / 100, glm::vec3(0.f,1.f,0.f));
@@ -647,7 +657,8 @@ void GameWindow::BaseUpdate()
     qs_w->Update(*cam);
     cam1->Update(gt, true);
     cam2->Update(gt);
-    ws->Update(gt);
+    MouseState s;
+    ws->Update(gt, s);
 
     Mouse::dropState();
 }

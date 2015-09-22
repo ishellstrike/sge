@@ -3,9 +3,9 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
-CONFIG += precompile_header
+#CONFIG += precompile_header
 
-PRECOMPILED_HEADER  = helper.h
+#PRECOMPILED_HEADER  = helper.h
 
 SOURCES += \
     logger.cpp \
@@ -94,14 +94,14 @@ SOURCES += \
     space/ship_model/hull.cpp \
     space/ship_model/attachpoint.cpp \
     space/ship_model/resource.cpp \
-    sql.cpp
+    sql.cpp \
+    sge_ui/treeview.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
--L$$PWD/3rdparty/soci-3.2.3/lib/Debug \
--L$$PWD/3rdparty/boost_1_58_0/bin.v2/libs/date_time/build/msvc-12.0/debug/link-static/threading-multi \
+-L$$PWD/3rdparty/boost_1_58_0/stage/lib \
 -llibboost_date_time-vc120-mt-gd-1_58 \
 -lopengl32 -lglew32 -lglfw3dll -lfreetype -lmysqlcppconn -lmysqlclient #-lassimp-vc120-mtd
 
@@ -110,8 +110,6 @@ unix:INCLUDEPATH += /usr/include/freetype2
 
 win32:INCLUDEPATH += $$PWD/3rdparty/include
 win32:INCLUDEPATH += $$PWD/3rdparty/boost_1_58_0
-win32:INCLUDEPATH += $$PWD/3rdparty/soci-3.2.3/backends/postgresql
-win32:INCLUDEPATH += $$PWD/3rdparty/soci-3.2.3/core
 
 HEADERS += \
     logger.h \
@@ -219,7 +217,8 @@ HEADERS += \
     space/ship_model/hull.h \
     space/ship_model/attachpoint.h \
     space/ship_model/resource.h \
-    sql.h
+    sql.h \
+    sge_ui/treeview.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

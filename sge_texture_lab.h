@@ -18,7 +18,7 @@ public:
     sge_texlab_heightmap(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt);
+    void Update(const GameTimer &gt, const MouseState &ms) override;
     ImageBox *ib;
     Connector<float> *scale, *offsetx, *offsety;
     Connector<std::shared_ptr<Texture>> *out;
