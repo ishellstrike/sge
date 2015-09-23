@@ -6,6 +6,7 @@
 *******************************************************************************/
 
 #include "sge_texlab_toolbox.h"
+#include "sge_ui/treeview.h"
 
 sge_texlab_toolbox::sge_texlab_toolbox(WContainer *par) :
     Win(par)
@@ -37,6 +38,9 @@ sge_texlab_toolbox::sge_texlab_toolbox(WContainer *par) :
     t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);
 
     resizable = true;
+    lc->hidden = true;
+
+    new TreeView(this);
 }
 
 void sge_texlab_toolbox::Draw() const
