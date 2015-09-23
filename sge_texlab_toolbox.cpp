@@ -34,6 +34,8 @@ sge_texlab_toolbox::sge_texlab_toolbox(WContainer *par) :
     t->text("lerp by map");
     t->onMouseClick.connect( [=](const ClickHandler&)->bool{ new sge_texlab_lerp_by_map(par); return true;});
 
+    t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);
+
     resizable = true;
 }
 

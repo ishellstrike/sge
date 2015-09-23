@@ -22,10 +22,11 @@ struct Key
 
 struct ClickHandler
 {
-    ClickHandler(glm::vec2 p, int b) : pos(p), button(b){}
+    ClickHandler(glm::vec2 p, int b, float t) : pos(p), button(b), time(t){}
     glm::vec2 pos = glm::vec2(0);
     int button = GLFW_MOUSE_BUTTON_LEFT;
     bool repeat = false;
+    float time = 0;
 };
 
 class Mouse
