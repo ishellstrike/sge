@@ -127,9 +127,9 @@ float Noise::noise ( float x, float y, float z )
     float n011 = dot3( grad3[gi011], x, y - 1, z - 1 );
     float n111 = dot3( grad3[gi111], x - 1, y - 1, z - 1 );
     // Compute the fade curve value for each of x, y, z
-    float u = fade( x );
-    float v = fade( y );
-    float w = fade( z );
+    float u = sge::fade( x );
+    float v = sge::fade( y );
+    float w = sge::fade( z );
     // Interpolate along x the contributions from each of the corners
     float nx00 = glm::mix( n000, n100, u );
     float nx01 = glm::mix( n001, n101, u );

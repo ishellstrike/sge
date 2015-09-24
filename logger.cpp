@@ -43,7 +43,7 @@ Log::Log(int type, const char *file, int line) :
 
     std::thread::id id = std::this_thread::get_id();
 
-    o_stream << " " << string_format("%6gms %16s %3d] ", clock()/static_cast<float>(CLOCKS_PER_SEC/1000), file, line).c_str();
+    o_stream << " " << sge::string_format("%6gms %16s %3d] ", clock()/static_cast<float>(CLOCKS_PER_SEC/1000), file, line).c_str();
 }
 
 Log::~Log()

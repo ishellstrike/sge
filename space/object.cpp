@@ -246,7 +246,7 @@ void Planet::Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam)
 
 std::string Object::GetDebugInfo()
 {
-    return string_format("pos:%s\nv:%s\na:%s\nmass:%g\ndensiry:%g\nvolume:%g\nradius:%g",
+    return sge::string_format("pos:%s\nv:%s\na:%s\nmass:%g\ndensiry:%g\nvolume:%g\nradius:%g",
                          std::to_string(pos).c_str(),
                          std::to_string(speed).c_str(),
                          std::to_string(acc).c_str(),

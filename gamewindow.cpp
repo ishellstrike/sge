@@ -80,7 +80,7 @@ bool GameWindow::BaseInit()
 
     int rx = Prefecences::Instance()->resolution.x;
     int ry = Prefecences::Instance()->resolution.y;
-    window = glfwCreateWindow(rx, ry, string_format("sge %dx%d", rx, ry).c_str(), monitor, nullptr);
+    window = glfwCreateWindow(rx, ry, sge::string_format("sge %dx%d", rx, ry).c_str(), monitor, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -486,10 +486,10 @@ void GameWindow::BaseDraw()
 
     if(is_debug)
     {
-        batch->drawText(string_format("%d dc UI", batch->getDc()), {RESX-70, 2}, f12.get(), Color::White);
-        batch->drawText(string_format("%d dc UM", UMeshDc::getDc()), {RESX-70, 2+20}, f12.get(), Color::White);
+        batch->drawText(sge::string_format("%d dc UI", batch->getDc()), {RESX-70, 2}, f12.get(), Color::White);
+        batch->drawText(sge::string_format("%d dc UM", UMeshDc::getDc()), {RESX-70, 2+20}, f12.get(), Color::White);
 
-        batch->drawText(string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
+        batch->drawText(sge::string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
     }
 
     auto aa = ss.GetSystemSnap(cam->Position(), cam->Forward(), cam->Right());
@@ -551,7 +551,7 @@ void GameWindow::BaseUpdate()
 
     if(Keyboard::isKeyDown(GLFW_KEY_P))
     {
-        glm::ray r = cam->unProject(Mouse::getCursorPos());
+        sge::ray r = cam->unProject(Mouse::getCursorPos());
         glm::mat4 inv_v = glm::inverse(cam->View());
         glm::vec3 D = glm::vec3(glm::vec4(r.origin, 1) );
         glm::vec3 V = glm::vec3(glm::vec4(r.dir, 1)    );

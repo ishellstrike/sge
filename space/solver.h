@@ -60,7 +60,7 @@ namespace ssolver
         _Ty v1 =          v_1<_Ty>(o);
         _Ty v2 =          v_2<_Ty>(o);
 
-        return lerp( v1, v2, r );
+        return sge::lerp( v1, v2, r );
     }
 
     template<typename _Ty = double>

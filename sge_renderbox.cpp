@@ -34,7 +34,7 @@ void sge_texlab_renderbox::Update(const GameTimer &gt, const MouseState &ms)
     {
         ib->tex = in->linked_value;
         if(ib->tex)
-            label->text( string_format("input %dx%d", ib->tex->width, ib->tex->height) );
+            label->text( sge::string_format("input %dx%d", ib->tex->width, ib->tex->height) );
     } else {
         label->text("no input");
     }

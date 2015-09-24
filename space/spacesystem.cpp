@@ -18,15 +18,15 @@ std::vector<SpaceSystem::system_snap> SpaceSystem::GetSystemSnap(const glm::vec3
 {
     std::vector<SpaceSystem::system_snap> result;
     result.reserve(system.size());
-    glm::plane plane = glm::plane(center, forward, right);
+    sge::plane plane = sge::plane(center, forward, right);
     for(const auto &a : system)
     {
         SpaceSystem::system_snap snap;
 
         glm::vec3 apos = a->pos;
         snap.longitude = glm::orientedAngle(glm::normalize(apos - center), right, forward);
-        snap.log_distance = log_clamp(glm::distance(center, apos));
-        snap.z_offset = -log_clamp(glm::distance(plane, apos));
+        snap.log_distance = sge::log_clamp(glm::distance(center, apos));
+        snap.z_offset = -sge::log_clamp(sge::distance(plane, apos));
 
         result.push_back(snap);
     }

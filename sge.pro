@@ -95,7 +95,8 @@ SOURCES += \
     space/ship_model/attachpoint.cpp \
     space/ship_model/resource.cpp \
     sql.cpp \
-    sge_ui/treeview.cpp
+    sge_ui/treeview.cpp \
+    core/tree.cpp
 
 VERSION = 0.1.0
 
@@ -218,7 +219,8 @@ HEADERS += \
     space/ship_model/attachpoint.h \
     space/ship_model/resource.h \
     sql.h \
-    sge_ui/treeview.h
+    sge_ui/treeview.h \
+    core/tree.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

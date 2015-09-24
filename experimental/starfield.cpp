@@ -15,7 +15,7 @@ Starfield::Starfield()
     {
         VertPosCol vpc;
         vpc.pos = ssolver::sphere_surface(100.f);
-        vpc.col = lerp(Color::White,Color::Clear, random::norm<float>()-0.5f);
+        vpc.col = sge::lerp(Color::White,Color::Clear, random::norm<float>()-0.5f);
         field.vertices.push_back(vpc);
         field.indices.push_back(i);
     }

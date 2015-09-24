@@ -61,7 +61,7 @@ public:
     void Viewport(const glm::vec4 &value);
 
     glm::vec2 Project(const glm::vec3 &pos) const;
-    glm::ray unProject(const glm::vec2 pos) const;
+    sge::ray unProject(const glm::vec2 pos) const;
 
     glm::vec3 Up() const;
     glm::vec3 Right() const;

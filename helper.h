@@ -138,6 +138,8 @@ inline std::vector<std::string> &split(const std::string &s, char delim, std::ve
     return elems;
 }
 
+namespace sge {
+
 template<typename _Ty>
 inline _Ty log_clamp(_Ty val, _Ty min = _Ty(0), _Ty max = _Ty(1))
 {
@@ -145,6 +147,15 @@ inline _Ty log_clamp(_Ty val, _Ty min = _Ty(0), _Ty max = _Ty(1))
         return (_Ty(1) - glm::exp( -val * _Ty(0.1)))*(max - min) + min;
     else
         return -(_Ty(1) - glm::exp( val * _Ty(0.1)))*(max - min) + min;
+}
+
+inline std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
 }
 
 inline std::vector<std::string> split(const std::string &s, char delim) {
@@ -288,7 +299,6 @@ inline std::string to_traf_string(double traf){
     return string_format("%i B", (int)traf);
 }
 
-namespace glm {
 
     /*!
      * \brief Описывает луч
@@ -307,13 +317,13 @@ namespace glm {
                                                             sign[1] = inv.y < 0;
                                                             sign[2] = inv.z < 0;
                                                           }
-        ray(const glm::ray &r) : origin(r.origin), dir(r.dir) { dir = normalize(dir);
+        ray(const sge::ray &r) : origin(r.origin), dir(r.dir) { dir = normalize(dir);
                                                                 inv = glm::vec3(1/dir.x, 1/dir.y, 1/dir.z);
                                                                 sign[0] = inv.x < 0;
                                                                 sign[1] = inv.y < 0;
                                                                 sign[2] = inv.z < 0;
                                                               }
-        ray &operator =(const glm::ray &r) {if (this != &r) {
+        ray &operator =(const sge::ray &r) {if (this != &r) {
                 origin = r.origin; dir = r.dir; dir = normalize(dir);
                 inv = glm::vec3(1/dir.x, 1/dir.y, 1/dir.z);
                 sign[0] = inv.x < 0;
@@ -333,7 +343,7 @@ namespace glm {
      * \param x Луч
      * \return Нормализованный луч
      */
-    glm::ray normalize(const glm::ray &x);
+    sge::ray normalize(const sge::ray &x);
 
     /*!
      * \brief Проверяет пересечение луча с ограничивающим паралелемипедом в определенном участе луча
@@ -347,7 +357,7 @@ namespace glm {
      *
      * @note t1 > t0, max[i] > min[i]
      */
-    bool intersect(const glm::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max);
+    bool intersect(const sge::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max);
 
     struct plane {
     public:
@@ -374,34 +384,34 @@ namespace glm {
 namespace std
 {
     inline std::string to_string(const glm::vec2& a){
-        return string_format("{%g, %g, %g}", a.x, a.y);
+        return sge::string_format("{%g, %g, %g}", a.x, a.y);
     }
     inline std::string to_string(const glm::vec3& a){
-        return string_format("{%g, %g, %g}", a.x, a.y, a.z);
+        return sge::string_format("{%g, %g, %g}", a.x, a.y, a.z);
     }
     inline std::string to_string(const glm::vec4& a){
-        return string_format("{%g, %g, %g, %g}", a.x, a.y, a.z, a.w);
+        return sge::string_format("{%g, %g, %g, %g}", a.x, a.y, a.z, a.w);
     }
 
     inline std::string to_string(const glm::quat& a){
-        return string_format("{%g, %g, %g, %g}", a.x, a.y, a.z, a.w);
+        return sge::string_format("{%g, %g, %g, %g}", a.x, a.y, a.z, a.w);
     }
 
     inline std::string to_string(const glm::mat3& a){
-        return string_format("{%g, %g, %g}\n{%g, %g, %g}\n{%g, %g, %g}",
+        return sge::string_format("{%g, %g, %g}\n{%g, %g, %g}\n{%g, %g, %g}",
                              a[0][0], a[1][0], a[2][0],
                              a[0][1], a[1][1], a[2][1],
                              a[0][2], a[1][2], a[2][2]);
     }
     inline std::string to_string(const glm::mat4& a){
-        return string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}",
+        return sge::string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}",
                              a[0][0], a[1][0], a[2][0], a[3][0],
                              a[0][1], a[1][1], a[2][1], a[3][1],
                              a[0][2], a[1][2], a[2][2], a[3][2],
                              a[0][3], a[1][3], a[2][3], a[3][3]);
     }
     inline std::string to_string(const float a[6][4]){
-        return string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}",
+        return sge::string_format("{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}\n{%g, %g, %g, %g}",
                              a[0][0], a[0][1], a[0][2], a[0][3],
                              a[1][0], a[1][1], a[1][2], a[1][3],
                              a[2][0], a[2][1], a[2][2], a[2][3],

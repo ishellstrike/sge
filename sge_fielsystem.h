@@ -25,7 +25,7 @@ inline std::string LoadTextFile(const std::string &filename)
         }
         file.close();
     } else {
-        LOG(fatal) << string_format("Failed to open file %s", filename.c_str());
+        LOG(fatal) << sge::string_format("Failed to open file %s", filename.c_str());
     }
 
     return ss.str();
@@ -38,7 +38,7 @@ inline void SaveTextFile(const std::string &filename, const std::string &content
         file << content;
         file.close();
     } else {
-        LOG(fatal) << string_format("Failed to save file %s", filename.c_str());
+        LOG(fatal) << sge::string_format("Failed to save file %s", filename.c_str());
     }
 }
 
@@ -47,13 +47,13 @@ inline int GetLastPatternedFilenameNubmer(const std::string &filename, const std
     bool cont = true;
     int i = 0;
 
-    std::ifstream file(string_format("%s%d%s", filename.c_str(), 0, ext.c_str()));
+    std::ifstream file(sge::string_format("%s%d%s", filename.c_str(), 0, ext.c_str()));
     if(!file.is_open()) {file.close(); return -1;}
     file.close();
 
     while(cont)
     {
-        std::ifstream file(string_format("%s%d%s", filename.c_str(), i, ext.c_str()));
+        std::ifstream file(sge::string_format("%s%d%s", filename.c_str(), i, ext.c_str()));
         if(!file.is_open()) cont = false;
         else i++;
         file.close();
@@ -70,13 +70,13 @@ inline int GetLastPatternedFilenameNubmer(const std::string &filename, const std
         WIN32_FIND_DATA f;
 
 
-        std::wstring s = L"./" + string_to_wstring(dir) + L"*";
+        std::wstring s = L"./" + sge::string_to_wstring(dir) + L"*";
         HANDLE h = FindFirstFile(s.c_str(), &f);
         if(h != INVALID_HANDLE_VALUE)
         {
             do
             {
-                std::string fn = wstring_to_string(f.cFileName);
+                std::string fn = sge::wstring_to_string(f.cFileName);
                 if(fn == "." || fn == "..")
                     continue;
 

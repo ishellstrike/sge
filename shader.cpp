@@ -91,7 +91,7 @@ void Shader::LogDumpError(const std::string &filename, GLenum type, const std::s
     std::string f_name;
     if(shader != -1)
     {
-        f_name = string_format("shader_error_log_%s_%s.txt",
+        f_name = sge::string_format("shader_error_log_%s_%s.txt",
                                get_filename_headername(get_name(filename)).c_str(),
                                shader_defines[type].c_str());
         LOG(error) << "in file " << filename;
@@ -99,7 +99,7 @@ void Shader::LogDumpError(const std::string &filename, GLenum type, const std::s
     }
     else
     {
-        f_name = string_format("shader_force_dump_%s_%s.txt",
+        f_name = sge::string_format("shader_force_dump_%s_%s.txt",
                                get_filename_headername(get_name(filename)).c_str(),
                                shader_defines[type].c_str());
         LOG(verbose) << filename << " force dump to " << f_name;

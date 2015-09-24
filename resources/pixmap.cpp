@@ -62,7 +62,7 @@ void Pixmap::Blit(const Pixmap &source, const glm::vec2 &pos)
     assert(pos.x >= 0 && pos.y >= 0);
     if(width < source.width + pos.x || height < source.height + pos.y) {
         LOG(error) << "Blit error. Target image not enough large. " <<
-                      string_format("(%g, %g) to (%g, %g) into (%d, %d)",
+                      sge::string_format("(%g, %g) to (%g, %g) into (%d, %d)",
                                     pos.x, pos.y,
                                     source.width + pos.x, source.height + pos.y,
                                     width, height);

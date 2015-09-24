@@ -7,13 +7,13 @@
 
 #include "helper.h"
 
-glm::ray normalize(const glm::ray &x)
+sge::ray normalize(const sge::ray &x)
 {
-    return glm::ray(x.origin, normalize(x.dir));
+    return sge::ray(x.origin, normalize(x.dir));
 }
 
 
-void glm::ray::precompute()
+void sge::ray::precompute()
 {
     dir = normalize(dir);
     inv = glm::vec3(1/dir.x, 1/dir.y, 1/dir.z);
@@ -22,7 +22,7 @@ void glm::ray::precompute()
     sign[2] = inv.z < 0;
 }
 
-bool glm::intersect(const glm::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max)
+bool sge::intersect(const sge::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max)
 {
     glm::vec3 bounds[2] = {min, max};
     float tmin, tmax, tymin, tymax, tzmin, tzmax;
@@ -165,7 +165,7 @@ void Bresencham3D(const glm::vec3 &p1, const glm::vec3 &p2, std::vector<glm::vec
 
 
 
-namespace glm {
+namespace sge {
 
 plane::plane() : a(0), b(0), c(0), d(0)
 {
@@ -232,7 +232,7 @@ glm::vec3 plane::normal() const
     return glm::vec3(a, b, c);
 }
 
-float distance(const plane &pl, const vec3 &point)
+float distance(const plane &pl, const glm::vec3 &point)
 {
     return (pl.a * point.x + pl.b * point.y + pl.c * point.z + pl.d);
 }
