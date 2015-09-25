@@ -267,15 +267,13 @@ inline char keyToChar(int key, bool shift){
     return r;
 }
 
-inline std::string string_format(const std::string fmt_str, ...) {
+template<typename ... Args>
+inline std::string string_format(const std::string &fmt_str, Args... args) {
     int final_n, n = ((int)fmt_str.size()) * 2;
     std::unique_ptr<char[]> formatted;
-    va_list ap;
     while(1) {
         formatted.reset(new char[n]);
-        va_start(ap, fmt_str);
-        final_n = vsnprintf(&formatted[0], n, fmt_str.c_str(), ap);
-        va_end(ap);
+        final_n = _snprintf(&formatted[0], n, fmt_str.c_str(), args...);
         if (final_n < 0 || final_n >= n)
             n += abs(final_n - n + 1);
         else

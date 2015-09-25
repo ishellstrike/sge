@@ -38,9 +38,9 @@ sge_texlab_toolbox::sge_texlab_toolbox(WContainer *par) :
     t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);
 
     resizable = true;
-    lc->hidden = true;
+    //lc->hidden = true;
 
-    new TreeView(this);
+    tree = new TreeView(this);
 }
 
 void sge_texlab_toolbox::Draw() const
@@ -51,6 +51,7 @@ void sge_texlab_toolbox::Draw() const
 void sge_texlab_toolbox::Update(const GameTimer &gt, const MouseState &ms)
 {
     lc->size = size - glm::vec2(0,20);
+    tree->size = size - glm::vec2(0,20);
     Win::Update(gt, ms);
 }
 

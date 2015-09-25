@@ -16,6 +16,7 @@
 #include "sge_texture_lab.h"
 #include "sge_texture_lab_float_selector.h"
 #include "sge_texlab_lerp_by_map.h"
+#include "sge_ui/treeview.h"
 
 class sge_texlab_toolbox : public Win
 {
@@ -25,6 +26,7 @@ public:
     void Draw() const;
     void Update(const GameTimer &gt, const MouseState &ms) override;
     ListContainer *lc;
+    TreeView *tree;
 };
 
 #endif // SGE_TEXLAB_TOOLBOX_H
