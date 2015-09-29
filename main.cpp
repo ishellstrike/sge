@@ -15,8 +15,15 @@
 
 #include "sql.h"
 
+template<typename... _Ty>
+void foo()
+{
+    LOG(fatal) << sizeof...(_Ty);
+}
+
 int main( int argc, char* const argv[] )
 {
+    foo<int,float,int>();
     if(argc >= 2)
         for(int i = 1; i < argc; i++)
         {

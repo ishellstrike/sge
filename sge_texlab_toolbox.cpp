@@ -38,7 +38,7 @@ sge_texlab_toolbox::sge_texlab_toolbox(WContainer *par) :
     t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);t = new Label(lc);
 
     resizable = true;
-    //lc->hidden = true;
+    lc->hidden = true;
 
     tree = new TreeView(this);
 }

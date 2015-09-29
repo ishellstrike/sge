@@ -10,6 +10,7 @@ struct Node
     Node() : data(nullptr) {}
 
     typedef std::shared_ptr<Node<_Ty>> N_ptr;
+    bool expanded = false;
 
     N_ptr sister, child;
 
