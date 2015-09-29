@@ -41,21 +41,24 @@ Camera::Camera(float __fieldOfView, glm::vec3 __lookAt, glm::vec3 /*__up*/, floa
 }
 
 void Camera::ReCreateViewMatrix(const GameTimer &gt) {
-    const auto &yawq = glm::angleAxis(m_yaw, glm::vec3(0,1,0));
-    const auto &pitchq = glm::angleAxis(m_pitch, glm::vec3(1,0,0));
-    const auto &rollq = glm::angleAxis(m_roll, glm::vec3(0,0,1));
+
+    float dt = glm::min( 1.f, gt.elapsed*5.f );
+
+    const auto &yawq = glm::angleAxis(m_yaw * dt, glm::vec3(0,1,0));
+    const auto &pitchq = glm::angleAxis(m_pitch * dt, glm::vec3(1,0,0));
+    const auto &rollq = glm::angleAxis(m_roll * dt, glm::vec3(0,0,1));
 
     m_rotation_quaternion = rollq * pitchq * yawq * m_rotation_quaternion;
     m_rotation_quaternion = normalize(m_rotation_quaternion);
 
-    m_position += camera_position_delta;
+    m_position += camera_position_delta * dt;
     m_camera_look_at = m_position + m_camera_direction;
 
 
-    m_yaw *= 0.5;
-    m_pitch *= 0.5;
-    m_roll *= 0.5;
-    camera_position_delta = camera_position_delta * 0.f;
+    m_yaw *= 1.f - dt;
+    m_pitch *= 1.f - dt;
+    m_roll *= 1.f - dt;
+    camera_position_delta = camera_position_delta * (1.f - dt);
 
     m_view = translate(mat4_cast(m_rotation_quaternion), -m_position);//glm::lookAt(position, look_at, up);
     m_camera_right = glm::normalize(glm::vec3(1,0,0) * m_rotation_quaternion);
@@ -63,7 +66,7 @@ void Camera::ReCreateViewMatrix(const GameTimer &gt) {
     m_camera_direction = glm::normalize(glm::vec3(0,0,1) * m_rotation_quaternion);
     m_MVP = m_projection * m_view * m_model;
 
-    if(camera_position_delta.x + camera_position_delta.y + camera_position_delta.z + m_pitch + m_yaw < 0.01)
+    if(glm::abs(camera_position_delta.x) + glm::abs(camera_position_delta.y) + glm::abs(camera_position_delta.z) + glm::abs(m_pitch) + glm::abs(m_yaw) + glm::abs(m_roll) < 0.0001)
         m_view_matrix_dirty = false;
 }
 
@@ -199,7 +202,7 @@ float Camera::Roll() const
 
 void Camera::Roll(float value)
 {
-    m_roll = value;
+    m_roll = value * 30;
     m_view_matrix_dirty = true;
 }
 

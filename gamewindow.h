@@ -59,7 +59,7 @@
 
 #define MAJOR 2
 #define MINOR 1
-//#define NO_SCATT
+#define NO_SCATT
 #define NO_STARFIELD
 
 class GameWindow {
