@@ -32,7 +32,9 @@ class QuadPlane
     enum Status {
         ERROR,
         READY,
-        TEXTURE_READY
+        PRE_READY,
+        TEXTURE_READY,
+        TEXTURE_PRE_READY
     };
 public:
      enum PARTS {
@@ -59,7 +61,7 @@ public:
                 int side,
                 SphereParamsStorage *parent);
     void Update(const Camera &camera, float Rs, float eps, int max_divide, SphereParamsStorage *parent);
-    void GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent);
+    void GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent, float devider = 1);
      std::shared_ptr<Material> sub_texture;
 };
 

@@ -11,6 +11,7 @@
 #include "TextureGenerator.h"
 #include "sge_ui/wins.h"
 #include "prefecences.h"
+#include <thread>
 
 QuadPlane::QuadPlane()
 {
@@ -27,18 +28,20 @@ bool QuadPlane::is_terminal() const
 }
 
 const float res = 256.0f;
-void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent)
+void QuadPlane::GenerateSubTexture(std::shared_ptr<Material> &t, SphereParamsStorage *parent, float devider)
 {
+    float _res = res / devider;
+    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2(_res), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
+    std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2(_res), true);
+
     TextureGenerator tg;
-    std::shared_ptr<Texture> height_map = std::make_shared<Texture>(glm::vec2(res), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
-    std::shared_ptr<Texture> grad_map = std::make_shared<Texture>(glm::vec2(res), true);
 
     tg.SetShader(parent->height_shader);
     tg.AddTexture("samplerPerlinPerm2D", parent->noise_map);
     tg.AddTexture("samplerPerlinGrad2D", parent->grad_map);
-    tg.SetParams(static_cast<float>(offset.x) - (2/res)*scale);
-    tg.SetParams(static_cast<float>(offset.y) - (2/res)*scale);
-    tg.SetParams(scale + (4/res)*scale);
+    tg.SetParams(static_cast<float>(offset.x) - (2/_res)*scale);
+    tg.SetParams(static_cast<float>(offset.y) - (2/_res)*scale);
+    tg.SetParams(scale + (4/_res)*scale);
     tg.SetResultTexture(height_map);
     tg.RenderOnTempFbo();
 
@@ -67,7 +70,7 @@ void QuadPlane::Render(const Camera &cam,
         parent->basic->SetUniform("R", parent->R);
         parent->basic->SetUniform("s", parent->s);
 
-        if(status == READY)
+        if(status == READY || status == PRE_READY)
         {
             terminal_mesh->Render(cam, parent->world);
             float pre_size = 222.f;
@@ -76,13 +79,8 @@ void QuadPlane::Render(const Camera &cam,
             //quadtree vis
             //WinS::ws->sb->drawRect(glm::vec2(10,10) + pre_size*offset + glm::vec2(pre_size,0)*(float)(side/2) + glm::vec2(0,pre_size)*(float)(side%2), glm::vec2(pre_size)*scale, glm::vec4(rand()%255/255.0,rand()%255/255.0,rand()%255/255.0,1 ));
         }
-        else if(status == TEXTURE_READY)
+        else if(status == TEXTURE_READY || status == TEXTURE_PRE_READY)
         {
-
-            terminal_mesh->material = sub_texture;
-            terminal_mesh->shader = parent->basic;
-            //terminal_mesh->primitives = GL_PATCHES;
-
             int size = parent->tess_size;
             terminal_mesh->indices.reserve(size * size * 6);
             terminal_mesh->vertices.reserve((size + 1) * (size + 1));
@@ -157,7 +155,7 @@ void QuadPlane::Render(const Camera &cam,
             terminal_mesh->ComputeAABB(&VertexType::position);
             terminal_mesh->ForgetBind();
             //terminal_mesh->BindExistingIBO(parent->ibo, parent->Indeces.size());
-            status = READY;
+            status = PRE_READY;
             terminal_mesh->Render(cam, parent->world);
         }
     }
@@ -179,14 +177,33 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
 
     if(status == ERROR)
     {
+       sub_texture = std::make_shared<Material>(*parent->mat);
+       GenerateSubTexture(sub_texture, parent, 8);
+       sub_texture->texture = parent->mat->texture;
+       sub_texture->global_height = parent->mat->global_height;
+
+       terminal_mesh->material = sub_texture;
+       terminal_mesh->shader = parent->basic;
+
+       status = TEXTURE_PRE_READY;
+       return;
+    }
+
+    if(status == PRE_READY && parent->busy <= 0)
+    {
+        parent->busy = 1;
         sub_texture = std::make_shared<Material>(*parent->mat);
         GenerateSubTexture(sub_texture, parent);
         sub_texture->texture = parent->mat->texture;
         sub_texture->global_height = parent->mat->global_height;
 
-        status = TEXTURE_READY;
+        terminal_mesh->material = sub_texture;
+        terminal_mesh->shader = parent->basic;
+
+        status = READY;
         return;
     }
+
 
     if(is_terminal() &&
        (glm::distance(cent[0] * Rs, camera.Position()) < eps * scale ||

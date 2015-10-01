@@ -134,6 +134,7 @@ void QuadSphere::Render(const Camera &cam)
 
 void QuadSphere::Update(const Camera &camera)
 {
+    --busy;
     if(pow(center.x - camera.Position().x, 2) + pow(center.y - camera.Position().y, 2) + pow(center.z - camera.Position().z, 2) < R*R)
         return;
     for(int i = 0; i < 6; i++)

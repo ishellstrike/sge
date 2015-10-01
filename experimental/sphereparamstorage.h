@@ -32,6 +32,7 @@ public:
     glm::vec3 center = {0,0,0};
 
     GLuint shader_r, shader_s;
+    int busy = 10;
 };
 
 #endif // SPHEREPARAMSTORAGE

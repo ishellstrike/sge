@@ -11,16 +11,10 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include "pixmap.h"
+#include "texturebase.h"
 
-struct Texture {
+struct Texture : public TextureBase {
 public:
-    GLuint textureId = 0;
-    std::string name = "empty";
-    unsigned int height = 0;
-    unsigned int width = 0;
-    unsigned int zsize = 0;
-    bool mip = false;
-
     Texture();
     Texture(glm::vec2 __size, bool smooth, bool _mip, GLuint dim, GLuint internal_format, GLuint type, GLuint format);
     Texture(glm::vec2 __size, bool smooth, bool _mip, GLuint dim, GLuint internal_format, GLuint type);

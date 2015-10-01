@@ -96,7 +96,8 @@ SOURCES += \
     space/ship_model/resource.cpp \
     sql.cpp \
     sge_ui/treeview.cpp \
-    core/tree.cpp
+    core/tree.cpp \
+    resources/texturebase.cpp
 
 VERSION = 0.1.0
 
@@ -220,7 +221,8 @@ HEADERS += \
     space/ship_model/resource.h \
     sql.h \
     sge_ui/treeview.h \
-    core/tree.h
+    core/tree.h \
+    resources/texturebase.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
