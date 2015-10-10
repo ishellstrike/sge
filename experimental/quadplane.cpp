@@ -178,7 +178,7 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
     if(status == ERROR)
     {
        sub_texture = std::make_shared<Material>(*parent->mat);
-       GenerateSubTexture(sub_texture, parent, 8);
+       GenerateSubTexture(sub_texture, parent);
        sub_texture->texture = parent->mat->texture;
        sub_texture->global_height = parent->mat->global_height;
 
@@ -192,13 +192,13 @@ void QuadPlane::Update(const Camera &camera, float Rs, float eps, int max_divide
     if(status == PRE_READY && parent->busy <= 0)
     {
         parent->busy = 1;
-        sub_texture = std::make_shared<Material>(*parent->mat);
-        GenerateSubTexture(sub_texture, parent);
-        sub_texture->texture = parent->mat->texture;
-        sub_texture->global_height = parent->mat->global_height;
+        //sub_texture = std::make_shared<Material>(*parent->mat);
+        //GenerateSubTexture(sub_texture, parent);
+        //sub_texture->texture = parent->mat->texture;
+        //sub_texture->global_height = parent->mat->global_height;
 
-        terminal_mesh->material = sub_texture;
-        terminal_mesh->shader = parent->basic;
+        //terminal_mesh->material = sub_texture;
+        //terminal_mesh->shader = parent->basic;
 
         status = READY;
         return;

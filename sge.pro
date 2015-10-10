@@ -103,15 +103,14 @@ VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
--L$$PWD/3rdparty/boost_1_58_0/stage/lib \
--llibboost_date_time-vc120-mt-gd-1_58 \
+-L$$PWD/3rdparty/boost/stage/lib \
 -lopengl32 -lglew32 -lglfw3dll -lfreetype -lmysqlcppconn -lmysqlclient #-lassimp-vc120-mtd
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
 
 win32:INCLUDEPATH += $$PWD/3rdparty/include
-win32:INCLUDEPATH += $$PWD/3rdparty/boost_1_58_0
+win32:INCLUDEPATH += $$PWD/3rdparty/boost
 
 HEADERS += \
     logger.h \

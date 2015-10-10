@@ -44,13 +44,8 @@ Shader::Shader()
 
 Shader::~Shader(void)
 {
-    while(!shaders_.empty()) {
-        glDeleteShader(shaders_.back());
-        //LOG(verbose) << "Deleting shader " << std::to_string(shaders_.back());
-        shaders_.pop_back();
-    }
+    Clear();
     glDeleteProgram(program);
-    //LOG(verbose) << string_format("Deleting program %i", program);
 }
 
 /*!
@@ -223,6 +218,22 @@ bool Shader::Link() const {
         throw;
     LOG(verbose) << "--------------------";
     return true;
+}
+
+void Shader::Clear()
+{
+    while(!shaders_.empty()) {
+        glDeleteShader(shaders_.back());
+        //LOG(verbose) << "Deleting shader " << std::to_string(shaders_.back());
+        shaders_.pop_back();
+    }
+    glDeleteProgram(program);
+    //LOG(verbose) << string_format("Deleting program %i", program);
+    program = glCreateProgram();
+    extensions.clear();
+    defines.clear();
+    shaderfile_name = "";
+    source_loaded = false;
 }
 
 GLuint Shader::GetUniformLocation(const std::string &uni_name) const

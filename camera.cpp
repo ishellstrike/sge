@@ -202,7 +202,7 @@ float Camera::Roll() const
 
 void Camera::Roll(float value)
 {
-    m_roll = value * 30;
+    m_roll = value;
     m_view_matrix_dirty = true;
 }
 

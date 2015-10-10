@@ -118,7 +118,7 @@ public:
     std::shared_ptr<Texture> tex1;
     float speed = 1;
 
-    bool wire = false;
+    bool wire = false, no_ui = false;
     std::shared_ptr<Camera> cam1, cam2;
     Camera *cam;
     glm::vec3 moving;
@@ -131,7 +131,6 @@ public:
     std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
     std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
     std::shared_ptr<Texture> texture_pipeline;
-    VoxelStructure vs;
 
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;

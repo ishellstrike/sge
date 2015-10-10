@@ -206,7 +206,7 @@ bool GameWindow::BaseInit()
     sf = std::unique_ptr<Starfield>(new Starfield());
 #endif
 
-    auto t = std::make_shared<Planet>(5000.f, 5510.f , glm::vec3{0,0,0});
+    std::shared_ptr<Planet> t = std::make_shared<Planet>(5000.f, 5510.f , glm::vec3{0,0,0});
     ss.system.push_back(t);
     t->dominant = true;
     t->InitRender(mat);
@@ -223,23 +223,6 @@ bool GameWindow::BaseInit()
         t->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital<float>(*ss.system[0])*1000);
         t->InitRender(mat);
     }
-
-    //auto aaa = GenerateRing<VertPosUv>(2, 0.5, 1000);
-
-    vs = VoxelStructure(120,120,10);
-   // vs.fillsphere();
-    vs.fillnoise();
-    auto ttt = MarchingCubes::generate<VertPosNormUvUv>(vs);
-    bill.vertices = ttt.vertices;
-    bill.indices = ttt.indices;
-
-    //bill.billboards = {{{3, 3},{0,0,0}}};
-    bill.material = mat;
-    bill.shader = Resources::instance()->Get<BasicJargShader>("planet_ring");
-    bill.clean();
-    bill.computeNormal();
-    //bill.MergeVerteces();
-    bill.Bind();
 
     return true;
 }
@@ -368,13 +351,6 @@ void GameWindow::ShadingPass()
         drawScreenQuad();
     }
 
-    //Resources::instance()->Get<BasicJargShader>("corona")->Use();
-    //Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("transform_VP", cam->View());
-    //Resources::instance()->Get<BasicJargShader>("corona")->SetUniform("iGlobalTime", gt.current);
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, Resources::instance()->Get<Texture>("noise_map")->textureId);
-    //drawScreenQuad();
-
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     const auto &deff = Resources::instance()->Get<BasicJargShader>("defered");
@@ -492,15 +468,8 @@ void GameWindow::BaseDraw()
         batch->drawText(sge::string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
     }
 
-    auto aa = ss.GetSystemSnap(cam->Position(), cam->Forward(), cam->Right());
-    batch->drawRect({400, 400}, {10, 10}, Color::DarkGreen);
-    for(const auto &a : aa)
-    {
-        glm::vec2 post = {cos(a.longitude)*a.log_distance*100+400, sin(a.longitude)*a.log_distance*100+400};
-        batch->drawLine(post, post + glm::vec2(0.f, a.z_offset*100), 2, Color::Red);
-        batch->drawRect(post + glm::vec2(-5.f, a.z_offset*100-5.f), {10,10}, Color::Red);
-    }
-    ws->Draw();
+    if(!no_ui) ws->Draw();
+
     switch(Mouse::state)
     {
     case Mouse::STATE_RESIZE:
@@ -549,43 +518,6 @@ void GameWindow::BaseUpdate()
 
     glEnable(GL_CULL_FACE);
 
-    if(Keyboard::isKeyDown(GLFW_KEY_P))
-    {
-        sge::ray r = cam->unProject(Mouse::getCursorPos());
-        glm::mat4 inv_v = glm::inverse(cam->View());
-        glm::vec3 D = glm::vec3(glm::vec4(r.origin, 1) );
-        glm::vec3 V = glm::vec3(glm::vec4(r.dir, 1)    );
-
-        for(int i = 0; i < bill.vertices.size(); i+=3)
-        {
-            glm::vec3 v0 = glm::vec3(bill.World * glm::vec4(bill.vertices[i+0].position, 1)),
-                      v1 = glm::vec3(bill.World * glm::vec4(bill.vertices[i+1].position, 1)),
-                      v2 = glm::vec3(bill.World * glm::vec4(bill.vertices[i+2].position, 1));
-
-            glm::vec3 E1 = v1 - v0;
-            glm::vec3 E2 = v2 - v0;
-            glm::vec3 T = D + v0;
-            glm::vec3 P = glm::cross(V, E2);
-            glm::vec3 Q = glm::cross(T, E1);
-
-            glm::vec3 z = (1.f/glm::dot(P, E1)) * glm::vec3(glm::dot(Q, E2), glm::dot(P, T), glm::dot(Q, V));
-            if(glm::all(glm::greaterThan(z, glm::vec3(0))))
-            {
-                vs.blocks[bill.vertices[i].position.x]
-                         [bill.vertices[i].position.y]
-                         [bill.vertices[i].position.z].data = 0;
-            }
-        }
-
-        auto ttt = MarchingCubes::generate<VertPosNormUvUv>(vs);
-        bill.vertices = ttt.vertices;
-        bill.indices = ttt.indices;
-        bill.clean();
-        bill.computeNormal();
-        //bill.MergeVerteces();
-        bill.Bind();
-    }
-
     if(Mouse::isWheelUp())
         speed *= 1.1f;
 
@@ -605,9 +537,9 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_D))
         cam->Move(Camera::RIGHT);
     if(Keyboard::isKeyDown(GLFW_KEY_Q))
-        cam->Roll(-gt.elapsed);
+        cam->Roll(-1);
     if(Keyboard::isKeyDown(GLFW_KEY_E))
-        cam->Roll(gt.elapsed);
+        cam->Roll(1);
 
     if(Keyboard::isKeyPress(GLFW_KEY_F3))
     {
@@ -619,6 +551,26 @@ void GameWindow::BaseUpdate()
 
     if(Keyboard::isKeyPress(GLFW_KEY_F2))
         wire = !wire;
+    if(Keyboard::isKeyPress(GLFW_KEY_F4))
+        no_ui = !no_ui;
+
+    if(Keyboard::isKeyPress(GLFW_KEY_F7))
+    {
+        std::shared_ptr<Material> mat = std::make_shared<Material>();
+        mat->texture = Resources::instance()->Get<Texture>("grass");
+        mat->low = Resources::instance()->Get<Texture>("grass");
+        mat->medium = Resources::instance()->Get<Texture>("soil");
+        mat->high = Resources::instance()->Get<Texture>("snow");
+        mat->side = Resources::instance()->Get<Texture>("rock");
+        auto s_dir = Prefecences::Instance()->getShadersDir();
+        auto height_shader = Resources::instance()->Get<BasicJargShader>("height_shader");
+        height_shader->Clear();
+        height_shader->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "testgen1.glsl");
+        height_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "testgen1.glsl");
+        height_shader->Link();
+        height_shader->Afterlink();
+        std::static_pointer_cast<Planet>(ss.system[0])->InitRender(mat);
+    }
 
     if(Mouse::isRightDown())
         Mouse::SetFixedPosState(true);
