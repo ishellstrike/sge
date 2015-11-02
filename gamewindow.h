@@ -27,8 +27,6 @@
 #include "sge_perfomance.h"
 #include "experimental/quadsphere.h"
 #include "experimental/scattering.h"
-#include "space/spacesystem.h"
-#include "space/solver.h"
 #include "experimental/starfield.h"
 #include "FrameBuffer.h"
 #include "geometry/ubillboard.h"
@@ -49,8 +47,6 @@
 #include "resources/resourcecontroller.h"
 #include "TextureGenerator.h"
 #include "resources/random_noise.h"
-#include "space/object.h"
-#include "space/spacesystem.h"
 #include <glm/gtx/compatibility.hpp>
 #include "sge_texlab_toolbox.h"
 #include "geometry/ring.h"
@@ -111,8 +107,6 @@ public:
 
     GameWindow();
     ~GameWindow();
-
-    SpaceSystem ss;
 
     std::shared_ptr<SpriteBatch> batch;
     std::shared_ptr<Texture> tex1;

@@ -7,10 +7,10 @@ SQL::SQL()
         //con = driver->connect("tcp://127.0.0.1:3306", "root", "admin");
         //con->setSchema("test");
     }
-    catch ( sql::SQLException &e )
-    {
-        LOG(fatal) << "SQL specific fatal: " << e.getSQLStateCStr();
-    }
+    //catch ( sql::SQLException &e )
+  //  {
+   //     LOG(fatal) << "SQL specific fatal: " << e.getSQLStateCStr();
+   // }
     catch ( std::exception &e )
     {
         LOG(fatal) << "SQL std fatal: " << e.what();

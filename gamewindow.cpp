@@ -174,55 +174,8 @@ bool GameWindow::BaseInit()
     cam2->LookAt({0,0,0});
     Resize(RESX, RESY);
 
-    std::shared_ptr<Material> mat = std::make_shared<Material>();
-    mat->texture = Resources::instance()->Get<Texture>("grass");
-    mat->low = Resources::instance()->Get<Texture>("grass");
-    mat->medium = Resources::instance()->Get<Texture>("soil");
-    mat->high = Resources::instance()->Get<Texture>("snow");
-    mat->side = Resources::instance()->Get<Texture>("rock");
-
     if(Prefecences::Instance()->hdr_on)
         PreloadHdr();
-
-    std::shared_ptr<Material> mat_star = std::make_shared<Material>();
-    mat_star->emission = Color::White;
-
-    auto &wm = std::make_shared<Material>();
-
-    qs = std::make_shared<QuadSphere>(mat);
-    qs->max_divide = 4;
-    qs_w = std::make_shared<QuadSphere>(wm);
-    qs_w->max_divide = 4;
-    qs_w->s = 1;
-    qs_w->R = 1010;
-    wm->diffuse = Color::SeaBlue;
-    wm->shininess = 80;
-
-#ifndef NO_SCATT
-    scat.Precompute();
-#endif
-
-#ifndef NO_STARFIELD
-    sf = std::unique_ptr<Starfield>(new Starfield());
-#endif
-
-    std::shared_ptr<Planet> t = std::make_shared<Planet>(5000.f, 5510.f , glm::vec3{0,0,0});
-    ss.system.push_back(t);
-    t->dominant = true;
-    t->InitRender(mat);
-
-    for(int i = 0; i < 3; i++)
-    {
-        auto t = std::make_shared<Planet>(random::next<float>()/5.0f,
-                                               3200.f,
-                                               glm::vec3{random::next<float>()*30 - 15,
-                                                         0,
-                                                         random::next<float>()*30 - 15});
-        ss.system.push_back(t);
-
-        t->speed = ssolver::make_orbital_vector<float>(*ss.system[0], *ss.system[i+1], ssolver::randomize_orbital<float>(*ss.system[0])*1000);
-        t->InitRender(mat);
-    }
 
     return true;
 }
@@ -268,27 +221,18 @@ void GameWindow::GeometryPass()
 {
     if(wire)
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
     gb->BindForWriting();
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0, 0, 0, 0.f);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
-
-    for(size_t i = 0; i < ss.system.size(); i++)
-    {
-        ss.system[i]->Render(*cam);
-    }
-
-    //water->Use();
-    //glUniform1f(glGetUniformLocation(water->program, "time"), gt.current);
-    //qs_w->Render(*cam);
-
-    //bill.Prepare(*cam);
-    bill.World = glm::rotate(bill.World, gt.elapsed, glm::vec3(0.1f, 0.2f, 0.7f));
-    bill.Render(*cam);
+    /*-----------------------*/
 
 
+
+    /*-----------------------*/
     // When we get here the depth buffer is already populated and the stencil pass
     // depends on it, but it does not write to it.
     glDepthMask(GL_FALSE);
@@ -342,15 +286,11 @@ void GameWindow::ShadingPass()
     glBlendEquation(GL_FUNC_ADD);
     glBlendFunc(GL_ONE, GL_ONE);
     glDisable(GL_DEPTH_TEST);
+    /*-----------------------*/
 
-    if(Prefecences::Instance()->starnest_on)
-    {
-        const auto &nest = Resources::instance()->Get<BasicJargShader>("starnest");
-        nest->Use();
-        nest->SetUniform("transform_VP", cam->View());
-        drawScreenQuad();
-    }
 
+
+    /*-----------------------*/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     const auto &deff = Resources::instance()->Get<BasicJargShader>("defered");
@@ -462,10 +402,15 @@ void GameWindow::BaseDraw()
 
     if(is_debug)
     {
-        batch->drawText(sge::string_format("%d dc UI", batch->getDc()), {RESX-70, 2}, f12.get(), Color::White);
-        batch->drawText(sge::string_format("%d dc UM", UMeshDc::getDc()), {RESX-70, 2+20}, f12.get(), Color::White);
-
-        batch->drawText(sge::string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
+        batch->drawText(sge::string_format("%d dc UI\n"
+                                           "%d dc UM\n"
+                                           "=%d\n"
+                                           "fps %d\n",
+                                           batch->getDc(),
+                                           UMeshDc::getDc(),
+                                           UMeshDc::getDc() + batch->getDc(),
+                                           fps.GetCount()),
+                        {RESX-70, 2}, f12.get(), Color::White);
     }
 
     if(!no_ui) ws->Draw();
@@ -479,8 +424,6 @@ void GameWindow::BaseDraw()
         batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_mouse"), Color::White);
         break;
     }
-    //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
-    //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
     batch->render();
 
     if(is_debug)
@@ -554,24 +497,6 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyPress(GLFW_KEY_F4))
         no_ui = !no_ui;
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F7))
-    {
-        std::shared_ptr<Material> mat = std::make_shared<Material>();
-        mat->texture = Resources::instance()->Get<Texture>("grass");
-        mat->low = Resources::instance()->Get<Texture>("grass");
-        mat->medium = Resources::instance()->Get<Texture>("soil");
-        mat->high = Resources::instance()->Get<Texture>("snow");
-        mat->side = Resources::instance()->Get<Texture>("rock");
-        auto s_dir = Prefecences::Instance()->getShadersDir();
-        auto height_shader = Resources::instance()->Get<BasicJargShader>("height_shader");
-        height_shader->Clear();
-        height_shader->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "testgen1.glsl");
-        height_shader->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "testgen1.glsl");
-        height_shader->Link();
-        height_shader->Afterlink();
-        std::static_pointer_cast<Planet>(ss.system[0])->InitRender(mat);
-    }
-
     if(Mouse::isRightDown())
         Mouse::SetFixedPosState(true);
     else
@@ -598,18 +523,12 @@ void GameWindow::BaseUpdate()
         cam->Zoom(cam->Zoom() - 1);
     }
 
-    for(size_t i = 0; i < ss.system.size(); i++)
-    {
-        ss.system[i]->Update(ss, gt, *cam);
-    }
 
-    qs->world = glm::rotate(qs->world, gt.elapsed/100, glm::vec3(1));
-    qs_w->world = glm::rotate(qs_w->world, gt.elapsed/100, glm::vec3(1));
-    qs->Update(*cam);
-    qs_w->Update(*cam);
     cam1->Update(gt, true);
     cam2->Update(gt);
-    MouseState s;
+
+
+    static MouseState s;
     ws->Update(gt, s);
 
     Mouse::dropState();

@@ -55,7 +55,6 @@ SOURCES += \
     FrameBuffer.cpp \
     TextureGenerator.cpp \
     experimental/scattering.cpp \
-    space/spacesystem.cpp \
     random.cpp \
     experimental/starfield.cpp \
     geometry/umesh.cpp \
@@ -74,37 +73,26 @@ SOURCES += \
     geometry/ubillboard.cpp \
     resources/umaterial.cpp \
     geometry/ring.cpp \
-    space/structure.cpp \
-    space/object.cpp \
-    space/planet_model/country.cpp \
-    space/planet_model/planet_population.cpp \
-    space/planet_model/city.cpp \
-    space/planet_model/resource.cpp \
-    space/objectbase.cpp \
     experimental/voxelstructure.cpp \
     experimental/marchingcubes.cpp \
     scene.cpp \
     light.cpp \
     geometry/meshbase.cpp \
-    space/logic/item.cpp \
-    space/logic/itemstorage.cpp \
     geometry/memorychunkcontroller.cpp \
     core/uniqueid.cpp \
     geometry/multimesh.cpp \
-    space/ship_model/hull.cpp \
-    space/ship_model/attachpoint.cpp \
-    space/ship_model/resource.cpp \
     sql.cpp \
     sge_ui/treeview.cpp \
     core/tree.cpp \
-    resources/texturebase.cpp
+    resources/texturebase.cpp \
+    map/sector.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype -lmysqlcppconn -lmysqlclient #-lassimp-vc120-mtd
+-lopengl32 -lglew32 -lglfw3dll -lfreetype #-lassimp-vc120-mtd
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -176,8 +164,6 @@ HEADERS += \
     sge_fielsystem.h \
     experimental/sphereparamstorage.h \
     experimental/scattering.h \
-    data/shaders/scattering/scatter_params.h \
-    space/spacesystem.h \
     random.h \
     experimental/starfield.h \
     geometry/umesh.h \
@@ -195,14 +181,6 @@ HEADERS += \
     geometry/ubillboard.h \
     resources/umaterial.h \
     geometry/ring.h \
-    space/structure.h \
-    space/object.h \
-    space/solver.h \
-    space/planet_model/country.h \
-    space/planet_model/city.h \
-    space/planet_model/resource.h \
-    space/planet_model/planet_population.h \
-    space/objectbase.h \
     geometry/aabb.h \
     experimental/voxelstructure.h \
     experimental/marchingcubes.h \
@@ -210,18 +188,14 @@ HEADERS += \
     scene.h \
     light.h \
     geometry/meshbase.h \
-    space/logic/item.h \
-    space/logic/itemstorage.h \
     geometry/memorychunkcontroller.h \
     core/uniqueid.h \
     geometry/multimesh.h \
-    space/ship_model/hull.h \
-    space/ship_model/attachpoint.h \
-    space/ship_model/resource.h \
     sql.h \
     sge_ui/treeview.h \
     core/tree.h \
-    resources/texturebase.h
+    resources/texturebase.h \
+    map/sector.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -274,4 +248,6 @@ DISTFILES += \
     data/shaders/fake_planet.glsl \
     data/shaders/planet_ring.glsl \
     data/shaders/defered_color.glsl \
-    data/shaders/normal.glsl
+    data/shaders/normal.glsl \
+    data/textures/cur_mouse.png \
+    data/textures/cur_resize.png
