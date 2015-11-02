@@ -43,8 +43,6 @@ int main( int argc, char* const argv[] )
         LOG(fatal) << "unknown exception";
     }
 
-    SQL s;
-
     void* v1 = new GameWindow();
     std::shared_ptr<void> v = std::shared_ptr<void>(v1);
     v.reset();

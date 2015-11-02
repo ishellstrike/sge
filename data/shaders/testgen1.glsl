@@ -80,27 +80,27 @@ float gavoronoi3b(in vec3 p)
 
 float fbmabs( vec3 p ) {
 
-    float f=1.2;
+    float f= 0.2;
 
     float r = 0.0;
     for(int i = 0;i<5;i++){
         r += abs(gavoronoi3b( p*f ))/f;
-        f *=2.3;
+        f *= 2.3;
     }
     return r/2.;
 }
 
 float map(vec3 p)
 {
-    return 1.2*fbmabs(p);
+    return 0.3*fbmabs(p);
 }
 
 void main(void)
 {
-    float c =  map(vec3(Vert.texcoord*100, 1));
+    float c = map(vec3(Vert.texcoord*100, 1));
     float pp = c;//jordanTurbulence(Vert.texcoord*100, 0, 18);
 
-    pp = clamp(pp, 0.0001, 0.9999);
+    pp = 1 - clamp(pp, 0.0001, 0.9999);
     pp = pp;
     color = encodeFloat(pp);
     //color.w = 1;
