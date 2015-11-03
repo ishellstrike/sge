@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
         Copyright (C) 2014 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT LICENSE.
@@ -52,10 +52,8 @@ void Font::renderAtlas()
     float x_start = x;
     const char32_t *p;
     FT_GlyphSlot ftGlyph = m_ftFace->glyph;
-    std::string  text8(R"xxx( `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,
-                       ./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?\|
-                       йцукенгшщзхъфывапролджэячсмитьбю
-                       ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ123@)xxx");
+    const std::string  text8(R"xxx( `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,
+                       ./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?\|123@)xxx");
 
     std::u32string text;
 

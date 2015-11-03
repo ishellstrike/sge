@@ -45,11 +45,15 @@ void main(void)
     vec3 eye = texture(buffer_normal, texcoord).xyz;
     vec3 pos = texture(buffer_world_pos, texcoord).xyz;
     vec3 light = normalize(transform_lightPos);
+    vec3 view_dir = transform_viewPos - pos;
 
     if(length(dif) <= 1.00) discard;
 
+    const float  k = 1.0;
+    float d1 = pow ( max ( dot ( eye, light ), 0.0 ), 1.0 + k );
+    float d2 = pow ( 1.0 - dot ( eye, view_dir ), 1.0 - k );
+
     color = vec4(0,0,0,1);
-    float diffuse_rate = clamp(dot(light, eye), 0, 1);
-    color += dif * diffuse_rate;
+    color += dif * d1 * d2;
 }
 #endif

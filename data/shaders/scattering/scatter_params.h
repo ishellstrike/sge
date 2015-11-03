@@ -1,4 +1,4 @@
-const float SUN_INTENSITY = 100;
+﻿const float SUN_INTENSITY = 100;
 
 const vec3 earthPos = vec3(0.0, 0.00, 0.0);
 

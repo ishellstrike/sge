@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
         Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT LICENSE.
@@ -234,7 +234,7 @@ glm::vec2 Camera::Project(const glm::vec3 &pos) const
     return glm::vec2(v.x, RESY - v.y);
 }
 
-sge::ray Camera::unProject(const glm::vec2 pos) const
+sge::ray Camera::unProject(const glm::vec2 &pos) const
 {
     glm::vec3 near = glm::unProject(glm::vec3(pos.x, RESY-pos.y, 0.f),  Model() * View(), Projection(),
                                     Viewport());

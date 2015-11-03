@@ -22,7 +22,7 @@ public:
     FPSCounter(void);
     ~FPSCounter(void);
 
-    void Update(GameTimer gt);
+    void Update(const GameTimer &gt);
 
     unsigned int GetCount() const;
 

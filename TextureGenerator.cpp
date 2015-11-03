@@ -1,4 +1,4 @@
-/*******************************************************************************
+п»ї/*******************************************************************************
         Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT LICENSE.
@@ -15,7 +15,7 @@
 #include "geometry/umesh.h"
 #include "geometry/vpnt.h"
 
-// TODO: наследуемые классы текстурного генератора, с перегрузкой функции OtherUniforms, которая вызывается перед рендером
+// TODO: РЅР°СЃР»РµРґСѓРµРјС‹Рµ РєР»Р°СЃСЃС‹ С‚РµРєСЃС‚СѓСЂРЅРѕРіРѕ РіРµРЅРµСЂР°С‚РѕСЂР°, СЃ РїРµСЂРµРіСЂСѓР·РєРѕР№ С„СѓРЅРєС†РёРё OtherUniforms, РєРѕС‚РѕСЂР°СЏ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїРµСЂРµРґ СЂРµРЅРґРµСЂРѕРј
 TextureGenerator::TextureGenerator(void)
 {
 }
@@ -110,7 +110,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         glUniform1i(uni, i + texes.size());
     }
 
-    //TODO: определение параметра
+    //TODO: РѕРїСЂРµРґРµР»РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР°
     for (int i=0; i<params.size(); i++)
     {
         std::string str = "param";

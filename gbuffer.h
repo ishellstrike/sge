@@ -31,9 +31,9 @@ public:
     void SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
 private:
 
-    GLuint m_fbo;
-    GLuint m_textures[GBUFFER_NUM_TEXTURES];
-    GLuint m_depthTexture;
+    GLuint m_fbo = 0;
+    GLuint m_textures[GBUFFER_NUM_TEXTURES] = {};
+    GLuint m_depthTexture = 0;
 };
 
 #endif // GBUFFER_H

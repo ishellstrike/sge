@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
         Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT LICENSE.
@@ -22,7 +22,7 @@ void sge::ray::precompute()
     sign[2] = inv.z < 0;
 }
 
-bool sge::intersect(const sge::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max)
+bool sge::intersect(const sge::ray &r, float t0, float t1, const glm::vec3 &min, const glm::vec3 &max)
 {
     glm::vec3 bounds[2] = {min, max};
     float tmin, tmax, tymin, tymax, tzmin, tzmax;

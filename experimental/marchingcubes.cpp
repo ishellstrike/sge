@@ -1,6 +1,6 @@
-#include "marchingcubes.h"
+﻿#include "marchingcubes.h"
 
-glm::vec3 MarchingCubes::VertexInterp(double isolevel, glm::vec3 p1, glm::vec3 p2, double valp1, double valp2)
+glm::vec3 MarchingCubes::VertexInterp(double isolevel, const glm::vec3 &p1, const glm::vec3 &p2, double valp1, double valp2)
 {
     double mu;
     glm::vec3 p;

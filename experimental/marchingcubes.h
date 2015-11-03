@@ -94,7 +94,7 @@ public:
         }
     }
 
-    static glm::vec3 VertexInterp(double isolevel, glm::vec3 p1, glm::vec3 p2, double valp1, double valp2);
+    static glm::vec3 VertexInterp(double isolevel, const glm::vec3 &p1, const glm::vec3 &p2, double valp1, double valp2);
 
     template <typename _Vtype>
     static UMesh<_Vtype> generate(const VoxelStructure &str)

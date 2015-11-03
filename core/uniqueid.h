@@ -1,4 +1,4 @@
-#ifndef UNIQUEID_H
+﻿#ifndef UNIQUEID_H
 #define UNIQUEID_H
 #include <functional>
 typedef unsigned long long uniqId;

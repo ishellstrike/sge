@@ -1,4 +1,4 @@
-#ifndef RING_H
+﻿#ifndef RING_H
 #define RING_H
 #include "umesh.h"
 #include <memory>

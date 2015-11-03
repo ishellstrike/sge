@@ -104,7 +104,7 @@ VERSION = 0.1.0
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype -lmysqlcppconn -lmysqlclient #-lassimp-vc120-mtd
+-lopengl32 -lglew32 -lglfw3dll -lfreetype #-lassimp-vc120-mtd
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -274,4 +274,5 @@ DISTFILES += \
     data/shaders/fake_planet.glsl \
     data/shaders/planet_ring.glsl \
     data/shaders/defered_color.glsl \
-    data/shaders/normal.glsl
+    data/shaders/normal.glsl \
+    data/shaders/crater.lib.glsl

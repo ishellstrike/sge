@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
         Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT LICENSE.
@@ -45,7 +45,7 @@ void GameWindow::make_release()
     update = [=](){BaseUpdate<false>();};
     draw = [=](){BaseDraw<false>();};
     main_is_debug = false;
-    glfwWindowHint(GLFW_SAMPLES, 1);
+    //glfwWindowHint(GLFW_SAMPLES, 1);
 }
 
 void GameWindow::make_spartial()
@@ -53,7 +53,7 @@ void GameWindow::make_spartial()
     update = [=](){BaseUpdate<spartial_rendering>();};
     draw = [=](){BaseDraw<spartial_rendering>();};
     main_is_debug = spartial_rendering;
-    glfwWindowHint(GLFW_SAMPLES, 16);
+    //glfwWindowHint(GLFW_SAMPLES, 16);
 }
 
 bool GameWindow::BaseInit()
@@ -462,10 +462,14 @@ void GameWindow::BaseDraw()
 
     if(is_debug)
     {
-        batch->drawText(sge::string_format("%d dc UI", batch->getDc()), {RESX-70, 2}, f12.get(), Color::White);
-        batch->drawText(sge::string_format("%d dc UM", UMeshDc::getDc()), {RESX-70, 2+20}, f12.get(), Color::White);
-
-        batch->drawText(sge::string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
+        batch->drawText(sge::string_format("%d dc UI\n"
+                                           "%d dc UM\n"
+                                           "=%d\n"
+                                           "fps %d",
+                                           batch->getDc(),
+                                           UMeshDc::getDc(),
+                                           UMeshDc::getDc() + batch->getDc(),
+                                           fps.GetCount()), {RESX-70, 2}, f12.get(), Color::White);
     }
 
     if(!no_ui) ws->Draw();

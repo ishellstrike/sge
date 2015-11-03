@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
         Copyright (C) 2015 Samsonov Andrey
 
         This software is distributed freely under the terms of the MIT LICENSE.
@@ -241,7 +241,7 @@ inline double triangular() {
         return max - sqrt((1 - U) * (max - min) * (max - mean));
 }
 
-inline bool inLimsVec2(glm::vec2 point, glm::vec2 area_begin, glm::vec2 area_end)
+inline bool inLimsVec2(const glm::vec2 &point, const glm::vec2 &area_begin, const glm::vec2 &area_end)
 {
     return point.x >= area_begin.x && point.y >= area_begin.y && point.x <= area_end.x && point.y <= area_end.y;
 }
@@ -355,7 +355,7 @@ inline std::string to_traf_string(double traf){
      *
      * @note t1 > t0, max[i] > min[i]
      */
-    bool intersect(const sge::ray &r, float t0, float t1, glm::vec3 min, glm::vec3 max);
+    bool intersect(const sge::ray &r, float t0, float t1, const glm::vec3 &min, const glm::vec3 &max);
 
     struct plane {
     public:

@@ -61,7 +61,7 @@ public:
     void Viewport(const glm::vec4 &value);
 
     glm::vec2 Project(const glm::vec3 &pos) const;
-    sge::ray unProject(const glm::vec2 pos) const;
+    sge::ray unProject(const glm::vec2 &pos) const;
 
     glm::vec3 Up() const;
     glm::vec3 Right() const;
@@ -92,9 +92,9 @@ private:
     glm::vec3 m_lookAt;
 
     glm::vec3 m_camera_direction = glm::vec3(1, 0, 0),
-              m_camera_position,
+              m_camera_position = glm::vec3(0),
               m_camera_up = glm::vec3(0, 1, 0),
-              m_camera_right,
+              m_camera_right = glm::vec3(0),
               m_camera_look_at = glm::vec3(1, 0, 0);
 
 
@@ -104,8 +104,9 @@ private:
     enum FrustrumPlane {
         RIGHT_PLANE, LEFT_PLANE, BOTTOM_PLANE, TOP_PLANE, BACK_PLANE, FRONT_PLANE
     };
-    float m_clipMatrix[16];
-    float m_frustum[6][4];
+    float m_clipMatrix[16] = {};
+
+    float m_frustum[6][4] = {};
 
     void ReCreateViewMatrix(const GameTimer &gt);
     void ReCreateProjectionMatrix();
