@@ -42,12 +42,16 @@ in Vertex {
 
 out vec4 color;
 
+    float f=1.2;
+        f *=2.3;
+    return 1.2*fbmabs(p);
 void main(void)
 {
-    float c =  crater(vec3(Vert.texcoord*100, 1), 10);
+    float c =  map(vec3(Vert.texcoord*100, 1));
     float pp = jordanTurbulence(Vert.texcoord*10, 0, 18) - c;
     pp = clamp(pp, 0, 1);
 
+    pp = clamp(pp, 0.0001, 0.9999);
     color = encodeFloat(pp);
     //color.w = 1;
 }
