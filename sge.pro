@@ -97,7 +97,9 @@ SOURCES += \
     sql.cpp \
     sge_ui/treeview.cpp \
     core/tree.cpp \
-    resources/texturebase.cpp
+    resources/texturebase.cpp \
+    core/sobject.cpp \
+    core/sagent.cpp
 
 VERSION = 0.1.0
 
@@ -221,7 +223,9 @@ HEADERS += \
     sql.h \
     sge_ui/treeview.h \
     core/tree.h \
-    resources/texturebase.h
+    resources/texturebase.h \
+    core/sobject.h \
+    core/sagent.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

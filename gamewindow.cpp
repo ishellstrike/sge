@@ -546,9 +546,9 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(GLFW_KEY_D))
         cam->Move(Camera::RIGHT);
     if(Keyboard::isKeyDown(GLFW_KEY_Q))
-        cam->Roll(-1);
+        cam->setRoll(-1);
     if(Keyboard::isKeyDown(GLFW_KEY_E))
-        cam->Roll(1);
+        cam->setRoll(1);
 
     if(Keyboard::isKeyPress(GLFW_KEY_F3))
     {
@@ -588,8 +588,8 @@ void GameWindow::BaseUpdate()
 
     if(Mouse::isRightDown())
     {
-        cam->Yaw(Mouse::getCursorDelta().x);
-        cam->Pitch(Mouse::getCursorDelta().y);
+        cam->setYaw(Mouse::getCursorDelta().x);
+        cam->setPitch(Mouse::getCursorDelta().y);
     }
 
     if (Mouse::isMiddleJustPressed())
@@ -599,12 +599,12 @@ void GameWindow::BaseUpdate()
 
     if(Mouse::isWheelUp())
     {
-        cam->Zoom(cam->Zoom() + 1);
+        cam->setZoom(cam->getZoom() + 1);
     }
 
     if(Mouse::isWheelDown())
     {
-        cam->Zoom(cam->Zoom() - 1);
+        cam->setZoom(cam->getZoom() - 1);
     }
 
     for(size_t i = 0; i < ss.system.size(); i++)

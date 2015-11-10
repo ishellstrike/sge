@@ -158,12 +158,12 @@ void Camera::Position(const glm::vec3 &value)
     m_view_matrix_dirty = true;
 }
 
-float Camera::Pitch() const
+float Camera::getPitch() const
 {
     return m_pitch;
 }
 
-void Camera::Pitch(float degrees)
+void Camera::setPitch(float degrees)
 {
     degrees = degrees/1000.f;
 
@@ -173,12 +173,12 @@ void Camera::Pitch(float degrees)
         m_yaw -= glm::sign(m_pitch) * glm::two_pi<float>();
 }
 
-float Camera::Yaw() const
+float Camera::getYaw() const
 {
     return m_yaw;
 }
 
-void Camera::Yaw(float degrees)
+void Camera::setYaw(float degrees)
 {
     degrees = degrees/1000.f;
 
@@ -195,23 +195,23 @@ void Camera::Yaw(float degrees)
     m_view_matrix_dirty = true;
 }
 
-float Camera::Roll() const
+float Camera::getRoll() const
 {
     return m_roll;
 }
 
-void Camera::Roll(float value)
+void Camera::setRoll(float value)
 {
     m_roll = value;
     m_view_matrix_dirty = true;
 }
 
-float Camera::Zoom() const
+float Camera::getZoom() const
 {
     return zoom;
 }
 
-void Camera::Zoom(float value)
+void Camera::setZoom(float value)
 {
     zoom = value;
     m_view_matrix_dirty = true;

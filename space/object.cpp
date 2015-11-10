@@ -17,7 +17,7 @@
 #ifdef ZERO_FIX
 #define if_not_zero_r if(r > m_R + a.m_R)
 #else
-#define is_not_zero_distance
+#define is_not_zero_distance if(true)
 #endif
 
 Object::Object()

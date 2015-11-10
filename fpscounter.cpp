@@ -24,12 +24,12 @@ void FPSCounter::Update(GameTimer gt)
     float frameTime = gt.elapsed;
 
     fpsTime += frameTime;
-    fpsStack.push_back(frameTime);
+    fpsStack.push(frameTime);
 
     while(fpsTime > 1)
     {
         fpsTime -= fpsStack.front();
-        fpsStack.pop_front();
+        fpsStack.pop();
     }
 }
 

@@ -72,7 +72,7 @@ void QuadPlane::Render(const Camera &cam,
 
         if(status == READY || status == PRE_READY)
         {
-            terminal_mesh->Render(cam, parent->world);
+            terminal_mesh->Render(cam, parent->world, true);
             float pre_size = 222.f;
             //texture vis
             //WinS::ws->sb->drawQuad(glm::vec2(10,10) + pre_size*offset + glm::vec2(pre_size,0)*(float)(side/2) + glm::vec2(0,pre_size)*(float)(side%2), glm::vec2(pre_size)*scale, *terminal_mesh->material->grad, Color::White);

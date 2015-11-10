@@ -45,17 +45,17 @@ public:
     const glm::vec3 &Position() const;
     void Position(const glm::vec3 &value);
 
-    float Pitch() const;
-    void Pitch(float value);
+    float getPitch() const;
+    void setPitch(float value);
 
-    float Yaw() const;
-    void Yaw(float value);
+    float getYaw() const;
+    void setYaw(float value);
 
-    float Roll() const;
-    void Roll(float value);
+    float getRoll() const;
+    void setRoll(float value);
 
-    float Zoom() const;
-    void Zoom(float value);
+    float getZoom() const;
+    void setZoom(float value);
 
     const glm::vec4 &Viewport() const;
     void Viewport(const glm::vec4 &value);
