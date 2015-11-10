@@ -37,7 +37,7 @@ void main( void )
 
     base *= 0.25;
 
-    if (length (base.rgb) < 1 )
+    if (length (base.rgb) < 0.8 )
         base.rgb = vec3(0);
 
     fragColor = base;

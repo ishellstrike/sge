@@ -117,7 +117,7 @@ public:
         return data_dir + json_data_subdir;
     }
 
-    bool hdr_on = false;
+    bool hdr_on = true;
     bool defered_debug = false;
     bool starnest_on = true;
     float double_c = 0.3;

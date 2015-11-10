@@ -225,6 +225,7 @@ void Camera::Viewport(const glm::vec4 &value)
 {
     m_viewport = value;
     m_projection_matrix_dirty = true;
+    m_view_matrix_dirty = true;
 }
 
 glm::vec2 Camera::Project(const glm::vec3 &pos) const

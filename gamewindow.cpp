@@ -241,6 +241,12 @@ void GameWindow::Resize(int w, int h)
 
     if(GameWindow::wi->gb)
         GameWindow::wi->gb->Resize(RESX, RESY);
+
+    if(Prefecences::Instance()->hdr_on)
+    {
+       GameWindow::wi->DropHdr();
+       GameWindow::wi->PreloadHdr();
+    }
 }
 
 void GameWindow::SetTitle(const std::string &str)
@@ -268,6 +274,7 @@ void GameWindow::GeometryPass()
 {
     if(wire)
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
     gb->BindForWriting();
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -393,11 +400,13 @@ void GameWindow::AftereffectPass()
 
 
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0, 0, 0, 0.f);
         Resources::instance()->Get<Shader>("tone_maping")->Use();
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_main->textureId);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture_blur2->textureId);
+        glBindTexture(GL_TEXTURE_2D, texture_blur->textureId);
         drawScreenQuad();
     }
 }
@@ -412,7 +421,7 @@ void GameWindow::PreloadHdr()
     texture_main    = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
     texture_blur    = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
     texture_blur2   = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
-    texture_extract = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA32F, GL_FLOAT, GL_RGBA);
+    texture_extract = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA);
 
     fbo_main->bindTexture(*texture_main);
     fbo_blur->bindTexture(*texture_blur);
