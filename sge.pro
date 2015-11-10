@@ -274,4 +274,6 @@ DISTFILES += \
     data/shaders/fake_planet.glsl \
     data/shaders/planet_ring.glsl \
     data/shaders/defered_color.glsl \
-    data/shaders/normal.glsl
+    data/shaders/normal.glsl \
+    data/textures/cur_mouse.png \
+    data/textures/cur_resize.png
