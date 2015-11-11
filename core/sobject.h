@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <map>
 
-class SObject
+class SObject : public SAgent
 {
 public:
    SObject();
@@ -15,15 +15,21 @@ public:
    template<typename _Ty>
    std::shared_ptr<SAgent> Get()
    {
-      auto a = std::find(std::begin(agents), std::end(agents), UniqueId::getTypeId<_Ty>());
+      auto a = std::find(std::begin(agents), std::end(agents), &typeid(SAgent));
       if(a != std::end(agents))
          return *a;
       else
          return nullptr;
    }
 
+   template<typename _Ty>
+   void Add(std::shared_ptr<SAgent> val)
+   {
+      agents.insert(&typeid(SAgent), val);
+   }
+
 private:
-   std::map<uniqId, std::shared_ptr<SAgent>> agents;
+   std::multimap<uniqId, std::shared_ptr<SAgent>> agents;
 };
 
 #endif // SOBJECT_H
