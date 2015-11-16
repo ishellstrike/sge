@@ -1,44 +1,39 @@
-#include "sagent.h"
+#include "stransformagent.h"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-SAgent::SAgent()
-{
-
-}
-
-glm::vec3 SPositionAgent::getPosition() const
+glm::vec3 STransformAgent::getPosition() const
 {
    return position;
 }
 
-void SPositionAgent::setPosition(const glm::vec3 &value)
+void STransformAgent::setPosition(const glm::vec3 &value)
 {
    raw = true;
    position = value;
 }
-glm::quat SPositionAgent::getRotation() const
+glm::vec3 STransformAgent::getRotation() const
 {
    return rotation;
 }
 
-void SPositionAgent::setRotation(const glm::quat &value)
+void STransformAgent::setRotation(const glm::vec3 &value)
 {
    raw = true;
    rotation = value;
 }
-glm::vec3 SPositionAgent::getScale() const
+glm::vec3 STransformAgent::getScale() const
 {
    return scale;
 }
 
-void SPositionAgent::setScale(const glm::vec3 &value)
+void STransformAgent::setScale(const glm::vec3 &value)
 {
    raw = true;
    scale = value;
 }
 
-glm::mat4 SPositionAgent::getTransformation() const
+glm::mat4 STransformAgent::getTransformation() const
 {
    if(raw_q)
    {

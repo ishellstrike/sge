@@ -1,7 +1,7 @@
 #ifndef UNIQUEID_H
 #define UNIQUEID_H
 #include <functional>
-typedef unsigned long int uniqId;
+typedef unsigned uniqId;
 
 class UniqueId
 {
@@ -44,6 +44,19 @@ public:
         {
                 std::hash<std::string> s;
                 return s(typeid(_Ty).name());
+        }();
+
+        return this_type;
+    }
+
+    template<typename _Ty>
+    static uniqId getTypeId(const _Ty &val)
+    {
+
+        static uniqId this_type = [&]() -> uniqId
+        {
+                std::hash<std::string> s;
+                return s(typeid(val).name());
         }();
 
         return this_type;

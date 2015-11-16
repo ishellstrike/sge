@@ -72,7 +72,7 @@ void QuadPlane::Render(const Camera &cam,
 
         if(status == READY || status == PRE_READY)
         {
-            terminal_mesh->Render(cam, parent->world, true);
+            terminal_mesh->__Render(cam, parent->world, true);
             float pre_size = 222.f;
             //texture vis
             //WinS::ws->sb->drawQuad(glm::vec2(10,10) + pre_size*offset + glm::vec2(pre_size,0)*(float)(side/2) + glm::vec2(0,pre_size)*(float)(side%2), glm::vec2(pre_size)*scale, *terminal_mesh->material->grad, Color::White);
@@ -84,7 +84,6 @@ void QuadPlane::Render(const Camera &cam,
             int size = parent->tess_size;
             terminal_mesh->indices.reserve(size * size * 6);
             terminal_mesh->vertices.reserve((size + 1) * (size + 1));
-            int co = 0;
 
             float xs = (-0.5f + offset.x); /*< x координата начала сектора сферы с отступом*/
             float ys = (-0.5f + offset.y); /*< y координата начала сектора сферы с отступом*/
@@ -156,7 +155,7 @@ void QuadPlane::Render(const Camera &cam,
             terminal_mesh->ForgetBind();
             //terminal_mesh->BindExistingIBO(parent->ibo, parent->Indeces.size());
             status = PRE_READY;
-            terminal_mesh->Render(cam, parent->world);
+            terminal_mesh->__Render(cam, parent->world);
         }
     }
     else

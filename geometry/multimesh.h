@@ -81,7 +81,7 @@ public:
         static_assert(false, "Multimesh can't be binded directly. Use Add()");
     }
 
-    void Render(const Camera &cam, const glm::mat4 &mod = glm::mat4(1), bool aabb_culling = false) override
+    void __Render(const Camera &cam, const glm::mat4 &mod = glm::mat4(1), bool aabb_culling = false) override
     {
 
     }

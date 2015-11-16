@@ -540,7 +540,7 @@ void SpriteBatch::reduceScissor(glm::vec2 loc, glm::vec2 size)
 
     render();
     glEnable(GL_SCISSOR_TEST);
-    glScissor(loc.x, RESY - (loc.y + size.y), size.x, size.y);
+    glScissor(loc.x, RESY - (loc.y + size.y), GLsizei(size.x), GLsizei(size.y));
 }
 
 void SpriteBatch::resetScissor()

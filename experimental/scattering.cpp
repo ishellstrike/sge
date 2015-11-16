@@ -359,7 +359,7 @@ void Scattering::Precompute()
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaJTexture, 0);
         glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
         glUseProgram(jProg);
-        glUniform1f(glGetUniformLocation(jProg, "first"), order == 2 ? 1.0 : 0.0);
+        glUniform1f(glGetUniformLocation(jProg, "first"), order == 2 ? 1.0f : 0.0f);
         glUniform1i(glGetUniformLocation(jProg, "transmittanceSampler"), transmittanceUnit);
         glUniform1i(glGetUniformLocation(jProg, "deltaESampler"), deltaEUnit);
         glUniform1i(glGetUniformLocation(jProg, "deltaSRSampler"), deltaSRUnit);
@@ -373,7 +373,7 @@ void Scattering::Precompute()
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
         glViewport(0, 0, SKY_W, SKY_H);
         glUseProgram(irradianceNProg);
-        glUniform1f(glGetUniformLocation(irradianceNProg, "first"), order == 2 ? 1.0 : 0.0);
+        glUniform1f(glGetUniformLocation(irradianceNProg, "first"), order == 2 ? 1.0f : 0.0f);
         glUniform1i(glGetUniformLocation(irradianceNProg, "transmittanceSampler"), transmittanceUnit);
         glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSRSampler"), deltaSRUnit);
         glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSMSampler"), deltaSMUnit);
@@ -383,7 +383,7 @@ void Scattering::Precompute()
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
         glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
         glUseProgram(inscatterNProg);
-        glUniform1f(glGetUniformLocation(inscatterNProg, "first"), order == 2 ? 1.0 : 0.0);
+        glUniform1f(glGetUniformLocation(inscatterNProg, "first"), order == 2 ? 1.0f : 0.0f);
         glUniform1i(glGetUniformLocation(inscatterNProg, "transmittanceSampler"), transmittanceUnit);
         glUniform1i(glGetUniformLocation(inscatterNProg, "deltaJSampler"), deltaJUnit);
         for (int layer = 0; layer < RES_R; ++layer) {

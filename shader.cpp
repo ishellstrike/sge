@@ -279,47 +279,47 @@ void Shader::LoadBinary(const std::string &)
 
 }
 
-void Shader::SetUniform_(const glm::mat4 &val, const std::string &uni_name) const
+void Shader::SetUniform_(const glm::mat4 &val, const GLuint pos) const
 {
-    glUniformMatrix4fv(GetUniformLocation(uni_name), 1, GL_FALSE, &val[0][0]);
+    glUniformMatrix4fv(pos, 1, GL_FALSE, &val[0][0]);
 }
 
-void Shader::SetUniform_(const glm::mat3 &val, const std::string &uni_name) const
+void Shader::SetUniform_(const glm::mat3 &val, const GLuint pos) const
 {
-    glUniformMatrix3fv(GetUniformLocation(uni_name), 1, GL_FALSE, &val[0][0]);
+    glUniformMatrix3fv(pos, 1, GL_FALSE, &val[0][0]);
 }
 
-void Shader::SetUniform_(const glm::mat2 &val, const std::string &uni_name) const
+void Shader::SetUniform_(const glm::mat2 &val, const GLuint pos) const
 {
-    glUniformMatrix2fv(GetUniformLocation(uni_name), 1, GL_FALSE, &val[0][0]);
+    glUniformMatrix2fv(pos, 1, GL_FALSE, &val[0][0]);
 }
 
-void Shader::SetUniform_(int val, const std::string &uni_name) const
+void Shader::SetUniform_(int val, const GLuint pos) const
 {
-    glUniform1i(GetUniformLocation(uni_name), val);
+    glUniform1i(pos, val);
 }
 
-void Shader::SetUniform_(unsigned int val, const std::string &uni_name) const
+void Shader::SetUniform_(unsigned int val, const GLuint pos) const
 {
-    glUniform1ui(GetUniformLocation(uni_name), val);
+    glUniform1ui(pos, val);
 }
 
-void Shader::SetUniform_(const glm::vec4 &val, const std::string &uni_name) const
+void Shader::SetUniform_(const glm::vec4 &val, const GLuint pos) const
 {
-    glUniform4fv(GetUniformLocation(uni_name), 1, &val[0]);
+    glUniform4fv(pos, 1, &val[0]);
 }
 
-void Shader::SetUniform_(const glm::vec3 &val, const std::string &uni_name) const
+void Shader::SetUniform_(const glm::vec3 &val, const GLuint pos) const
 {
-    glUniform3fv(GetUniformLocation(uni_name), 1, &val[0]);
+    glUniform3fv(pos, 1, &val[0]);
 }
 
-void Shader::SetUniform_(const glm::vec2 &val, const std::string &uni_name) const
+void Shader::SetUniform_(const glm::vec2 &val, const GLuint pos) const
 {
-    glUniform2fv(GetUniformLocation(uni_name), 1, &val[0]);
+    glUniform2fv(pos, 1, &val[0]);
 }
 
-void Shader::SetUniform_(const float &val, const std::string &uni_name) const
+void Shader::SetUniform_(const float &val, const GLuint pos) const
 {
-    glUniform1f(GetUniformLocation(uni_name), val);
+    glUniform1f(pos, val);
 }

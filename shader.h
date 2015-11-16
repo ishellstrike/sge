@@ -38,7 +38,9 @@ public:
     template<class T>
     void SetUniform(const std::string &name, const T &val) const
     {
-      SetUniform_(val, name);
+        const GLuint pos = GetUniformLocation(name);
+        if(pos != -1)
+            SetUniform_(val, pos);
     }
 
     GLuint GetUniformLocation(const std::string &uni_name) const;
@@ -53,18 +55,18 @@ private:
     GLint locate(const std::string &s);
     void preprocessIncludes(std::stringstream &ss, const std::string &filename, GLenum type, int level = 0);
 
-    void SetUniform_(const glm::mat4 &val, const std::string &uni_name) const;
-    void SetUniform_(const glm::mat3 &val, const std::string &uni_name) const;
-    void SetUniform_(const glm::mat2 &val, const std::string &uni_name) const;
+    void SetUniform_(const glm::mat4 &val, const GLuint pos) const;
+    void SetUniform_(const glm::mat3 &val, const GLuint pos) const;
+    void SetUniform_(const glm::mat2 &val, const GLuint pos) const;
 
-    void SetUniform_(int val,              const std::string &uni_name) const;
-    void SetUniform_(unsigned int val,     const std::string &uni_name) const;
+    void SetUniform_(int val,              const GLuint pos) const;
+    void SetUniform_(unsigned int val,     const GLuint pos) const;
 
-    void SetUniform_(const glm::vec4 &val, const std::string &uni_name) const;
-    void SetUniform_(const glm::vec3 &val, const std::string &uni_name) const;
-    void SetUniform_(const glm::vec2 &val, const std::string &uni_name) const;
+    void SetUniform_(const glm::vec4 &val, const GLuint pos) const;
+    void SetUniform_(const glm::vec3 &val, const GLuint pos) const;
+    void SetUniform_(const glm::vec2 &val, const GLuint pos) const;
 
-    void SetUniform_(const float &val,     const std::string &uni_name) const;
+    void SetUniform_(const float &val,     const GLuint pos) const;
 
     mutable std::unordered_map <std::string, GLuint> m_uniforms;
     bool source_loaded = false;

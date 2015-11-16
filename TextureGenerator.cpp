@@ -87,7 +87,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     glViewport(0, 0, target->width, target->height);
     shader->Use();
 
-    for (int i=0; i<texes.size(); i++)
+    for (size_t i=0; i<texes.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0+i);
         glBindTexture(GL_TEXTURE_2D, texes[i]->textureId);
@@ -99,7 +99,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
         glUniform1i(uni, i);
     }
 
-    for(int i=0; i < named_textures.size(); ++i)
+    for(size_t i=0; i < named_textures.size(); ++i)
     {
         glActiveTexture(GL_TEXTURE0 + i + texes.size());
         glBindTexture(GL_TEXTURE_2D, named_textures[i].second->textureId);
@@ -111,7 +111,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     }
 
     //TODO: определение параметра
-    for (int i=0; i<params.size(); i++)
+    for (size_t i=0; i<params.size(); i++)
     {
         std::string str = "param";
         str.append(std::to_string(i));
@@ -129,7 +129,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     mesh.shader = shader;
     mesh.ForgetBind();
     Camera c;
-    mesh.Render(c);
+    mesh.__Render(c);
 
 //    Radeon driver bug =(
 //    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);

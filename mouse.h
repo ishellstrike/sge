@@ -51,7 +51,8 @@ public:
     enum STATE
     {
         STATE_MOUSE,
-        STATE_RESIZE
+        STATE_RESIZE,
+        STATE_HIDDEN
     };
 
     static STATE state;

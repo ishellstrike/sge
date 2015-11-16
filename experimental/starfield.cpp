@@ -36,7 +36,7 @@ Starfield::Starfield()
 void Starfield::Render(const Camera &cam)
 {
     glPointSize(1);
-    field.Render(cam);
+    field.__Render(cam);
 }
 
 VertexInfo VertPosCol::info = VertexInfo({VERTEX_ATTRIBUTE("color",    glm::vec4, col, VertPosCol),

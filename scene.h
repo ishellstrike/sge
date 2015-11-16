@@ -2,14 +2,15 @@
 #define SCENE_H
 #include <list>
 #include "light.h"
-#include "geometry/meshbase.h"
+
+#include <core/sobject.hpp>
 
 class Scene
 {
 public:
     Scene();
 
-    std::list<MeshBase> meshes;
+    std::list<SObject> meshes;
     std::list<Light> lights;
     Camera camera;
 

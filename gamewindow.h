@@ -27,11 +27,7 @@
 #include "sge_perfomance.h"
 #include "experimental/quadsphere.h"
 #include "experimental/scattering.h"
-#include "space/spacesystem.h"
-#include "space/solver.h"
-#include "experimental/starfield.h"
 #include "FrameBuffer.h"
-#include "geometry/ubillboard.h"
 
 #include "mouse.h"
 #include "keyboard.h"
@@ -40,22 +36,16 @@
 #include "spritebatch.h"
 #include "glm/gtx/transform.hpp"
 #include "colorextender.h"
-#include "textureatlas.h"
 #include <thread>
 #include <chrono>
 #include <algorithm>
-#include "ClassicNoise.h"
 #include "geometry/model.h"
 #include "resources/resourcecontroller.h"
 #include "TextureGenerator.h"
-#include "resources/random_noise.h"
-#include "space/object.h"
-#include "space/spacesystem.h"
 #include <glm/gtx/compatibility.hpp>
 #include "sge_texlab_toolbox.h"
-#include "geometry/ring.h"
-#include "experimental/marchingcubes.h"
-#include "experimental/voxelstructure.h"
+
+#include "core/sobject.hpp"
 
 #define MAJOR 2
 #define MINOR 1
@@ -112,21 +102,11 @@ public:
     GameWindow();
     ~GameWindow();
 
-    SpaceSystem ss;
-
     std::shared_ptr<SpriteBatch> batch;
-    std::shared_ptr<Texture> tex1;
     float speed = 1;
 
     bool wire = false, no_ui = false;
-    std::shared_ptr<Camera> cam1, cam2;
-    Camera *cam;
-    glm::vec3 moving;
-    std::vector<glm::vec3> tail;
-    Scattering scat;
-    std::unique_ptr<Starfield> sf;
-
-    UMesh<VertPosNormUvUv> bill;
+    std::shared_ptr<Camera> cam;
 
     std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
     std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
@@ -135,7 +115,9 @@ public:
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
-    std::shared_ptr<QuadSphere> qs, qs_w;
+
+    std::list<std::shared_ptr<SObject>> objects;
+
     static void Swap();
     void GeometryPass();
     void BlitGBuffer();

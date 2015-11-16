@@ -14,8 +14,8 @@ sge_texlab_float_selector::sge_texlab_float_selector(WContainer *par) :
 
     d = new DragNumbox(this);
     d->max = 2;
-    d->min = 0.00001;
-    d->growth = 0.0001;
+    d->min = 0.00001f;
+    d->growth = 0.0001f;
     d->pos = {0,0};
     d->size = {70,30};
     size = {90,50};

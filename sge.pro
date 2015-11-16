@@ -99,7 +99,10 @@ SOURCES += \
     core/tree.cpp \
     resources/texturebase.cpp \
     core/sobject.cpp \
-    core/sagent.cpp
+    core/agents/stransformagent.cpp \
+    core/sagent_base.cpp \
+    core/agents/smeshagent.cpp \
+    core/agents/sagentrender.cpp
 
 VERSION = 0.1.0
 
@@ -225,7 +228,12 @@ HEADERS += \
     core/tree.h \
     resources/texturebase.h \
     core/sobject.h \
-    core/sagent.h
+    core/agents/stransformagent.h \
+    core/sagent_base.h \
+    core/agents/smeshagent.h \
+    core/agents/sagentrender.h \
+    core/sobject.hpp \
+    geometry/cube.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -280,4 +288,5 @@ DISTFILES += \
     data/shaders/defered_color.glsl \
     data/shaders/normal.glsl \
     data/textures/cur_mouse.png \
-    data/textures/cur_resize.png
+    data/textures/cur_resize.png \
+    data/shaders/defered_basic_render.glsl

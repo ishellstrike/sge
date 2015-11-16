@@ -66,7 +66,6 @@ public:
 
     void Bind() override
     {
-        assert(shader && "need shader to bind");
         if(!assigned) Assign();
 
         if(vertices.size() == 0){
@@ -152,7 +151,7 @@ public:
         aabb.builded = true;
     }
 
-    void Render(const Camera &cam, const glm::mat4 &mod = glm::mat4(1), bool aabb_culling = false) override
+    void __Render(const Camera &cam, const glm::mat4 &mod = glm::mat4(1), bool aabb_culling = false) override
     {
         if(aabb_culling && aabb.builded)
         {
@@ -257,6 +256,21 @@ public:
 
         glDrawElements(primitives, loaded_i, GL_UNSIGNED_INT, (void*)0);
         glBindVertexArray(0);
+
+        OPENGL_CHECK_ERRORS();
+        UMeshDc::dc++;
+    }
+
+    void Render()
+    {
+        glBindVertexArray(vao);
+
+        if(primitives == GL_PATCHES) {
+            glPatchParameteri(GL_PATCH_VERTICES, 3);
+        }
+
+        glDrawElements(primitives, loaded_i, GL_UNSIGNED_INT, (void*)0);
+        //glBindVertexArray(0);
 
         OPENGL_CHECK_ERRORS();
         UMeshDc::dc++;

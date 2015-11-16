@@ -199,4 +199,13 @@ void Resources::Init()
     planet_ring->Link();
     planet_ring->Afterlink();
     PUSH_NVP(planet_ring);
+
+    //============================
+
+    const auto & defered_basic_render = new BasicJargShader;
+    defered_basic_render->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "defered_basic_render.glsl");
+    defered_basic_render->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "defered_basic_render.glsl");
+    defered_basic_render->Link();
+    defered_basic_render->Afterlink();
+    PUSH_NVP(defered_basic_render);
 }

@@ -35,7 +35,7 @@ public:
 
     std::unordered_map<std::string, std::shared_ptr<material_uniform>> uniforms;
 
-    void SetUniform( const std::string &name, std::shared_ptr<Texture> &u )
+    void SetUniform( const std::string &, std::shared_ptr<Texture> & )
     {
         //auto a = std::make_shared<texture_uniform>();
        // uniforms[name] = u;

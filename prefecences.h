@@ -120,7 +120,7 @@ public:
     bool hdr_on = true;
     bool defered_debug = false;
     bool starnest_on = true;
-    float double_c = 0.3;
+    float double_c = 0.3f;
 };
 
 #endif // PREFECENCES_H

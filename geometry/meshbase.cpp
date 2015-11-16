@@ -6,25 +6,8 @@ MeshBase::MeshBase(VertexInfo &inf) : info(inf)
 
 }
 
-void MeshBase::Bind()
-{
-    assert(false);
-}
-
-void MeshBase::ForgetBind()
-{
-    assert(false);
-}
-
-void MeshBase::Render(const Camera &cam, const glm::mat4 &mod, bool aabb_culling)
-{
-    assert(false);
-}
-
 void MeshBase::Assign()
 {
-    assert(shader && "need shader to bind");
-
     for(size_t i = 0; i < info.attrib.size(); ++i)
     {
         const VertexAttribute &a = info.attrib[i];

@@ -1,21 +1,9 @@
-#ifndef SAGENT_H
-#define SAGENT_H
-#include "uniqueid.h"
+#ifndef STRANSFORMAGENT_H
+#define STRANSFORMAGENT_H
+#include "core/sagent_base.h"
 #include <glm/glm.hpp>
-#include <boost/any.hpp>
 
-class SAgent
-{
-public:
-   SAgent();
-};
-
-class SMeshAgent : public SAgent
-{
-public:
-};
-
-class SPositionAgent : public SAgent
+class STransformAgent : public SAgentBase
 {
 public:
 
@@ -24,8 +12,8 @@ public:
    glm::vec3 getPosition() const;
    void setPosition(const glm::vec3 &value);
 
-   glm::quat getRotation() const;
-   void setRotation(const glm::quat &value);
+   glm::vec3 getRotation() const;
+   void setRotation(const glm::vec3 &value);
 
    glm::vec3 getScale() const;
    void setScale(const glm::vec3 &value);
@@ -41,6 +29,10 @@ private:
    mutable glm::quat precomp_quat;
    mutable bool raw = false;
    mutable bool raw_q = false;
+
+   // SAgentBase interface
+public:
+   AGENT(STransformAgent)
 };
 
-#endif // SAGENT_H
+#endif // STRANSFORMAGENT_H

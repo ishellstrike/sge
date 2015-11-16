@@ -9,9 +9,10 @@ class MeshBase
 public:
     MeshBase(VertexInfo &inf);
 
-    virtual void Bind();
-    virtual void ForgetBind();
-    virtual void Render(const Camera &cam, const glm::mat4 &mod = glm::mat4(1), bool aabb_culling = false);
+    virtual void Bind() = 0;
+    virtual void ForgetBind() = 0;
+    virtual void __Render(const Camera &cam, const glm::mat4 &mod = glm::mat4(1), bool aabb_culling = false) = 0;
+    virtual void Render() = 0;
 
     VertexInfo info;
 
