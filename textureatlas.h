@@ -20,7 +20,8 @@ public:
     static std::shared_ptr<Texture> tex;
     static std::unordered_map<std::string, int> refs;
 
-    void LoadAll();
+    static void LoadAll();
+    static glm::vec2 GetUV(int n);
 };
 
 #endif // TEXTUREATLAS_H

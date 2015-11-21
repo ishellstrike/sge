@@ -267,10 +267,6 @@ DISTFILES += \
     data/shaders/scattering/irradianceN.glsl \
     data/shaders/scattering/transmittance.glsl \
     data/shaders/starfield.glsl \
-    data/textures/grass.png \
-    data/textures/rock.png \
-    data/textures/snow.png \
-    data/textures/soil.png \
     README.md \
     LICENSE.txt \
     data/shaders/rgb_to_luminance.glsl \
@@ -289,4 +285,5 @@ DISTFILES += \
     data/shaders/normal.glsl \
     data/textures/cur_mouse.png \
     data/textures/cur_resize.png \
-    data/shaders/defered_basic_render.glsl
+    data/shaders/defered_basic_render.glsl \
+    data/textures/atlas/blank.png

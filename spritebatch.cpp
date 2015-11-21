@@ -315,9 +315,9 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
     col[cur*4 + 2] = col_;
     col[cur*4 + 3] = col_;
 
-    float sx = 32 / (float) tex.width;
+    float sx = 64 / (float) tex.width;
     float sy = 32 / (float) tex.height;
-    int inrow = tex.width / 32;
+    int inrow = tex.width / 64;
     float x = (apos % inrow) * sx;
     float y = (apos / inrow) * sy;
 

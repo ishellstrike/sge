@@ -28,7 +28,6 @@ public:
 
     void Load(const std::string &a, bool smooth = false, bool mip = false);
     void Load(const Pixmap &a, bool smooth = false, bool mip = false);
-    //void Load(QImage *a, bool smooth = false, bool mip = false);
     void Empty(const glm::vec2 &size, bool smooth = false, bool _mip = false, GLuint dim = GL_TEXTURE_2D, GLuint internal_format = GL_RGBA, GLuint type = GL_UNSIGNED_BYTE, GLuint format = GL_RGBA);
     void CreateDepth(glm::vec2 &size);
     void IdOnly();

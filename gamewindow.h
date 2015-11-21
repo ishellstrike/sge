@@ -119,13 +119,6 @@ public:
     std::list<std::shared_ptr<SObject>> objects;
 
     static void Swap();
-    void GeometryPass();
-    void BlitGBuffer();
-    void ShadingPass();
-    void BeginLightPasses();
-    void AftereffectPass();
-    void PreloadHdr();
-    void DropHdr();
 };
 
 #endif // GAMEWINDOW_H

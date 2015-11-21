@@ -83,7 +83,7 @@ Texture::~Texture()
  * \param smooth параметр интерполяции текселей (true - GL_LINEAR, false - GL_NEAREST)
  * \param mip параметр генерации мип-карт
  */
-void Texture::Load(const std::string &a, bool smooth, bool mip)
+void Texture::Load(const std::string &a, bool smooth /*=false*/, bool mip /*=false*/)
 {
     Pixmap p(a);
     auto slpos = a.find_last_of('/');
@@ -100,6 +100,7 @@ void Texture::Load(const std::string &a, bool smooth, bool mip)
  */
 void Texture::Load(const Pixmap &a, bool smooth /*=false*/, bool _mip /*=false*/)
 {
+    m_dim = GL_TEXTURE_2D;
     width = a.width;
     height = a.height;
 

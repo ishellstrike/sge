@@ -223,6 +223,7 @@ const glm::vec4 &Camera::Viewport() const
 }
 void Camera::Viewport(const glm::vec4 &value)
 {
+    glViewport(value.x, value.y, value.z, value.w);
     m_viewport = value;
     m_projection_matrix_dirty = true;
     m_view_matrix_dirty = true;

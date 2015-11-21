@@ -26,7 +26,7 @@ public:
     {
         const auto & find = data.find(id);
         if(find == data.end())
-            LOG(fatal) << typeid(_Ty).name() << id << " missed";
+            LOG(fatal) << typeid(_Ty).name() << " id = \"" << id << "\" missed";
         return find->second;
     }
 

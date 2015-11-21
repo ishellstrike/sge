@@ -79,6 +79,19 @@ public:
     }
 
     /*!
+     * \brief atlas_data_subdir
+     */
+    std::string atlas_data_subdir = "atlas/";
+    /*!
+     * \brief getAtlasDir
+     * \return atlas directory name
+     */
+    const std::string getAtlasDir() const
+    {
+        return getTexturesDir() + atlas_data_subdir;
+    }
+
+    /*!
      * \brief shaders data subdir
      */
     std::string shaders_data_subdir = "shaders/";

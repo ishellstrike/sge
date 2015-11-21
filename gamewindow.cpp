@@ -102,11 +102,12 @@ bool GameWindow::BaseInit()
 
 
     int glVersion[2] = {-1, -1};
-    int ntex, nuni;
+    int ntex, nuni, texss;
     glGetIntegerv(GL_MAJOR_VERSION, &glVersion[0]);
     glGetIntegerv(GL_MINOR_VERSION, &glVersion[1]);
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &ntex);
     glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &nuni);
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texss);
     LOG(info) << "Renderer: " << glGetString(GL_RENDERER);
     LOG(info) << "Vendor: " << glGetString(GL_VENDOR);
     LOG(info) << "Version: " << glGetString(GL_VERSION);
@@ -116,6 +117,7 @@ bool GameWindow::BaseInit()
     LOG(info) << "GLEW: " << glewGetString(GLEW_VERSION);
     LOG(info) << "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: " << ntex;
     LOG(info) << "GL_MAX_UNIFORM_LOCATIONS: " << nuni;
+    LOG(info) << "GL_MAX_TEXTURE_SIZE: " << texss;
     if(ntex < 16)
         throw;
     LOG(info) << EXT_CHECK(GLEW_ARB_multi_bind);
@@ -170,9 +172,6 @@ bool GameWindow::BaseInit()
     cam->LookAt({0,0,0});
     Resize(RESX, RESY);
 
-    if(Prefecences::Instance()->hdr_on)
-        PreloadHdr();
-
     //================================
 
     std::shared_ptr<SObject> o = std::make_shared<SObject>();
@@ -185,6 +184,8 @@ bool GameWindow::BaseInit()
     o->Add(t);
     r->mesh = m;
     m->mesh = GenerateCube<VertPosNormUvUv>();
+
+    TextureAtlas::LoadAll();
 
     return true;
 }
@@ -203,12 +204,6 @@ void GameWindow::Resize(int w, int h)
 
     if(GameWindow::wi->gb)
         GameWindow::wi->gb->Resize(RESX, RESY);
-
-    if(Prefecences::Instance()->hdr_on)
-    {
-       GameWindow::wi->DropHdr();
-       GameWindow::wi->PreloadHdr();
-    }
 }
 
 void GameWindow::SetTitle(const std::string &str)
@@ -232,207 +227,24 @@ void GameWindow::Swap()
     glfwSwapBuffers(wi->window);
 }
 
-void GameWindow::GeometryPass()
-{
-    if(wire)
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
-    gb->BindForWriting();
-    glDepthMask(GL_TRUE);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0, 0, 0, 0.f);
-    glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-    //=================================================
-
-    for(const std::shared_ptr<SObject> &a : objects)
-    {
-        auto i = a->Get<SRenderAgent>();
-        if(i != nullptr)
-           i->Render(*cam);
-    }
-
-    //=================================================
-    glDepthMask(GL_FALSE);
-    glDisable(GL_DEPTH_TEST);
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-}
-
-void GameWindow::BlitGBuffer()
-{
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    gb->BindForBlit();
-
-    GLsizei HalfWidth = (GLsizei)(RESX_float / 2.0f);
-    GLsizei HalfHeight = (GLsizei)(RESY_float / 2.0f);
-
-    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
-    glBlitFramebuffer(0, 0, RESX, RESY,
-                      0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-    glBlitFramebuffer(0, 0, RESX, RESY,
-                      0, HalfHeight, HalfWidth, RESY, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
-    glBlitFramebuffer(0, 0, RESX, RESY,
-                      HalfWidth, HalfHeight, RESX, RESY, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-    gb->SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
-    glBlitFramebuffer(0, 0, RESX, RESY,
-                      HalfWidth, 0, RESX, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-    OPENGL_CHECK_ERRORS();
-}
-
-void GameWindow::ShadingPass()
-{
-    gb->BindForReading();
-    if(Prefecences::Instance()->hdr_on)
-    {
-        fbo_main->Bind();
-    }
-    else
-    {
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    }
-
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0, 0, 0, 0.f);
-
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_ONE, GL_ONE);
-    glDisable(GL_DEPTH_TEST);
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    const auto &deff = Resources::instance()->Get<BasicJargShader>("defered");
-    deff->Use();
-    deff->SetUniform("transform_lightPos", glm::vec3(0,1,0));
-    drawScreenQuad();
-
-#ifndef NO_SCATT
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    scat.redisplayFunc(*cam);
-#endif
-}
-
-void GameWindow::AftereffectPass()
-{
-    if(Prefecences::Instance()->hdr_on)
-    {
-        fbo_extract->Bind();
-        glClampColor( GL_CLAMP_VERTEX_COLOR, GL_FALSE );
-        Resources::instance()->Get<Shader>("extract_glow")->Use();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture_main->textureId);
-        drawScreenQuad();
-
-
-        fbo_blur->Bind();
-        Resources::instance()->Get<Shader>("gausian_blur")->Use();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture_extract->textureId);
-        drawScreenQuad();
-
-
-        fbo_blur2->Bind();
-        Resources::instance()->Get<Shader>("gausian_blur2")->Use();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture_blur->textureId);
-        drawScreenQuad();
-
-
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(0, 0, 0, 0.f);
-        Resources::instance()->Get<Shader>("tone_maping")->Use();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture_main->textureId);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture_blur->textureId);
-        drawScreenQuad();
-    }
-}
-
-void GameWindow::PreloadHdr()
-{
-    fbo_blur    = std::make_shared<FrameBuffer>();
-    fbo_blur2   = std::make_shared<FrameBuffer>();
-    fbo_main    = std::make_shared<FrameBuffer>();
-    fbo_extract = std::make_shared<FrameBuffer>();
-
-    texture_main    = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
-    texture_blur    = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
-    texture_blur2   = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE);
-    texture_extract = std::make_shared<Texture>(glm::vec2(RESX,RESY), true, false, GL_TEXTURE_2D, GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA);
-
-    fbo_main->bindTexture(*texture_main);
-    fbo_blur->bindTexture(*texture_blur);
-    fbo_blur2->bindTexture(*texture_blur2);
-    fbo_extract->bindTexture(*texture_extract);
-
-    fbo_main->CheckErrors();
-    fbo_blur->CheckErrors();
-    fbo_blur2->CheckErrors();
-    fbo_extract->CheckErrors();
-}
-
-void GameWindow::DropHdr()
-{
-    fbo_blur.reset();
-    fbo_blur2.reset();
-    fbo_main.reset();
-    fbo_extract.reset();
-    texture_main.reset();
-    texture_blur.reset();
-    texture_blur2.reset();
-    texture_extract.reset();
-}
-
 template<int is_debug>
 void GameWindow::BaseDraw()
 {
-    GeometryPass();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0, 0, 0, 0.f);
 
-    if(!Prefecences::Instance()->defered_debug)
-    {
-        ShadingPass();
-        AftereffectPass();
-    }
-    else
-    {
-        BlitGBuffer();
-    }
+    batch->setUniform(proj);
 
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    batch->setUniform(proj * model);
+    batch->drawQuad({0,0},{800,800}, *TextureAtlas::tex, Color::White);
+    for(int i =0; i<10; i++)
+        for(int j =0; j<10; j++)
+        {
+            int x = i*64/2 - j*64/2 + 300;
+            int y = i*32/2 + j*32/2 + 300;
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf((const GLfloat*)&cam->Projection());
-    glMatrixMode(GL_MODELVIEW);
-    glm::mat4 MV = cam->View();
-    glLoadMatrixf((const GLfloat*)&MV[0][0]);
-    glUseProgram(0);
-    glBegin(GL_LINES);
-        glColor3f(1,0,0);
-        glVertex3f(0,0,0);
-        glVertex3f(1,0,0);
-
-        glColor3f(0,1,0);
-        glVertex3f(0,0,0);
-        glVertex3f(0,1,0);
-
-        glColor3f(0,0,1);
-        glVertex3f(0,0,0);
-        glVertex3f(0,0,1);
-    glEnd();
+            batch->drawQuadAtlas({x,y}, {64,32}, *TextureAtlas::tex, 0, Color::White);
+        }
 
     if(is_debug)
     {
@@ -441,7 +253,7 @@ void GameWindow::BaseDraw()
                                            "=%d\n"
                                            "fps %d",
                                            batch->getDc(),
-                                           (UMeshDc::getDc() + batch->getDc()),
+                                           UMeshDc::getDc(),
                                            UMeshDc::getDc() + batch->getDc(),
                                            fps.GetCount()), {RESX-70, 2+20}, f12.get(), Color::White);
     }
@@ -481,9 +293,6 @@ void GameWindow::BaseUpdate()
     {
         wire = !wire;
     }
-
-    if(Keyboard::isKeyPress(GLFW_KEY_F5))
-        Prefecences::Instance()->hdr_on = Prefecences::Instance()->hdr_on ? (DropHdr(), false) : (PreloadHdr(), true);
 
     if(Keyboard::isKeyPress(GLFW_KEY_F6))
         Prefecences::Instance()->defered_debug = !Prefecences::Instance()->defered_debug;

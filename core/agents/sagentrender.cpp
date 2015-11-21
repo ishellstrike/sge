@@ -18,7 +18,7 @@ void SRenderSettings::Init(){
     std::shared_ptr<Material> m = std::make_shared<Material>();
     m->texture = Resources::instance()->Get<Texture>("error");
     SRenderSettings::basic->material = m;
-    SRenderSettings::basic->shader = Resources::instance()->Get<BasicJargShader>("defered_basic_render");
+    //SRenderSettings::basic->shader = Resources::instance()->Get<BasicJargShader>("defered_basic_render");
 }
 
 void SRenderSettings::Set()
