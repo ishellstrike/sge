@@ -31,9 +31,6 @@ SOURCES += \
     main.cpp \
     basicjargshader.cpp \
     ClassicNoise.cpp \
-    camera.cpp \
-    geometry/vpnt.cpp \
-    geometry/model.cpp \
     sge_ui/button.cpp \
     sge_ui/component.cpp \
     sge_ui/graph.cpp \
@@ -45,8 +42,6 @@ SOURCES += \
     sge_ui/wins.cpp \
     colorscheme.cpp \
     gbuffer.cpp \
-    experimental/quadsphere.cpp \
-    experimental/quadplane.cpp \
     resources/resourcecontroller.cpp \
     resources/material.cpp \
     resources/texture.cpp \
@@ -54,13 +49,7 @@ SOURCES += \
     sge_perfomance.cpp \
     FrameBuffer.cpp \
     TextureGenerator.cpp \
-    experimental/scattering.cpp \
-    space/spacesystem.cpp \
     random.cpp \
-    experimental/starfield.cpp \
-    geometry/umesh.cpp \
-    geometry/vertex.cpp \
-    geometry/vertexinfo.cpp \
     sge_ui/image_box.cpp \
     sge_ui/dragnumbox.cpp \
     sge_ui/connector.cpp \
@@ -71,38 +60,13 @@ SOURCES += \
     sge_texlab_toolbox.cpp \
     sge_texlab_lerp_by_map.cpp \
     helper.cpp \
-    geometry/ubillboard.cpp \
     resources/umaterial.cpp \
-    geometry/ring.cpp \
-    space/structure.cpp \
-    space/object.cpp \
-    space/planet_model/country.cpp \
-    space/planet_model/planet_population.cpp \
-    space/planet_model/city.cpp \
-    space/planet_model/resource.cpp \
-    space/objectbase.cpp \
-    experimental/voxelstructure.cpp \
-    experimental/marchingcubes.cpp \
-    scene.cpp \
     light.cpp \
-    geometry/meshbase.cpp \
-    space/logic/item.cpp \
-    space/logic/itemstorage.cpp \
-    geometry/memorychunkcontroller.cpp \
     core/uniqueid.cpp \
-    geometry/multimesh.cpp \
-    space/ship_model/hull.cpp \
-    space/ship_model/attachpoint.cpp \
-    space/ship_model/resource.cpp \
     sql.cpp \
     sge_ui/treeview.cpp \
     core/tree.cpp \
     resources/texturebase.cpp \
-    core/sobject.cpp \
-    core/agents/stransformagent.cpp \
-    core/sagent_base.cpp \
-    core/agents/smeshagent.cpp \
-    core/agents/sagentrender.cpp
 
 VERSION = 0.1.0
 
@@ -151,10 +115,6 @@ HEADERS += \
     utfcpp/utf8.h \
     helper.h \
     ClassicNoise.h \
-    camera.h \
-    geometry/geometry.hpp \
-    geometry/vpnt.h \
-    geometry/model.h \
     sge_ui/button.h \
     sge_ui/component.h \
     sge_ui/graph.h \
@@ -167,8 +127,6 @@ HEADERS += \
     sge_ui/wins.h \
     colorscheme.h \
     gbuffer.h \
-    experimental/quadsphere.h \
-    experimental/quadplane.h \
     resources/resourcecontroller.h \
     resources/material.h \
     resources/pixmap.h \
@@ -179,15 +137,7 @@ HEADERS += \
     TextureGenerator.h \
     resources/random_noise.h \
     sge_fielsystem.h \
-    experimental/sphereparamstorage.h \
-    experimental/scattering.h \
-    data/shaders/scattering/scatter_params.h \
-    space/spacesystem.h \
     random.h \
-    experimental/starfield.h \
-    geometry/umesh.h \
-    geometry/vertex.h \
-    geometry/vertexinfo.h \
     sge_ui/image_box.h \
     sge_texture_lab.h \
     sge_ui/dragnumbox.h \
@@ -197,43 +147,13 @@ HEADERS += \
     sge_texlab_rgb_to_luminance.h \
     sge_texlab_toolbox.h \
     sge_texlab_lerp_by_map.h \
-    geometry/ubillboard.h \
     resources/umaterial.h \
-    geometry/ring.h \
-    space/structure.h \
-    space/object.h \
-    space/solver.h \
-    space/planet_model/country.h \
-    space/planet_model/city.h \
-    space/planet_model/resource.h \
-    space/planet_model/planet_population.h \
-    space/objectbase.h \
-    geometry/aabb.h \
-    experimental/voxelstructure.h \
-    experimental/marchingcubes.h \
-    experimental/marchingcubeshelper.h \
-    scene.h \
     light.h \
-    geometry/meshbase.h \
-    space/logic/item.h \
-    space/logic/itemstorage.h \
-    geometry/memorychunkcontroller.h \
     core/uniqueid.h \
-    geometry/multimesh.h \
-    space/ship_model/hull.h \
-    space/ship_model/attachpoint.h \
-    space/ship_model/resource.h \
     sql.h \
     sge_ui/treeview.h \
     core/tree.h \
     resources/texturebase.h \
-    core/sobject.h \
-    core/agents/stransformagent.h \
-    core/sagent_base.h \
-    core/agents/smeshagent.h \
-    core/agents/sagentrender.h \
-    core/sobject.hpp \
-    geometry/cube.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -244,8 +164,6 @@ DISTFILES += \
     data/shaders/minimal.glsl \
     sge_ui/.git \
     data/shaders/noise.lib.glsl \
-    data/shaders/test1.glsl \
-    data/shaders/test2.glsl \
     data/shaders/minimal_watertest.glsl \
     data/shaders/height.lib.glsl \
     data/shaders/celltexture.glsl \
@@ -255,35 +173,20 @@ DISTFILES += \
     data/shaders/float.lib.glsl \
     data/textures/PerlinGrad2D.png \
     data/textures/PerlinPerm2D.png \
-    data/shaders/scattering/common.glsl \
-    data/shaders/scattering/copyInscatter1.glsl \
-    data/shaders/scattering/copyInscatterN.glsl \
-    data/shaders/scattering/copyIrradiance.glsl \
-    data/shaders/scattering/earth.glsl \
-    data/shaders/scattering/inscatter1.glsl \
-    data/shaders/scattering/inscatterN.glsl \
-    data/shaders/scattering/inscatterS.glsl \
-    data/shaders/scattering/irradiance1.glsl \
-    data/shaders/scattering/irradianceN.glsl \
-    data/shaders/scattering/transmittance.glsl \
-    data/shaders/starfield.glsl \
     README.md \
     LICENSE.txt \
     data/shaders/rgb_to_luminance.glsl \
     data/shaders/lerp_rgb_map.glsl \
     data/shaders/defered.glsl \
-    data/shaders/starnest.glsl \
-    data/shaders/corona.glsl \
     data/shaders/tone_maping.glsl \
     data/shaders/gausian_blur.glsl \
     data/shaders/extract_glow.glsl \
     data/shaders/gausian_blur2.glsl \
     data/shaders/wireframe.lib.glsl \
-    data/shaders/fake_planet.glsl \
-    data/shaders/planet_ring.glsl \
     data/shaders/defered_color.glsl \
     data/shaders/normal.glsl \
     data/textures/cur_mouse.png \
     data/textures/cur_resize.png \
     data/shaders/defered_basic_render.glsl \
-    data/textures/atlas/blank.png
+    data/textures/atlas/blank.png \
+    data/shaders/defered_jarg.glsl

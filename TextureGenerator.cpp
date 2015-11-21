@@ -12,8 +12,6 @@
 #include <functional>
 #include "prefecences.h"
 #include "logger.h"
-#include "geometry/umesh.h"
-#include "geometry/vpnt.h"
 
 // TODO: наследуемые классы текстурного генератора, с перегрузкой функции OtherUniforms, которая вызывается перед рендером
 TextureGenerator::TextureGenerator(void)
@@ -123,32 +121,7 @@ void TextureGenerator::RenderOnTempFbo(std::function<void()> func) const
     
     func();
 
-    UMesh<VertPosUv> mesh;
-    mesh.vertices = {{{-1,-1,0},{0,0}},{{1,-1,0},{1,0}},{{-1,1,0},{0,1}},{{1,1,0},{1,1}}};
-    mesh.indices = {0,1,2,1,3,2};
-    mesh.shader = shader;
-    mesh.ForgetBind();
-    Camera c;
-    mesh.__Render(c);
-
-//    Radeon driver bug =(
-//    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-//    switch(status)
-//    {
-//    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-//        LOG(fatal) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
-//        break;
-//    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-//        LOG(fatal) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
-//        break;
-//    case GL_FRAMEBUFFER_UNSUPPORTED:
-//        LOG(fatal) << "FATAL FRAMEBUFFER ERROR : GL_FRAMEBUFFER_UNSUPPORTED";
-//        break;
-//    default:
-//        if (status != GL_FRAMEBUFFER_COMPLETE)
-//            LOG(fatal) << "FATAL FRAMEBUFFER ERROR #" << status;
-//        break;
-//    }
+    drawScreenQuad();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, RESX, RESY);

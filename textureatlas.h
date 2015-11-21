@@ -17,7 +17,7 @@ class TextureAtlas
 public:
     TextureAtlas();
     ~TextureAtlas();
-    static std::shared_ptr<Texture> tex;
+    static std::shared_ptr<Texture> tex, tex_n;
     static std::unordered_map<std::string, int> refs;
 
     static void LoadAll();

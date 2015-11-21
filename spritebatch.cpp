@@ -28,6 +28,7 @@ SpriteBatch::SpriteBatch()
     basic_program = Resources::instance()->Get<BasicJargShader>("basic");
     color_program = Resources::instance()->Get<BasicJargShader>("color");
     font_program = Resources::instance()->Get<BasicJargShader>("font");
+    defered_jarg_program = Resources::instance()->Get<BasicJargShader>("defered_jarg");
 
     current_program = basic_program;
 
@@ -248,7 +249,7 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, 
     cur++;
 }
 
-void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv)
+void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint direct, const glm::vec4 &col_, const glm::vec4 &double_uv)
 {
     if(current_program != basic_program)
     {
@@ -256,10 +257,10 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Te
         current_program = basic_program;
         current_program->Use();
     }
-    if(tex.textureId != current)
+    if(direct != current)
     {
         render();
-        current = tex.textureId;
+        current = direct;
     }
     if(cur >= SIZE - 1)
         render();
@@ -289,6 +290,11 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Te
     cur++;
 }
 
+void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv)
+{
+    drawQuad(loc, size, tex.textureId, col_, double_uv);
+}
+
 void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, int apos, const glm::vec4 &col_)
 {
     if(current_program != basic_program)
@@ -304,6 +310,54 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
     }
     if(cur >= SIZE - 1)
         render();
+
+    pos[cur*4]     = glm::vec3(loc.x,          loc.y,          0);
+    pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y,          0);
+    pos[cur*4 + 2] = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
+    pos[cur*4 + 3] = glm::vec3(loc.x,          loc.y + size.y, 0);
+
+    col[cur*4]     = col_;
+    col[cur*4 + 1] = col_;
+    col[cur*4 + 2] = col_;
+    col[cur*4 + 3] = col_;
+
+    float sx = 64 / (float) tex.width;
+    float sy = 32 / (float) tex.height;
+    int inrow = tex.width / 64;
+    float x = (apos % inrow) * sx;
+    float y = (apos / inrow) * sy;
+
+    uv[cur*4]      = glm::vec2(x,      y);
+    uv[cur*4 + 1]  = glm::vec2(x + sx, y);
+    uv[cur*4 + 2]  = glm::vec2(x + sx, y + sy);
+    uv[cur*4 + 3]  = glm::vec2(x,      y + sy);
+
+    index[cur*6]     = cur*4;
+    index[cur*6 + 1] = cur*4 + 1;
+    index[cur*6 + 2] = cur*4 + 3;
+    index[cur*6 + 3] = cur*4 + 1;
+    index[cur*6 + 4] = cur*4 + 2;
+    index[cur*6 + 5] = cur*4 + 3;
+
+    cur++;
+}
+
+void SpriteBatch::drawQuadAtlasJARG(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const Texture &tex_2, int apos, const glm::vec4 &col_)
+{
+    if(current_program != defered_jarg_program)
+    {
+        render();
+        current_program = defered_jarg_program;
+        current_program->Use();
+    }
+    if(tex.textureId != current)
+    {
+        render();
+        current = tex.textureId;
+    }
+    if(cur >= SIZE - 1)
+        render();
+    normals = tex_2.textureId;
 
     pos[cur*4]     = glm::vec3(loc.x,          loc.y,          0);
     pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y,          0);
@@ -506,6 +560,9 @@ void SpriteBatch::render()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, current);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, normals);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*cur*4, &pos[0], GL_STREAM_DRAW);

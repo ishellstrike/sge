@@ -32,7 +32,7 @@ glm::vec2 TextureAtlas::GetUV(int n)
 void TextureAtlas::LoadAll()
 {
     std::vector<std::string> files;
-    getFiles(Prefecences::Instance()->getAtlasDir(), files);
+    getFiles(Prefecences::Instance()->getTexturesDir() + "atlas/", files);
     LOG(verbose) << "texatlas found " << files.size() << " files";
 
     Pixmap atlas(glm::vec2(2048, 2048));
@@ -40,7 +40,7 @@ void TextureAtlas::LoadAll()
     int x = 0, y = 0, i = 0;
     for(std::string file: files)
     {
-        Pixmap tex(Prefecences::Instance()->getAtlasDir() + file);
+        Pixmap tex(Prefecences::Instance()->getTexturesDir() + "atlas/" + file);
         atlas.Blit(tex, glm::vec2(x * 64, y * 32));
         refs[file] = i;
         x++;
@@ -51,13 +51,38 @@ void TextureAtlas::LoadAll()
         }
         ++i;
     }
+    tex->Load(atlas, false, false);
+    atlas.data.clear();
+
+    getFiles(Prefecences::Instance()->getTexturesDir() + "normal/", files);
+
+    Pixmap atlas_n(glm::vec2(2048, 2048));
+
+    x = 0; y = 0; i = 0;
+    for(std::string file: files)
+    {
+        Pixmap tex(Prefecences::Instance()->getTexturesDir() + "normal/" + file);
+        atlas_n.Blit(tex, glm::vec2(x * 64, y * 32));
+        refs[file] = i;
+        x++;
+        if(x >= 2048/64)
+        {
+            x = 0;
+            y++;
+        }
+        ++i;
+    }
+
     LOG(verbose) << "texatlas load " << i << " pixmaps";
 
-    tex->Load(atlas, false, false);
+    tex_n->Load(atlas_n, false, false);
+
     tex->name = "texture atlas 1";
+    tex_n->name = "texture normal atlas 1";
     LOG(verbose) << "texatlas load texture";
 }
 
 std::shared_ptr<Texture> TextureAtlas::tex = std::make_shared<Texture>();
+std::shared_ptr<Texture> TextureAtlas::tex_n = std::make_shared<Texture>();
 std::unordered_map<std::string, int> TextureAtlas::refs;
 

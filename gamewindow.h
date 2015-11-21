@@ -21,12 +21,9 @@
 #include "gametimer.h"
 #include "textureatlas.h"
 #include "font.h"
-#include "camera.h"
 #include "gbuffer.h"
 #include "sge_ui/wins.h"
 #include "sge_perfomance.h"
-#include "experimental/quadsphere.h"
-#include "experimental/scattering.h"
 #include "FrameBuffer.h"
 
 #include "mouse.h"
@@ -39,13 +36,10 @@
 #include <thread>
 #include <chrono>
 #include <algorithm>
-#include "geometry/model.h"
 #include "resources/resourcecontroller.h"
 #include "TextureGenerator.h"
 #include <glm/gtx/compatibility.hpp>
 #include "sge_texlab_toolbox.h"
-
-#include "core/sobject.hpp"
 
 #define MAJOR 2
 #define MINOR 1
@@ -106,7 +100,7 @@ public:
     float speed = 1;
 
     bool wire = false, no_ui = false;
-    std::shared_ptr<Camera> cam;
+    glm::vec2 offset;
 
     std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
     std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
@@ -116,9 +110,10 @@ public:
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
 
-    std::list<std::shared_ptr<SObject>> objects;
-
     static void Swap();
+    void BlitGBuffer();
+    void ShadingPass();
+    void GeometryPass();
 };
 
 #endif // GAMEWINDOW_H
