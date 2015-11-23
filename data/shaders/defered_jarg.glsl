@@ -7,10 +7,11 @@
 
 uniform sampler2D diffuse_map;
 uniform sampler2D normal_map;
+uniform sampler2D outline_map;
 
 #ifdef _FRAGMENT_
 
-in vec4 fragColor;
+in vec4 col;
 in vec3 pos;
 in vec2 uv;
 
@@ -23,7 +24,7 @@ void main(void)
 {
     vec4 c = texture(diffuse_map, uv);
     if(c.a <= 0.1) discard;
-    DiffuseOut = c;
+    DiffuseOut = c * col;
     NormalOut = texture(normal_map, uv);
     TexCoordOut = vec4(uv,0,1);
     WorldPosOut = vec4(pos, 1);
@@ -40,7 +41,7 @@ layout (location = 3) in vec4 color;
 
 uniform mat4 transform_VP;
 
-out vec4 fragColor;
+out vec4 col;
 out vec3 pos;
 out vec2 uv;
 
@@ -48,7 +49,7 @@ out vec2 uv;
 void main(void)
 {
     gl_Position = transform_VP * vec4(position, 1);
-    fragColor = color;
+    col = color;
     pos = position;
     uv = texcoord;
 }

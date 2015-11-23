@@ -13,6 +13,7 @@
 #include <GL/glew.h>
 #include "colorextender.h"
 #include "resources/resourcecontroller.h"
+#include "textureatlas.h"
 
 typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
@@ -342,7 +343,7 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
     cur++;
 }
 
-void SpriteBatch::drawQuadAtlasJARG(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const Texture &tex_2, int apos, const glm::vec4 &col_)
+void SpriteBatch::drawQuadAtlasJARG(const glm::vec2 &loc, float scale, const AtlasPart &tex, int apos, const glm::vec4 &col_)
 {
     if(current_program != defered_jarg_program)
     {
@@ -350,35 +351,34 @@ void SpriteBatch::drawQuadAtlasJARG(const glm::vec2 &loc, const glm::vec2 &size,
         current_program = defered_jarg_program;
         current_program->Use();
     }
-    if(tex.textureId != current)
+    if(tex.tex->textureId != current)
     {
         render();
-        current = tex.textureId;
+        current = tex.tex->textureId;
     }
     if(cur >= SIZE - 1)
         render();
-    normals = tex_2.textureId;
+    normals = tex.tex_n->textureId;
+    outlines = tex.tex_o->textureId;
 
-    pos[cur*4]     = glm::vec3(loc.x,          loc.y,          0);
-    pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y,          0);
-    pos[cur*4 + 2] = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
-    pos[cur*4 + 3] = glm::vec3(loc.x,          loc.y + size.y, 0);
+    glm::vec2 size = TextureAtlas::size[apos] * scale;
+    auto of = TextureAtlas::size[apos].y - 32;
+    pos[cur*4]     = glm::vec3(loc.x,          loc.y - of,          0);
+    pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y - of,          0);
+    pos[cur*4 + 2] = glm::vec3(loc.x + size.x, loc.y + size.y - of, 0);
+    pos[cur*4 + 3] = glm::vec3(loc.x,          loc.y + size.y - of, 0);
 
     col[cur*4]     = col_;
     col[cur*4 + 1] = col_;
     col[cur*4 + 2] = col_;
     col[cur*4 + 3] = col_;
 
-    float sx = 64 / (float) tex.width;
-    float sy = 32 / (float) tex.height;
-    int inrow = tex.width / 64;
-    float x = (apos % inrow) * sx;
-    float y = (apos / inrow) * sy;
+    glm::vec4 uvs = TextureAtlas::uvs[apos];
 
-    uv[cur*4]      = glm::vec2(x,      y);
-    uv[cur*4 + 1]  = glm::vec2(x + sx, y);
-    uv[cur*4 + 2]  = glm::vec2(x + sx, y + sy);
-    uv[cur*4 + 3]  = glm::vec2(x,      y + sy);
+    uv[cur*4]      = glm::vec2(uvs.x, uvs.y);
+    uv[cur*4 + 1]  = glm::vec2(uvs.z, uvs.y);
+    uv[cur*4 + 2]  = glm::vec2(uvs.z, uvs.w);
+    uv[cur*4 + 3]  = glm::vec2(uvs.x, uvs.w);
 
     index[cur*6]     = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
@@ -563,6 +563,9 @@ void SpriteBatch::render()
 
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, normals);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, outlines);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*cur*4, &pos[0], GL_STREAM_DRAW);

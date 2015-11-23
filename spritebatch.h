@@ -15,6 +15,7 @@
 #include "unordered_map"
 #include "font.h"
 #include "json/json.h"
+#include "textureatlas.h"
 
 #define SIZE 32000
 class SpriteBatch
@@ -49,7 +50,7 @@ public:
 
     void resetDc();
     int getDc();
-    void drawQuadAtlasJARG(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const Texture &tex_n, int apos, const glm::vec4 &col_);
+    void drawQuadAtlasJARG(const glm::vec2 &loc, float scale, const AtlasPart &tex, int apos, const glm::vec4 &col_);
 
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
@@ -70,7 +71,7 @@ private:
     unsigned int cur = 0;
 
     GLuint current = 0;
-    GLuint normals = 0;
+    GLuint normals = 0, outlines = 0;
     GLuint m_vbo[4];
 
     glm::mat4 uniform;

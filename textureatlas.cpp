@@ -21,68 +21,128 @@ TextureAtlas::~TextureAtlas()
 
 }
 
-glm::vec2 TextureAtlas::GetUV(int n)
-{
-    static int inrow = 2048/64;
-    int row = n % inrow;
-    int column = n / inrow;
-    return glm::vec2(2048.f/(row*64.f), 2048.f/(column*32.f));
-}
-
 void TextureAtlas::LoadAll()
 {
     std::vector<std::string> files;
     getFiles(Prefecences::Instance()->getTexturesDir() + "atlas/", files);
     LOG(verbose) << "texatlas found " << files.size() << " files";
+    tex.emplace_back();
+    AtlasPart &ap = *(--tex.end());
+    ap.tex = std::make_shared<Texture>();
+    ap.tex_n = std::make_shared<Texture>();
+    ap.tex_o = std::make_shared<Texture>();
 
     Pixmap atlas(glm::vec2(2048, 2048));
+    Pixmap atlas_o(glm::vec2(2048, 2048));
 
-    int x = 0, y = 0, i = 0;
+    int x = 0, y = 0, count = 0, max_y = 0;
     for(std::string file: files)
     {
         Pixmap tex(Prefecences::Instance()->getTexturesDir() + "atlas/" + file);
-        atlas.Blit(tex, glm::vec2(x * 64, y * 32));
-        refs[file] = i;
-        x++;
-        if(x >= 2048/64)
+        x += tex.width;
+        max_y = max(max_y, tex.height);
+
+        Pixmap tex_o(glm::vec2(tex.width, tex.height));
+        auto data = std::vector<std::vector<bool>>(tex.width);
+        for(int i = 0; i < tex.width; i++)
+        {
+            data[i] = std::vector<bool>(tex.height);
+            for(int j = 0; j < tex.height; j++)
+            {
+                data[i][j] = tex.data[(tex.height*j + i)*4    ] != 0 &&
+                             tex.data[(tex.height*j + i)*4 + 1] != 0 &&
+                             tex.data[(tex.height*j + i)*4 + 2] != 0 &&
+                             tex.data[(tex.height*j + i)*4 + 3] != 0;
+
+                if(data[i][j])
+                {
+                    if(i < tex.width - 1)
+                    {
+                        tex_o.data[(tex_o.height * j + i + 1)*4    ] = 255;
+                        tex_o.data[(tex_o.height * j + i + 1)*4 + 1] = 255;
+                        tex_o.data[(tex_o.height * j + i + 1)*4 + 2] = 255;
+                        tex_o.data[(tex_o.height * j + i + 1)*4 + 3] = 255;
+                    }
+
+                    if(j < tex.height - 1)
+                    {
+                        tex_o.data[(tex_o.height * (j + 1) + i)*4    ] = 255;
+                        tex_o.data[(tex_o.height * (j + 1) + i)*4 + 1] = 255;
+                        tex_o.data[(tex_o.height * (j + 1) + i)*4 + 2] = 255;
+                        tex_o.data[(tex_o.height * (j + 1) + i)*4 + 3] = 255;
+                    }
+
+                    if(i > 0)
+                    {
+                        tex_o.data[(tex_o.height * j + i - 1)*4    ] = 255;
+                        tex_o.data[(tex_o.height * j + i - 1)*4 + 1] = 255;
+                        tex_o.data[(tex_o.height * j + i - 1)*4 + 2] = 255;
+                        tex_o.data[(tex_o.height * j + i - 1)*4 + 3] = 255;
+                    }
+
+                    if(j > 0)
+                    {
+                        tex_o.data[(tex_o.height * (j - 1) + i)*4    ] = 255;
+                        tex_o.data[(tex_o.height * (j - 1) + i)*4 + 1] = 255;
+                        tex_o.data[(tex_o.height * (j - 1) + i)*4 + 2] = 255;
+                        tex_o.data[(tex_o.height * (j - 1) + i)*4 + 3] = 255;
+                    }
+                }
+            }
+        }
+
+        atlas_o.Blit(tex_o, glm::vec2(x, y));
+        atlas.Blit(tex, glm::vec2(x, y));
+
+        pixels.push_back(data);
+        uvs.push_back(glm::vec4(x, y, x + tex.width, y + tex.height)/2048.f);
+        size.push_back({tex.width, tex.height});
+
+        refs[file] = std::make_tuple(0, count);
+
+        if(x >= 2048)
         {
             x = 0;
-            y++;
+            y+= max_y;
         }
-        ++i;
+        ++count;
     }
-    tex->Load(atlas, false, false);
-    atlas.data.clear();
 
     getFiles(Prefecences::Instance()->getTexturesDir() + "normal/", files);
 
     Pixmap atlas_n(glm::vec2(2048, 2048));
 
-    x = 0; y = 0; i = 0;
+    x = 0; y = 0; count = 0; max_y = 0;
     for(std::string file: files)
     {
         Pixmap tex(Prefecences::Instance()->getTexturesDir() + "normal/" + file);
-        atlas_n.Blit(tex, glm::vec2(x * 64, y * 32));
-        refs[file] = i;
-        x++;
-        if(x >= 2048/64)
+        x += tex.width;
+        max_y = max(max_y, tex.height);
+
+        atlas_n.Blit(tex, glm::vec2(x, y));
+
+        if(x >= 2048)
         {
             x = 0;
-            y++;
+            y+= max_y;
         }
-        ++i;
+        ++count;
     }
 
-    LOG(verbose) << "texatlas load " << i << " pixmaps";
+    LOG(verbose) << "texatlas load " << count << " pixmaps";
 
-    tex_n->Load(atlas_n, false, false);
+    ap.tex_n->Load(atlas_n, false, false);
+    ap.tex_o->Load(atlas_o, false, false);
+    ap.tex->Load(atlas, false, false);
 
-    tex->name = "texture atlas 1";
-    tex_n->name = "texture normal atlas 1";
     LOG(verbose) << "texatlas load texture";
 }
 
-std::shared_ptr<Texture> TextureAtlas::tex = std::make_shared<Texture>();
-std::shared_ptr<Texture> TextureAtlas::tex_n = std::make_shared<Texture>();
-std::unordered_map<std::string, int> TextureAtlas::refs;
+std::vector<AtlasPart> TextureAtlas::tex;
+
+std::vector<glm::vec4> TextureAtlas::uvs;
+std::vector<glm::vec2> TextureAtlas::size;
+std::vector<std::vector<std::vector<bool>>> TextureAtlas::pixels;
+
+std::unordered_map<std::string, std::tuple<int, int>> TextureAtlas::refs;
 

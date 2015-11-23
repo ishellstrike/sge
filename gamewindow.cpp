@@ -7,6 +7,7 @@
 
 #include "gamewindow.h"
 #include "helper.h"
+#include <fstream>
 
 GameWindow *GameWindow::wi = nullptr;
 
@@ -236,13 +237,15 @@ void GameWindow::GeometryPass()
     glEnable(GL_DEPTH_TEST);
     //==================
 
-    for(int i =0; i<10; i++)
-        for(int j =0; j<10; j++)
+    srand(1);
+    for(int i =9; i>=0; --i)
+        for(int j =9; j>=0; --j)
         {
             int x = i*64/2 - j*64/2 + 300;
             int y = i*32/2 + j*32/2 + 300;
 
-            batch->drawQuadAtlasJARG({x,y}, {64,32}, *TextureAtlas::tex, *TextureAtlas::tex_n, 0, Color::White);
+             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], 1, Color::Brown);
+             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], rand()%2 + 2, Color::RosyBrown);
         }
 
     //============
@@ -273,7 +276,7 @@ void GameWindow::ShadingPass()
     angle += gt.elapsed;
 
     deff->Use();
-    deff->SetUniform("transform_lightPos", glm::vec3(sin(angle)+cos(angle),-sin(angle)+cos(angle),0));
+    deff->SetUniform("transform_lightPos", glm::vec3(sin(angle)+cos(angle),-sin(angle)+cos(angle), 2));
     drawScreenQuad();
 }
 

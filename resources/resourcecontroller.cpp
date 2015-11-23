@@ -50,6 +50,7 @@ void Resources::Init()
     defered_jarg->Use();
     defered_jarg->SetUniform("diffuse_map", 0);
     defered_jarg->SetUniform("normal_map", 1);
+    defered_jarg->SetUniform("outline_map", 2);
     PUSH_NVP(defered_jarg);
 
     const auto & defered = new BasicJargShader;

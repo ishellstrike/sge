@@ -1,46 +1,46 @@
 #ifndef UNIQUEID_H
 #define UNIQUEID_H
 #include <functional>
-typedef unsigned uniqId;
+typedef unsigned Uid;
 
 class UniqueId
 {
-    static const uniqId type_size = 1<<20;
+    static const Uid type_size = 1<<20;
 
-    static uniqId _next_typeId()
+    static Uid _next_typeId()
     {
-        static uniqId uniq_id = 0;
+        static Uid uniq_id = 0;
         ++uniq_id;
         return uniq_id;
     }
 
     template<typename _Ty>
-    static uniqId _get_type_offset()
+    static Uid _get_type_offset()
     {
         return getTypeId<_Ty>() * type_size;
     }
 
 public:
     template<typename _Ty>
-    static uniqId next()
+    static Uid next()
     {
-        static uniqId uniq_id = 0;
+        static Uid uniq_id = 0;
         ++uniq_id;
         return _get_type_offset<_Ty>() + uniq_id;
     }
 
     template<typename _Ty>
-    static bool is(uniqId id)
+    static bool is(Uid id)
     {
         if(id == 0) return false;
         return id / type_size == _get_type_offset<_Ty>();
     }
 
     template<typename _Ty>
-    static uniqId getTypeId()
+    static Uid getTypeId()
     {
 
-        static uniqId this_type = []() -> uniqId
+        static Uid this_type = []() -> Uid
         {
                 std::hash<std::string> s;
                 return s(typeid(_Ty).name());
@@ -50,10 +50,10 @@ public:
     }
 
     template<typename _Ty>
-    static uniqId getTypeId(const _Ty &val)
+    static Uid getTypeId(const _Ty &val)
     {
 
-        static uniqId this_type = [&]() -> uniqId
+        static Uid this_type = [&]() -> Uid
         {
                 std::hash<std::string> s;
                 return s(typeid(val).name());

@@ -66,14 +66,14 @@ SOURCES += \
     sql.cpp \
     sge_ui/treeview.cpp \
     core/tree.cpp \
-    resources/texturebase.cpp \
+    resources/texturebase.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype #-lassimp-vc120-mtd
+-lopengl32 -lglew32 -lglfw3dll -lfreetype -llibboost_serialization-vc120-mt-gd-1_59
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -153,7 +153,7 @@ HEADERS += \
     sql.h \
     sge_ui/treeview.h \
     core/tree.h \
-    resources/texturebase.h \
+    resources/texturebase.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -189,4 +189,5 @@ DISTFILES += \
     data/textures/cur_resize.png \
     data/shaders/defered_basic_render.glsl \
     data/textures/atlas/blank.png \
-    data/shaders/defered_jarg.glsl
+    data/shaders/defered_jarg.glsl \
+    rapidjson/license.txt
