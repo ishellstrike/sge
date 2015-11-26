@@ -23,7 +23,6 @@ SOURCES += \
     fpscounter.cpp \
     keyboard.cpp \
     mouse.cpp \
-    singleton.cpp \
     font.cpp \
     json/json_internalarray.inl \
     json/json_internalmap.inl \
@@ -66,7 +65,16 @@ SOURCES += \
     sql.cpp \
     sge_ui/treeview.cpp \
     core/tree.cpp \
-    resources/texturebase.cpp
+    resources/texturebase.cpp \
+    core/object.cpp \
+    core/dynamicobject.cpp \
+    core/objectstatic.cpp \
+    core/agent.cpp \
+    core/sector.cpp \
+    core/level.cpp \
+    core/offset.cpp \
+    core/db.cpp \
+    core/objecthelper.cpp
 
 VERSION = 0.1.0
 
@@ -97,7 +105,6 @@ HEADERS += \
     lodepng/lodepng.h \
     textureatlas.h \
     spritebatch.h \
-    singleton.h \
     prefecences.h \
     sge.h \
     gamewindow.h \
@@ -111,7 +118,6 @@ HEADERS += \
     utfcpp/utf8/core.h \
     utfcpp/utf8/unchecked.h \
     basicjargshader.h \
-    tangentcalc.h \
     utfcpp/utf8.h \
     helper.h \
     ClassicNoise.h \
@@ -153,7 +159,29 @@ HEADERS += \
     sql.h \
     sge_ui/treeview.h \
     core/tree.h \
-    resources/texturebase.h
+    resources/texturebase.h \
+    core/object.h \
+    core/dynamicobject.h \
+    core/objectstatic.h \
+    core/agent.h \
+    core/sector.h \
+    core/level.h \
+    core/offset.h \
+    core/core_const.h \
+    core/agents.hpp \
+    rapidjson/internal/pow10.h \
+    rapidjson/internal/stack.h \
+    rapidjson/internal/strfunc.h \
+    rapidjson/document.h \
+    rapidjson/filestream.h \
+    rapidjson/genericstream.h \
+    rapidjson/prettywriter.h \
+    rapidjson/rapidjson.h \
+    rapidjson/reader.h \
+    rapidjson/stringbuffer.h \
+    rapidjson/writer.h \
+    core/db.h \
+    core/objecthelper.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

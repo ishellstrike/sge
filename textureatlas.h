@@ -23,7 +23,7 @@ public:
     TextureAtlas();
     ~TextureAtlas();
     static std::vector<AtlasPart> tex;
-    static std::unordered_map<std::string, std::tuple<int, int>> refs;
+    static std::unordered_map<std::string, glm::ivec2> refs;
     static std::vector<glm::vec4> uvs;
     static std::vector<glm::vec2> size;
     static std::vector<std::vector<std::vector<bool>>> pixels;

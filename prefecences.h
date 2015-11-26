@@ -7,9 +7,9 @@
 
 #ifndef PREFECENCES_H
 #define PREFECENCES_H
-#include "singleton.h"
 #include <glm/glm.hpp>
 #include <string>
+#include <memory>
 
 #define RESX Prefecences::Instance()->resolution.x
 #define RESY Prefecences::Instance()->resolution.y
@@ -20,39 +20,13 @@ class Prefecences
 {
 public:
 protected:
-    static Prefecences *m_instance;
     Prefecences() {}
-    ~Prefecences() {}
 
 public:
     static Prefecences* Instance()
     {
-        static std::mutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-
-            if (!m_instance)
-                m_instance = new Prefecences();
-
-            mutex.unlock();
-        }
-        return m_instance;
-    }
-
-    static void DeleteInstance()
-    {
-        static std::mutex mutex;
-        if(!m_instance)
-        {
-            mutex.lock();
-            if(!m_instance)
-            {
-                m_instance = nullptr;
-                delete m_instance;
-            }
-            mutex.unlock();
-        }
+        static auto m_instance = std::unique_ptr<Prefecences>(new Prefecences());
+        return m_instance.get();
     }
 
     /*!

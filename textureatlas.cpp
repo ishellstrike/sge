@@ -98,7 +98,7 @@ void TextureAtlas::LoadAll()
         uvs.push_back(glm::vec4(x, y, x + tex.width, y + tex.height)/2048.f);
         size.push_back({tex.width, tex.height});
 
-        refs[file] = std::make_tuple(0, count);
+        refs[file] = glm::ivec2(0, count);
 
         if(x >= 2048)
         {
@@ -144,5 +144,5 @@ std::vector<glm::vec4> TextureAtlas::uvs;
 std::vector<glm::vec2> TextureAtlas::size;
 std::vector<std::vector<std::vector<bool>>> TextureAtlas::pixels;
 
-std::unordered_map<std::string, std::tuple<int, int>> TextureAtlas::refs;
+std::unordered_map<std::string, glm::ivec2> TextureAtlas::refs;
 

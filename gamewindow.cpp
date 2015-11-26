@@ -8,6 +8,7 @@
 #include "gamewindow.h"
 #include "helper.h"
 #include <fstream>
+#include "core/db.h"
 
 GameWindow *GameWindow::wi = nullptr;
 
@@ -170,6 +171,12 @@ bool GameWindow::BaseInit()
     //================================
 
     TextureAtlas::LoadAll();
+    DB::Load();
+    level.GetSector({0, 0});
+    level.GetSector({0, 1});
+    level.GetSector({1, 0});
+    level.GetSector({0, -1});
+    level.GetSector({-1, 0});
 
     return true;
 }
@@ -237,16 +244,18 @@ void GameWindow::GeometryPass()
     glEnable(GL_DEPTH_TEST);
     //==================
 
-    srand(1);
-    for(int i =9; i>=0; --i)
-        for(int j =9; j>=0; --j)
-        {
-            int x = i*64/2 - j*64/2 + 300;
-            int y = i*32/2 + j*32/2 + 300;
+//    srand(1);
+//    for(int i =9; i>=0; --i)
+//        for(int j =9; j>=0; --j)
+//        {
+//            int x = i*64/2 - j*64/2 + 300;
+//            int y = i*32/2 + j*32/2 + 300;
 
-             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], 1, Color::Brown);
-             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], rand()%2 + 2, Color::RosyBrown);
-        }
+//             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], 1, Color::Brown);
+//             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], rand()%2 + 2, Color::RosyBrown);
+//        }
+
+    level.Draw(*batch);
 
     //============
 

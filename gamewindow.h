@@ -8,38 +8,39 @@
 #ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
+#include "colorextender.h"
+#include "font.h"
+#include "fpscounter.h"
+#include "FrameBuffer.h"
+#include "gametimer.h"
+#include "gbuffer.h"
+#include "glm/gtx/transform.hpp"
+#include "keyboard.h"
+#include "logger.h"
+#include "mouse.h"
+#include "prefecences.h"
+#include "resources/resourcecontroller.h"
+#include "sge_perfomance.h"
+#include "sge_texlab_toolbox.h"
+#include "sge_ui/wins.h"
+#include "shader.h"
+#include "shader.h"
+#include "spritebatch.h"
+#include "spritebatch.h"
+#include "textureatlas.h"
+#include "TextureGenerator.h"
+
+#include <algorithm>
+#include <chrono>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-
+#include <glm/gtx/compatibility.hpp>
 #include <memory>
 #include <string>
-#include "logger.h"
-#include "shader.h"
-#include "spritebatch.h"
-#include "fpscounter.h"
-#include "gametimer.h"
-#include "textureatlas.h"
-#include "font.h"
-#include "gbuffer.h"
-#include "sge_ui/wins.h"
-#include "sge_perfomance.h"
-#include "FrameBuffer.h"
-
-#include "mouse.h"
-#include "keyboard.h"
-#include "prefecences.h"
-#include "shader.h"
-#include "spritebatch.h"
-#include "glm/gtx/transform.hpp"
-#include "colorextender.h"
 #include <thread>
-#include <chrono>
-#include <algorithm>
-#include "resources/resourcecontroller.h"
-#include "TextureGenerator.h"
-#include <glm/gtx/compatibility.hpp>
-#include "sge_texlab_toolbox.h"
+#include "core/level.h"
+
 
 #define MAJOR 2
 #define MINOR 1
@@ -109,6 +110,7 @@ public:
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
+    Level level;
 
     static void Swap();
     void BlitGBuffer();
