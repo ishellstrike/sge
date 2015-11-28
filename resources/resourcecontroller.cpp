@@ -42,28 +42,6 @@ void Resources::Init()
     basic->SetUniform("material_texture", 0);
     PUSH_NVP(basic);
 
-    const auto & defered_jarg = new BasicJargShader;
-    defered_jarg->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "defered_jarg.glsl");
-    defered_jarg->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "defered_jarg.glsl");
-    defered_jarg->Link();
-    defered_jarg->Afterlink();
-    defered_jarg->Use();
-    defered_jarg->SetUniform("diffuse_map", 0);
-    defered_jarg->SetUniform("normal_map", 1);
-    defered_jarg->SetUniform("outline_map", 2);
-    PUSH_NVP(defered_jarg);
-
-    const auto & defered = new BasicJargShader;
-    defered->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "defered.glsl");
-    defered->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "defered.glsl");
-    defered->Link();
-    defered->Afterlink();
-    defered->SetUniform("buffer_world_pos", 0);
-    defered->SetUniform("buffer_diffuse", 1);
-    defered->SetUniform("buffer_normal", 2);
-    defered->SetUniform("buffer_tex_coord", 3);
-    PUSH_NVP(defered);
-
     const auto & font = new BasicJargShader;
     font->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "font.glsl");
     font->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "font.glsl");

@@ -74,7 +74,11 @@ SOURCES += \
     core/level.cpp \
     core/offset.cpp \
     core/db.cpp \
-    core/objecthelper.cpp
+    core/objecthelper.cpp \
+    core/agents/chest.cpp \
+    core/agents/itemspawner.cpp \
+    core/agents/stacked.cpp \
+    core/scheme.cpp
 
 VERSION = 0.1.0
 
@@ -181,7 +185,11 @@ HEADERS += \
     rapidjson/stringbuffer.h \
     rapidjson/writer.h \
     core/db.h \
-    core/objecthelper.h
+    core/objecthelper.h \
+    core/agents/chest.h \
+    core/agents/itemspawner.h \
+    core/agents/stacked.h \
+    core/scheme.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -216,6 +224,135 @@ DISTFILES += \
     data/textures/cur_mouse.png \
     data/textures/cur_resize.png \
     data/shaders/defered_basic_render.glsl \
-    data/textures/atlas/blank.png \
     data/shaders/defered_jarg.glsl \
-    rapidjson/license.txt
+    rapidjson/license.txt \
+    data/textures/atlas/asfalt.png \
+    data/textures/atlas/asfalt_br.png \
+    data/textures/atlas/bath1.png \
+    data/textures/atlas/bath2.png \
+    data/textures/atlas/bath3.png \
+    data/textures/atlas/bath4.png \
+    data/textures/atlas/bath5.png \
+    data/textures/atlas/bed1.png \
+    data/textures/atlas/bed2.png \
+    data/textures/atlas/bed3.png \
+    data/textures/atlas/bed4.png \
+    data/textures/atlas/bed5.png \
+    data/textures/atlas/bochka.png \
+    data/textures/atlas/briwall1.png \
+    data/textures/atlas/bush1.png \
+    data/textures/atlas/chair1.png \
+    data/textures/atlas/cone1.png \
+    data/textures/atlas/cone2.png \
+    data/textures/atlas/conk1.png \
+    data/textures/atlas/crates1.png \
+    data/textures/atlas/crates2.png \
+    data/textures/atlas/crates3.png \
+    data/textures/atlas/cur_mouse.png \
+    data/textures/atlas/cur_resize.png \
+    data/textures/atlas/cvet.png \
+    data/textures/atlas/cvet1.png \
+    data/textures/atlas/cvet2.png \
+    data/textures/atlas/cvet3.png \
+    data/textures/atlas/dirt1.png \
+    data/textures/atlas/door1.png \
+    data/textures/atlas/door1_open.png \
+    data/textures/atlas/door2.png \
+    data/textures/atlas/door2_open.png \
+    data/textures/atlas/door3.png \
+    data/textures/atlas/door4.png \
+    data/textures/atlas/error.png \
+    data/textures/atlas/fence_s.png \
+    data/textures/atlas/fence_s1.png \
+    data/textures/atlas/fence_s2.png \
+    data/textures/atlas/fence_w.png \
+    data/textures/atlas/fence_w1.png \
+    data/textures/atlas/fence_w2.png \
+    data/textures/atlas/foodpolka.png \
+    data/textures/atlas/foodpolka1.png \
+    data/textures/atlas/foodpolka2.png \
+    data/textures/atlas/foodpolka3.png \
+    data/textures/atlas/foodpolka4.png \
+    data/textures/atlas/frame.png \
+    data/textures/atlas/fridge1.png \
+    data/textures/atlas/fridge2.png \
+    data/textures/atlas/glass_hor.png \
+    data/textures/atlas/glass_ver.png \
+    data/textures/atlas/grass_m.png \
+    data/textures/atlas/grass1.png \
+    data/textures/atlas/grass2.png \
+    data/textures/atlas/grass3.png \
+    data/textures/atlas/grass4.png \
+    data/textures/atlas/grass5.png \
+    data/textures/atlas/grass6.png \
+    data/textures/atlas/grass7.png \
+    data/textures/atlas/heater.png \
+    data/textures/atlas/liqpolka.png \
+    data/textures/atlas/liqpolka1.png \
+    data/textures/atlas/liqpolka2.png \
+    data/textures/atlas/liqpolka3.png \
+    data/textures/atlas/mbush1.png \
+    data/textures/atlas/mbush2.png \
+    data/textures/atlas/mbush3.png \
+    data/textures/atlas/medpolka.png \
+    data/textures/atlas/medpolka1.png \
+    data/textures/atlas/medpolka2.png \
+    data/textures/atlas/medpolka3.png \
+    data/textures/atlas/medpolka4.png \
+    data/textures/atlas/none.png \
+    data/textures/atlas/notex.png \
+    data/textures/atlas/palka.png \
+    data/textures/atlas/plita.png \
+    data/textures/atlas/rakovina.png \
+    data/textures/atlas/rakovina2.png \
+    data/textures/atlas/rakovina3.png \
+    data/textures/atlas/rakovina4.png \
+    data/textures/atlas/rock1.png \
+    data/textures/atlas/rock2.png \
+    data/textures/atlas/rock3.png \
+    data/textures/atlas/rock4.png \
+    data/textures/atlas/s1console1.png \
+    data/textures/atlas/s1console2.png \
+    data/textures/atlas/s1console3.png \
+    data/textures/atlas/s1console4.png \
+    data/textures/atlas/s1console5.png \
+    data/textures/atlas/s1console6.png \
+    data/textures/atlas/s1console7.png \
+    data/textures/atlas/s1console8.png \
+    data/textures/atlas/s1console9.png \
+    data/textures/atlas/s1console10.png \
+    data/textures/atlas/s1console11.png \
+    data/textures/atlas/s1console12.png \
+    data/textures/atlas/s1console13.png \
+    data/textures/atlas/s1console14.png \
+    data/textures/atlas/s1console15.png \
+    data/textures/atlas/s1console16.png \
+    data/textures/atlas/s1console17.png \
+    data/textures/atlas/s1console18.png \
+    data/textures/atlas/safe1.png \
+    data/textures/atlas/safe2.png \
+    data/textures/atlas/shkaf.png \
+    data/textures/atlas/shkaf2.png \
+    data/textures/atlas/shkaf3.png \
+    data/textures/atlas/steelwall1.png \
+    data/textures/atlas/steelwall2.png \
+    data/textures/atlas/steelwall3.png \
+    data/textures/atlas/steelwall4.png \
+    data/textures/atlas/steelwall5.png \
+    data/textures/atlas/steelwall6.png \
+    data/textures/atlas/table_hor_left.png \
+    data/textures/atlas/table_hor_mid.png \
+    data/textures/atlas/table_hor_right.png \
+    data/textures/atlas/table1.png \
+    data/textures/atlas/trashcan.png \
+    data/textures/atlas/trashcan1.png \
+    data/textures/atlas/tree1.png \
+    data/textures/atlas/tree2.png \
+    data/textures/atlas/tumba1.png \
+    data/textures/atlas/tumba2.png \
+    data/textures/atlas/washer.png \
+    data/textures/atlas/wearpolka.png \
+    data/textures/atlas/wearpolka1.png \
+    data/textures/atlas/wearpolka2.png \
+    data/textures/atlas/wearpolka3.png \
+    data/textures/atlas/wearpolka4.png

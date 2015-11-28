@@ -1,4 +1,5 @@
 #include "objectstatic.h"
+#include "textureatlas.h"
 
 ObjectStatic::ObjectStatic(const std::string &__id)
 {
@@ -14,6 +15,9 @@ std::unique_ptr<Object> ObjectStatic::Instantiate()
 {
     Object *o = new Object(this);
 
+    if(tex.size() > 0)
+        o->otex = rand()%tex.size();
+
     if(is_static)
         return std::unique_ptr<Object>(o);
 
@@ -24,5 +28,3 @@ std::unique_ptr<Object> ObjectStatic::Instantiate()
 
     return std::unique_ptr<Object>(o);
 }
-
-std::unique_ptr<ObjectStatic> ObjectStatic::air = std::unique_ptr<ObjectStatic>( new ObjectStatic("air"));

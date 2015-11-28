@@ -2,6 +2,9 @@
 #define AGENTS_H
 
 #define CASTERS \
+    CASTER(Chest) \
+    CASTER(ItemSpawner) \
+    CASTER(Stacked)
 
 #define PARTS_PARSER                                                                                               \
     if(val.HasMember("parts")) {                                                                                   \
@@ -40,5 +43,9 @@
     }
 
 #include "agent.h"
+
+#include "agents/itemspawner.h"
+#include "agents/stacked.h"
+#include "agents/chest.h"
 
 #endif // AGENTS_H

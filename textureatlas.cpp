@@ -29,7 +29,6 @@ void TextureAtlas::LoadAll()
     tex.emplace_back();
     AtlasPart &ap = *(--tex.end());
     ap.tex = std::make_shared<Texture>();
-    ap.tex_n = std::make_shared<Texture>();
     ap.tex_o = std::make_shared<Texture>();
 
     Pixmap atlas(glm::vec2(2048, 2048));
@@ -39,7 +38,6 @@ void TextureAtlas::LoadAll()
     for(std::string file: files)
     {
         Pixmap tex(Prefecences::Instance()->getTexturesDir() + "atlas/" + file);
-        x += tex.width;
         max_y = max(max_y, tex.height);
 
         Pixmap tex_o(glm::vec2(tex.width, tex.height));
@@ -100,28 +98,8 @@ void TextureAtlas::LoadAll()
 
         refs[file] = glm::ivec2(0, count);
 
-        if(x >= 2048)
-        {
-            x = 0;
-            y+= max_y;
-        }
-        ++count;
-    }
-
-    getFiles(Prefecences::Instance()->getTexturesDir() + "normal/", files);
-
-    Pixmap atlas_n(glm::vec2(2048, 2048));
-
-    x = 0; y = 0; count = 0; max_y = 0;
-    for(std::string file: files)
-    {
-        Pixmap tex(Prefecences::Instance()->getTexturesDir() + "normal/" + file);
         x += tex.width;
-        max_y = max(max_y, tex.height);
-
-        atlas_n.Blit(tex, glm::vec2(x, y));
-
-        if(x >= 2048)
+        if(x >= 2048 - 32)
         {
             x = 0;
             y+= max_y;
@@ -131,7 +109,6 @@ void TextureAtlas::LoadAll()
 
     LOG(verbose) << "texatlas load " << count << " pixmaps";
 
-    ap.tex_n->Load(atlas_n, false, false);
     ap.tex_o->Load(atlas_o, false, false);
     ap.tex->Load(atlas, false, false);
 

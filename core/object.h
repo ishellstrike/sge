@@ -10,6 +10,7 @@ public:
     std::unique_ptr<Object> Instantiate();
 
     ObjectStaticHelper *base;
+    int otex = 0;
 
     bool isStatic();
 };

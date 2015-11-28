@@ -5,6 +5,12 @@ Agent::Agent()
 
 }
 
+Agent::Agent(int __id) :
+    id(__id)
+{
+
+}
+
 bool Agent::IsStatic()
 {
     return is_static;

@@ -4,22 +4,22 @@
 #include <memory>
 #include "rapidjson/document.h"
 
-#define AGENT(type)                         \
-type() :                                    \
-    Agent(#type, Agent::typeid_for<type>()) \
-{                                           \
-}                                           \
-virtual ~type(){}                           \
-type(const type&) = delete;                 \
+#define AGENT(type)                    \
+type() :                               \
+    Agent(Agent::TidFor<type>())       \
+{                                      \
+}                                      \
+virtual ~type(){}                      \
+type(const type&) = delete;            \
 type& operator=(const type&) = delete;
 
-#define CASTER(ctype)                                                \
-if(strcmp(part["type"].GetString(), #ctype) == 0)                    \
-{                                                                    \
-    std::unique_ptr<ctype> c = std::unique_ptr<ctype>(new ctype());  \
-    c->Deserialize(part);                                            \
-    b->PushAgent(c);                                                 \
-    LOG(verbose) << #ctype << " added";                              \
+#define CASTER(ctype)                                               \
+if(strcmp(part["type"].GetString(), #ctype) == 0)                   \
+{                                                                   \
+    std::unique_ptr<ctype> c = std::unique_ptr<ctype>(new ctype()); \
+    c->Deserialize(part);                                           \
+    b->PushAgent(std::move(c));                                     \
+    LOG(verbose) << #ctype << " added";                             \
 } else
 
 class Agent
@@ -35,7 +35,9 @@ class Agent
 
 public:
     Agent();
+    Agent(int __id);
 
+    template <typename T_>
     static Tid TidFor()
     {
         static int result(NextTid());

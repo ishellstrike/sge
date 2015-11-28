@@ -15,7 +15,7 @@ std::unique_ptr<Object> DB::Create(const std::string &id)
     if(t == data.end())
     {
         LOG(error) << "id " << id << " not found in db";
-        return ObjectStatic::air->Instantiate();
+        return data["air"]->Instantiate();
     }
     return data[id]->Instantiate();
 }
@@ -24,6 +24,8 @@ void DB::Load()
 {
    std::vector<std::string> files;
    getFiles(Prefecences::Instance()->getJsonDir(), files);
+
+   data["air"] = std::unique_ptr<ObjectStatic>( new ObjectStatic("air"));
 
    int loaded = 0;
    for(std::string file : files)
@@ -51,48 +53,95 @@ void DB::Load()
            LOG(error) << "                    ^";
        }
 
-       int loaded = 0;
        if(d.IsArray())
        {
            for(decltype(d.Size()) i=0; i < d.Size(); i++)
            {
                rapidjson::Value &val = d[i];
-               if(!val.HasMember("id"))
+
+               std::string type;
+               if(val.HasMember("type"))
+                   type = val["type"].GetString();
+               else
                {
-                   LOG(error) << "record #" << i+1 << " from " << file << " has no \"id\"";
+                   LOG(error) << "record #" << i+1 << " from " << file << " has no \"type\"";
                    continue;
                }
-               std::string id = val["id"].GetString();
 
-               ObjectStatic *b = new ObjectStatic(id);
-               b->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
-
-               if(!val.HasMember("name"))
+               if(type == "scheme")
                {
-                   LOG(error) << "record #" << i+1 << " from " << file << " has no \"id\"";
-                   continue;
-               }
-               b->name = val["name"].GetString();
+                   Scheme s;
+                   if(!s.Deserialize(val))
+                   {
+                       LOG(error) << "record #" << i+1 << " from " << file << " broken, skipped";
+                       continue;
+                   }
 
-               if(val.HasMember("tex"))
-                   b->tex = val["tex"].GetString();
-
-               PARTS_PARSER
-
-               if(b->agents->empty())
-               {
-                   b->agents.release();
-                   b->is_static = true;
+                   scheme_db[s.type].push_back(s);
+                   loaded ++;
                }
                else
-                   b->is_static = false;
+               {
+                   if(!val.HasMember("id"))
+                   {
+                       LOG(error) << "record #" << i+1 << " from " << file << " has no \"id\"";
+                       continue;
+                   }
+                   std::string id = val["id"].GetString();
 
-               data[id] = std::unique_ptr<ObjectStatic>(b);
-               loaded ++;
+                   auto b = std::unique_ptr<ObjectStatic>(new ObjectStatic(id));
+                   b->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
+
+                   if(type == "item")
+                       b->type = ObjectItem;
+                   else if(type == "creature")
+                       b->type = ObjectCreature;
+                   else if(type == "creature")
+                       b->type = ObjectBlock;
+                   else
+                       b->type = ObjectSpecial;
+
+                   if(!val.HasMember("name"))
+                   {
+                       LOG(error) << "record #" << i+1 << " from " << file << " has no \"id\"";
+                       continue;
+                   }
+                   b->name = val["name"].GetString();
+
+                   if(val.HasMember("tex"))
+                   {
+                       rapidjson::Value &ar = val["tex"];
+                       if(!ar.IsArray())
+                       {
+                           LOG(error) << "record #" << i+1 << " from " << file << " tex wrond format. Must be \"tex\":[\"tex1\",\"tex2\"]";
+                           continue;
+                       }
+
+                       for(decltype(ar.Size()) k=0; k < ar.Size(); k++)
+                           b->tex.push_back(ar[k].GetString());
+                   }
+
+                   if(val.HasMember("ground"))
+                       b->ground = val["ground"].GetBool_();
+
+                   PARTS_PARSER
+
+                   if(b->agents->empty())
+                   {
+                       b->agents.release();
+                       b->is_static = true;
+                   }
+                   else
+                       b->is_static = false;
+
+                   data[id] = std::move(b);
+                   loaded ++;
+               }
            }
        }
    }
    LOG(info) << loaded << " loaded";
 }
 
-std::unordered_map<std::string, std::unique_ptr<ObjectStatic>> DB::data;
+std::unordered_map<Id, std::unique_ptr<ObjectStatic>> DB::data;
+std::unordered_map<SchemeType, std::vector<Scheme>> DB::scheme_db;

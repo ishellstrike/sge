@@ -217,94 +217,14 @@ void GameWindow::Swap()
     glfwSwapBuffers(wi->window);
 }
 
-void GameWindow::BlitGBuffer()
-{
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    gb->BindForBlit();
-
-    GLsizei HalfWidth = (GLsizei)(RESX_float / 2.0f);
-    GLsizei HalfHeight = (GLsizei)(RESY_float / 2.0f);
-
-    batch->drawQuad({0,         0},          {HalfWidth, HalfHeight}, gb->m_textures[0], Color::White);
-    batch->drawQuad({HalfWidth, 0},          {HalfWidth, HalfHeight}, gb->m_textures[1], Color::White);
-    batch->drawQuad({0,         HalfHeight}, {HalfWidth, HalfHeight}, gb->m_textures[2], Color::White);
-    batch->drawQuad({HalfWidth, HalfHeight}, {HalfWidth, HalfHeight}, gb->m_textures[3], Color::White);
-}
-
-void GameWindow::GeometryPass()
-{
-    if(wire)
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
-    gb->BindForWriting();
-    glDepthMask(GL_TRUE);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0, 0, 0, 0.f);
-    glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-    //==================
-
-//    srand(1);
-//    for(int i =9; i>=0; --i)
-//        for(int j =9; j>=0; --j)
-//        {
-//            int x = i*64/2 - j*64/2 + 300;
-//            int y = i*32/2 + j*32/2 + 300;
-
-//             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], 1, Color::Brown);
-//             batch->drawQuadAtlasJARG({x,y}, 1, TextureAtlas::tex[0], rand()%2 + 2, Color::RosyBrown);
-//        }
-
-    level.Draw(*batch);
-
-    //============
-
-    batch->render();
-    glDepthMask(GL_FALSE);
-    glDisable(GL_DEPTH_TEST);
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-}
-
-void GameWindow::ShadingPass()
-{
-    gb->BindForReading();
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0, 0, 0, 0.f);
-
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_ONE, GL_ONE);
-    glDisable(GL_DEPTH_TEST);
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    static const auto &deff = Resources::instance()->Get<BasicJargShader>("defered");
-    static float angle = 0;
-    angle += gt.elapsed;
-
-    deff->Use();
-    deff->SetUniform("transform_lightPos", glm::vec3(sin(angle)+cos(angle),-sin(angle)+cos(angle), 2));
-    drawScreenQuad();
-}
-
-
 template<int is_debug>
 void GameWindow::BaseDraw()
 {
     batch->setUniform(proj);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0,0,0,1);
 
-    GeometryPass();
-
-    if(!Prefecences::Instance()->defered_debug)
-    {
-        ShadingPass();
-    }
-    else
-    {
-        BlitGBuffer();
-    }
+    level.Draw(*batch);
 
     if(is_debug)
     {

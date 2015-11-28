@@ -14,7 +14,6 @@ public:
     bool isStatic();
     bool is_static = false;
 
-    static std::unique_ptr<ObjectStatic> air;
     std::unique_ptr<Object> Instantiate();
 };
 

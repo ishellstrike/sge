@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <list>
+#include "scheme.h"
 
 #include <boost/archive/basic_archive.hpp>
 
@@ -29,14 +30,15 @@ public:
     void Draw(SpriteBatch &sb, const glm::vec2 &off) const;
     void SetObject(const glm::ivec3 &pos, std::unique_ptr<Object> obj);
 
+    void PlaceScheme(const Scheme &s, glm::vec3 pos);
+
+    glm::ivec2 offset;
 private:
 
     void RebuildMax();
 
     std::array<std::unique_ptr<Object>, RXYZ> data;
     //std::list<Object*> active;
-
-    glm::ivec2 offset;
     int maxlevel = 0;
 };
 

@@ -7,13 +7,23 @@
 
 typedef std::vector<std::unique_ptr<Agent>> AgentContainer;
 
+enum ObjectType
+{
+    ObjectError,
+    ObjectItem,
+    ObjectBlock,
+    ObjectCreature,
+    ObjectSpecial
+};
 
 class ObjectStaticHelper
 {
 public:
     Id id;
-    Tex tex;
+    std::vector<Tex> tex;
     std::string name = "air";
+    ObjectType type;
+    bool ground = false;
 };
 
 class ObjectHelper
@@ -58,9 +68,9 @@ public:
     }
 
     template <typename T>
-    void PushAgent(std::shared_ptr<T> agent)
+    void PushAgent(std::unique_ptr<T> agent)
     {
-        agents.push_back(agent);
+        agents->push_back(std::move(agent));
     }
 };
 

@@ -3,12 +3,14 @@
 #include "objectstatic.h"
 #include <unordered_map>
 #include <memory>
+#include "scheme.h"
 
 class DB
 {
 public:
     DB();
     static std::unordered_map<std::string, std::unique_ptr<ObjectStatic>> data;
+    static std::unordered_map<SchemeType, std::vector<Scheme>> scheme_db;
     static std::unique_ptr<Object> Create(const std::string &id);
 
     static void Load();

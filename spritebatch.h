@@ -37,7 +37,7 @@ public:
     void render();
     void drawRect(const glm::vec2 &loc, const glm::vec2 &size, const glm::vec4 &_col);
     void drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv = glm::vec4(0,0,1,1));
-    void drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, int apos, const glm::vec4 &col_);
+    void drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const AtlasPart &tex, int apos, const glm::vec4 &col_);
     void drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint direct, const glm::vec4 &col_, const glm::vec4 &double_uv = glm::vec4(0,0,1,1));
     void drawLine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
     void drawText(const std::string &text, const glm::vec2 &pos, Font *font, const glm::vec4 &col_);
@@ -50,7 +50,6 @@ public:
 
     void resetDc();
     int getDc();
-    void drawQuadAtlasJARG(const glm::vec2 &loc, float scale, const AtlasPart &tex, int apos, const glm::vec4 &col_);
 
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
