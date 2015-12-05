@@ -9,13 +9,14 @@ class Level
 public:
     Level();
 
-    std::unordered_map<glm::ivec2, std::unique_ptr<Sector>> map;
+    typedef std::unordered_map<glm::ivec2, std::unique_ptr<Sector>> SectorMap;
+    SectorMap map;
 
     Sector *GetSector(const glm::vec2 &off);
     void Update();
     void Draw(SpriteBatch &sb) const;
 
-    glm::vec2 off;
+    glm::ivec2 off;
 };
 
 #endif // LEVEL_H

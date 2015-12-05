@@ -172,11 +172,9 @@ bool GameWindow::BaseInit()
 
     TextureAtlas::LoadAll();
     DB::Load();
-    level.GetSector({0, 0});
-    level.GetSector({0, 1});
-    level.GetSector({1, 0});
-    level.GetSector({0, -1});
-    level.GetSector({-1, 0});
+    for(int i = -2; i < 4; i++)
+        for(int j = -2; j < 4; j++)
+            level.GetSector({i, j});
 
     return true;
 }

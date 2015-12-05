@@ -13,6 +13,11 @@ public:
     int otex = 0;
 
     bool isStatic();
+
+    void onInit();
+    void onUpdate();
+    void onDraw();
+    void onDestroy();
 };
 
 #endif // OBJECT_H

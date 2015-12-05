@@ -22,9 +22,18 @@ std::unique_ptr<Object> ObjectStatic::Instantiate()
         return std::unique_ptr<Object>(o);
 
     if(agents)
+    {
+        o->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
         for(const auto &i : *agents)
-            if(!i->IsStatic())
-                o->agents->push_back(i->Instantiate());
+            o->agents->push_back(i->Instantiate());
+        o->onInit();
+        std::remove_if(std::begin(*o->agents), std::end(*o->agents), [](const std::unique_ptr<Agent> &ag)
+        {
+            return ag->IsStatic();
+        });
+    }
+
+
 
     return std::unique_ptr<Object>(o);
 }

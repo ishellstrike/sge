@@ -1,5 +1,4 @@
 #include "db.h"
-#include "agents.hpp"
 #include "sge_fielsystem.h"
 #include "prefecences.h"
 #include "objectstatic.h"
@@ -124,7 +123,29 @@ void DB::Load()
                    if(val.HasMember("ground"))
                        b->ground = val["ground"].GetBool_();
 
-                   PARTS_PARSER
+                   if(val.HasMember("parts")) {
+                       LOG(verbose) << "found parts";
+                       rapidjson::Value &arr = val["parts"];
+                       if(val["parts"].IsArray())
+                       for(decltype(arr.Size()) a = 0; a < arr.Size(); a++)
+                       {
+                           rapidjson::Value &part = arr[a];
+                           if(part.HasMember("type")) {
+                               auto c = Agent::AgentFactory.Create(part["type"].GetString());
+                               if(!c)
+                               {
+                                   LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has unknown \"type\"";
+                                   continue;
+                               }
+                               c->Deserialize(part);
+                               b->PushAgent(std::move(c));
+                           }
+                           else
+                               LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";
+                       }
+                       else
+                           LOG(error) << "record \"" << id << "\" parts is not valid agents array";
+                   }
 
                    if(b->agents->empty())
                    {

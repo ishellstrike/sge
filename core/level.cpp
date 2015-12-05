@@ -1,4 +1,5 @@
 #include "level.h"
+#include "prefecences.h"
 
 Level::Level()
 {
@@ -25,17 +26,15 @@ void Level::Update()
 
 void Level::Draw(SpriteBatch &sb) const
 {
-    std::vector<Sector*> t;
     for(const auto &i : map)
-        t.push_back(i.second.get());
-    std::sort(std::begin(t), std::end(t), [](Sector* a, Sector* b)
     {
-        return a->offset.x == b->offset.x ?
-               a->offset.y > b->offset.y  :
-               a->offset.x > b->offset.x  ;
-    });
-
-    for(const auto &i : t)
-        i->Draw(sb, off);
+        auto max = (i.second->offset + glm::ivec2(1)) * glm::ivec2(RX, RY) + off;
+        if(max.x < 0 || max.y < 0)
+            continue;
+        auto min = i.second->offset * glm::ivec2(RX, RY) + off;
+        if(min.x > RESX || min.y > RESY)
+            continue;
+        i.second->Draw(sb, off);
+    }
 }
 

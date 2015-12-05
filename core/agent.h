@@ -1,8 +1,14 @@
+#pragma once
 #ifndef AGENT_H
 #define AGENT_H
 #include <core/core_const.h>
 #include <memory>
 #include "rapidjson/document.h"
+#include "boost/signals2.hpp"
+#include "agents/agentfactory.h"
+
+class ObjectHelper;
+using namespace boost::signals2;
 
 #define AGENT(type)                    \
 type() :                               \
@@ -13,19 +19,16 @@ virtual ~type(){}                      \
 type(const type&) = delete;            \
 type& operator=(const type&) = delete;
 
-#define CASTER(ctype)                                               \
-if(strcmp(part["type"].GetString(), #ctype) == 0)                   \
-{                                                                   \
-    std::unique_ptr<ctype> c = std::unique_ptr<ctype>(new ctype()); \
-    c->Deserialize(part);                                           \
-    b->PushAgent(std::move(c));                                     \
-    LOG(verbose) << #ctype << " added";                             \
-} else
+#define REGISTER(ctype)                                                     \
+namespace                                                                   \
+{                                                                           \
+RegisterElement<ctype> RegisterElement##ctype(Agent::AgentFactory, #ctype); \
+}
 
 class Agent
 {
+    friend class ObjectHelper;
     Tid id;
-    bool is_static = true;
 
     static Tid NextTid()
     {
@@ -44,12 +47,19 @@ public:
         return result;
     }
 
-    bool IsStatic();
+    virtual bool IsStatic();
 
     Tid GetTid();
 
     virtual void Deserialize(rapidjson::Value &val) = 0;
     virtual std::unique_ptr<Agent> Instantiate() = 0;
+
+    virtual void onInit(ObjectHelper *par);
+    virtual void onUpdate(ObjectHelper *par);
+    virtual void onDraw(ObjectHelper *par);
+    virtual void onDestroy(ObjectHelper *par);
+
+    static ObjectFactory<std::string, Agent> AgentFactory;
 };
 
 #endif // AGENT_H

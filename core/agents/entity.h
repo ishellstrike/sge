@@ -1,15 +1,13 @@
-#ifndef CHEST_H
-#define CHEST_H
+#ifndef ENTITY_H
+#define ENTITY_H
 #include <vector>
 #include "core/agent.h"
 #include "core/object.h"
 
-class Chest : public Agent
+class Entity : public Agent
 {
 public:
-    AGENT(Chest)
-
-    std::vector<std::unique_ptr<Object>> items;
+    AGENT(Entity)
 
     // Agent interface
 public:
@@ -18,6 +16,6 @@ public:
     bool IsStatic() override;
 };
 
-REGISTER(Chest)
+REGISTER(Entity)
 
-#endif // CHEST_H
+#endif // ENTITY_H

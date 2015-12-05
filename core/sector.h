@@ -22,15 +22,15 @@
 class Sector
 {
 public:
-    Sector(const glm::vec2 &o);
+    Sector(const glm::ivec2 &o);
 
     std::array<const Object*, 6> Neighbours(const glm::ivec3 &pos);
     void Generate();
     void Update();
-    void Draw(SpriteBatch &sb, const glm::vec2 &off) const;
+    void Draw(SpriteBatch &sb, const glm::ivec2 &off) const;
     void SetObject(const glm::ivec3 &pos, std::unique_ptr<Object> obj);
 
-    void PlaceScheme(const Scheme &s, glm::vec3 pos);
+    void PlaceScheme(const Scheme &s, const glm::ivec3 &pos);
 
     glm::ivec2 offset;
 private:

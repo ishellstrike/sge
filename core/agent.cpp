@@ -13,10 +13,32 @@ Agent::Agent(int __id) :
 
 bool Agent::IsStatic()
 {
-    return is_static;
+    return true;
 }
 
 Tid Agent::GetTid()
 {
     return id;
 }
+
+void Agent::onInit(ObjectHelper *)
+{
+
+}
+
+void Agent::onUpdate(ObjectHelper *)
+{
+
+}
+
+void Agent::onDraw(ObjectHelper *)
+{
+
+}
+
+void Agent::onDestroy(ObjectHelper *)
+{
+
+}
+
+ObjectFactory<std::string, Agent> Agent::AgentFactory;

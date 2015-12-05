@@ -11,6 +11,11 @@ public:
 public:
     void Deserialize(rapidjson::Value &val);
     std::unique_ptr<Agent> Instantiate();
+
+    int count;
+    bool IsStatic() override;
 };
+
+REGISTER(Stacked)
 
 #endif // STACKED_H

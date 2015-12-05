@@ -2,8 +2,9 @@
 #include "db.h"
 #include "textureatlas.h"
 #include "colorextender.h"
+#include "prefecences.h"
 
-Sector::Sector(const glm::vec2 &o) : offset(o)
+Sector::Sector(const glm::ivec2 &o) : offset(o)
 {
     for(int i = 0; i < RX; i++)
         for(int j = 0; j < RY; j++)
@@ -31,14 +32,22 @@ void Sector::Update()
 
 }
 
-void Sector::Draw(SpriteBatch &sb, const glm::vec2 &off) const
+void Sector::Draw(SpriteBatch &sb, const glm::ivec2 &off) const
 {
     for(int i = 0; i < RX; i++)
         for(int j = 0; j < RY; j++)
+        {
+            int x = (i + offset.x*RX)*32 - off.x + 200;
+            int y = (j + offset.y*RY)*32 - off.y + 200;
+            if(x > RESX || y > RESY)
+                continue;
+            if(x + 32 < 0 || y + 32 < 0)
+                continue;
             for(int k = 0; k < maxlevel + 1; k++)
             {
-                int x = (i + offset.x*RX)*32 - off.x + 200;
-                int y = (j + offset.y*RY)*32 - off.y + 200;
+
+
+
 
                 const Object &b = *data[ONEDIM(i,j,k)];
                 const ObjectStaticHelper &o = *b.base;
@@ -47,6 +56,7 @@ void Sector::Draw(SpriteBatch &sb, const glm::vec2 &off) const
                 auto t = TextureAtlas::refs[o.tex[b.otex]];
                 sb.drawQuadAtlas({x, y}, {32,32}, TextureAtlas::tex[t.x], t.y, Color::White);
             }
+        }
 }
 
 void Sector::SetObject(const glm::ivec3 &pos, std::unique_ptr<Object> obj)
@@ -66,7 +76,7 @@ void Sector::RebuildMax()
             }
 }
 
-void Sector::PlaceScheme(const Scheme &s, glm::vec3 pos)
+void Sector::PlaceScheme(const Scheme &s, const glm::ivec3 &pos)
 {
     for(int i = 0; i < s.size.x && pos.x + i < RX; i++)
     {

@@ -78,7 +78,8 @@ SOURCES += \
     core/agents/chest.cpp \
     core/agents/itemspawner.cpp \
     core/agents/stacked.cpp \
-    core/scheme.cpp
+    core/scheme.cpp \
+    core/agents/entity.cpp
 
 VERSION = 0.1.0
 
@@ -172,7 +173,6 @@ HEADERS += \
     core/level.h \
     core/offset.h \
     core/core_const.h \
-    core/agents.hpp \
     rapidjson/internal/pow10.h \
     rapidjson/internal/stack.h \
     rapidjson/internal/strfunc.h \
@@ -189,7 +189,9 @@ HEADERS += \
     core/agents/chest.h \
     core/agents/itemspawner.h \
     core/agents/stacked.h \
-    core/scheme.h
+    core/scheme.h \
+    core/agents/entity.h \
+    core/agents/agentfactory.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

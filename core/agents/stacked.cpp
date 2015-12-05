@@ -12,3 +12,8 @@ std::unique_ptr<Agent> Stacked::Instantiate()
 
     return std::unique_ptr<Stacked>(s);
 }
+
+bool Stacked::IsStatic()
+{
+    return false;
+}

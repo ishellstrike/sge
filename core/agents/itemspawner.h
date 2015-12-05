@@ -21,6 +21,10 @@ public:
 public:
     void Deserialize(rapidjson::Value &val);
     std::unique_ptr<Agent> Instantiate();
+
+    void onInit(ObjectHelper *par) override;
 };
+
+REGISTER(ItemSpawner)
 
 #endif // ITEMSPAWNER_H
