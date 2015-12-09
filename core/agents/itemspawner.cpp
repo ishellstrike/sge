@@ -6,6 +6,18 @@
 #include "core/agents/stacked.h"
 #include "core/db.h"
 
+/**
+*\brief Агент, осуществляющий генерацию предметов при создании блоков-контейнеров
+*
+*   Example:
+*   {
+*       "type":"ItemSpawner",
+*       "items":[
+*           [<string id>, <int low_quantity>, <int high_quantity>, <double probability>],
+*           ["foo_block", 1, 10, 0.4]
+*       ]
+*   }
+*/
 void ItemSpawner::Deserialize(rapidjson::Value &val)
 {
     if(val.HasMember("items"))
