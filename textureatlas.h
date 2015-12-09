@@ -12,15 +12,24 @@
 #include <memory>
 #include <unordered_map>
 
+struct AtlasPart
+{
+    std::shared_ptr<Texture> tex, tex_o;
+};
+
 class TextureAtlas
 {
 public:
     TextureAtlas();
     ~TextureAtlas();
-    static std::shared_ptr<Texture> tex;
-    static std::unordered_map<std::string, int> refs;
+    static std::vector<AtlasPart> tex;
+    static std::unordered_map<std::string, glm::ivec2> refs;
+    static std::vector<glm::vec4> uvs;
+    static std::vector<glm::vec2> size;
+    static std::vector<std::vector<std::vector<bool>>> pixels;
 
-    void LoadAll();
+    static void LoadAll();
+    static glm::vec2 GetUV(int n);
 };
 
 #endif // TEXTUREATLAS_H

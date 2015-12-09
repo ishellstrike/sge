@@ -8,44 +8,39 @@
 #ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
+#include "colorextender.h"
+#include "font.h"
+#include "fpscounter.h"
+#include "FrameBuffer.h"
+#include "gametimer.h"
+#include "gbuffer.h"
+#include "glm/gtx/transform.hpp"
+#include "keyboard.h"
+#include "logger.h"
+#include "mouse.h"
+#include "prefecences.h"
+#include "resources/resourcecontroller.h"
+#include "sge_perfomance.h"
+#include "sge_texlab_toolbox.h"
+#include "sge_ui/wins.h"
+#include "shader.h"
+#include "shader.h"
+#include "spritebatch.h"
+#include "spritebatch.h"
+#include "textureatlas.h"
+#include "TextureGenerator.h"
+
+#include <algorithm>
+#include <chrono>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-
+#include <glm/gtx/compatibility.hpp>
 #include <memory>
 #include <string>
-#include "logger.h"
-#include "shader.h"
-#include "spritebatch.h"
-#include "fpscounter.h"
-#include "gametimer.h"
-#include "textureatlas.h"
-#include "font.h"
-#include "camera.h"
-#include "gbuffer.h"
-#include "sge_ui/wins.h"
-#include "sge_perfomance.h"
-#include "experimental/quadsphere.h"
-#include "experimental/scattering.h"
-#include "FrameBuffer.h"
-
-#include "mouse.h"
-#include "keyboard.h"
-#include "prefecences.h"
-#include "shader.h"
-#include "spritebatch.h"
-#include "glm/gtx/transform.hpp"
-#include "colorextender.h"
 #include <thread>
-#include <chrono>
-#include <algorithm>
-#include "geometry/model.h"
-#include "resources/resourcecontroller.h"
-#include "TextureGenerator.h"
-#include <glm/gtx/compatibility.hpp>
-#include "sge_texlab_toolbox.h"
+#include "core/level.h"
 
-#include "core/sobject.hpp"
 
 #define MAJOR 2
 #define MINOR 1
@@ -106,7 +101,7 @@ public:
     float speed = 1;
 
     bool wire = false, no_ui = false;
-    std::shared_ptr<Camera> cam;
+    glm::vec2 offset;
 
     std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
     std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
@@ -115,17 +110,12 @@ public:
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
-
-    std::list<std::shared_ptr<SObject>> objects;
+    Level level;
 
     static void Swap();
-    void GeometryPass();
     void BlitGBuffer();
     void ShadingPass();
-    void BeginLightPasses();
-    void AftereffectPass();
-    void PreloadHdr();
-    void DropHdr();
+    void GeometryPass();
 };
 
 #endif // GAMEWINDOW_H

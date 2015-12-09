@@ -46,8 +46,6 @@ void main(void)
     vec3 pos = texture(buffer_world_pos, texcoord).xyz;
     vec3 light = normalize(transform_lightPos);
 
-    if(length(dif) <= 1.00) discard;
-
     color = vec4(0,0,0,1);
     float diffuse_rate = clamp(dot(light, eye), 0, 1);
     color += dif * diffuse_rate;
