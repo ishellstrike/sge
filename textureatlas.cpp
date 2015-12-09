@@ -11,6 +11,11 @@
 #include "prefecences.h"
 #include "logger.h"
 
+namespace {
+    const int atlas_dim = 2048;
+    const int sprite_size = 32;
+}
+
 TextureAtlas::TextureAtlas()
 {
 
@@ -31,8 +36,8 @@ void TextureAtlas::LoadAll()
     ap.tex = std::make_shared<Texture>();
     ap.tex_o = std::make_shared<Texture>();
 
-    Pixmap atlas(glm::vec2(2048, 2048));
-    Pixmap atlas_o(glm::vec2(2048, 2048));
+    Pixmap atlas(glm::vec2(atlas_dim, atlas_dim));
+    Pixmap atlas_o(glm::vec2(atlas_dim, atlas_dim));
 
     int x = 0, y = 0, count = 0, max_y = 0;
     for(std::string file: files)
@@ -93,13 +98,13 @@ void TextureAtlas::LoadAll()
         atlas.Blit(tex, glm::vec2(x, y));
 
         pixels.push_back(data);
-        uvs.push_back(glm::vec4(x, y, x + tex.width, y + tex.height)/2048.f);
+        uvs.push_back(glm::vec4(x, y, x + tex.width, y + tex.height)/static_cast<float>(atlas_dim));
         size.push_back({tex.width, tex.height});
 
         refs[file] = glm::ivec2(0, count);
 
         x += tex.width;
-        if(x >= 2048 - 32)
+        if(x >= atlas_dim - sprite_size)
         {
             x = 0;
             y+= max_y;
