@@ -1,0 +1,39 @@
+[
+
+  "type":"object",
+  "id":"template_0",
+  "agents":[
+    {
+      "type":"ItemSpawner",
+      "items":[
+        ["empty_bottle_05",1,2,0.5]
+      ]
+    }
+  ]
+},
+{
+  "type":"object",
+  "id":"template_1",
+  "agents":[
+    {
+      "type":"ItemSpawner",
+      "items":[
+        ["can",1,2,0.5]
+      ]
+    },
+    {
+      "type":"Referencer",
+      "ref":"template_0"
+    }
+  ]
+},{
+  "type":"object",
+  "id":"test_templ_user",
+  "agents":[
+    {
+      "type":"Referencer",
+      "ref":"template_1"
+    }
+  ]
+}
+]
