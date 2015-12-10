@@ -20,4 +20,37 @@ public:
     void onDestroy();
 };
 
+template<typename _Ty>
+inline _Ty* agent_cast( Object &ag )
+{
+    if(agents)
+    {
+        auto tid = Agent::TidFor<T>()
+        for(const auto &a : *agents)
+        {
+            Agent &agent = *a;
+            if(agent.id == tid)
+                return static_cast<T*>(&agent);
+        }
+    }
+    return nullptr;
+}
+
+template<typename _Ty>
+inline _Ty* agent_base_cast( Object &ag )
+{
+    
+    if(base->agents)
+    {
+        auto tid = Agent::TidFor<T>()
+        for(const auto &a : *base->agents)
+        {
+            Agent &agent = *a;
+            if(agent.id == tid)
+                return static_cast<T*>(&agent);
+        }
+    }
+    return nullptr;
+}
+
 #endif // OBJECT_H
