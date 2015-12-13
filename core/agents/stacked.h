@@ -9,13 +9,13 @@ public:
 
     // Agent interface
 public:
-    void Deserialize(rapidjson::Value &val);
-    std::unique_ptr<Agent> Instantiate();
+    void Deserialize(rapidjson::Value &val) override;
+    std::shared_ptr<Agent> Instantiate() override;
 
     int count;
     bool IsStatic() override;
 };
 
-REGISTER(Stacked)
+REGISTER_AGENT(Stacked)
 
 #endif // STACKED_H

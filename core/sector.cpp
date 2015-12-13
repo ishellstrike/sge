@@ -51,9 +51,12 @@ void Sector::Draw(SpriteBatch &sb, const glm::ivec2 &off) const
 
                 const Object &b = *data[ONEDIM(i,j,k)];
                 const ObjectStaticHelper &o = *b.base;
-                if(o.id == "air")
+                if(o.id == "air" || o.tex.size() == 0)
                     continue;
-                auto t = TextureAtlas::refs[o.tex[b.otex]];
+
+                auto btex = b.otex;
+                auto otex = o.tex[btex];
+                auto t = TextureAtlas::refs[otex];
                 sb.drawQuadAtlas({x, y}, {32,32}, TextureAtlas::tex[t.x], t.y, Color::White);
             }
         }
@@ -61,7 +64,8 @@ void Sector::Draw(SpriteBatch &sb, const glm::ivec2 &off) const
 
 void Sector::SetObject(const glm::ivec3 &pos, std::unique_ptr<Object> obj)
 {
-    if(obj->base != DB::data["air"].get())
+    static void *air_ref = DB::data["air"].get();
+    if(obj->base != air_ref)
         maxlevel = pos.z;
 }
 

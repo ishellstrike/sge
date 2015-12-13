@@ -1,5 +1,5 @@
 [
-
+{
   "type":"object",
   "id":"template_0",
   "agents":[
@@ -35,5 +35,36 @@
       "ref":"template_1"
     }
   ]
+},{
+    "type":"object",
+    "id":"grass",
+    "tex":["grass1"]
+},{
+    "type":"object",
+    "id":"chair",
+    "tex":["frame"],
+    "agents":[
+      {
+        "type":"Referencer",
+        "ref":"template_1"
+      }
+    ]
+},
+{
+   "type":"scheme",
+   "building":"house1_room",
+   "size":[16, 7],
+   "dictionary":[
+       ["T","chair"]
+   ],
+   "data":[
+       "................",
+       "..TTTTTTTT......",
+       "..T......TTTTT..",
+       "..T..........T..",
+       "..T..........T..",
+       "..TTTTTTTTTTTT..",
+       "................"
+   ]
 }
 ]

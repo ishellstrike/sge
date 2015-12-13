@@ -10,6 +10,7 @@
 #include "resources/pixmap.h"
 #include "prefecences.h"
 #include "logger.h"
+#include "resources/error_image.h"
 
 namespace {
     const int atlas_dim = 2048;
@@ -34,87 +35,42 @@ void TextureAtlas::LoadAll()
     tex.emplace_back();
     AtlasPart &ap = *(--tex.end());
     ap.tex = std::make_shared<Texture>();
-    ap.tex_o = std::make_shared<Texture>();
 
     Pixmap atlas(glm::vec2(atlas_dim, atlas_dim));
-    Pixmap atlas_o(glm::vec2(atlas_dim, atlas_dim));
 
-    int x = 0, y = 0, count = 0, max_y = 0;
-    for(std::string file: files)
-    {
-        Pixmap tex(Prefecences::Instance()->getTexturesDir() + "atlas/" + file);
-        max_y = max(max_y, tex.height);
+    int x = 0, y = 0, count = 0;
+    auto add_image = [&](Pixmap &pmap, const std::string &file){
 
-        Pixmap tex_o(glm::vec2(tex.width, tex.height));
-        auto data = std::vector<std::vector<bool>>(tex.width);
-        for(int i = 0; i < tex.width; i++)
-        {
-            data[i] = std::vector<bool>(tex.height);
-            for(int j = 0; j < tex.height; j++)
-            {
-                data[i][j] = tex.data[(tex.height*j + i)*4    ] != 0 &&
-                             tex.data[(tex.height*j + i)*4 + 1] != 0 &&
-                             tex.data[(tex.height*j + i)*4 + 2] != 0 &&
-                             tex.data[(tex.height*j + i)*4 + 3] != 0;
+        atlas.Blit(pmap, glm::vec2(x, y));
 
-                if(data[i][j])
-                {
-                    if(i < tex.width - 1)
-                    {
-                        tex_o.data[(tex_o.height * j + i + 1)*4    ] = 255;
-                        tex_o.data[(tex_o.height * j + i + 1)*4 + 1] = 255;
-                        tex_o.data[(tex_o.height * j + i + 1)*4 + 2] = 255;
-                        tex_o.data[(tex_o.height * j + i + 1)*4 + 3] = 255;
-                    }
-
-                    if(j < tex.height - 1)
-                    {
-                        tex_o.data[(tex_o.height * (j + 1) + i)*4    ] = 255;
-                        tex_o.data[(tex_o.height * (j + 1) + i)*4 + 1] = 255;
-                        tex_o.data[(tex_o.height * (j + 1) + i)*4 + 2] = 255;
-                        tex_o.data[(tex_o.height * (j + 1) + i)*4 + 3] = 255;
-                    }
-
-                    if(i > 0)
-                    {
-                        tex_o.data[(tex_o.height * j + i - 1)*4    ] = 255;
-                        tex_o.data[(tex_o.height * j + i - 1)*4 + 1] = 255;
-                        tex_o.data[(tex_o.height * j + i - 1)*4 + 2] = 255;
-                        tex_o.data[(tex_o.height * j + i - 1)*4 + 3] = 255;
-                    }
-
-                    if(j > 0)
-                    {
-                        tex_o.data[(tex_o.height * (j - 1) + i)*4    ] = 255;
-                        tex_o.data[(tex_o.height * (j - 1) + i)*4 + 1] = 255;
-                        tex_o.data[(tex_o.height * (j - 1) + i)*4 + 2] = 255;
-                        tex_o.data[(tex_o.height * (j - 1) + i)*4 + 3] = 255;
-                    }
-                }
-            }
-        }
-
-        atlas_o.Blit(tex_o, glm::vec2(x, y));
-        atlas.Blit(tex, glm::vec2(x, y));
-
-        pixels.push_back(data);
-        uvs.push_back(glm::vec4(x, y, x + tex.width, y + tex.height)/static_cast<float>(atlas_dim));
-        size.push_back({tex.width, tex.height});
+        uvs.push_back(glm::vec4(x, y, x + pmap.width, y + pmap.height)/static_cast<float>(atlas_dim));
+        size.push_back({pmap.width, pmap.height});
 
         refs[file] = glm::ivec2(0, count);
 
-        x += tex.width;
+        x += pmap.width;
         if(x >= atlas_dim - sprite_size)
         {
             x = 0;
-            y+= max_y;
+            y += 32;
         }
         ++count;
+    };
+
+    Pixmap err(glm::vec2(error_image.width, error_image.width));
+    err.data.insert(std::begin(err.data), std::begin(error_image.pixel_data), std::end(error_image.pixel_data));
+    add_image(err, "error");
+
+
+    for(std::string file: files)
+    {
+        Pixmap pmap(Prefecences::Instance()->getTexturesDir() + "atlas/" + file);
+
+        add_image(pmap, file.substr(0, file.find_last_of('.')));
     }
 
     LOG(verbose) << "texatlas load " << count << " pixmaps";
 
-    ap.tex_o->Load(atlas_o, false, false);
     ap.tex->Load(atlas, false, false);
 
     LOG(verbose) << "texatlas load texture";

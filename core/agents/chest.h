@@ -13,11 +13,11 @@ public:
 
     // Agent interface
 public:
-    void Deserialize(rapidjson::Value &val);
-    std::unique_ptr<Agent> Instantiate();
+    void Deserialize(rapidjson::Value &val) override;
+    std::shared_ptr<Agent> Instantiate() override;
     bool IsStatic() override;
 };
 
-REGISTER(Chest)
+REGISTER_AGENT(Chest)
 
 #endif // CHEST_H

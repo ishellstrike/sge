@@ -14,7 +14,7 @@
 
 struct AtlasPart
 {
-    std::shared_ptr<Texture> tex, tex_o;
+    std::shared_ptr<Texture> tex;
 };
 
 class TextureAtlas

@@ -6,7 +6,7 @@ void Stacked::Deserialize(rapidjson::Value &val)
 
 }
 
-std::unique_ptr<Agent> Stacked::Instantiate()
+std::shared_ptr<Agent> Stacked::Instantiate()
 {
     Stacked *s = new Stacked();
 

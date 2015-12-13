@@ -6,6 +6,8 @@
 #include "rapidjson/document.h"
 #include "boost/signals2.hpp"
 #include "agents/agentfactory.h"
+#include <string>
+#include "core/serialize.h"
 
 class ObjectHelper;
 using namespace boost::signals2;
@@ -19,7 +21,7 @@ virtual ~type(){}                      \
 type(const type&) = delete;            \
 type& operator=(const type&) = delete;
 
-#define REGISTER(ctype)                                                     \
+#define REGISTER_AGENT(ctype)                                               \
 namespace                                                                   \
 {                                                                           \
 RegisterElement<ctype> RegisterElement##ctype(Agent::AgentFactory, #ctype); \
@@ -52,8 +54,9 @@ public:
     Tid GetTid();
 
     virtual void Deserialize(rapidjson::Value &val) = 0;
-    virtual std::unique_ptr<Agent> Instantiate() = 0;
+    virtual std::shared_ptr<Agent> Instantiate() = 0;
 
+    virtual void onLoad(ObjectHelper *par);
     virtual void onInit(ObjectHelper *par);
     virtual void onUpdate(ObjectHelper *par);
     virtual void onDraw(ObjectHelper *par);

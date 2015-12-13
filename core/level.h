@@ -3,6 +3,7 @@
 #include "sector.h"
 #include "offset.h"
 #include <unordered_map>
+#include "core/agents/itemspawner.h"
 
 class Level
 {

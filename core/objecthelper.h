@@ -5,7 +5,7 @@
 #include <functional>
 #include "agent.h"
 
-typedef std::vector<std::unique_ptr<Agent>> AgentContainer;
+typedef std::vector<std::shared_ptr<Agent>> AgentContainer;
 
 enum ObjectType
 {
@@ -68,7 +68,7 @@ public:
     }
 
     template <typename T>
-    void PushAgent(std::unique_ptr<T> agent)
+    void PushAgent(std::shared_ptr<T> agent)
     {
         agents->push_back(std::move(agent));
     }

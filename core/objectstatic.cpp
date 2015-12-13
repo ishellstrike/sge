@@ -27,7 +27,7 @@ std::unique_ptr<Object> ObjectStatic::Instantiate()
         for(const auto &i : *agents)
             o->agents->push_back(i->Instantiate());
         o->onInit();
-        std::remove_if(std::begin(*o->agents), std::end(*o->agents), [](const std::unique_ptr<Agent> &ag)
+        std::remove_if(std::begin(*o->agents), std::end(*o->agents), [](const std::shared_ptr<Agent> &ag)
         {
             return ag->IsStatic();
         });

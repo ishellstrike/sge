@@ -21,6 +21,11 @@ Tid Agent::GetTid()
     return id;
 }
 
+void Agent::onLoad(ObjectHelper *par)
+{
+
+}
+
 void Agent::onInit(ObjectHelper *)
 {
 

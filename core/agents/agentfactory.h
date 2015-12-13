@@ -13,7 +13,7 @@ class ObjectFactory : boost::noncopyable
 public:
     typedef IdType IdTypeUsing;
 protected:
-    typedef std::unique_ptr<Base> BasePtr;
+    typedef std::shared_ptr<Base> BasePtr;
     typedef std::function<BasePtr()> CreateFunc;
     typedef std::map<IdType, CreateFunc> FactoryMap;
 
@@ -26,9 +26,12 @@ public:
 
     void Add(const IdType & id, CreateFunc func)
     {
-        FactoryMap::iterator i = map_.find( id );
+        auto i = map_.find( id );
         if ( i == map_.end() )
+        {
+            LOG(verbose) << "agent class id = \"" << id << "\" register";
             map_.insert(  FactoryMap::value_type(id, func) );
+        }
         else
         {
             LOG(error) << "agent class id = \"" << id << "\" override";
@@ -44,7 +47,7 @@ template <class T>
 class RegisterElement
 {
 public:
-    typedef std::unique_ptr<T> TPtr;
+    typedef std::shared_ptr<T> TPtr;
 public:
     template <class Factory>
     RegisterElement(Factory & factory, const typename Factory::IdTypeUsing & id)

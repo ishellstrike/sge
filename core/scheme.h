@@ -62,6 +62,30 @@ struct Scheme
      */
     void NumericTransform(int __num);
 
+    /*!
+    *\brief 123
+    *
+    *   Example:
+    *   {
+    *       "type":"scheme",
+    *       "building":<string building type list name>,
+    *       "size":[<int x, int y>],
+    *       "dictionary":[
+    *           [<char>,<id>],
+    *           [<T>,<table>]
+    *       ],
+    *       "data":[
+    *           <string scheme row>,
+    *           ".................",
+    *           "..TTTTTTTT.......",
+    *           "..T......TTTTT...",
+    *           "..T..........T...",
+    *           "..T..........T...",
+    *           "..TTTTTTTTTTTT...",
+    *           "................."
+    *       ]
+    *   }
+    */
     bool Deserialize(rapidjson::Value &__val);
 };
 

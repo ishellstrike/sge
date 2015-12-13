@@ -19,6 +19,17 @@ std::unique_ptr<Object> DB::Create(const std::string &id)
     return data[id]->Instantiate();
 }
 
+const ObjectStatic *DB::Get(const std::string &id)
+{
+    auto t = data.find(id);
+    if(t == data.end())
+    {
+        LOG(error) << "id " << id << " not found in db";
+        return nullptr;
+    }
+    return data[id].get();
+}
+
 void DB::Load()
 {
    std::vector<std::string> files;
@@ -47,6 +58,7 @@ void DB::Load()
         d.Parse<0>(all.c_str());
        if(d.HasParseError())
        {
+           LOG(error) << "while parsing " << file;
            LOG(error) << d.GetParseError();
            LOG(error) << all.substr(max(d.GetErrorOffset() - 20, 0), min(all.length(), 40));
            LOG(error) << "                    ^";
@@ -100,12 +112,8 @@ void DB::Load()
                    else
                        b->type = ObjectSpecial;
 
-                   if(!val.HasMember("name"))
-                   {
-                       LOG(error) << "record #" << i+1 << " from " << file << " has no \"id\"";
-                       continue;
-                   }
-                   b->name = val["name"].GetString();
+                   if(val.HasMember("name"))
+                       b->name = val["name"].GetString();
 
                    if(val.HasMember("tex"))
                    {
@@ -139,6 +147,7 @@ void DB::Load()
                                }
                                c->Deserialize(part);
                                b->PushAgent(std::move(c));
+                               c->onInit(b.get());
                            }
                            else
                                LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";

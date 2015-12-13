@@ -6,18 +6,6 @@
 #include "core/agents/stacked.h"
 #include "core/db.h"
 
-/**
-*\brief Агент, осуществляющий генерацию предметов при создании блоков-контейнеров
-*
-*   Example:
-*   {
-*       "type":"ItemSpawner",
-*       "items":[
-*           [<string id>, <int low_quantity>, <int high_quantity>, <double probability>],
-*           ["foo_block", 1, 10, 0.4]
-*       ]
-*   }
-*/
 void ItemSpawner::Deserialize(rapidjson::Value &val)
 {
     if(val.HasMember("items"))
@@ -39,7 +27,7 @@ void ItemSpawner::Deserialize(rapidjson::Value &val)
     }
 }
 
-std::unique_ptr<Agent> ItemSpawner::Instantiate()
+std::shared_ptr<Agent> ItemSpawner::Instantiate()
 {
     ItemSpawner *i = new ItemSpawner();
     return std::unique_ptr<ItemSpawner>(i);

@@ -79,14 +79,16 @@ SOURCES += \
     core/agents/itemspawner.cpp \
     core/agents/stacked.cpp \
     core/scheme.cpp \
-    core/agents/entity.cpp
+    core/agents/entity.cpp \
+    core/agents/itembase.cpp \
+    core/agents/referencer.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype -llibboost_serialization-vc120-mt-gd-1_59
+-lopengl32 -lglew32 -lglfw3dll -lfreetype
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -191,7 +193,10 @@ HEADERS += \
     core/agents/stacked.h \
     core/scheme.h \
     core/agents/entity.h \
-    core/agents/agentfactory.h
+    core/agents/agentfactory.h \
+    core/agents/itembase.h \
+    core/serialize.h \
+    core/agents/referencer.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -357,4 +362,6 @@ DISTFILES += \
     data/textures/atlas/wearpolka1.png \
     data/textures/atlas/wearpolka2.png \
     data/textures/atlas/wearpolka3.png \
-    data/textures/atlas/wearpolka4.png
+    data/textures/atlas/wearpolka4.png \
+    data/json/core.json \
+    data/json/items.json
