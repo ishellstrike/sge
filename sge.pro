@@ -23,7 +23,6 @@ SOURCES += \
     fpscounter.cpp \
     keyboard.cpp \
     mouse.cpp \
-    singleton.cpp \
     font.cpp \
     json/json_internalarray.inl \
     json/json_internalmap.inl \
@@ -31,9 +30,6 @@ SOURCES += \
     main.cpp \
     basicjargshader.cpp \
     ClassicNoise.cpp \
-    camera.cpp \
-    geometry/vpnt.cpp \
-    geometry/model.cpp \
     sge_ui/button.cpp \
     sge_ui/component.cpp \
     sge_ui/graph.cpp \
@@ -45,8 +41,6 @@ SOURCES += \
     sge_ui/wins.cpp \
     colorscheme.cpp \
     gbuffer.cpp \
-    experimental/quadsphere.cpp \
-    experimental/quadplane.cpp \
     resources/resourcecontroller.cpp \
     resources/material.cpp \
     resources/texture.cpp \
@@ -54,13 +48,7 @@ SOURCES += \
     sge_perfomance.cpp \
     FrameBuffer.cpp \
     TextureGenerator.cpp \
-    experimental/scattering.cpp \
-    space/spacesystem.cpp \
     random.cpp \
-    experimental/starfield.cpp \
-    geometry/umesh.cpp \
-    geometry/vertex.cpp \
-    geometry/vertexinfo.cpp \
     sge_ui/image_box.cpp \
     sge_ui/dragnumbox.cpp \
     sge_ui/connector.cpp \
@@ -71,40 +59,34 @@ SOURCES += \
     sge_texlab_toolbox.cpp \
     sge_texlab_lerp_by_map.cpp \
     helper.cpp \
-    geometry/ubillboard.cpp \
     resources/umaterial.cpp \
-    geometry/ring.cpp \
-    space/structure.cpp \
-    space/object.cpp \
-    space/planet_model/country.cpp \
-    space/planet_model/planet_population.cpp \
-    space/planet_model/city.cpp \
-    space/planet_model/resource.cpp \
-    space/objectbase.cpp \
-    experimental/voxelstructure.cpp \
-    experimental/marchingcubes.cpp \
-    scene.cpp \
     light.cpp \
-    geometry/meshbase.cpp \
-    space/logic/item.cpp \
-    space/logic/itemstorage.cpp \
-    geometry/memorychunkcontroller.cpp \
     core/uniqueid.cpp \
-    geometry/multimesh.cpp \
-    space/ship_model/hull.cpp \
-    space/ship_model/attachpoint.cpp \
-    space/ship_model/resource.cpp \
     sql.cpp \
     sge_ui/treeview.cpp \
     core/tree.cpp \
-    resources/texturebase.cpp
+    resources/texturebase.cpp \
+    core/object.cpp \
+    core/dynamicobject.cpp \
+    core/objectstatic.cpp \
+    core/agent.cpp \
+    core/sector.cpp \
+    core/level.cpp \
+    core/offset.cpp \
+    core/db.cpp \
+    core/objecthelper.cpp \
+    core/agents/chest.cpp \
+    core/agents/itemspawner.cpp \
+    core/agents/stacked.cpp \
+    core/scheme.cpp \
+    core/agents/entity.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype #-lassimp-vc120-mtd
+-lopengl32 -lglew32 -lglfw3dll -lfreetype -llibboost_serialization-vc120-mt-gd-1_59
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -128,7 +110,6 @@ HEADERS += \
     lodepng/lodepng.h \
     textureatlas.h \
     spritebatch.h \
-    singleton.h \
     prefecences.h \
     sge.h \
     gamewindow.h \
@@ -142,14 +123,9 @@ HEADERS += \
     utfcpp/utf8/core.h \
     utfcpp/utf8/unchecked.h \
     basicjargshader.h \
-    tangentcalc.h \
     utfcpp/utf8.h \
     helper.h \
     ClassicNoise.h \
-    camera.h \
-    geometry/geometry.hpp \
-    geometry/vpnt.h \
-    geometry/model.h \
     sge_ui/button.h \
     sge_ui/component.h \
     sge_ui/graph.h \
@@ -162,8 +138,6 @@ HEADERS += \
     sge_ui/wins.h \
     colorscheme.h \
     gbuffer.h \
-    experimental/quadsphere.h \
-    experimental/quadplane.h \
     resources/resourcecontroller.h \
     resources/material.h \
     resources/pixmap.h \
@@ -174,15 +148,7 @@ HEADERS += \
     TextureGenerator.h \
     resources/random_noise.h \
     sge_fielsystem.h \
-    experimental/sphereparamstorage.h \
-    experimental/scattering.h \
-    data/shaders/scattering/scatter_params.h \
-    space/spacesystem.h \
     random.h \
-    experimental/starfield.h \
-    geometry/umesh.h \
-    geometry/vertex.h \
-    geometry/vertexinfo.h \
     sge_ui/image_box.h \
     sge_texture_lab.h \
     sge_ui/dragnumbox.h \
@@ -192,36 +158,40 @@ HEADERS += \
     sge_texlab_rgb_to_luminance.h \
     sge_texlab_toolbox.h \
     sge_texlab_lerp_by_map.h \
-    geometry/ubillboard.h \
     resources/umaterial.h \
-    geometry/ring.h \
-    space/structure.h \
-    space/object.h \
-    space/solver.h \
-    space/planet_model/country.h \
-    space/planet_model/city.h \
-    space/planet_model/resource.h \
-    space/planet_model/planet_population.h \
-    space/objectbase.h \
-    geometry/aabb.h \
-    experimental/voxelstructure.h \
-    experimental/marchingcubes.h \
-    experimental/marchingcubeshelper.h \
-    scene.h \
     light.h \
-    geometry/meshbase.h \
-    space/logic/item.h \
-    space/logic/itemstorage.h \
-    geometry/memorychunkcontroller.h \
     core/uniqueid.h \
-    geometry/multimesh.h \
-    space/ship_model/hull.h \
-    space/ship_model/attachpoint.h \
-    space/ship_model/resource.h \
     sql.h \
     sge_ui/treeview.h \
     core/tree.h \
-    resources/texturebase.h
+    resources/texturebase.h \
+    core/object.h \
+    core/dynamicobject.h \
+    core/objectstatic.h \
+    core/agent.h \
+    core/sector.h \
+    core/level.h \
+    core/offset.h \
+    core/core_const.h \
+    rapidjson/internal/pow10.h \
+    rapidjson/internal/stack.h \
+    rapidjson/internal/strfunc.h \
+    rapidjson/document.h \
+    rapidjson/filestream.h \
+    rapidjson/genericstream.h \
+    rapidjson/prettywriter.h \
+    rapidjson/rapidjson.h \
+    rapidjson/reader.h \
+    rapidjson/stringbuffer.h \
+    rapidjson/writer.h \
+    core/db.h \
+    core/objecthelper.h \
+    core/agents/chest.h \
+    core/agents/itemspawner.h \
+    core/agents/stacked.h \
+    core/scheme.h \
+    core/agents/entity.h \
+    core/agents/agentfactory.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -232,8 +202,6 @@ DISTFILES += \
     data/shaders/minimal.glsl \
     sge_ui/.git \
     data/shaders/noise.lib.glsl \
-    data/shaders/test1.glsl \
-    data/shaders/test2.glsl \
     data/shaders/minimal_watertest.glsl \
     data/shaders/height.lib.glsl \
     data/shaders/celltexture.glsl \
@@ -243,36 +211,150 @@ DISTFILES += \
     data/shaders/float.lib.glsl \
     data/textures/PerlinGrad2D.png \
     data/textures/PerlinPerm2D.png \
-    data/shaders/scattering/common.glsl \
-    data/shaders/scattering/copyInscatter1.glsl \
-    data/shaders/scattering/copyInscatterN.glsl \
-    data/shaders/scattering/copyIrradiance.glsl \
-    data/shaders/scattering/earth.glsl \
-    data/shaders/scattering/inscatter1.glsl \
-    data/shaders/scattering/inscatterN.glsl \
-    data/shaders/scattering/inscatterS.glsl \
-    data/shaders/scattering/irradiance1.glsl \
-    data/shaders/scattering/irradianceN.glsl \
-    data/shaders/scattering/transmittance.glsl \
-    data/shaders/starfield.glsl \
-    data/textures/grass.png \
-    data/textures/rock.png \
-    data/textures/snow.png \
-    data/textures/soil.png \
     README.md \
     LICENSE.txt \
     data/shaders/rgb_to_luminance.glsl \
     data/shaders/lerp_rgb_map.glsl \
     data/shaders/defered.glsl \
-    data/shaders/starnest.glsl \
-    data/shaders/corona.glsl \
     data/shaders/tone_maping.glsl \
     data/shaders/gausian_blur.glsl \
     data/shaders/extract_glow.glsl \
     data/shaders/gausian_blur2.glsl \
     data/shaders/wireframe.lib.glsl \
-    data/shaders/fake_planet.glsl \
-    data/shaders/planet_ring.glsl \
     data/shaders/defered_color.glsl \
     data/shaders/normal.glsl \
-    data/shaders/crater.lib.glsl
+    data/textures/cur_mouse.png \
+    data/textures/cur_resize.png \
+    data/shaders/defered_basic_render.glsl \
+    data/shaders/defered_jarg.glsl \
+    rapidjson/license.txt \
+    data/textures/atlas/asfalt.png \
+    data/textures/atlas/asfalt_br.png \
+    data/textures/atlas/bath1.png \
+    data/textures/atlas/bath2.png \
+    data/textures/atlas/bath3.png \
+    data/textures/atlas/bath4.png \
+    data/textures/atlas/bath5.png \
+    data/textures/atlas/bed1.png \
+    data/textures/atlas/bed2.png \
+    data/textures/atlas/bed3.png \
+    data/textures/atlas/bed4.png \
+    data/textures/atlas/bed5.png \
+    data/textures/atlas/bochka.png \
+    data/textures/atlas/briwall1.png \
+    data/textures/atlas/bush1.png \
+    data/textures/atlas/chair1.png \
+    data/textures/atlas/cone1.png \
+    data/textures/atlas/cone2.png \
+    data/textures/atlas/conk1.png \
+    data/textures/atlas/crates1.png \
+    data/textures/atlas/crates2.png \
+    data/textures/atlas/crates3.png \
+    data/textures/atlas/cur_mouse.png \
+    data/textures/atlas/cur_resize.png \
+    data/textures/atlas/cvet.png \
+    data/textures/atlas/cvet1.png \
+    data/textures/atlas/cvet2.png \
+    data/textures/atlas/cvet3.png \
+    data/textures/atlas/dirt1.png \
+    data/textures/atlas/door1.png \
+    data/textures/atlas/door1_open.png \
+    data/textures/atlas/door2.png \
+    data/textures/atlas/door2_open.png \
+    data/textures/atlas/door3.png \
+    data/textures/atlas/door4.png \
+    data/textures/atlas/error.png \
+    data/textures/atlas/fence_s.png \
+    data/textures/atlas/fence_s1.png \
+    data/textures/atlas/fence_s2.png \
+    data/textures/atlas/fence_w.png \
+    data/textures/atlas/fence_w1.png \
+    data/textures/atlas/fence_w2.png \
+    data/textures/atlas/foodpolka.png \
+    data/textures/atlas/foodpolka1.png \
+    data/textures/atlas/foodpolka2.png \
+    data/textures/atlas/foodpolka3.png \
+    data/textures/atlas/foodpolka4.png \
+    data/textures/atlas/frame.png \
+    data/textures/atlas/fridge1.png \
+    data/textures/atlas/fridge2.png \
+    data/textures/atlas/glass_hor.png \
+    data/textures/atlas/glass_ver.png \
+    data/textures/atlas/grass_m.png \
+    data/textures/atlas/grass1.png \
+    data/textures/atlas/grass2.png \
+    data/textures/atlas/grass3.png \
+    data/textures/atlas/grass4.png \
+    data/textures/atlas/grass5.png \
+    data/textures/atlas/grass6.png \
+    data/textures/atlas/grass7.png \
+    data/textures/atlas/heater.png \
+    data/textures/atlas/liqpolka.png \
+    data/textures/atlas/liqpolka1.png \
+    data/textures/atlas/liqpolka2.png \
+    data/textures/atlas/liqpolka3.png \
+    data/textures/atlas/mbush1.png \
+    data/textures/atlas/mbush2.png \
+    data/textures/atlas/mbush3.png \
+    data/textures/atlas/medpolka.png \
+    data/textures/atlas/medpolka1.png \
+    data/textures/atlas/medpolka2.png \
+    data/textures/atlas/medpolka3.png \
+    data/textures/atlas/medpolka4.png \
+    data/textures/atlas/none.png \
+    data/textures/atlas/notex.png \
+    data/textures/atlas/palka.png \
+    data/textures/atlas/plita.png \
+    data/textures/atlas/rakovina.png \
+    data/textures/atlas/rakovina2.png \
+    data/textures/atlas/rakovina3.png \
+    data/textures/atlas/rakovina4.png \
+    data/textures/atlas/rock1.png \
+    data/textures/atlas/rock2.png \
+    data/textures/atlas/rock3.png \
+    data/textures/atlas/rock4.png \
+    data/textures/atlas/s1console1.png \
+    data/textures/atlas/s1console2.png \
+    data/textures/atlas/s1console3.png \
+    data/textures/atlas/s1console4.png \
+    data/textures/atlas/s1console5.png \
+    data/textures/atlas/s1console6.png \
+    data/textures/atlas/s1console7.png \
+    data/textures/atlas/s1console8.png \
+    data/textures/atlas/s1console9.png \
+    data/textures/atlas/s1console10.png \
+    data/textures/atlas/s1console11.png \
+    data/textures/atlas/s1console12.png \
+    data/textures/atlas/s1console13.png \
+    data/textures/atlas/s1console14.png \
+    data/textures/atlas/s1console15.png \
+    data/textures/atlas/s1console16.png \
+    data/textures/atlas/s1console17.png \
+    data/textures/atlas/s1console18.png \
+    data/textures/atlas/safe1.png \
+    data/textures/atlas/safe2.png \
+    data/textures/atlas/shkaf.png \
+    data/textures/atlas/shkaf2.png \
+    data/textures/atlas/shkaf3.png \
+    data/textures/atlas/steelwall1.png \
+    data/textures/atlas/steelwall2.png \
+    data/textures/atlas/steelwall3.png \
+    data/textures/atlas/steelwall4.png \
+    data/textures/atlas/steelwall5.png \
+    data/textures/atlas/steelwall6.png \
+    data/textures/atlas/table_hor_left.png \
+    data/textures/atlas/table_hor_mid.png \
+    data/textures/atlas/table_hor_right.png \
+    data/textures/atlas/table1.png \
+    data/textures/atlas/trashcan.png \
+    data/textures/atlas/trashcan1.png \
+    data/textures/atlas/tree1.png \
+    data/textures/atlas/tree2.png \
+    data/textures/atlas/tumba1.png \
+    data/textures/atlas/tumba2.png \
+    data/textures/atlas/washer.png \
+    data/textures/atlas/wearpolka.png \
+    data/textures/atlas/wearpolka1.png \
+    data/textures/atlas/wearpolka2.png \
+    data/textures/atlas/wearpolka3.png \
+    data/textures/atlas/wearpolka4.png

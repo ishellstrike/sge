@@ -71,7 +71,7 @@ void Pixmap::Blit(const Pixmap &source, const glm::vec2 &pos)
 
     for(unsigned i = 0; i < source.height; ++i)
         memcpy(&data[(height * (i + (int) pos.y) + (int) pos.x)*4],
-               &source.data[(source.height * i)*4],
+               &source.data[(source.width * i)*4],
                sizeof(unsigned char) * 4 * source.width);
 }
 

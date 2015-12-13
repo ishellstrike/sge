@@ -29,7 +29,6 @@ public:
     void BindForBlit();
 
     void SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
-private:
 
     GLuint m_fbo = 0;
     GLuint m_textures[GBUFFER_NUM_TEXTURES] = {};

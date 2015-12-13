@@ -8,13 +8,13 @@
 #ifndef FPSCOUNTER_h__
 #define FPSCOUNTER_h__
 
-#include <list>
+#include <queue>
 #include "gametimer.h"
 
 class FPSCounter
 {
 private:
-    std::list<float> fpsStack;
+    std::queue<float> fpsStack;
 
     double fpsTime;
 

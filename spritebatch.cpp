@@ -13,6 +13,7 @@
 #include <GL/glew.h>
 #include "colorextender.h"
 #include "resources/resourcecontroller.h"
+#include "textureatlas.h"
 
 typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
@@ -248,7 +249,7 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, 
     cur++;
 }
 
-void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv)
+void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint direct, const glm::vec4 &col_, const glm::vec4 &double_uv)
 {
     if(current_program != basic_program)
     {
@@ -256,10 +257,10 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Te
         current_program = basic_program;
         current_program->Use();
     }
-    if(tex.textureId != current)
+    if(direct != current)
     {
         render();
-        current = tex.textureId;
+        current = direct;
     }
     if(cur >= SIZE - 1)
         render();
@@ -289,7 +290,12 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Te
     cur++;
 }
 
-void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, int apos, const glm::vec4 &col_)
+void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv)
+{
+    drawQuad(loc, size, tex.textureId, col_, double_uv);
+}
+
+void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const AtlasPart &tex, int apos, const glm::vec4 &col_)
 {
     if(current_program != basic_program)
     {
@@ -297,10 +303,10 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
         current_program = basic_program;
         current_program->Use();
     }
-    if(tex.textureId != current)
+    if(tex.tex->textureId != current)
     {
         render();
-        current = tex.textureId;
+        current = tex.tex->textureId;
     }
     if(cur >= SIZE - 1)
         render();
@@ -315,9 +321,9 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
     col[cur*4 + 2] = col_;
     col[cur*4 + 3] = col_;
 
-    float sx = 32 / (float) tex.width;
-    float sy = 32 / (float) tex.height;
-    int inrow = tex.width / 32;
+    float sx = 32 / (float) tex.tex->width;
+    float sy = 32 / (float) tex.tex->height;
+    int inrow = tex.tex->width / 32;
     float x = (apos % inrow) * sx;
     float y = (apos / inrow) * sy;
 
@@ -540,7 +546,7 @@ void SpriteBatch::reduceScissor(glm::vec2 loc, glm::vec2 size)
 
     render();
     glEnable(GL_SCISSOR_TEST);
-    glScissor(loc.x, RESY - (loc.y + size.y), size.x, size.y);
+    glScissor(loc.x, RESY - (loc.y + size.y), GLsizei(size.x), GLsizei(size.y));
 }
 
 void SpriteBatch::resetScissor()

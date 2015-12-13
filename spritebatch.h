@@ -15,6 +15,7 @@
 #include "unordered_map"
 #include "font.h"
 #include "json/json.h"
+#include "textureatlas.h"
 
 #define SIZE 32000
 class SpriteBatch
@@ -36,7 +37,8 @@ public:
     void render();
     void drawRect(const glm::vec2 &loc, const glm::vec2 &size, const glm::vec4 &_col);
     void drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv = glm::vec4(0,0,1,1));
-    void drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, int apos, const glm::vec4 &col_);
+    void drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, const AtlasPart &tex, int apos, const glm::vec4 &col_);
+    void drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint direct, const glm::vec4 &col_, const glm::vec4 &double_uv = glm::vec4(0,0,1,1));
     void drawLine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
     void drawText(const std::string &text, const glm::vec2 &pos, Font *font, const glm::vec4 &col_);
     void drawText(const std::string &text, const glm::vec2 &pos, const glm::vec2 &size, Font *font, const glm::vec4 &col_, ALIGN align = ALIGN_LEFT);
@@ -48,6 +50,7 @@ public:
 
     void resetDc();
     int getDc();
+
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
                        Font *font, const glm::vec4 &col_, bool no_draw);
@@ -56,7 +59,8 @@ private:
     std::shared_ptr<BasicJargShader> font_program,
                                      basic_program,
                                      color_program,
-                                     current_program;
+                                     current_program,
+                                     defered_jarg_program;
     glm::vec2 scis_min, scis_size;
     glm::vec3 *pos = nullptr;
     glm::vec2 *uv = nullptr;
@@ -66,6 +70,7 @@ private:
     unsigned int cur = 0;
 
     GLuint current = 0;
+    GLuint normals = 0, outlines = 0;
     GLuint m_vbo[4];
 
     glm::mat4 uniform;
