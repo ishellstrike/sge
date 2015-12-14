@@ -24,7 +24,7 @@ type& operator=(const type&) = delete;
 #define REGISTER_AGENT(ctype)                                               \
 namespace                                                                   \
 {                                                                           \
-RegisterElement<ctype> RegisterElement##ctype(Agent::AgentFactory, #ctype); \
+RegisterElement<ctype> RegisterElement##ctype(AgentFactory, #ctype); \
 }
 
 class Agent
