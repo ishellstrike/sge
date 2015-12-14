@@ -22,14 +22,14 @@ Font::~Font()
 
 void Font::initFreeType(int size)
 {
-    LOG(verbose) << "FT " << size << " start";
+    LOG(trace) << "FT " << size << " start";
     if(FT_Init_FreeType(&ft))
     {
         LOG(fatal) << "could not init free type library.";
         return;
     }
     else
-        LOG(verbose) << "FT " << size << " init OK";
+        LOG(trace) << "FT " << size << " init OK";
     char fontPath[] = "data/fonts/DejaVuSansMono.ttf";
     if(FT_New_Face(ft, fontPath, 0, &m_ftFace))
     {
@@ -37,7 +37,7 @@ void Font::initFreeType(int size)
         return;
     }
     else
-        LOG(verbose) << "FT " << size << " face OK";
+        LOG(trace) << "FT " << size << " face OK";
 
     FT_Select_Charmap(m_ftFace, ft_encoding_unicode);
     FT_Set_Pixel_Sizes(m_ftFace, 0, size);

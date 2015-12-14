@@ -24,7 +24,7 @@ type& operator=(const type&) = delete;
 #define REGISTER_AGENT(ctype)                                               \
 namespace                                                                   \
 {                                                                           \
-RegisterElement<ctype> RegisterElement##ctype(AgentFactory, #ctype); \
+RegisterElement<ctype> RegisterElement##ctype(AgentFactory::instance(), #ctype); \
 }
 
 class Agent
@@ -63,6 +63,15 @@ public:
     virtual void onDestroy(ObjectHelper *par);
 };
 
-ObjectFactory<std::string, Agent> AgentFactory;
+struct AgentFactory
+{
+  static ObjectFactory<std::string, Agent> &instance()
+  {
+      typedef ObjectFactory<std::string, Agent> OfType;
+      static auto af = std::unique_ptr<OfType>( new OfType() );
+
+      return *af;
+  }
+};
 
 #endif // AGENT_H

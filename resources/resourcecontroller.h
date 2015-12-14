@@ -52,7 +52,7 @@ public:
 
             if (!m_inst)
             {
-                LOG(verbose) << "making resources controller instance";
+                LOG(trace) << "making resources controller instance";
                 m_inst = new Resources();
             }
 
@@ -71,7 +71,7 @@ public:
             m_inst = nullptr;
         }
         mutex.unlock();
-        LOG(verbose) << "droping resources controller instance";
+        LOG(trace) << "droping resources controller instance";
     }
 
     void Init();
@@ -84,24 +84,24 @@ public:
     template<>
     void Push(const std::string &name, BasicJargShader *res)
     {
-        LOG(verbose) << "pushing \"" << name << "\" BasicJargShader resource";
+        LOG(trace) << "pushing \"" << name << "\" BasicJargShader resource";
         shaders.Push(name, res);
     }template<>
     void Push(const std::string &name, Shader *res)
     {
-        LOG(verbose) << "pushing \"" << name << "\" Shader resource";
+        LOG(trace) << "pushing \"" << name << "\" Shader resource";
         u_shaders.Push(name, res);
     }
     template<>
     void Push(const std::string &name, Material *res)
     {
-        LOG(verbose) << "pushing \"" << name << "\" Material resource";
+        LOG(trace) << "pushing \"" << name << "\" Material resource";
         materials.Push(name, res);
     }
     template<>
     void Push(const std::string &name, Texture *res)
     {
-        LOG(verbose) << "pushing \"" << name << "\" Texture resource";
+        LOG(trace) << "pushing \"" << name << "\" Texture resource";
         textures.Push(name, res);
     }
 

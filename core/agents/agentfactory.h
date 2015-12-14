@@ -7,6 +7,8 @@
 #include <boost/noncopyable.hpp>
 #include "logger.h"
 
+using namespace boost::log::trivial;
+
 template <class IdType, class Base>
 class ObjectFactory : boost::noncopyable
 {
@@ -29,7 +31,7 @@ public:
         auto i = map_.find( id );
         if ( i == map_.end() )
         {
-            LOG(verbose) << "agent class id = \"" << id << "\" register";
+            LOG(trace) << "agent class id = \"" << id << "\" register";
             map_.insert(  FactoryMap::value_type(id, func) );
         }
         else

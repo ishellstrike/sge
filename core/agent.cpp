@@ -21,7 +21,7 @@ Tid Agent::GetTid()
     return id;
 }
 
-void Agent::onLoad(ObjectHelper *par)
+void Agent::onLoad(ObjectHelper *)
 {
 
 }

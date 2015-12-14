@@ -24,7 +24,7 @@ GLint BasicJargShader::locate(const std::string &s)
 {
     GLint a = glGetUniformLocation(program, s.c_str());
     if(a >= 0)
-        LOG(verbose) << s << " located in " << a;
+        LOG(trace) << s << " located in " << a;
     return a;
 }
 

@@ -2,12 +2,12 @@
 
 void Referencer::Deserialize(rapidjson::Value &val)
 {
-    DESERIALIZE(ref);
+    DESERIALIZE(NVP(ref));
 }
 
 std::shared_ptr<Agent> Referencer::Instantiate()
 {
-    return std::unique_ptr<Referencer>(i);
+    return std::make_shared<Referencer>();
 }
 
 bool Referencer::IsStatic()
@@ -17,9 +17,9 @@ bool Referencer::IsStatic()
 
 void Referencer::onLoad(ObjectHelper *par)
 {
-    ObjectStatic *os = DB::Get("some");
-    for(auto &a : os->agents)
-    {
-        par->PushAgent(a.Instantoate());
-    }
+   // ObjectStatic *os = DB::Get("some");
+   // for(auto &a : os->agents)
+   // {
+   //     par->PushAgent(a.Instantoate());
+   // }
 }

@@ -31,7 +31,7 @@ void TextureAtlas::LoadAll()
 {
     std::vector<std::string> files;
     getFiles(Prefecences::Instance()->getTexturesDir() + "atlas/", files);
-    LOG(verbose) << "texatlas found " << files.size() << " files";
+    LOG(trace) << "texatlas found " << files.size() << " files";
     tex.emplace_back();
     AtlasPart &ap = *(--tex.end());
     ap.tex = std::make_shared<Texture>();
@@ -69,11 +69,11 @@ void TextureAtlas::LoadAll()
         add_image(pmap, file.substr(0, file.find_last_of('.')));
     }
 
-    LOG(verbose) << "texatlas load " << count << " pixmaps";
+    LOG(trace) << "texatlas load " << count << " pixmaps";
 
     ap.tex->Load(atlas, false, false);
 
-    LOG(verbose) << "texatlas load texture";
+    LOG(trace) << "texatlas load texture";
 }
 
 std::vector<AtlasPart> TextureAtlas::tex;

@@ -53,7 +53,7 @@ void DB::Load()
        fs.close();
        all = ss.str();
 
-       LOG(verbose) << "parse " << file;
+       LOG(trace) << "parse " << file;
        rapidjson::Document d;
         d.Parse<0>(all.c_str());
        if(d.HasParseError())
@@ -132,14 +132,14 @@ void DB::Load()
                        b->ground = val["ground"].GetBool_();
 
                    if(val.HasMember("parts")) {
-                       LOG(verbose) << "found parts";
+                       LOG(trace) << "found parts";
                        rapidjson::Value &arr = val["parts"];
                        if(val["parts"].IsArray())
                        for(decltype(arr.Size()) a = 0; a < arr.Size(); a++)
                        {
                            rapidjson::Value &part = arr[a];
                            if(part.HasMember("type")) {
-                               auto c = Agent::AgentFactory.Create(part["type"].GetString());
+                               auto c = AgentFactory::instance().Create(part["type"].GetString());
                                if(!c)
                                {
                                    LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has unknown \"type\"";

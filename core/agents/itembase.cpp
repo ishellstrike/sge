@@ -2,7 +2,7 @@
 
 void ItemBase::Deserialize(rapidjson::Value &val)
 {
-    DESERIALIZE(volume, weight, sort);
+    DESERIALIZE(NVP(volume), NVP(weight), NVP(sort));
 }
 
 std::shared_ptr<Agent> ItemBase::Instantiate()

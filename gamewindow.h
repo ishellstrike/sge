@@ -47,6 +47,7 @@
 //#define NO_SCATT
 #define NO_STARFIELD
 
+
 class GameWindow {
 public:
     enum {

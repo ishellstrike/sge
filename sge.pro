@@ -88,7 +88,7 @@ VERSION = 0.1.0
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype
+-lopengl32 -lglew32 -lglfw3dll -lfreetype -llibboost_log-vc140-mt-gd-1_59.lib
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -196,7 +196,8 @@ HEADERS += \
     core/agents/agentfactory.h \
     core/agents/itembase.h \
     core/serialize.h \
-    core/agents/referencer.h
+    core/agents/referencer.h \
+    core/agents/agents.hpp
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

@@ -32,7 +32,7 @@ bool printLog(GLuint id)
     }
     else
     {
-        LOG(verbose) << "     no errors";
+        LOG(trace) << "     no errors";
         return true;
     }
 }
@@ -97,7 +97,7 @@ void Shader::LogDumpError(const std::string &filename, GLenum type, const std::s
         f_name = sge::string_format("shader_force_dump_%s_%s.txt",
                                     get_filename_headername(get_name(filename)).c_str(),
                                     shader_defines[type].c_str());
-        LOG(verbose) << filename << " force dump to " << f_name;
+        LOG(trace) << filename << " force dump to " << f_name;
     }
 
     std::stringstream out_file;
@@ -153,7 +153,7 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     glShaderSource(id, 1, (const char **)&data, &length);
     glCompileShader(id);
 
-    LOG(verbose) << filename << " file " << shader_defines[type];
+    LOG(trace) << filename << " file " << shader_defines[type];
     bool has_error = !printLog(id);
     if(has_error)
     {
@@ -213,10 +213,10 @@ void Shader::preprocessIncludes(std::stringstream &ss, const std::string &filena
  */
 bool Shader::Link() const {
     glLinkProgram(program);
-    LOG(verbose) << "Program " << std::to_string(program) << " linking";
+    LOG(trace) << "Program " << std::to_string(program) << " linking";
     if(!printLog(program))
         throw;
-    LOG(verbose) << "--------------------";
+    LOG(trace) << "--------------------";
     return true;
 }
 
