@@ -6,7 +6,8 @@
     {
       "type":"ItemSpawner",
       "items":[
-        ["empty_bottle_05",1,2,0.5]
+        [["empty_bottle_05", 1, 1, 0.5], ["closed_bottle", 1, 1, 0.4]],
+        [["comething_else", 1, 2, 0.6]]
       ]
     }
   ]
