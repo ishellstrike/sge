@@ -15,7 +15,7 @@ class ItemSpawner : public Agent
 public:
     AGENT(ItemSpawner)
 
-    std::vector<SpawnInfo> items;
+    std::vector<std::vector<SpawnInfo>> items;
 
     // Agent interface
 public:
@@ -27,8 +27,8 @@ public:
     *   {
     *       "type":"ItemSpawner",
     *       "items":[
-    *           [<string id>, <int low_quantity>, <int high_quantity>, <double probability>],
-    *           ["foo_block", 1, 10, 0.4]
+    *           [[<string id>, <int low_quantity>, <int high_quantity>, <double probability>]],
+    *           [["foo_block", 1, 10, 0.4]]
     *       ]
     *   }
     */

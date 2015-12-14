@@ -1,4 +1,5 @@
 #include "referencer.h"
+#include "core/db.h"
 
 void Referencer::Deserialize(rapidjson::Value &val)
 {
@@ -17,9 +18,15 @@ bool Referencer::IsStatic()
 
 void Referencer::onLoad(ObjectHelper *par)
 {
-   // ObjectStatic *os = DB::Get("some");
-   // for(auto &a : os->agents)
-   // {
-   //     par->PushAgent(a.Instantoate());
-   // }
+    const ObjectStatic *os = DB::Get("some");
+    if(!os)
+        LOG(error) << "broken reference";
+    else
+    {
+        LOG(trace) << "reference " << ref << " ok";
+        for(auto &a : *os->agents)
+        {
+            par->PushAgent(a->Instantiate());
+        }
+    }
 }

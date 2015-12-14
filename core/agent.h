@@ -19,7 +19,8 @@ type() :                               \
 }                                      \
 virtual ~type(){}                      \
 type(const type&) = delete;            \
-type& operator=(const type&) = delete;
+type& operator=(const type&) = delete; \
+virtual std::string Typename() { return #type; }
 
 #define REGISTER_AGENT(ctype)                                               \
 namespace                                                                   \
@@ -52,6 +53,7 @@ public:
     virtual bool IsStatic();
 
     Tid GetTid();
+    virtual std::string Typename() = 0;
 
     virtual void Deserialize(rapidjson::Value &val) = 0;
     virtual std::shared_ptr<Agent> Instantiate() = 0;

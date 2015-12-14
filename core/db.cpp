@@ -13,7 +13,7 @@ std::unique_ptr<Object> DB::Create(const std::string &id)
     auto t = data.find(id);
     if(t == data.end())
     {
-        LOG(error) << "id " << id << " not found in db";
+        LOG(error) << "id \"" << id << "\" not found in db";
         return data["air"]->Instantiate();
     }
     return data[id]->Instantiate();
@@ -24,7 +24,7 @@ const ObjectStatic *DB::Get(const std::string &id)
     auto t = data.find(id);
     if(t == data.end())
     {
-        LOG(error) << "id " << id << " not found in db";
+        LOG(error) << "id \"" << id << "\" not found in db";
         return nullptr;
     }
     return data[id].get();
@@ -54,6 +54,7 @@ void DB::Load()
        all = ss.str();
 
        LOG(trace) << "parse " << file;
+       LOG(trace) << "============";
        rapidjson::Document d;
         d.Parse<0>(all.c_str());
        if(d.HasParseError())
@@ -99,6 +100,7 @@ void DB::Load()
                        continue;
                    }
                    std::string id = val["id"].GetString();
+                   LOG(trace) << "\"" << id << "\" parsing";
 
                    auto b = std::unique_ptr<ObjectStatic>(new ObjectStatic(id));
                    b->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
@@ -131,23 +133,30 @@ void DB::Load()
                    if(val.HasMember("ground"))
                        b->ground = val["ground"].GetBool_();
 
-                   if(val.HasMember("parts")) {
-                       LOG(trace) << "found parts";
-                       rapidjson::Value &arr = val["parts"];
-                       if(val["parts"].IsArray())
+                   if(val.HasMember("agents")) {
+                       rapidjson::Value &arr = val["agents"];
+                       if(val["agents"].IsArray())
                        for(decltype(arr.Size()) a = 0; a < arr.Size(); a++)
                        {
                            rapidjson::Value &part = arr[a];
                            if(part.HasMember("type")) {
-                               auto c = AgentFactory::instance().Create(part["type"].GetString());
+                               auto agenttype = part["type"].GetString();
+                               auto c = AgentFactory::instance().Create(agenttype);
                                if(!c)
                                {
-                                   LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has unknown \"type\"";
+                                   LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has unknown type = " << agenttype;
                                    continue;
                                }
-                               c->Deserialize(part);
-                               b->PushAgent(std::move(c));
-                               c->onInit(b.get());
+                               try {
+                                   c->Deserialize(part);
+                               } catch ( ... )
+                               {
+                                   LOG(error) << id << " agent " << agenttype << " deserialize failed by unkown reason (probably wrong syntax). See agents documentation";
+                                   continue;
+                               }
+
+                               b->PushAgent(c);
+                               c->onLoad(b.get());
                            }
                            else
                                LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";

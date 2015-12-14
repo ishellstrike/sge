@@ -3,9 +3,9 @@
 
 #include "chest.h"
 #include "entity.h"
-//#include "itembase.h"
+#include "itembase.h"
 #include "itemspawner.h"
-//#include "referencer.h"
+#include "referencer.h"
 #include "stacked.h"
 
 #endif // AGENTS_HPP
