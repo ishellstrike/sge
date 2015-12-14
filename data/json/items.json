@@ -236,57 +236,174 @@
         "id":"opilki",
         "name":"Древесные опилки",
         "Fire":5,
-        "sort":"Craft",
-        "weight":100
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"craft",
+                "weight":100
+            }
+        ]
     },
     {
         "type":"Item",
         "id":"nail",
         "name":"Гвоздь",
-        "sort":"Craft",
-        "weight":10
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"craft",
+                "weight":10
+            }
+        ]
     },
     {
         "type":"Item",
         "id":"coal",
         "name":"Пакет угля",
         "Fire":2000,
-        "sort":"Craft",
-        "weight":1000
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"craft",
+                "weight":1000
+            }
+        ]
     },
     {
         "type":"Item",
         "id":"log",
         "name":"Бревно",
         "Fire":500,
-        "sort":"Craft",
-        "weight":10000
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"craft",
+                "weight":1000
+            }
+        ]
     },
     {
         "type":"Item",
         "id":"hammer",
         "name":"Молоток",
-        "sort":"Craft",
-        "weight":700
-    },
-    {
-        "type":"Item",
-        "id":"otvertka",
-        "name":"Отвертка",
-        "sort":"Craft",
-        "weight":150
-    },
-    {
-        "type":"Item",
-        "id":"knife",
-        "name":"Небольшой нож",
         "agents":[
             {
                 "type":"ItemBase",
-                "sort":"meele"
+                "sort":"craft",
+                "weight":700
+            },{
+                "type":"Tool",
+                "data":[
+                    ["hammer", 3]
+                ]
+            }
+        ]
+    },
+    {
+        "type":"Item",
+        "id":"screwdriver",
+        "name":"Отвертка",
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"craft",
+                "weight":150
+            },{
+                "type":"Tool",
+                "data":[
+                    ["screwdriver", 5],
+                    ["hammer", 1],
+                    ["knife", 2]
+                ]
+            },{
+                "type":"Disassemble",
+                "components":[
+                    [["steel_rod", 1, 1, 1.0]],
+                    [["plastic_chunk", 1, 1, 1.0]]
+                ]
+            }
+            }
+            }
+        ]
+    },{
+        "type":"Item",
+        "id":"plastic_chunk",
+        "name":"Кусок пластика",
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"meele",
+                "weight":50
+            }
+    },{
+        "type":"Item",
+        "id":"small_steel_blade",
+        "name":"Небольшое лезвие ножа",
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"craft",
+                "weight":150
+            },{
+                "type":"Tool",
+                "data":[
+                    ["screwdriver", 2],
+                    ["hammer", 2]
+                ]
+            }
+    },
+    {
+        "type":"Item",
+        "id":"flick_knife",
+        "name":"Выкидной нож",
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"meele",
+                "weight":200
+            },{
+                "type":"Tool",
+                "data":[
+                    ["screwdriver", 2],
+                    ["hammer", 1],
+                    ["knife", 3]
+                ]
+            },{
+                "type":"Disassemble",
+                "components":[
+                    [["small_steel_blade", 1, 1, 1.0]],
+                    [["plastic_chunk", 1, 1, 1.0]],
+                    [["small_screw", 1, 1, 1.0]]
+                ]
             }
         ],
-        "weight":200
+        
+    },
+    {
+        "type":"Item",
+        "id":"small_knife",
+        "name":"Кухонный нож",
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"meele",
+                "weight":200
+            },{
+                "type":"Tool",
+                "data":[
+                    ["screwdriver", 2],
+                    ["hammer", 1],
+                    ["knife", 3]
+                ]
+            },{
+                "type":"Disassemble",
+                "components":[
+                    [["small_steel_blade", 1, 1, 1.0]],
+                    [["plastic_chunk", 1, 1, 1.0]]
+                ]
+            }
+        ],
+        
     },
     {
         "type":"Item",
@@ -325,23 +442,14 @@
     },
     {
         "type":"Item",
-        "id":"smallvint",
+        "id":"small_screw",
         "name":"Маленькие винты",
         "sort":"Craft",
         "weight":1
     },
     {
         "type":"Item",
-        "id":"2001"
-    },
-    {
-        "type":"Item",
-        "id":"0",
-        "name":"blank item"
-    },
-    {
-        "type":"Item",
-        "id":"colacan",
+        "id":"cola_can",
         "name":"Кола",
         "nameret":"Банка",
         "NutH2O":500,
