@@ -61,8 +61,8 @@ public:
     virtual void onUpdate(ObjectHelper *par);
     virtual void onDraw(ObjectHelper *par);
     virtual void onDestroy(ObjectHelper *par);
-
-    static ObjectFactory<std::string, Agent> AgentFactory;
 };
+
+ObjectFactory<std::string, Agent> AgentFactory;
 
 #endif // AGENT_H
