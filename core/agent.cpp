@@ -45,5 +45,3 @@ void Agent::onDestroy(ObjectHelper *)
 {
 
 }
-
-ObjectFactory<std::string, Agent> Agent::AgentFactory;
