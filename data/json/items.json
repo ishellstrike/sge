@@ -333,6 +333,7 @@
                 "sort":"meele",
                 "weight":50
             }
+        ]
     },{
         "type":"Item",
         "id":"small_steel_blade",
@@ -349,6 +350,7 @@
                     ["hammer", 2]
                 ]
             }
+        ]
     },
     {
         "type":"Item",
