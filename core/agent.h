@@ -8,6 +8,7 @@
 #include "agents/agentfactory.h"
 #include <string>
 #include "core/serialize.h"
+#include <boost/noncopyable.hpp>
 
 class ObjectHelper;
 using namespace boost::signals2;
@@ -65,7 +66,7 @@ public:
     virtual void onDestroy(ObjectHelper *par);
 };
 
-struct AgentFactory
+struct AgentFactory : public boost:noncopyable
 {
   static ObjectFactory<std::string, Agent> &instance()
   {
