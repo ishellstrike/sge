@@ -8,6 +8,11 @@
             {
                 "type":"ItemBase",
                 "sort":"meele"
+            },{
+                "type":"Disassemble",
+                "components":[
+                    [["stick", 1, 1, 1.0]]
+                ]
             }
         ]
     },
@@ -42,6 +47,12 @@
             {
                 "type":"ItemBase",
                 "sort":"meele"
+            },{
+                "type":"Disassemble",
+                "components":[
+                    [["nail", 4, 8, 1.0]],
+                    [["board", 1, 1, 1.0]]
+                ]
             }
         ]
     },
@@ -54,6 +65,12 @@
             {
                 "type":"ItemBase",
                 "sort":"meele"
+            },{
+                "type":"Disassemble",
+                "components":[
+                    [["nail", 4, 8, 1.0]],
+                    [["stick", 1, 1, 1.0]]
+                ]
             }
         ]
     },
@@ -196,12 +213,14 @@
         "type":"Item",
         "id":"stick",
         "name":"Палка",
-        "Fire":30,
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
                 "weight":400
+            },{
+                "type":"Flammable",
+                "time":30
             }
         ]
     },
@@ -233,14 +252,16 @@
     },
     {
         "type":"Item",
-        "id":"opilki",
+        "id":"wooden_pulp",
         "name":"Древесные опилки",
-        "Fire":5,
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
                 "weight":100
+            },{
+                "type":"Flammable",
+                "time":5
             }
         ]
     },
@@ -260,12 +281,14 @@
         "type":"Item",
         "id":"coal",
         "name":"Пакет угля",
-        "Fire":2000,
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
                 "weight":1000
+            },{
+                "type":"Flammable",
+                "time":2000
             }
         ]
     },
@@ -273,12 +296,14 @@
         "type":"Item",
         "id":"log",
         "name":"Бревно",
-        "Fire":500,
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
                 "weight":1000
+            },{
+                "type":"Flammable",
+                "time":500
             }
         ]
     },
@@ -295,6 +320,12 @@
                 "type":"Tool",
                 "data":[
                     ["hammer", 3]
+                ]
+            },{
+                "type":"Disassemble",
+                "components":[
+                    [["hammer_head", 1, 1, 1.0]],
+                    [["stick", 1, 1, 1.0]]
                 ]
             }
         ]
@@ -401,6 +432,9 @@
                     [["small_steel_blade", 1, 1, 1.0]],
                     [["plastic_chunk", 1, 1, 1.0]]
                 ]
+            },{
+                "type":"Tags",
+                "tags":["kitchen"]
             }
         ]
         
@@ -1375,13 +1409,28 @@
         "type":"Item",
         "id":"glasscup",
         "name":"Стеклянный стакан",
-        "weight":200
+        "weight":200,
+        "agents":[
+            {
+                "type":"Tags",
+                "tags":["kitchen"]
+            }
+        ]
     },
     {
         "type":"Item",
         "id":"papercup",
         "name":"Бумажный стакан",
-        "weight":20
+        "weight":20,
+        "agents":[
+            {
+                "type":"Flammable",
+                "time":2
+            },{
+                "type":"Tags",
+                "tags":["kitchen"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -1416,14 +1465,26 @@
         "id":"plate",
         "name":"Тарелка",
         "weight":200,
-        "spawn_group":"spawn_posuda"
+        "agents":[
+            {
+                "type":"Tags",
+                "tags":["kitchen"]
+                
+            }
+        ]
     },
     {
         "type":"Item",
         "id":"cup",
         "name":"Чашка",
         "weight":200,
-        "spawn_group":"spawn_posuda"
+        "agents":[
+            {
+                "type":"Tags",
+                "tags":["kitchen"]
+                
+            }
+        ]
     },
     {
         "type":"Item",
@@ -1449,13 +1510,25 @@
         "type":"Item",
         "id":"pot",
         "name":"Кастрюля",
-        "spawn_group":"spawn_posuda"
+        "agents":[
+            {
+                "type":"Tags",
+                "tags":["kitchen"]
+                
+            }
+        ]
     },
     {
         "type":"Item",
         "id":"pan",
         "name":"Сковорода",
-        "spawn_group":"spawn_posuda"
+        "agents":[
+            {
+                "type":"Tags",
+                "tags":["kitchen"]
+                
+            }
+        ]
     },
     {
         "type":"Item",
