@@ -2,6 +2,7 @@
 #include "sge_fielsystem.h"
 #include "prefecences.h"
 #include "objectstatic.h"
+#include "boost/filesystem.hpp"
 
 DB::DB()
 {
@@ -31,155 +32,156 @@ const ObjectStatic *DB::Get(const std::string &id)
 }
 
 void DB::Load()
-{
-   std::vector<std::string> files;
-   getFiles(Prefecences::Instance()->getJsonDir(), files);
+{  
+    boost::filesystem::path targetDir(Prefecences::Instance()->getJsonDir());
+    boost::filesystem::recursive_directory_iterator iter(targetDir);
 
-   data["air"] = std::unique_ptr<ObjectStatic>( new ObjectStatic("air"));
+    data["air"] = std::unique_ptr<ObjectStatic>( new ObjectStatic("air"));
 
-   int loaded = 0;
-   for(std::string file : files)
-   {
-       std::ifstream fs(Prefecences::Instance()->getJsonDir() + file);
-       std::stringstream ss;
-       std::string all;
-       all.reserve(65536);
-       while(!fs.eof())
-       {
-           std::string buf;
-           fs >> buf;
-           ss << buf;
-       }
-       fs.close();
-       all = ss.str();
+    int loaded = 0;
+    for(const boost::filesystem::path &file : iter){
+        if (boost::filesystem::is_regular_file(file) && boost::filesystem::extension(file) == ".json")
+        {
+            std::ifstream fs(file.string());
+            std::stringstream ss;
+            std::string all;
+            while(!fs.eof())
+            {
+                std::string buf;
+                fs >> buf;
+                ss << buf;
+            }
+            fs.close();
+            all = ss.str();
 
-       LOG(trace) << "parse " << file;
-       LOG(trace) << "============";
-       rapidjson::Document d;
-        d.Parse<0>(all.c_str());
-       if(d.HasParseError())
-       {
-           LOG(error) << "while parsing " << file;
-           LOG(error) << d.GetParseError();
-           LOG(error) << all.substr(max(d.GetErrorOffset() - 20, 0), min(all.length(), 40));
-           LOG(error) << "                    ^";
-       }
+            LOG(trace) << "parse " << file;
+            LOG(trace) << "============";
+            rapidjson::Document d;
+            d.Parse<0>(all.c_str());
+            if(d.HasParseError())
+            {
+                LOG(error) << "while parsing " << file;
+                LOG(error) << d.GetParseError();
+                LOG(error) << all.substr(max(d.GetErrorOffset() - 20, 0), min(all.length(), 40));
+                LOG(error) << "                    ^";
+            }
 
-       if(d.IsArray())
-       {
-           for(decltype(d.Size()) i=0; i < d.Size(); i++)
-           {
-               rapidjson::Value &val = d[i];
+            if(d.IsArray())
+            {
+                for(decltype(d.Size()) i=0; i < d.Size(); i++)
+                {
+                    rapidjson::Value &val = d[i];
 
-               std::string type;
-               if(val.HasMember("type"))
-                   type = val["type"].GetString();
-               else
-               {
-                   LOG(error) << "record #" << i+1 << " from " << file << " has no \"type\"";
-                   continue;
-               }
+                    std::string type;
+                    if(val.HasMember("type"))
+                        type = val["type"].GetString();
+                    else
+                    {
+                        LOG(error) << "record #" << i+1 << " from " << file << " has no \"type\"";
+                        continue;
+                    }
 
-               if(type == "scheme")
-               {
-                   Scheme s;
-                   if(!s.Deserialize(val))
-                   {
-                       LOG(error) << "record #" << i+1 << " from " << file << " broken, skipped";
-                       continue;
-                   }
+                    if(type == "scheme")
+                    {
+                        Scheme s;
+                        if(!s.Deserialize(val))
+                        {
+                            LOG(error) << "record #" << i+1 << " from " << file << " broken, skipped";
+                            continue;
+                        }
 
-                   scheme_db[s.type].push_back(s);
-                   loaded ++;
-               }
-               else
-               {
-                   if(!val.HasMember("id"))
-                   {
-                       LOG(error) << "record #" << i+1 << " from " << file << " has no \"id\"";
-                       continue;
-                   }
-                   std::string id = val["id"].GetString();
-                   LOG(trace) << "\"" << id << "\" parsing";
+                        scheme_db[s.type].push_back(s);
+                        loaded ++;
+                    }
+                    else
+                    {
+                        if(!val.HasMember("id"))
+                        {
+                            LOG(error) << "record #" << i+1 << " from " << file << " has no \"id\"";
+                            continue;
+                        }
+                        std::string id = val["id"].GetString();
+                        LOG(trace) << "\"" << id << "\" parsing";
 
-                   auto b = std::unique_ptr<ObjectStatic>(new ObjectStatic(id));
-                   b->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
+                        auto b = std::unique_ptr<ObjectStatic>(new ObjectStatic(id));
+                        b->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
 
-                   if(type == "item")
-                       b->type = ObjectItem;
-                   else if(type == "creature")
-                       b->type = ObjectCreature;
-                   else if(type == "creature")
-                       b->type = ObjectBlock;
-                   else
-                       b->type = ObjectSpecial;
+                        if(type == "item")
+                            b->type = ObjectItem;
+                        else if(type == "creature")
+                            b->type = ObjectCreature;
+                        else if(type == "creature")
+                            b->type = ObjectBlock;
+                        else
+                            b->type = ObjectSpecial;
 
-                   if(val.HasMember("name"))
-                       b->name = val["name"].GetString();
+                        if(val.HasMember("name"))
+                            b->name = val["name"].GetString();
 
-                   if(val.HasMember("tex"))
-                   {
-                       rapidjson::Value &ar = val["tex"];
-                       if(!ar.IsArray())
-                       {
-                           LOG(error) << "record #" << i+1 << " from " << file << " tex wrond format. Must be \"tex\":[\"tex1\",\"tex2\"]";
-                           continue;
-                       }
+                        if(val.HasMember("tex"))
+                        {
+                            rapidjson::Value &ar = val["tex"];
+                            if(!ar.IsArray())
+                            {
+                                LOG(error) << "record #" << i+1 << " from " << file << " tex wrond format. Must be \"tex\":[\"tex1\",\"tex2\"]";
+                                continue;
+                            }
 
-                       for(decltype(ar.Size()) k=0; k < ar.Size(); k++)
-                           b->tex.push_back(ar[k].GetString());
-                   }
+                            for(decltype(ar.Size()) k=0; k < ar.Size(); k++)
+                                b->tex.push_back(ar[k].GetString());
+                        }
 
-                   if(val.HasMember("ground"))
-                       b->ground = val["ground"].GetBool_();
+                        if(val.HasMember("ground"))
+                            b->ground = val["ground"].GetBool_();
 
-                   if(val.HasMember("agents")) {
-                       rapidjson::Value &arr = val["agents"];
-                       if(val["agents"].IsArray())
-                       for(decltype(arr.Size()) a = 0; a < arr.Size(); a++)
-                       {
-                           rapidjson::Value &part = arr[a];
-                           if(part.HasMember("type")) {
-                               auto agenttype = part["type"].GetString();
-                               auto c = AgentFactory::instance().Create(agenttype);
-                               if(!c)
-                               {
-                                   LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has unknown type = " << agenttype;
-                                   continue;
-                               }
-                               try {
-                                   c->Deserialize(part);
-                               } catch ( ... )
-                               {
-                                   LOG(error) << id << " agent " << agenttype << " deserialize failed by unkown reason (probably wrong syntax). See agents documentation";
-                                   continue;
-                               }
+                        if(val.HasMember("agents")) {
+                            rapidjson::Value &arr = val["agents"];
+                            if(val["agents"].IsArray())
+                                for(decltype(arr.Size()) a = 0; a < arr.Size(); a++)
+                                {
+                                    rapidjson::Value &part = arr[a];
+                                    if(part.HasMember("type")) {
+                                        auto agenttype = part["type"].GetString();
+                                        auto c = AgentFactory::instance().Create(agenttype);
+                                        if(!c)
+                                        {
+                                            LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has unknown type = " << agenttype;
+                                            continue;
+                                        }
+                                        try {
+                                            c->Deserialize(part);
+                                        } catch ( ... )
+                                        {
+                                            LOG(error) << id << " agent " << agenttype << " deserialize failed by unkown reason (probably wrong syntax). See agents documentation";
+                                            continue;
+                                        }
 
-                               b->PushAgent(c);
-                               c->onLoad(b.get());
-                           }
-                           else
-                               LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";
-                       }
-                       else
-                           LOG(error) << "record \"" << id << "\" parts is not valid agents array";
-                   }
+                                        b->PushAgent(c);
+                                        c->onLoad(b.get());
+                                    }
+                                    else
+                                        LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";
+                                }
+                            else
+                                LOG(error) << "record \"" << id << "\" parts is not valid agents array";
+                        }
 
-                   if(b->agents->empty())
-                   {
-                       b->agents.release();
-                       b->is_static = true;
-                   }
-                   else
-                       b->is_static = false;
+                        if(b->agents->empty())
+                        {
+                            b->agents.release();
+                            b->is_static = true;
+                        }
+                        else
+                            b->is_static = false;
 
-                   data[id] = std::move(b);
-                   loaded ++;
-               }
-           }
-       }
-   }
-   LOG(info) << loaded << " loaded";
+                        data[id] = std::move(b);
+                        loaded ++;
+                    }
+                }
+            }
+        }
+    }
+    LOG(info) << loaded << " loaded";
 }
 
 std::unordered_map<Id, std::unique_ptr<ObjectStatic>> DB::data;

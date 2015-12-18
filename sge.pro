@@ -81,7 +81,8 @@ SOURCES += \
     core/scheme.cpp \
     core/agents/entity.cpp \
     core/agents/itembase.cpp \
-    core/agents/referencer.cpp
+    core/agents/referencer.cpp \
+    sge_level_debug_info.cpp
 
 VERSION = 0.1.0
 
@@ -197,7 +198,8 @@ HEADERS += \
     core/agents/itembase.h \
     core/serialize.h \
     core/agents/referencer.h \
-    core/agents/agents.hpp
+    core/agents/agents.hpp \
+    sge_level_debug_info.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -365,4 +367,73 @@ DISTFILES += \
     data/textures/atlas/wearpolka3.png \
     data/textures/atlas/wearpolka4.png \
     data/json/core.json \
-    data/json/items.json
+    data/json/items.json \
+    data/textures/atlas/arrow_down.png \
+    data/textures/atlas/arrow_up.png \
+    data/textures/atlas/asf1.png \
+    data/textures/atlas/bag.png \
+    data/textures/atlas/bandana1.png \
+    data/textures/atlas/banner.png \
+    data/textures/atlas/bdec.png \
+    data/textures/atlas/biskup.png \
+    data/textures/atlas/blank1.png \
+    data/textures/atlas/blank2.png \
+    data/textures/atlas/blank3.png \
+    data/textures/atlas/blank4.png \
+    data/textures/atlas/car.png \
+    data/textures/atlas/caracter.png \
+    data/textures/atlas/collar1.png \
+    data/textures/atlas/conk2.png \
+    data/textures/atlas/cross1.png \
+    data/textures/atlas/dog.png \
+    data/textures/atlas/engine1.png \
+    data/textures/atlas/floor1.png \
+    data/textures/atlas/forest1.png \
+    data/textures/atlas/gear.png \
+    data/textures/atlas/gem.png \
+    data/textures/atlas/gem1.png \
+    data/textures/atlas/gem3.png \
+    data/textures/atlas/glass1.png \
+    data/textures/atlas/glass2.png \
+    data/textures/atlas/glass3.png \
+    data/textures/atlas/haer1.png \
+    data/textures/atlas/haer2.png \
+    data/textures/atlas/haer3.png \
+    data/textures/atlas/haer4.png \
+    data/textures/atlas/hdzombie.png \
+    data/textures/atlas/house1.png \
+    data/textures/atlas/jeans.png \
+    data/textures/atlas/jeans_br.png \
+    data/textures/atlas/ljacket.png \
+    data/textures/atlas/map.png \
+    data/textures/atlas/nothing1.png \
+    data/textures/atlas/p1.png \
+    data/textures/atlas/pants_mil.png \
+    data/textures/atlas/pants_mil2.png \
+    data/textures/atlas/pants1.png \
+    data/textures/atlas/pfire.png \
+    data/textures/atlas/plate1.png \
+    data/textures/atlas/plate2.png \
+    data/textures/atlas/plate3.png \
+    data/textures/atlas/plate4.png \
+    data/textures/atlas/rabbit.png \
+    data/textures/atlas/redsq.png \
+    data/textures/atlas/resp1.png \
+    data/textures/atlas/s1shipfl1.png \
+    data/textures/atlas/s1shipfl2.png \
+    data/textures/atlas/s1shipfl3.png \
+    data/textures/atlas/s1shipfl4.png \
+    data/textures/atlas/s1shipfl5.png \
+    data/textures/atlas/s1shipfl6.png \
+    data/textures/atlas/s1shipfl7.png \
+    data/textures/atlas/s1shipfl8.png \
+    data/textures/atlas/s1shipfl9.png \
+    data/textures/atlas/s1shipfl10.png \
+    data/textures/atlas/seat1.png \
+    data/textures/atlas/transparent_pixel.png \
+    data/textures/atlas/t-shirt1.png \
+    data/textures/atlas/wheel1.png \
+    data/textures/atlas/whitesq.png \
+    data/textures/atlas/zombie.png \
+    data/textures/atlas/zombie_corp.png \
+    data/json/hero.json

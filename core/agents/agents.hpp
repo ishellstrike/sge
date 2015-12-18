@@ -7,6 +7,7 @@
 #include "itemspawner.h"
 #include "referencer.h"
 #include "stacked.h"
+#include "entity.h"
 
 #endif // AGENTS_HPP
 

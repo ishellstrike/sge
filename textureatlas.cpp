@@ -48,7 +48,7 @@ void TextureAtlas::LoadAll()
 
         refs[file] = glm::ivec2(0, count);
 
-        x += pmap.width;
+        x += 32;
         if(x >= atlas_dim - sprite_size)
         {
             x = 0;

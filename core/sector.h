@@ -21,6 +21,7 @@
 
 class Sector
 {
+    friend class Level;
 public:
     Sector(const glm::ivec2 &o);
 
@@ -38,6 +39,7 @@ private:
     void RebuildMax();
 
     std::array<std::unique_ptr<Object>, RXYZ> data;
+    std::list<std::unique_ptr<Object>> entities;
     //std::list<Object*> active;
     int maxlevel = 0;
 };

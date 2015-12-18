@@ -1,0 +1,12 @@
+[
+{
+  "type":"hero",
+  "tex":["hdzombie"],
+  "id":"hero",
+  "agents": [
+    {
+      "type":"Entity"
+    }
+  ]
+}
+]

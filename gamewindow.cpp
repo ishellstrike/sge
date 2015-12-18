@@ -10,6 +10,8 @@
 #include <fstream>
 #include "core/db.h"
 
+#define GLM_SWIZZLE
+
 GameWindow *GameWindow::wi = nullptr;
 
 
@@ -165,6 +167,7 @@ bool GameWindow::BaseInit()
     ws->f = f12.get();
 
     perf = new sge_perfomance(ws.get());
+    linfo = new sge_level_debug_info(ws.get());
 
     Resize(RESX, RESY);
 
@@ -172,9 +175,10 @@ bool GameWindow::BaseInit()
 
     TextureAtlas::LoadAll();
     DB::Load();
-    for(int i = -2; i < 4; i++)
-        for(int j = -2; j < 4; j++)
-            level.GetSector({i, j});
+
+    auto &h = DB::Create("hero");
+    hero = h.get();
+    level.AddEntity(std::move(h));
 
     return true;
 }
@@ -222,7 +226,7 @@ void GameWindow::BaseDraw()
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0,0,0,1);
 
-    level.Draw(*batch);
+    level.Draw(*batch, offset);
 
     if(is_debug)
     {
@@ -274,6 +278,21 @@ void GameWindow::BaseUpdate()
         wire = !wire;
     if(Keyboard::isKeyPress(GLFW_KEY_F4))
         no_ui = !no_ui;
+
+    if(Keyboard::isKeyDown(GLFW_KEY_DOWN))
+        hero->GetAgent<Entity>()->pos.y+= 0.1f;
+    if(Keyboard::isKeyDown(GLFW_KEY_UP))
+        hero->GetAgent<Entity>()->pos.y-= 0.1f;
+    if(Keyboard::isKeyDown(GLFW_KEY_LEFT))
+        hero->GetAgent<Entity>()->pos.x-= 0.1f;
+    if(Keyboard::isKeyDown(GLFW_KEY_RIGHT))
+        hero->GetAgent<Entity>()->pos.x+= 0.1f;
+
+    level.Update();
+    offset = glm::vec2(hero->GetAgent<Entity>()->pos)*32.f - glm::vec2(Prefecences::Instance()->resolution)/2.f;
+    level.GetSectorByPos(hero->GetAgent<Entity>()->pos);
+
+    linfo->UpdateLevelInfo(level);
 
     if(Mouse::isRightDown())
         Mouse::SetFixedPosState(true);

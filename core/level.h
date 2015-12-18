@@ -7,6 +7,7 @@
 
 class Level
 {
+    friend class sge_level_debug_info;
 public:
     Level();
 
@@ -15,9 +16,10 @@ public:
 
     Sector *GetSector(const glm::vec2 &off);
     void Update();
-    void Draw(SpriteBatch &sb) const;
+    void Draw(SpriteBatch &sb, const glm::vec2 &off) const;
+    void AddEntity(std::unique_ptr<Object> o);
 
-    glm::ivec2 off;
+    Sector *GetSectorByPos(const glm::vec3 &coord);
 };
 
 #endif // LEVEL_H

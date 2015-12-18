@@ -50,13 +50,17 @@
         "ref":"template_1"
       }
     ]
+},{
+    "type":"object",
+    "id":"briwall",
+    "tex":["briwall1"]
 },
 {
    "type":"scheme",
    "building":"house1_room",
    "size":[16, 7],
    "dictionary":[
-       ["T","chair"]
+       ["T","briwall"]
    ],
    "data":[
        "................",

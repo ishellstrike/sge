@@ -13,6 +13,7 @@ sge_perfomance::sge_perfomance(WContainer *par) :
     text = "sge_perfomance";
     size = {200,220};
     pos = {0,0};
+    resizable = true;
 
     fps1 = new Label(this);
     fps2 = new Label(this);

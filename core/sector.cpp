@@ -3,6 +3,7 @@
 #include "textureatlas.h"
 #include "colorextender.h"
 #include "prefecences.h"
+#include "core/agents/entity.h"
 
 Sector::Sector(const glm::ivec2 &o) : offset(o)
 {
@@ -29,37 +30,44 @@ void Sector::Generate()
 
 void Sector::Update()
 {
-
 }
 
 void Sector::Draw(SpriteBatch &sb, const glm::ivec2 &off) const
 {
+    auto atlas_draw = [&](int x, int y, const Object &b){
+        const ObjectStaticHelper &o = *b.base;
+        if(o.id == "air" || o.tex.size() == 0)
+            return;
+
+        auto btex = b.otex;
+        auto otex = o.tex[btex];
+        auto t = TextureAtlas::refs[otex];
+        sb.drawQuadAtlas({x, y}, {32,32}, TextureAtlas::tex[t.x], t.y, Color::White);
+    };
+
     for(int i = 0; i < RX; i++)
         for(int j = 0; j < RY; j++)
         {
-            int x = (i + offset.x*RX)*32 - off.x + 200;
-            int y = (j + offset.y*RY)*32 - off.y + 200;
+            int x = (i + offset.x*RX)*32 - off.x;
+            int y = (j + offset.y*RY)*32 - off.y;
             if(x > RESX || y > RESY)
                 continue;
             if(x + 32 < 0 || y + 32 < 0)
                 continue;
             for(int k = 0; k < maxlevel + 1; k++)
             {
-
-
-
-
                 const Object &b = *data[ONEDIM(i,j,k)];
-                const ObjectStaticHelper &o = *b.base;
-                if(o.id == "air" || o.tex.size() == 0)
-                    continue;
-
-                auto btex = b.otex;
-                auto otex = o.tex[btex];
-                auto t = TextureAtlas::refs[otex];
-                sb.drawQuadAtlas({x, y}, {32,32}, TextureAtlas::tex[t.x], t.y, Color::White);
+                atlas_draw(x, y, b);
             }
         }
+
+    for(const std::unique_ptr<Object> &a : entities)
+    {
+        if(const Entity *e = a->GetAgent<Entity>())
+        {
+            atlas_draw(offset.x*RX*32 + e->pos.x*32.f - off.x, offset.y*RY*32 + e->pos.y*32.f - off.y, *a);
+        }
+    }
 }
 
 void Sector::SetObject(const glm::ivec3 &pos, std::unique_ptr<Object> obj)

@@ -21,6 +21,7 @@
 #include "prefecences.h"
 #include "resources/resourcecontroller.h"
 #include "sge_perfomance.h"
+#include "sge_level_debug_info.h"
 #include "sge_texlab_toolbox.h"
 #include "sge_ui/wins.h"
 #include "shader.h"
@@ -111,7 +112,9 @@ public:
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
+    sge_level_debug_info *linfo;
     Level level;
+    Object *hero;
 
     static void Swap();
     void BlitGBuffer();

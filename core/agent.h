@@ -66,7 +66,7 @@ public:
     virtual void onDestroy(ObjectHelper *par);
 };
 
-struct AgentFactory : public boost:noncopyable
+struct AgentFactory : public boost::noncopyable
 {
   static ObjectFactory<std::string, Agent> &instance()
   {
