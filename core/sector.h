@@ -22,14 +22,15 @@
 class Sector
 {
     friend class Level;
+    friend class RemoteClient;
+    friend void Generate(Sector &s);
 public:
     Sector(const glm::ivec2 &o);
 
     std::array<const Object*, 6> Neighbours(const glm::ivec3 &pos);
-    void Generate();
     void Update();
     void Draw(SpriteBatch &sb, const glm::ivec2 &off) const;
-    void SetObject(const glm::ivec3 &pos, std::unique_ptr<Object> obj);
+    void SetObject(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
 
     void PlaceScheme(const Scheme &s, const glm::ivec3 &pos);
 
@@ -38,8 +39,8 @@ private:
 
     void RebuildMax();
 
-    std::array<std::unique_ptr<Object>, RXYZ> data;
-    std::list<std::unique_ptr<Object>> entities;
+    std::array<std::shared_ptr<Object>, RXYZ> data;
+    std::list<std::shared_ptr<Object>> entities;
     //std::list<Object*> active;
     int maxlevel = 0;
 };

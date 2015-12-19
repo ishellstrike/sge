@@ -14,10 +14,10 @@ public:
     typedef std::unordered_map<glm::ivec2, std::unique_ptr<Sector>> SectorMap;
     SectorMap map;
 
-    Sector *GetSector(const glm::vec2 &off);
+    Sector *GetSector(const glm::ivec2 &off);
     void Update();
     void Draw(SpriteBatch &sb, const glm::vec2 &off) const;
-    void AddEntity(std::unique_ptr<Object> o);
+    bool AddEntity(std::shared_ptr<Object> o, bool wait = false);
 
     Sector *GetSectorByPos(const glm::vec3 &coord);
 };

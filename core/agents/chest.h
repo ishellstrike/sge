@@ -9,7 +9,7 @@ class Chest : public Agent
 public:
     AGENT(Chest)
 
-    std::vector<std::unique_ptr<Object>> items;
+    std::vector<std::shared_ptr<Object>> items;
 
     // Agent interface
 public:

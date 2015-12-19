@@ -82,7 +82,10 @@ SOURCES += \
     core/agents/entity.cpp \
     core/agents/itembase.cpp \
     core/agents/referencer.cpp \
-    sge_level_debug_info.cpp
+    sge_level_debug_info.cpp \
+    core/remoteclient.cpp \
+    core/remoteserver.cpp \
+    core/levelgen.cpp
 
 VERSION = 0.1.0
 
@@ -199,7 +202,10 @@ HEADERS += \
     core/serialize.h \
     core/agents/referencer.h \
     core/agents/agents.hpp \
-    sge_level_debug_info.h
+    sge_level_debug_info.h \
+    core/remoteclient.h \
+    core/remoteserver.h \
+    core/levelgen.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

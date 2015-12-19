@@ -9,7 +9,7 @@ DB::DB()
 
 }
 
-std::unique_ptr<Object> DB::Create(const std::string &id)
+std::shared_ptr<Object> DB::Create(const std::string &id)
 {
     auto t = data.find(id);
     if(t == data.end())

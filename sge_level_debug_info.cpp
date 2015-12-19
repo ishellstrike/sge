@@ -1,4 +1,5 @@
 #include "sge_level_debug_info.h"
+#include "core/remoteclient.h"
 
 sge_level_debug_info::sge_level_debug_info(WContainer *par) :
     Win(par)
@@ -22,5 +23,10 @@ void sge_level_debug_info::Update(const GameTimer &gt, const MouseState &ms)
 
 void sge_level_debug_info::UpdateLevelInfo(const Level &fps)
 {
-    fps1->text(sge::string_format("active sector count: %d", fps.map.size()));
+    fps1->text(sge::string_format("active sector count: %d\n"
+                                  "requested: %d\n"
+                                  "inactive: %d",
+                                  fps.map.size(),
+                                  RemoteClient::instance().requested.size(),
+                                  RemoteClient::instance().ready.size()));
 }

@@ -114,7 +114,7 @@ public:
     sge_perfomance *perf;
     sge_level_debug_info *linfo;
     Level level;
-    Object *hero;
+    std::shared_ptr<Object> hero;
 
     static void Swap();
     void BlitGBuffer();

@@ -69,7 +69,7 @@ void ItemSpawner::onInit(ObjectHelper *par)
                             LOG(error) << spawn_group_part.id << " has no stacks, but count = " << count << " on ItemSpawner requested. Count skipped.";
                     }
 
-                    ch->items.push_back(std::move(item));
+                    ch->items.push_back(item);
                     continue;
                 }
                 prob += spawn_group_part.probability; //если не выпало, то увеличиваем шенс на значение вероятности предыдущего предмета

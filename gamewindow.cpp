@@ -9,6 +9,7 @@
 #include "helper.h"
 #include <fstream>
 #include "core/db.h"
+#include "core/remoteclient.h"
 
 #define GLM_SWIZZLE
 
@@ -18,6 +19,7 @@ GameWindow *GameWindow::wi = nullptr;
 void GameWindow::Mainloop()
 {
     BaseInit();
+
     while(!glfwWindowShouldClose(window))
     {
         update();
@@ -28,8 +30,8 @@ void GameWindow::Mainloop()
             ii++;
             if(ii >= 10) { ii = 0; jj++;}
             if(jj >= 10) {jj = 0; }
-            glScissor(ii*RESX/10,jj*RESY/10,RESX/10,RESY/10);
-            glEnable(GL_SCISSOR_TEST);
+            glScissor( ii*RESX/10, jj*RESY/10, RESX/10, RESY/10 );
+            glEnable( GL_SCISSOR_TEST );
         }
 
         draw();
@@ -46,8 +48,12 @@ void GameWindow::Mainloop()
 
 void GameWindow::make_release()
 {
-    update = [=](){BaseUpdate<false>();};
-    draw = [=](){BaseDraw<false>();};
+    update = [=](){
+        BaseUpdate<false>();
+    };
+    draw = [=](){
+        BaseDraw<false>();
+    };
     main_is_debug = false;
     //glfwWindowHint(GLFW_SAMPLES, 1);
 }
@@ -62,23 +68,29 @@ void GameWindow::make_spartial()
 
 bool GameWindow::BaseInit()
 {
-    update = [=](){BaseUpdate<false>();};
-    draw = [=](){BaseDraw<false>();};
+    update = [=](){
+        BaseUpdate<false>();
+    };
+    draw = [=](){
+        BaseDraw<false>();
+    };
 
     srand(123);
     LOG(info) << "Jarg initialization start";
     LOG(info) << "User-preferred locale setting is " << std::locale("").name().c_str();
-    glfwSetErrorCallback([](int /*a*/,const char* description){LOG(error) << description;});
+    glfwSetErrorCallback([](int /*a*/,const char* description){
+        LOG(error) << description;
+    });
     int glfwErrorCode = glfwInit();
     if (!glfwErrorCode)
     {
         LOG(error) << "glfwInit error " << glfwErrorCode;
         return false;
     }
-    glfwWindowHint(GLFW_SAMPLES, 16);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MAJOR);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MINOR);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+    glfwWindowHint( GLFW_SAMPLES, 16 );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, MAJOR );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, MINOR );
+    glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE );
 
     monitor = nullptr;
 
@@ -176,9 +188,21 @@ bool GameWindow::BaseInit()
     TextureAtlas::LoadAll();
     DB::Load();
 
-    auto &h = DB::Create("hero");
-    hero = h.get();
-    level.AddEntity(std::move(h));
+    //================================
+
+    RemoteClient::instance();
+    auto clie = [](){
+        while(true)
+        {
+            RemoteClient::instance().Process();
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        }
+    };
+    std::thread th(clie);
+    th.detach();
+
+    hero = DB::Create( "hero" );
+    level.AddEntity( hero, true );
 
     return true;
 }

@@ -7,25 +7,12 @@
 
 Sector::Sector(const glm::ivec2 &o) : offset(o)
 {
-    for(int i = 0; i < RX; i++)
-        for(int j = 0; j < RY; j++)
-            for(int k = 0; k < RZ; k++)
-            {
-                data[ONEDIM(i,j,k)] = DB::Create("air");
-            }
-}
-
-void Sector::Generate()
-{
-    for(int j = 0; j < RY; j++)
-        for(int k = 0; k < RZ; k++)
-        {
-            data[ONEDIM(k,j,0)] = DB::Create("grass");
-        }
-
-    PlaceScheme(DB::scheme_db["house1_room"][0], {0,0,1});
-
-    RebuildMax();
+//    for(int i = 0; i < RX; i++)
+//        for(int j = 0; j < RY; j++)
+//            for(int k = 0; k < RZ; k++)
+//            {
+//                data[ONEDIM(i,j,k)] = DB::Create("air");
+//            }
 }
 
 void Sector::Update()
@@ -61,7 +48,7 @@ void Sector::Draw(SpriteBatch &sb, const glm::ivec2 &off) const
             }
         }
 
-    for(const std::unique_ptr<Object> &a : entities)
+    for(const std::shared_ptr<Object> &a : entities)
     {
         if(const Entity *e = a->GetAgent<Entity>())
         {
@@ -70,7 +57,7 @@ void Sector::Draw(SpriteBatch &sb, const glm::ivec2 &off) const
     }
 }
 
-void Sector::SetObject(const glm::ivec3 &pos, std::unique_ptr<Object> obj)
+void Sector::SetObject(const glm::ivec3 &pos, std::shared_ptr<Object> obj)
 {
     static void *air_ref = DB::data["air"].get();
     if(obj->base != air_ref)

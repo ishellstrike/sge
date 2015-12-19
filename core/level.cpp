@@ -1,5 +1,7 @@
 #include "level.h"
 #include "prefecences.h"
+#include "remoteclient.h"
+#include <thread>
 
 Level::Level()
 {
@@ -14,17 +16,17 @@ Sector *Level::GetSectorByPos(const glm::vec3 &p)
     return GetSector({x,y});
 }
 
-Sector *Level::GetSector(const glm::vec2 &off)
+Sector *Level::GetSector(const glm::ivec2 &off)
 {
     auto t = map.find(off);
     if(t != map.end())
         return (*t).second.get();
 
-    map[off] = std::unique_ptr<Sector>(new Sector(off));
-    Sector *s = map[off].get();
-    s->Generate();
-
-    return s;
+    auto s = RemoteClient::instance().GetSector( off );
+    auto sr = s.get();
+    if(sr != nullptr)
+        map.insert( std::make_pair( off, std::move( s ) ) );
+    return sr;
 }
 
 void Level::Update()
@@ -32,7 +34,7 @@ void Level::Update()
     for(const auto &i : map)
     {
         Sector &cur = *i.second;
-        for(const std::unique_ptr<Object> &a : cur.entities)
+        for(const std::shared_ptr<Object> &a : cur.entities)
         {
 
         }
@@ -75,12 +77,23 @@ void Level::Draw(SpriteBatch &sb, const glm::vec2 &off) const
     }
 }
 
-void Level::AddEntity(std::unique_ptr<Object> o)
+bool Level::AddEntity( std::shared_ptr<Object> o, bool wait )
 {
-    if(const Entity *e = o->GetAgent<Entity>())
+    if( const Entity *e = o->GetAgent<Entity>() )
     {
-        Sector *s = GetSectorByPos(e->pos);
-        s->entities.insert(s->entities.end(), std::move(o));
+        Sector *s;
+        while( !(s = GetSectorByPos(e->pos)) && wait )
+        {
+            std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+            s = GetSectorByPos(e->pos);
+        }
+
+        if( s != nullptr )
+        {
+            s->entities.insert( s->entities.end(), std::move( o ) );
+            return true;
+        }
+        return false;
     }
     else
         LOG(error) << "not an entity";
