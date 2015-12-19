@@ -2,14 +2,15 @@
 #define OBJECT_H
 #include "objecthelper.h"
 #include <functional>
+class ObjectStatic;
 
 class Object : public ObjectHelper
 {
 public:
-    Object(ObjectStaticHelper *base);
+    Object(ObjectStatic *base);
     std::unique_ptr<Object> Instantiate();
 
-    ObjectStaticHelper *base;
+    ObjectStatic *base;
     int otex = 0;
 
     bool isStatic();

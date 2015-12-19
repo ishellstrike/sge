@@ -36,6 +36,7 @@ public:
     std::shared_ptr<Agent> Instantiate() override;
 
     void onInit(ObjectHelper *par) override;
+
 };
 
 REGISTER_AGENT(ItemSpawner)

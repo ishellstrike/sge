@@ -34,24 +34,26 @@ public:
     template <typename T>
     T *GetAgent()
     {
-        for(const auto &a : *agents)
-        {
-            Agent &agent = *a;
-            if(agent.id == Agent::TidFor<T>())
-                return static_cast<T*>(&agent);
-        }
+        if(agents)
+            for(const auto &a : *agents)
+            {
+                Agent &agent = *a;
+                if(agent.id == Agent::TidFor<T>())
+                    return static_cast<T*>(&agent);
+            }
         return nullptr;
     }
 
     template <typename T>
     bool HasAgent()
     {
-        for(const auto &a : *agents)
-        {
-            Agent &agent = *a;
-            if(agent.id == Agent::TidFor<T>())
-                return true;
-        }
+        if(agents)
+            for(const auto &a : *agents)
+            {
+                Agent &agent = *a;
+                if(agent.id == Agent::TidFor<T>())
+                    return true;
+            }
         return false;
     }
 

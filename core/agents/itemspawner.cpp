@@ -58,18 +58,41 @@ void ItemSpawner::onInit(ObjectHelper *par)
                     if(count == 0)
                         continue;
 
-                    auto item = DB::Create(spawn_group_part.id);
-
-                    if(count > 1)
+                    std::string oid = spawn_group_part.id;
+                    bool tagged = false;
+                    if(oid.length() >= 4)
                     {
-                        Stacked *stack = item->GetAgent<Stacked>();
-                        if(stack)
-                            stack->count = count;
-                        else
-                            LOG(error) << spawn_group_part.id << " has no stacks, but count = " << count << " on ItemSpawner requested. Count skipped.";
+                        std::string tag = oid.substr(0, 4);
+                        if(tag == "tag_")
+                        {
+                            std::vector<ObjectStatic *> t_ref = DB::tags_ref[oid];
+                            if(t_ref.size() > 0)
+                            {
+                                for(int cc = 0; cc < count; cc++)
+                                {
+                                    oid = t_ref[rand() % t_ref.size()]->id;
+                                    auto item = DB::Create(oid);
+                                    ch->items.push_back(item);
+                                }
+                                tagged = true;
+                            }
+                        }
                     }
+                    if(!tagged)
+                    {
+                        auto item = DB::Create(oid);
 
-                    ch->items.push_back(item);
+                        if(count > 1)
+                        {
+                            Stacked *stack = item->GetAgent<Stacked>();
+                            if(stack)
+                                stack->count = count;
+                            else
+                                LOG(error) << oid << " has no stacks, but count = " << count << " on ItemSpawner requested. Count skipped.";
+                        }
+
+                        ch->items.push_back(item);
+                    }
                     continue;
                 }
                 prob += spawn_group_part.probability; //если не выпало, то увеличиваем шенс на значение вероятности предыдущего предмета

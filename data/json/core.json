@@ -1,54 +1,25 @@
 [
 {
-  "type":"object",
-  "id":"template_0",
-  "agents":[
-    {
-      "type":"ItemSpawner",
-      "items":[
-        [["empty_bottle_05", 1, 1, 0.5], ["closed_bottle", 1, 1, 0.4]],
-        [["comething_else", 1, 2, 0.6]]
-      ]
-    }
-  ]
-},
-{
-  "type":"object",
-  "id":"template_1",
-  "agents":[
-    {
-      "type":"ItemSpawner",
-      "items":[
-        [["can",1,2,0.5]]
-      ]
-    },
-    {
-      "type":"Referencer",
-      "ref":"template_0"
-    }
-  ]
-},{
-  "type":"object",
-  "id":"test_templ_user",
-  "agents":[
-    {
-      "type":"Referencer",
-      "ref":"template_1"
-    }
-  ]
-},{
     "type":"object",
     "id":"grass",
-    "tex":["grass1"]
+    "tex":["grass1"],
+    "agents":[
+                {
+        "type":"Walkable"
+                },
+                {
+                    "type":"Ground"
+                }
+
+            ]
 },{
     "type":"object",
     "id":"chair",
     "tex":["frame"],
     "agents":[
-      {
-        "type":"Referencer",
-        "ref":"template_1"
-      }
+                {
+        "type":"Walkable"
+                }
     ]
 },{
     "type":"object",
@@ -56,19 +27,56 @@
     "tex":["briwall1"]
 },
 {
+    "type":"object",
+    "id":"door",
+    "tex":["door1"]
+},{
+    "type":"object",
+    "id":"chair",
+    "tex":["chair1"]
+},{
+    "type":"object",
+    "id":"window",
+    "tex":["glass_hor"]
+},{
+    "type":"object",
+    "id":"table",
+    "tex":["table1"]
+},{
+    "type":"object",
+    "id":"foodpolka",
+    "tex":["foodpolka","foodpolka1","foodpolka2","foodpolka3","foodpolka4"],
+            "agents":[
+                {
+                    "type":"Chest"
+                },
+                {
+                    "type":"ItemSpawner",
+                    "items":[
+                        [["tag_buffet", 1, 25, 0.5]]
+                    ]
+                }
+            ]
+},
+{
    "type":"scheme",
    "building":"house1_room",
    "size":[16, 7],
    "dictionary":[
-       ["T","briwall"]
+       ["#","briwall"],
+       ["F","foodpolka"],
+       ["T","table"],
+       ["c","chair"],
+       ["D","door"],
+       ["W","window"]
    ],
    "data":[
        "................",
-       "..TTTTTTTT......",
-       "..T......TTTTT..",
-       "..T..........T..",
-       "..T..........T..",
-       "..TTTTTTTTTTTT..",
+       "..##W#####......",
+       "..#...FFF#####..",
+       "..W......cTc.W..",
+       "..#.......c..#..",
+       "..#D##########..",
        "................"
    ]
 }

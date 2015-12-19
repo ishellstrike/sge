@@ -8,6 +8,8 @@
 #include "referencer.h"
 #include "stacked.h"
 #include "entity.h"
+#include "tags.h"
+#include "walkable.h"
 
 #endif // AGENTS_HPP
 

@@ -25,7 +25,12 @@ std::unique_ptr<Object> ObjectStatic::Instantiate()
     {
         o->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
         for(const auto &i : *agents)
-            o->agents->push_back(i->Instantiate());
+        {
+            if( i->IsStatic() )
+                o->agents->push_back( i );
+            else
+                o->agents->push_back(i->Instantiate());
+        }
         o->onInit();
         std::remove_if(std::begin(*o->agents), std::end(*o->agents), [](const std::shared_ptr<Agent> &ag)
         {

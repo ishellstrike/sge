@@ -195,7 +195,7 @@ bool GameWindow::BaseInit()
         while(true)
         {
             RemoteClient::instance().Process();
-            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            std::this_thread::sleep_for( std::chrono::milliseconds(50) );
         }
     };
     std::thread th(clie);
@@ -250,7 +250,25 @@ void GameWindow::BaseDraw()
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0,0,0,1);
 
-    level.Draw(*batch, offset);
+    level.Draw(*batch, offset, hero->GetAgent<Entity>()->pos);
+
+    if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/32.f ) )
+    {
+        //auto oo = DB::Create("foodpolka");
+        //o = oo.get();
+        //level.SetObjectAtPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/32.f , oo);
+        if( Chest *c = o->GetAgent<Chest>() )
+        {
+            std::stringstream ss;
+            ss << "some" << std::endl;
+            for( const std::shared_ptr<Object> &o : c->items )
+            {
+                ss << o->base->id << std::endl;
+            }
+
+            batch->drawText(ss.str(), {100,100}, f12.get(), Color::Red);
+        }
+    }
 
     if(is_debug)
     {
@@ -304,17 +322,19 @@ void GameWindow::BaseUpdate()
         no_ui = !no_ui;
 
     if(Keyboard::isKeyDown(GLFW_KEY_DOWN))
-        hero->GetAgent<Entity>()->pos.y+= 0.1f;
+        level.DeltaEntity(*hero, {0, 0.1f, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_UP))
-        hero->GetAgent<Entity>()->pos.y-= 0.1f;
+        level.DeltaEntity(*hero, {0, -0.1f, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_LEFT))
-        hero->GetAgent<Entity>()->pos.x-= 0.1f;
+        level.DeltaEntity(*hero, {-0.1f, 0, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_RIGHT))
-        hero->GetAgent<Entity>()->pos.x+= 0.1f;
+        level.DeltaEntity(*hero, {0.1f, 0, 0});
 
     level.Update();
     offset = glm::vec2(hero->GetAgent<Entity>()->pos)*32.f - glm::vec2(Prefecences::Instance()->resolution)/2.f;
-    level.GetSectorByPos(hero->GetAgent<Entity>()->pos);
+    for(int i = -2; i < 3; i++)
+        for(int j = -2; j < 3; j++)
+            level.GetSectorByPos(hero->GetAgent<Entity>()->pos + glm::vec3(i*RX,j*RY,0));
 
     linfo->UpdateLevelInfo(level);
 

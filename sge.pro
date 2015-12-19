@@ -85,7 +85,9 @@ SOURCES += \
     sge_level_debug_info.cpp \
     core/remoteclient.cpp \
     core/remoteserver.cpp \
-    core/levelgen.cpp
+    core/levelgen.cpp \
+    core/agents/tags.cpp \
+    core/agents/walkable.cpp
 
 VERSION = 0.1.0
 
@@ -153,7 +155,6 @@ HEADERS += \
     FrameBuffer.h \
     TextureGenerator.h \
     resources/random_noise.h \
-    sge_fielsystem.h \
     random.h \
     sge_ui/image_box.h \
     sge_texture_lab.h \
@@ -205,7 +206,9 @@ HEADERS += \
     sge_level_debug_info.h \
     core/remoteclient.h \
     core/remoteserver.h \
-    core/levelgen.h
+    core/levelgen.h \
+    core/agents/tags.h \
+    core/agents/walkable.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

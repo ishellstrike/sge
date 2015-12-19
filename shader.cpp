@@ -14,7 +14,6 @@
 #include "helper.h"
 #include <map>
 #include <regex>
-#include "sge_fielsystem.h"
 
 bool printLog(GLuint id)
 {
@@ -79,6 +78,54 @@ std::string get_filename_headername(std::string path)
     std::replace(path.begin(), path.end(), '.', '_');
     std::transform(path.begin(), path.end(), path.begin(), toupper);
     return path;
+}
+
+std::string LoadTextFile(const std::string &filename)
+{
+    std::ifstream file(filename);
+    std::string line;
+    std::stringstream ss;
+    if (file.is_open()) {
+        while (file.good()) {
+            getline(file, line);
+            ss << line << std::endl;
+        }
+        file.close();
+    } else {
+        LOG(fatal) << sge::string_format("Failed to open file %s", filename.c_str());
+    }
+
+    return ss.str();
+}
+
+void SaveTextFile(const std::string &filename, const std::string &content)
+{
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        file << content;
+        file.close();
+    } else {
+        LOG(fatal) << sge::string_format("Failed to save file %s", filename.c_str());
+    }
+}
+
+int GetLastPatternedFilenameNubmer(const std::string &filename, const std::string &ext)
+{
+    bool cont = true;
+    int i = 0;
+
+    std::ifstream file(sge::string_format("%s%d%s", filename.c_str(), 0, ext.c_str()));
+    if(!file.is_open()) {file.close(); return -1;}
+    file.close();
+
+    while(cont)
+    {
+        std::ifstream file(sge::string_format("%s%d%s", filename.c_str(), i, ext.c_str()));
+        if(!file.is_open()) cont = false;
+        else i++;
+        file.close();
+    }
+    return i;
 }
 
 void Shader::LogDumpError(const std::string &filename, GLenum type, const std::string &str, GLuint shader)

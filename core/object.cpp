@@ -2,7 +2,7 @@
 #include "random.h"
 #include "textureatlas.h"
 
-Object::Object(ObjectStaticHelper *__base) : base(__base)
+Object::Object(ObjectStatic *__base) : base(__base)
 {  
 }
 

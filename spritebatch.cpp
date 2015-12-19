@@ -249,7 +249,7 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, 
     cur++;
 }
 
-void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint direct, const glm::vec4 &col_, const glm::vec4 &double_uv)
+void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint tex_id, const glm::vec4 &col_, const glm::vec4 &double_uv)
 {
     if(current_program != basic_program)
     {
@@ -257,10 +257,10 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint d
         current_program = basic_program;
         current_program->Use();
     }
-    if(direct != current)
+    if(tex_id != current)
     {
         render();
-        current = direct;
+        current = tex_id;
     }
     if(cur >= SIZE - 1)
         render();
@@ -286,6 +286,35 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint d
     index[cur*6 + 3] = cur*4 + 1;
     index[cur*6 + 4] = cur*4 + 2;
     index[cur*6 + 5] = cur*4 + 3;
+
+    cur++;
+}
+
+void SpriteBatch::drawTriangle(const glm::vec2 &loc, const glm::vec2 &loc2, const glm::vec2 &loc3, const glm::vec4 &col_)
+{
+    if(current_program != color_program)
+    {
+        render();
+        current_program = color_program;
+        current_program->Use();
+    }
+    if(cur >= SIZE - 1)
+        render();
+
+    pos[cur*4]     = glm::vec3(loc.x,  loc.y, 0);
+    pos[cur*4 + 1] = glm::vec3(loc2.x, loc2.y, 0);
+    pos[cur*4 + 2] = glm::vec3(loc3.x, loc3.y, 0);
+
+    col[cur*4]     = col_;
+    col[cur*4 + 1] = col_;
+    col[cur*4 + 2] = col_;
+
+    index[cur*6]     = cur*4;
+    index[cur*6 + 1] = cur*4 + 1;
+    index[cur*6 + 2] = cur*4 + 2;
+    index[cur*6 + 3] = cur*4 + 2;
+    index[cur*6 + 4] = cur*4 + 2;
+    index[cur*6 + 5] = cur*4 + 2;
 
     cur++;
 }

@@ -185,20 +185,6 @@ T lerp(T &a, T &b, double a_percent){
     return a_percent * a + (1.0 - a_percent) * b;
 }
 
-inline std::string wstring_to_string(const std::wstring &wstr)
-{
-    std::string s(wstr.length(), ' ');
-    std::copy(wstr.begin(), wstr.end(), s.begin());
-    return s;
-}
-
-inline std::wstring string_to_wstring(const std::string &str)
-{
-    std::wstring s(str.length(), L' ');
-    std::copy(str.begin(), str.end(), s.begin());
-    return s;
-}
-
 inline double triangular(double min, double max, double mean) {
     double U = rand() / (double) RAND_MAX;
     double F = (mean - min) / (max - min);

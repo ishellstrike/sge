@@ -1,8 +1,8 @@
 #include "db.h"
-#include "sge_fielsystem.h"
 #include "prefecences.h"
 #include "objectstatic.h"
 #include "boost/filesystem.hpp"
+#include "agents/agents.hpp"
 
 DB::DB()
 {
@@ -36,7 +36,10 @@ void DB::Load()
     boost::filesystem::path targetDir(Prefecences::Instance()->getJsonDir());
     boost::filesystem::recursive_directory_iterator iter(targetDir);
 
-    data["air"] = std::unique_ptr<ObjectStatic>( new ObjectStatic("air"));
+    ObjectStatic *air = new ObjectStatic("air");
+    air->agents = std::unique_ptr<AgentContainer>( new AgentContainer() );
+    air->agents->push_back( std::make_shared<Walkable>() );
+    data["air"] = std::unique_ptr<ObjectStatic>( air );
 
     int loaded = 0;
     for(const boost::filesystem::path &file : iter){
@@ -62,7 +65,7 @@ void DB::Load()
             {
                 LOG(error) << "while parsing " << file;
                 LOG(error) << d.GetParseError();
-                LOG(error) << all.substr(max(d.GetErrorOffset() - 20, 0), min(all.length(), 40));
+                LOG(error) << all.substr(glm::max<int>(d.GetErrorOffset() - 20, 0), glm::min<int>(all.length(), 40));
                 LOG(error) << "                    ^";
             }
 
@@ -141,7 +144,7 @@ void DB::Load()
                                 {
                                     rapidjson::Value &part = arr[a];
                                     if(part.HasMember("type")) {
-                                        auto agenttype = part["type"].GetString();
+                                        std::string agenttype = part["type"].GetString();
                                         auto c = AgentFactory::instance().Create(agenttype);
                                         if(!c)
                                         {
@@ -156,8 +159,17 @@ void DB::Load()
                                             continue;
                                         }
 
+                                        if( agenttype == "Tags" )
+                                        {
+                                            for( const std::string &s : std::static_pointer_cast<Tags>( c )->tags)
+                                            {
+                                                LOG(trace) << "tagged as " << s;
+                                                tags_ref[s].push_back( b.get() );
+                                            }
+                                        }
+
                                         b->PushAgent(c);
-                                        c->onLoad(b.get());
+                                        c->onLoad( b.get() );
                                     }
                                     else
                                         LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";
@@ -185,4 +197,5 @@ void DB::Load()
 }
 
 std::unordered_map<Id, std::unique_ptr<ObjectStatic>> DB::data;
+std::unordered_map<std::string, std::vector<ObjectStatic *>> DB::tags_ref;
 std::unordered_map<SchemeType, std::vector<Scheme>> DB::scheme_db;

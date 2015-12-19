@@ -492,7 +492,13 @@
         "AfteruseId":"emptycan",
         "sort":"Food",
         "spawn_group":"spawn_shopfood",
-        "Description":"Полная банка популярного газированного напитка."
+        "Description":"Полная банка популярного газированного напитка.",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -504,7 +510,13 @@
         "weight":100,
         "NutCal":500,
         "doses":2,
-        "Description":"Полная банка недорогих рыбных консервов."
+        "Description":"Полная банка недорогих рыбных консервов.",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -518,7 +530,13 @@
         "Buff":[
             "foodbad1"
         ],
-        "Description":"Пакет дешевой лапши быстрого приготовления с приправами."
+        "Description":"Пакет дешевой лапши быстрого приготовления с приправами.",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet", "tag_cola"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -529,8 +547,13 @@
         "nameret":"Коробка с едой",
         "doses":20,
         "sort":"Food",
-        "spawn_group":"spawn_shopfood",
-        "Description":"Коробка практически непортящегося, но безвкусного печенья"
+        "Description":"Коробка практически непортящегося, но безвкусного печенья",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -552,8 +575,13 @@
         "name":"Банка тушеной говядины",
         "nameret":"Банка с едой",
         "AfteruseId":"meatcan1",
-        "spawn_group":"spawn_shopfood",
-        "Type":"ItemCan"
+        "Type":"ItemCan",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -575,8 +603,13 @@
         "name":"Банка паштета",
         "nameret":"Банка с едой",
         "AfteruseId":"meatcan2",
-        "spawn_group":"spawn_shopfood",
-        "Type":"ItemCan"
+        "Type":"ItemCan",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -589,7 +622,13 @@
         "doses":10,
         "sort":"Food",
         "spawn_group":"spawn_shopfood",
-        "Description":"Выглядит подозрительно."
+        "Description":"Выглядит подозрительно.",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -640,7 +679,13 @@
         "id":"13",
         "name":"Пустая коробка",
         "weight":20,
-        "Descroption":"Картонная коробка."
+        "Descroption":"Картонная коробка.",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -702,7 +747,12 @@
             "foodjoy1"
         ],
         "sort":"Food",
-        "spawn_group":"spawn_shopfood"
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -711,7 +761,12 @@
         "weight":90,
         "NutCal":100,
         "sort":"Food",
-        "spawn_group":"spawn_shopfood"
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -723,7 +778,12 @@
         "Buff":[
             "foodjoy2"
         ],
-        "spawn_group":"spawn_shopfood"
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -735,7 +795,12 @@
         "Buff":[
             "foodbad1"
         ],
-        "spawn_group":"spawn_shopfood"
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -746,7 +811,12 @@
         "NutH2O":100,
         "sort":"Food",
         "spawn_group":"spawn_shopfood",
-        "Type":"ItemCookableFood"
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_fruit"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -757,7 +827,12 @@
         "NutH2O":100,
         "sort":"Food",
         "spawn_group":"spawn_shopfood",
-        "Type":"ItemCookableFood"
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_fruit"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -767,7 +842,12 @@
         "NutCal":150,
         "NutH2O":150,
         "sort":"Food",
-        "spawn_group":"spawn_shopfood",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_fruit"]
+            }
+        ],
         "Type":"ItemCookableFood"
     },
     {
@@ -778,7 +858,12 @@
         "NutCal":70,
         "NutH2O":70,
         "sort":"Food",
-        "spawn_group":"spawn_shopfood",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_vegetable"]
+            }
+        ],
         "Type":"ItemCookableFood"
     },
     {
@@ -801,7 +886,12 @@
         "name":"Соль",
         "doses":100,
         "sort":"Food",
-        "spawn_group":"spawn_shopfood"
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ]
     },
     {
         "type":"Item",
@@ -823,7 +913,12 @@
         "name":"Банка бобов",
         "nameret":"Банка с едой",
         "AfteruseId":"beancan1",
-        "spawn_group":"spawn_shopfood",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ],
         "Type":"ItemCan"
     },
     {
@@ -846,7 +941,12 @@
         "name":"Банка кукурузы",
         "nameret":"Банка с едой",
         "AfteruseId":"corncan1",
-        "spawn_group":"spawn_shopfood",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ],
         "Type":"ItemCan"
     },
     {
@@ -869,7 +969,12 @@
         "name":"Банка горошка",
         "nameret":"Банка с едой",
         "AfteruseId":"corncan2",
-        "spawn_group":"spawn_shopfood",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ],
         "Type":"ItemCan"
     },
     {
@@ -877,7 +982,12 @@
         "id":"vinebottlecl",
         "name":"Бутылка вина",
         "AfteruseId":"vinebottle",
-        "spawn_group":"spawn_shopfood",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ],
         "Type":"ItemBottle",
         "weight":1000
     },
@@ -896,7 +1006,12 @@
         "id":"vodkabottlecl",
         "name":"Бутылка водки",
         "AfteruseId":"vodkabottle",
-        "spawn_group":"spawn_shopfood",
+        "agents": [
+            {
+                "type":"Tags",
+                "tags":["tag_buffet"]
+            }
+        ],
         "Type":"ItemBottle",
         "weight":500,
         "Description":"Она самая"

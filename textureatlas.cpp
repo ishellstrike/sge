@@ -48,11 +48,11 @@ void TextureAtlas::LoadAll()
 
         refs[file] = glm::ivec2(0, count);
 
-        x += 32;
-        if(x >= atlas_dim - sprite_size)
+        x += sprite_size;
+        if(x >= atlas_dim)
         {
             x = 0;
-            y += 32;
+            y += sprite_size;
         }
         ++count;
     };
