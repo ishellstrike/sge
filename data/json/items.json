@@ -2,12 +2,12 @@
     {
         "type":"Item",
         "id":"sharp_stick",
-        "name":"Заостренная палка",
         "Damage":2,
         "agents":[
             {
                 "type":"ItemBase",
-                "sort":"meele"
+                "sort":"meele",
+                "name":"заостренная палка",
             },{
                 "type":"Disassemble",
                 "components":[
@@ -19,21 +19,21 @@
     {
         "type":"Item",
         "id":"board",
-        "name":"Деревянная доска"
+        "name":"деревянная доска"
     },
     {
         "type":"Item",
         "id":"bigblade",
-        "name":"Большое лезвие"
+        "name":"большое лезвие"
     },
     {
         "type":"Item",
         "id":"bigblade_weapon",
-        "name":"Самодельный большой нож",
         "Damage":9,
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"самодельный большой нож",
                 "sort":"meele"
             }
         ]
@@ -41,11 +41,11 @@
     {
         "type":"Item",
         "id":"nail_board",
-        "name":"Доска с гвоздями",
         "Damage":4,
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"доска с гвоздями",
                 "sort":"meele"
             },{
                 "type":"Disassemble",
@@ -59,11 +59,11 @@
     {
         "type":"Item",
         "id":"nail_stick",
-        "name":"Палка с гвоздями",
         "Damage":3,
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"палка с гвоздями",
                 "sort":"meele"
             },{
                 "type":"Disassemble",
@@ -77,10 +77,10 @@
     {
         "type":"Item",
         "id":"a357",
-        "name":".357 Magnum",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":".357 Magnum",
                 "sort":"ammo",
                 "weight":20
             }
@@ -89,10 +89,10 @@
     {
         "type":"Item",
         "id":"a308",
-        "name":".308 Winchester",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":".308 Winchester",
                 "sort":"ammo",
                 "weight":10
             }
@@ -101,10 +101,10 @@
     {
         "type":"Item",
         "id":"a233",
-        "name":".233 ЦМО",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":".233 ЦМО",
                 "sort":"ammo",
                 "weight":15
             }
@@ -113,10 +113,10 @@
     {
         "type":"Item",
         "id":"a50",
-        "name":".50 BMG",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":".50 BMG",
                 "sort":"ammo",
                 "weight":50
             }
@@ -125,10 +125,10 @@
     {
         "type":"Item",
         "id":"a545",
-        "name":".50 BMG",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":".50 BMG",
                 "sort":"ammo",
                 "weight":50
             }
@@ -137,10 +137,10 @@
     {
         "type":"Item",
         "id":"a223",
-        "name":".223 Remington",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":".223 Remington",
                 "sort":"ammo",
                 "weight":20
             }
@@ -149,10 +149,10 @@
     {
         "type":"Item",
         "id":"a762",
-        "name":"7,62-мм",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"7,62-мм",
                 "sort":"ammo",
                 "weight":20
             }
@@ -161,10 +161,10 @@
     {
         "type":"Item",
         "id":"steelplate",
-        "name":"Стальная пластина",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"стальная пластина",
                 "sort":"craft",
                 "weight":4000
             }
@@ -173,11 +173,11 @@
     {
         "type":"Item",
         "id":"copperwire",
-        "name":"Моток медной проволоки",
         "doses":10,
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"моток медной проволоки",
                 "sort":"craft",
                 "weight":100
             }
@@ -186,10 +186,10 @@
     {
         "type":"Item",
         "id":"steelbar",
-        "name":"Стальной прут",
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"стальной прут",
                 "sort":"craft",
                 "weight":4000
             }
@@ -199,11 +199,11 @@
     {
         "type":"Item",
         "id":"plank",
-        "name":"Доска",
         "Fire":100,
         "agents":[
             {
                 "type":"ItemBase",
+                "name":"доска",
                 "sort":"craft",
                 "weight":2000
             }
@@ -212,11 +212,11 @@
     {
         "type":"Item",
         "id":"stick",
-        "name":"Палка",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
+                "name":"палка",
                 "weight":400
             },{
                 "type":"Flammable",
@@ -484,20 +484,26 @@
     {
         "type":"Item",
         "id":"cola_can",
-        "name":"Кола",
         "nameret":"Банка",
-        "NutH2O":500,
-        "weight":500,
-        "NutCal":20,
-        "AfteruseId":"emptycan",
-        "sort":"Food",
         "spawn_group":"spawn_shopfood",
         "Description":"Полная банка популярного газированного напитка.",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet"]
+            },
+            {
+                "type":"ItemBase",
+                "name":"Кола",
+                "weight":500
+            },
+            {
+                "type":"Food",
+                "h2o":500,
+                "cal":20,
+                "aftereat":"emptycan"
             }
+
         ]
     },
     {

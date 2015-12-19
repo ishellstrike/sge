@@ -15,6 +15,10 @@ void Generate(Sector &s)
         for(int i = 0; i < RY; i++)
         {
             s.ground[ONEDIM(i,j,0)] = DB::Create("grass");
+            if(rand()%20 == 1)
+                s.block[ONEDIM(i,j,0)] = DB::Create("tree");
+            if(rand()%20 == 1)
+                s.block[ONEDIM(i,j,0)] = DB::Create("bush");
         }
 
     s.PlaceScheme(DB::scheme_db["house1_room"][0], {0,0,0});

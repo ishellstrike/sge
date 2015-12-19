@@ -118,9 +118,6 @@ void DB::Load()
                         else
                             b->type = ObjectSpecial;
 
-                        if(val.HasMember("name"))
-                            b->name = val["name"].GetString();
-
                         if(val.HasMember("tex"))
                         {
                             rapidjson::Value &ar = val["tex"];
@@ -133,9 +130,6 @@ void DB::Load()
                             for(decltype(ar.Size()) k=0; k < ar.Size(); k++)
                                 b->tex.push_back(ar[k].GetString());
                         }
-
-                        if(val.HasMember("ground"))
-                            b->ground = val["ground"].GetBool_();
 
                         if(val.HasMember("agents")) {
                             rapidjson::Value &arr = val["agents"];

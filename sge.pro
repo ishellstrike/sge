@@ -89,14 +89,23 @@ SOURCES += \
     core/agents/tags.cpp \
     core/agents/walkable.cpp \
     core/agents/simpleinteract.cpp \
-    core/agents/transparent.cpp
+    core/agents/transparent.cpp \
+    core/agents/passsound.cpp \
+    core/agents/sound.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype -llibboost_log-vc120-mt-gd-1_59
+-lopengl32 -lglew32 -lglfw3dll -lfreetype
+
+CONFIG(debug, debug|release) {
+    LIBS += -llibboost_log-vc120-mt-gd-1_59
+}
+else {
+    LIBS += -llibboost_log-vc120-mt-1_59
+}
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
@@ -212,7 +221,9 @@ HEADERS += \
     core/agents/tags.h \
     core/agents/walkable.h \
     core/agents/simpleinteract.h \
-    core/agents/transparent.h
+    core/agents/transparent.h \
+    core/agents/passsound.h \
+    core/agents/sound.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -449,4 +460,5 @@ DISTFILES += \
     data/textures/atlas/whitesq.png \
     data/textures/atlas/zombie.png \
     data/textures/atlas/zombie_corp.png \
-    data/json/hero.json
+    data/json/hero.json \
+    data/json/sounds.json

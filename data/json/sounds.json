@@ -1,0 +1,27 @@
+[
+{
+    "type":"sound",
+    "id":"sound_rustle",
+    "agents":[
+        {
+            "type":"Sound",
+            "range":8,
+            "name":"шелест"
+        }
+
+    ]
+},
+{
+    "type":"sound",
+    "id":"sound_crackle",
+    "agents":[
+        {
+            "type":"Sound",
+            "range":16,
+            "name":"треск"
+        }
+
+    ]
+}
+
+]

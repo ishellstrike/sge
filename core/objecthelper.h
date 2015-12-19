@@ -21,9 +21,7 @@ class ObjectStaticHelper
 public:
     Id id;
     std::vector<Tex> tex;
-    std::string name = "air";
     ObjectType type;
-    bool ground = false;
 };
 
 class ObjectHelper

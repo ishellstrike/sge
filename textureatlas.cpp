@@ -6,11 +6,11 @@
 *******************************************************************************/
 
 #include "textureatlas.h"
-#include "sge_fielsystem.h"
 #include "resources/pixmap.h"
 #include "prefecences.h"
 #include "logger.h"
 #include "resources/error_image.h"
+#include <boost/filesystem.hpp>
 
 namespace {
     const int atlas_dim = 2048;
@@ -29,9 +29,9 @@ TextureAtlas::~TextureAtlas()
 
 void TextureAtlas::LoadAll()
 {
-    std::vector<std::string> files;
-    getFiles(Prefecences::Instance()->getTexturesDir() + "atlas/", files);
-    LOG(trace) << "texatlas found " << files.size() << " files";
+    boost::filesystem::path targetDir(Prefecences::Instance()->getTexturesDir() + "atlas/");
+    boost::filesystem::recursive_directory_iterator iter(targetDir);
+
     tex.emplace_back();
     AtlasPart &ap = *(--tex.end());
     ap.tex = std::make_shared<Texture>();
@@ -61,12 +61,13 @@ void TextureAtlas::LoadAll()
     err.data.insert(std::begin(err.data), std::begin(error_image.pixel_data), std::end(error_image.pixel_data));
     add_image(err, "error");
 
+    for(const boost::filesystem::path &file : iter){
+        if (boost::filesystem::is_regular_file(file) && boost::filesystem::extension(file) == ".png")
+        {
+            Pixmap pmap(file.string());
 
-    for(std::string file: files)
-    {
-        Pixmap pmap(Prefecences::Instance()->getTexturesDir() + "atlas/" + file);
-
-        add_image(pmap, file.substr(0, file.find_last_of('.')));
+            add_image(pmap, file.stem().string());
+        }
     }
 
     LOG(trace) << "texatlas load " << count << " pixmaps";

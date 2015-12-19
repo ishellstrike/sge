@@ -29,6 +29,7 @@ public:
 
     int volume, weight;
     std::string sort;
+    std::string name, description;
 };
 
 REGISTER_AGENT(ItemBase)

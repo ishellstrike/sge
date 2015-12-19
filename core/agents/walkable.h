@@ -13,6 +13,8 @@ public:
     std::shared_ptr<Agent> Instantiate() override;
 
     bool IsStatic() override;
+
+    float cost = 1;
 };
 
 REGISTER_AGENT(Walkable)

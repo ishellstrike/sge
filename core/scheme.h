@@ -22,7 +22,7 @@ struct Scheme
         TRANSFORM_AFTER_LAST
     };
 
-    LetterMatrix data;
+    LetterMatrix data, floor;
     std::map<Letter, std::string> dict;
 
     /*!

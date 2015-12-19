@@ -16,6 +16,21 @@
   },
   {
     "type":"object",
+    "id":"floor",
+    "tex":[
+      "floor1"
+    ],
+    "agents":[
+      {
+        "type":"Walkable"
+      },
+      {
+        "type":"Ground"
+      }
+    ]
+  },
+  {
+    "type":"object",
     "id":"chair",
     "tex":[
       "frame"
@@ -48,6 +63,40 @@
   },
   {
     "type":"object",
+    "id":"tree",
+    "tex":["tree2"],
+    "agents":[
+      {
+        "type":"Transparent"
+      },
+      {
+        "type":"Walkable",
+        "cost":2
+      }
+
+    ]
+  },
+  {
+    "type":"object",
+    "id":"bush",
+    "tex":["bush1"],
+    "agents":[
+      {
+        "type":"Transparent"
+      },
+      {
+        "type":"Walkable",
+        "cost":5
+      },
+      {
+        "type":"PassSound",
+        "sound":["sound_rustle","sound_crackle","sound_none"],
+        "difficulty":1.0
+      }
+    ]
+  },
+  {
+    "type":"object",
     "id":"opened_door",
     "tex":[
       "door1_open"
@@ -70,6 +119,11 @@
     "id":"chair",
     "tex":[
       "chair1"
+    ],
+    "agents":[
+      {
+        "type":"Transparent"
+      }
     ]
   },
   {
@@ -87,8 +141,11 @@
   {
     "type":"object",
     "id":"table",
-    "tex":[
-      "table1"
+    "tex":["table1"],
+    "agents":[
+      {
+        "type":"Transparent"
+      }
     ]
   },
   {
@@ -123,7 +180,8 @@
       ["T", "table"],
       ["c", "chair"],
       ["D", "door"],
-      ["W", "window"]
+      ["W", "window"],
+      ["*", "floor"]
     ],
     "data":[
       "................",
@@ -133,6 +191,16 @@
       "..#.......c..#..",
       "..#D##########..",
       "................"
+    ],
+    "floor":[
+      "................",
+      "..********......",
+      "..************..",
+      "..************..",
+      "..************..",
+      "..************..",
+      "................"
     ]
   }
 ]
+

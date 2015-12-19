@@ -2,7 +2,7 @@
 
 void Walkable::Deserialize(rapidjson::Value &val)
 {
-
+    DESERIALIZE(NVP(cost));
 }
 
 std::shared_ptr<Agent> Walkable::Instantiate()

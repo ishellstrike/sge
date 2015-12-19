@@ -79,7 +79,8 @@ bool Level::TpEntity( Object &o, const glm::vec3 &pos, bool wait )
 
 bool Level::DeltaEntity(Object &o, const glm::vec3 &delta, bool wait )
 {
-    auto new_pos = o.GetAgent<Entity>()->pos + delta;
+    auto pos = o.GetAgent<Entity>()->pos;
+    auto new_pos = pos + delta;
     Sector *s;
     while( !(s = GetSectorByPos( new_pos )) && wait )
         std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
@@ -94,8 +95,9 @@ bool Level::DeltaEntity(Object &o, const glm::vec3 &delta, bool wait )
     {
         static const ObjectStatic *air = DB::Get("air");
 
-        if( targ.first->base->HasAgent<Walkable>() && targ.second->base != air )
-            o.GetAgent<Entity>()->pos = new_pos;
+        Walkable *w = targ.first->base->GetAgent<Walkable>();
+        if( w && targ.second->base != air )
+            o.GetAgent<Entity>()->pos = pos + delta / w->cost;
     }
 
     return false;
