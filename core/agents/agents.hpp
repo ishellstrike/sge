@@ -10,6 +10,8 @@
 #include "entity.h"
 #include "tags.h"
 #include "walkable.h"
+#include "simpleinteract.h"
+#include "transparent.h"
 
 #endif // AGENTS_HPP
 

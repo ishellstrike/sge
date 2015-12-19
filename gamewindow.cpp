@@ -10,6 +10,7 @@
 #include <fstream>
 #include "core/db.h"
 #include "core/remoteclient.h"
+#include "core/agents/agents.hpp"
 
 #define GLM_SWIZZLE
 
@@ -335,6 +336,15 @@ void GameWindow::BaseUpdate()
     for(int i = -2; i < 3; i++)
         for(int j = -2; j < 3; j++)
             level.GetSectorByPos(hero->GetAgent<Entity>()->pos + glm::vec3(i*RX,j*RY,0));
+
+    if(Mouse::isLeftJustPressed())
+        if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/32.f ) )
+        {
+            if(SimpleInteract *si = o->base->GetAgent<SimpleInteract>())
+            {
+                level.SetObjectAtPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/32.f, DB::Create(si->afterid));
+            }
+        }
 
     linfo->UpdateLevelInfo(level);
 

@@ -4,6 +4,7 @@
 #include "colorextender.h"
 #include "prefecences.h"
 #include "core/agents/entity.h"
+#include "core/agents/agents.hpp"
 
 Sector::Sector(const glm::ivec2 &o) : offset(o)
 {
@@ -124,7 +125,7 @@ void Sector::DrawShadow(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 
             {
                 const Object &b2 = *block[ONEDIM(i,j,k)];
                 static void *air_ref = DB::data["air"].get();
-                if(b2.base != air_ref)
+                if(b2.base != air_ref && !b2.base->HasAgent<Transparent>())
                     DrawShadowForBlock(sb, hpos, off, x, y);
             }
         }

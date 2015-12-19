@@ -1,83 +1,138 @@
 [
-{
+  {
     "type":"object",
     "id":"grass",
-    "tex":["grass1"],
+    "tex":[
+      "grass1"
+    ],
     "agents":[
-                {
+      {
         "type":"Walkable"
-                },
-                {
-                    "type":"Ground"
-                }
-
-            ]
-},{
+      },
+      {
+        "type":"Ground"
+      }
+    ]
+  },
+  {
     "type":"object",
     "id":"chair",
-    "tex":["frame"],
+    "tex":[
+      "frame"
+    ],
     "agents":[
-                {
+      {
         "type":"Walkable"
-                }
+      }
     ]
-},{
+  },
+  {
     "type":"object",
     "id":"briwall",
-    "tex":["briwall1"]
-},
-{
+    "tex":[
+      "briwall1"
+    ]
+  },
+  {
     "type":"object",
     "id":"door",
-    "tex":["door1"]
-},{
+    "tex":[
+      "door1"
+    ],
+    "agents":[
+      {
+        "type":"SimpleInteract",
+        "afterid":"opened_door"
+      }
+    ]
+  },
+  {
+    "type":"object",
+    "id":"opened_door",
+    "tex":[
+      "door1_open"
+    ],
+    "agents":[
+      {
+        "type":"SimpleInteract",
+        "afterid":"door"
+      },
+      {
+        "type":"Walkable"
+      },
+      {
+        "type":"Transparent"
+      }
+    ]
+  },
+  {
     "type":"object",
     "id":"chair",
-    "tex":["chair1"]
-},{
+    "tex":[
+      "chair1"
+    ]
+  },
+  {
     "type":"object",
     "id":"window",
-    "tex":["glass_hor"]
-},{
+    "tex":[
+      "glass_hor"
+    ],
+    "agents":[
+      {
+        "type":"Transparent"
+      }
+    ]
+  },
+  {
     "type":"object",
     "id":"table",
-    "tex":["table1"]
-},{
+    "tex":[
+      "table1"
+    ]
+  },
+  {
     "type":"object",
     "id":"foodpolka",
-    "tex":["foodpolka","foodpolka1","foodpolka2","foodpolka3","foodpolka4"],
-            "agents":[
-                {
-                    "type":"Chest"
-                },
-                {
-                    "type":"ItemSpawner",
-                    "items":[
-                        [["tag_buffet", 1, 25, 0.5]]
-                    ]
-                }
-            ]
-},
-{
-   "type":"scheme",
-   "building":"house1_room",
-   "size":[16, 7],
-   "dictionary":[
-       ["#","briwall"],
-       ["F","foodpolka"],
-       ["T","table"],
-       ["c","chair"],
-       ["D","door"],
-       ["W","window"]
-   ],
-   "data":[
-       "................",
-       "..##W#####......",
-       "..#...FFF#####..",
-       "..W......cTc.W..",
-       "..#.......c..#..",
-       "..#D##########..",
-       "................"
-   ]
-}
+    "tex":[
+      "foodpolka",
+      "foodpolka1",
+      "foodpolka2",
+      "foodpolka3",
+      "foodpolka4"
+    ],
+    "agents":[
+      {
+        "type":"Chest"
+      },
+      {
+        "type":"ItemSpawner",
+        "items":[
+          [["tag_buffet", 1, 25, 0.5]]
+        ]
+      }
+    ]
+  },
+  {
+    "type":"scheme",
+    "building":"house1_room",
+    "size":[16, 7],
+    "dictionary":[
+      ["#", "briwall"],
+      ["F", "foodpolka"],
+      ["T", "table"],
+      ["c", "chair"],
+      ["D", "door"],
+      ["W", "window"]
+    ],
+    "data":[
+      "................",
+      "..##W#####......",
+      "..#...FFF#####..",
+      "..W......cTc.W..",
+      "..#.......c..#..",
+      "..#D##########..",
+      "................"
+    ]
+  }
 ]

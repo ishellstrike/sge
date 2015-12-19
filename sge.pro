@@ -87,7 +87,9 @@ SOURCES += \
     core/remoteserver.cpp \
     core/levelgen.cpp \
     core/agents/tags.cpp \
-    core/agents/walkable.cpp
+    core/agents/walkable.cpp \
+    core/agents/simpleinteract.cpp \
+    core/agents/transparent.cpp
 
 VERSION = 0.1.0
 
@@ -208,7 +210,9 @@ HEADERS += \
     core/remoteserver.h \
     core/levelgen.h \
     core/agents/tags.h \
-    core/agents/walkable.h
+    core/agents/walkable.h \
+    core/agents/simpleinteract.h \
+    core/agents/transparent.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
