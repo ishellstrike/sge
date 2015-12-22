@@ -2,10 +2,10 @@
 #define REFERENCER_H
 #include "core/agent.h"
 
-class Referencer : public Agent
+class Referencer : public StaticAgent
 {
 public:
-    AGENT(Referencer)
+    SAGENT(Referencer)
 
     // Agent interface
 public:
@@ -19,9 +19,7 @@ public:
     *   }
     */
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
-    bool IsStatic() override;
-    void onLoad(ObjectHelper *par) override;
+    void onLoad(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt) override;
 
     std::string ref;
 };

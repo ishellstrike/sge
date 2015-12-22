@@ -7,7 +7,7 @@
 
 #ifndef GAMETIMER_H
 #define GAMETIMER_H
-
+#include <ostream>
 
 class GameTimer
 {
@@ -16,6 +16,8 @@ public:
     ~GameTimer();
     float last, current, elapsed; /*< in seconds */
     void Update(float wglTime);
+
+    friend std::ostream& operator <<(std::ostream& os, const GameTimer& dt);
 };
 
 #endif // GAMETIMER_H

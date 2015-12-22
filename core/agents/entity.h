@@ -4,18 +4,17 @@
 #include "core/agent.h"
 #include "core/object.h"
 
-class Entity : public Agent
+class Entity : public DynamicAgent
 {
 public:
-    AGENT(Entity)
+    DAGENT(Entity)
 
     std::vector<std::unique_ptr<Object>> items;
 
     // Agent interface
 public:
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
-    bool IsStatic() override;
+    std::shared_ptr<Agent> Instantiate() const override;
 
     glm::vec3 pos;
 };

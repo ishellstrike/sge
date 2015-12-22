@@ -2,6 +2,7 @@
 #define OBJECT_H
 #include "objecthelper.h"
 #include <functional>
+
 class ObjectStatic;
 
 class Object : public ObjectHelper
@@ -13,12 +14,14 @@ public:
     ObjectStatic *base;
     int otex = 0;
 
-    bool isStatic();
+    bool  isStatic();
 
-    void onInit();
-    void onUpdate();
-    void onDraw();
-    void onDestroy();
+    void    onInit(const glm::vec3 &pos, const GameTimer &gt);
+    void  onUpdate(const glm::vec3 &pos, const GameTimer &gt);
+    void    onDraw(const glm::vec3 &pos, const GameTimer &gt);
+    void onDestroy(const glm::vec3 &pos, const GameTimer &gt);
+    void   onEnter(const glm::vec3 &pos, const GameTimer &gt);
+    void   onLeave(const glm::vec3 &pos, const GameTimer &gt);
 };
 
 template<typename _Ty>

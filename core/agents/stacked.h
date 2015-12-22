@@ -2,18 +2,17 @@
 #define STACKED_H
 #include "core/agent.h"
 
-class Stacked : public Agent
+class Stacked : public DynamicAgent
 {
 public:   
-    AGENT(Stacked)
+    DAGENT(Stacked)
 
     // Agent interface
 public:
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
+    std::shared_ptr<Agent> Instantiate() const override;
 
     int count;
-    bool IsStatic() override;
 };
 
 REGISTER_AGENT(Stacked)

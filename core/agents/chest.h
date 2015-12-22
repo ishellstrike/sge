@@ -4,18 +4,17 @@
 #include "core/agent.h"
 #include "core/object.h"
 
-class Chest : public Agent
+class Chest : public DynamicAgent
 {
 public:
-    AGENT(Chest)
+    DAGENT(Chest)
 
     std::vector<std::shared_ptr<Object>> items;
 
     // Agent interface
 public:
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
-    bool IsStatic() override;
+    std::shared_ptr<Agent> Instantiate() const override;
 };
 
 REGISTER_AGENT(Chest)

@@ -10,10 +10,10 @@ struct SpawnInfo
     float probability = 1.0f;
 };
 
-class ItemSpawner : public Agent
+class ItemSpawner : public StaticAgent
 {
 public:
-    AGENT(ItemSpawner)
+    SAGENT(ItemSpawner)
 
     std::vector<std::vector<SpawnInfo>> items;
 
@@ -21,22 +21,26 @@ public:
 public:
 
     /*!
-    *\brief Агент, осуществляющий генерацию предметов при создании блоков-контейнеров
+    *\brief Create items in Chest agents while mapgen
+    *
+    *   spawn group format
+    *   [
+    *       [<string id>, <int low_quantity>, <int high_quantity>, <double probability>], //if first itemm pool does'n spawned
+    *       [<string id>, <int low_quantity>, <int high_quantity>, <double probability>], //moving to next
+    *       ...
+    *   ]
     *
     *   Example:
     *   {
     *       "type":"ItemSpawner",
     *       "items":[
-    *           [[<string id>, <int low_quantity>, <int high_quantity>, <double probability>]],
-    *           [["foo_block", 1, 10, 0.4]]
+    *           [["foo_block", 1, 10, 0.4], ["bar_block", 1, 10, 0.6]] //spawn group chance 100%
     *       ]
     *   }
     */
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
 
-    void onInit(ObjectHelper *par) override;
-
+    void onInit(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt) override;
 };
 
 REGISTER_AGENT(ItemSpawner)

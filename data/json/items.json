@@ -7,7 +7,7 @@
             {
                 "type":"ItemBase",
                 "sort":"meele",
-                "name":"заостренная палка",
+                "name":"заостренная палка"
             },{
                 "type":"Disassemble",
                 "components":[

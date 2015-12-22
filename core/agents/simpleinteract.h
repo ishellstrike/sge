@@ -2,17 +2,14 @@
 #define SIMPLEINTERACT_H
 #include "core/agent.h"
 
-class SimpleInteract : public Agent
+class SimpleInteract : public StaticAgent
 {
 public:
-    AGENT(SimpleInteract)
+    SAGENT(SimpleInteract)
 
     // Agent interface
 public:
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
-
-    bool IsStatic() override;
 
     std::string afterid;
 };

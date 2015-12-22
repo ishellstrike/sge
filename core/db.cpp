@@ -15,9 +15,9 @@ std::shared_ptr<Object> DB::Create(const std::string &id)
     if(t == data.end())
     {
         LOG(error) << "id \"" << id << "\" not found in db";
-        return data["air"]->Instantiate();
+        return data["air"]->Instantiate({0,0,0}, GameTimer());
     }
-    return data[id]->Instantiate();
+    return data[id]->Instantiate({0,0,0}, GameTimer());
 }
 
 const ObjectStatic *DB::Get(const std::string &id)
@@ -57,8 +57,9 @@ void DB::Load()
             fs.close();
             all = ss.str();
 
+            LOG(trace) << "---------------";
             LOG(trace) << "parse " << file;
-            LOG(trace) << "============";
+            LOG(trace) << "---------------";
             rapidjson::Document d;
             d.Parse<0>(all.c_str());
             if(d.HasParseError())
@@ -163,7 +164,7 @@ void DB::Load()
                                         }
 
                                         b->PushAgent(c);
-                                        c->onLoad( b.get() );
+                                        c->onLoad( b.get(), {0,0,0}, GameTimer() );
                                     }
                                     else
                                         LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";

@@ -87,6 +87,20 @@ bool Level::DeltaEntity(Object &o, const glm::vec3 &delta, bool wait )
     if( !s )
         return false;
 
+    if(int(pos.x) != int(new_pos.x) ||
+       int(pos.y) != int(new_pos.y) ||
+       int(pos.z) != int(new_pos.z))
+    {
+        if(Object *o = GetObjectByPos(pos))
+        {
+            o->onLeave(pos, GameTimer());
+        }
+        if(Object *o = GetObjectByPos(new_pos))
+        {
+            o->onEnter(new_pos, GameTimer());
+        }
+    }
+
     int sec_x = new_pos.x < 0 ? (int(new_pos.x) + 1) / RX - 1 : int(new_pos.x) / RX;
     int sec_y = new_pos.y < 0 ? (int(new_pos.y) + 1) / RY - 1 : int(new_pos.y) / RY;
     auto sec_pos = new_pos - glm::vec3( sec_x*RX, sec_y*RY, 0 );

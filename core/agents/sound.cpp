@@ -1,7 +1,8 @@
 #include "sound.h"
 
-Sound::Sound()
+
+
+void Sound::Deserialize(rapidjson::Value &val)
 {
 
 }
-

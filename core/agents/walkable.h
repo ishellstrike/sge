@@ -2,17 +2,14 @@
 #define WALKABLE_H
 #include "core/agent.h"
 
-class Walkable : public Agent
+class Walkable : public StaticAgent
 {
 public:
-    AGENT(Walkable)
+    SAGENT(Walkable)
 
     // Agent interface
 public:
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
-
-    bool IsStatic() override;
 
     float cost = 1;
 };

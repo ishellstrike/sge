@@ -26,4 +26,10 @@ GameTimer::~GameTimer()
 
 }
 
+std::ostream& operator <<(std::ostream& os, const GameTimer& dt)
+{
+    os << "{cur: " << dt.current << ", delta: " << dt.elapsed << "}";
+    return os;
+}
+
 

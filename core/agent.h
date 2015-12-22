@@ -9,18 +9,29 @@
 #include <string>
 #include "core/serialize.h"
 #include <boost/noncopyable.hpp>
+#include "gametimer.h"
 
 class ObjectHelper;
 using namespace boost::signals2;
 
-#define AGENT(type)                    \
-type() :                               \
-    Agent(Agent::TidFor<type>())       \
-{                                      \
-}                                      \
-virtual ~type(){}                      \
-type(const type&) = delete;            \
-type& operator=(const type&) = delete; \
+#define DAGENT(type)                     \
+type() :                                 \
+    DynamicAgent(Agent::TidFor<type>())  \
+{                                        \
+}                                        \
+virtual ~type(){}                        \
+type(const type&) = delete;              \
+type& operator=(const type&) = delete;   \
+virtual std::string Typename() { return #type; }
+
+#define SAGENT(type)                     \
+type() :                                 \
+    StaticAgent(Agent::TidFor<type>())   \
+{                                        \
+}                                        \
+virtual ~type(){}                        \
+type(const type&) = delete;              \
+type& operator=(const type&) = delete;   \
 virtual std::string Typename() { return #type; }
 
 #define REGISTER_AGENT(ctype)                                               \
@@ -41,7 +52,6 @@ class Agent
     }
 
 public:
-    Agent();
     Agent(int __id);
 
     template <typename T_>
@@ -51,19 +61,39 @@ public:
         return result;
     }
 
-    virtual bool IsStatic();
+    virtual bool IsStatic() const = 0;
 
     Tid GetTid();
     virtual std::string Typename() = 0;
 
     virtual void Deserialize(rapidjson::Value &val) = 0;
-    virtual std::shared_ptr<Agent> Instantiate() = 0;
+    virtual std::shared_ptr<Agent> Instantiate() const = 0;
 
-    virtual void onLoad(ObjectHelper *par);
-    virtual void onInit(ObjectHelper *par);
-    virtual void onUpdate(ObjectHelper *par);
-    virtual void onDraw(ObjectHelper *par);
-    virtual void onDestroy(ObjectHelper *par);
+    virtual void    onLoad(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void    onInit(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+
+    virtual void  onUpdate(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void    onDraw(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+
+    virtual void onDestroy(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+
+    virtual void   onEnter(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void   onLeave(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+};
+
+class DynamicAgent : public Agent
+{
+public:
+    DynamicAgent(int __id) : Agent(__id) {}
+    virtual bool IsStatic() const override final;
+};
+
+class StaticAgent : public Agent
+{
+public:
+    StaticAgent(int __id) : Agent(__id) {}
+    virtual bool IsStatic() const override final;
+    virtual std::shared_ptr<Agent> Instantiate() const override final;
 };
 
 struct AgentFactory : public boost::noncopyable

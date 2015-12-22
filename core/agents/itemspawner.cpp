@@ -36,13 +36,7 @@ void ItemSpawner::Deserialize(rapidjson::Value &val)
     else throw;
 }
 
-std::shared_ptr<Agent> ItemSpawner::Instantiate()
-{
-    ItemSpawner *i = new ItemSpawner();
-    return std::unique_ptr<ItemSpawner>(i);
-}
-
-void ItemSpawner::onInit(ObjectHelper *par)
+void ItemSpawner::onInit(ObjectHelper *par, const glm::vec3 &, const GameTimer &)
 {
     auto ch = par->GetAgent<Chest>();
     if(ch)
@@ -74,8 +68,8 @@ void ItemSpawner::onInit(ObjectHelper *par)
                                     auto item = DB::Create(oid);
                                     ch->items.push_back(item);
                                 }
-                                tagged = true;
                             }
+                            tagged = true;
                         }
                     }
                     if(!tagged)

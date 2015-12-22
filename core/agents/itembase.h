@@ -5,10 +5,10 @@
 #include "core/agent.h"
 #include "core/object.h"
 
-class ItemBase : public Agent
+class ItemBase : public StaticAgent
 {
 public:
-    AGENT(ItemBase)
+    SAGENT(ItemBase)
 
     // Agent interface
 public:
@@ -24,8 +24,6 @@ public:
     *   }
     */
     void Deserialize(rapidjson::Value &val) override;
-    std::shared_ptr<Agent> Instantiate() override;
-    bool IsStatic() override;
 
     int volume, weight;
     std::string sort;

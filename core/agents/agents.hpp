@@ -12,6 +12,8 @@
 #include "walkable.h"
 #include "simpleinteract.h"
 #include "transparent.h"
+#include "sound.h"
+#include "passsound.h"
 
 #endif // AGENTS_HPP
 

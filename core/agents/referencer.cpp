@@ -6,17 +6,7 @@ void Referencer::Deserialize(rapidjson::Value &val)
     DESERIALIZE(NVP(ref));
 }
 
-std::shared_ptr<Agent> Referencer::Instantiate()
-{
-    return std::make_shared<Referencer>();
-}
-
-bool Referencer::IsStatic()
-{
-    return true;
-}
-
-void Referencer::onLoad(ObjectHelper *par)
+void Referencer::onLoad(ObjectHelper *par, const glm::vec3 &, const GameTimer &)
 {
     const ObjectStatic *os = DB::Get("some");
     if(!os)
