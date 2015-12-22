@@ -80,7 +80,7 @@ void DrawShadowForBlock(SpriteBatch &sb, const glm::vec3 &per, const glm::vec2 &
 }
 
 auto atlas_draw = [&](int x, int y, const Object &b, SpriteBatch &sb){
-    const ObjectStaticHelper &o = *b.base;
+    const ObjectStatic &o = *b.base;
     if(o.id == "air" || o.tex.size() == 0)
         return;
 

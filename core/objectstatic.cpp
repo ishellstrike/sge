@@ -6,20 +6,12 @@ ObjectStatic::ObjectStatic(const std::string &__id)
     id = __id;
 }
 
-bool ObjectStatic::isStatic()
-{
-    return is_static;
-}
-
 std::unique_ptr<Object> ObjectStatic::Instantiate(const glm::vec3 &pos, const GameTimer &gt)
 {
     Object *o = new Object(this);
 
     if(tex.size() > 0)
         o->otex = rand()%tex.size();
-
-    if(is_static)
-        return std::unique_ptr<Object>(o);
 
     if(agents)
     {
@@ -37,7 +29,7 @@ std::unique_ptr<Object> ObjectStatic::Instantiate(const glm::vec3 &pos, const Ga
     return std::unique_ptr<Object>(o);
 }
 
-void ObjectStatic::onInit(ObjectHelper *o, const glm::vec3 &pos, const GameTimer &gt)
+void ObjectStatic::onInit(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -45,7 +37,7 @@ void ObjectStatic::onInit(ObjectHelper *o, const glm::vec3 &pos, const GameTimer
                 a->onInit(o, pos, gt);
 }
 
-void ObjectStatic::onUpdate(ObjectHelper *o, const glm::vec3 &pos, const GameTimer &gt)
+void ObjectStatic::onUpdate(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -53,7 +45,7 @@ void ObjectStatic::onUpdate(ObjectHelper *o, const glm::vec3 &pos, const GameTim
                 a->onUpdate(o, pos, gt);
 }
 
-void ObjectStatic::onDraw(ObjectHelper *o, const glm::vec3 &pos, const GameTimer &gt)
+void ObjectStatic::onDraw(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -61,7 +53,7 @@ void ObjectStatic::onDraw(ObjectHelper *o, const glm::vec3 &pos, const GameTimer
                 a->onDraw(o, pos, gt);
 }
 
-void ObjectStatic::onDestroy(ObjectHelper *o, const glm::vec3 &pos, const GameTimer &gt)
+void ObjectStatic::onDestroy(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -69,7 +61,7 @@ void ObjectStatic::onDestroy(ObjectHelper *o, const glm::vec3 &pos, const GameTi
                 a->onDestroy(o, pos, gt);
 }
 
-void ObjectStatic::onEnter(ObjectHelper *o, const glm::vec3 &pos, const GameTimer &gt)
+void ObjectStatic::onEnter(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -77,7 +69,7 @@ void ObjectStatic::onEnter(ObjectHelper *o, const glm::vec3 &pos, const GameTime
                 a->onEnter(o, pos, gt);
 }
 
-void ObjectStatic::onLeave(ObjectHelper *o, const glm::vec3 &pos, const GameTimer &gt)
+void ObjectStatic::onLeave(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)

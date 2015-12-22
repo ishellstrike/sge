@@ -11,37 +11,37 @@ Tid Agent::GetTid()
     return id;
 }
 
-void Agent::onLoad(ObjectHelper *, const glm::vec3 &, const GameTimer &)
+void Agent::onLoad(ObjectBase *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onInit(ObjectHelper *, const glm::vec3 &, const GameTimer &)
+void Agent::onInit(ObjectBase *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onUpdate(ObjectHelper *, const glm::vec3 &, const GameTimer &)
+void Agent::onUpdate(ObjectBase *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onDraw(ObjectHelper *, const glm::vec3 &, const GameTimer &)
+void Agent::onDraw(ObjectBase *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onDestroy(ObjectHelper *, const glm::vec3 &, const GameTimer &)
+void Agent::onDestroy(ObjectBase *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onEnter(ObjectHelper *, const glm::vec3 &, const GameTimer &)
+void Agent::onEnter(ObjectBase *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onLeave(ObjectHelper *, const glm::vec3 &, const GameTimer &)
+void Agent::onLeave(ObjectBase *, const glm::vec3 &, const GameTimer &)
 {
 
 }

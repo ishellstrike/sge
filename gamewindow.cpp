@@ -202,6 +202,8 @@ bool GameWindow::BaseInit()
     std::thread th(clie);
     th.detach();
 
+    Sqvm::instance();
+
     hero = DB::Create( "hero" );
     level.AddEntity( hero, true );
 

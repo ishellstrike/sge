@@ -14,6 +14,7 @@
 #include "transparent.h"
 #include "sound.h"
 #include "passsound.h"
+#include "script.h"
 
 #endif // AGENTS_HPP
 

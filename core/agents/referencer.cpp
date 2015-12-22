@@ -6,7 +6,7 @@ void Referencer::Deserialize(rapidjson::Value &val)
     DESERIALIZE(NVP(ref));
 }
 
-void Referencer::onLoad(ObjectHelper *par, const glm::vec3 &, const GameTimer &)
+void Referencer::onLoad(ObjectBase *par, const glm::vec3 &, const GameTimer &)
 {
     const ObjectStatic *os = DB::Get("some");
     if(!os)

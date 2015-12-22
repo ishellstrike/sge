@@ -110,15 +110,6 @@ void DB::Load()
                         auto b = std::unique_ptr<ObjectStatic>(new ObjectStatic(id));
                         b->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
 
-                        if(type == "item")
-                            b->type = ObjectItem;
-                        else if(type == "creature")
-                            b->type = ObjectCreature;
-                        else if(type == "creature")
-                            b->type = ObjectBlock;
-                        else
-                            b->type = ObjectSpecial;
-
                         if(val.HasMember("tex"))
                         {
                             rapidjson::Value &ar = val["tex"];
@@ -174,12 +165,7 @@ void DB::Load()
                         }
 
                         if(b->agents->empty())
-                        {
                             b->agents.release();
-                            b->is_static = true;
-                        }
-                        else
-                            b->is_static = false;
 
                         data[id] = std::move(b);
                         loaded ++;

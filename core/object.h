@@ -5,7 +5,7 @@
 
 class ObjectStatic;
 
-class Object : public ObjectHelper
+class Object : public ObjectBase
 {
 public:
     Object(ObjectStatic *base);

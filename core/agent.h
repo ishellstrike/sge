@@ -11,7 +11,7 @@
 #include <boost/noncopyable.hpp>
 #include "gametimer.h"
 
-class ObjectHelper;
+class ObjectBase;
 using namespace boost::signals2;
 
 #define DAGENT(type)                     \
@@ -42,7 +42,7 @@ RegisterElement<ctype> RegisterElement##ctype(AgentFactory::instance(), #ctype);
 
 class Agent
 {
-    friend class ObjectHelper;
+    friend class ObjectBase;
     Tid id;
 
     static Tid NextTid()
@@ -69,16 +69,16 @@ public:
     virtual void Deserialize(rapidjson::Value &val) = 0;
     virtual std::shared_ptr<Agent> Instantiate() const = 0;
 
-    virtual void    onLoad(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void    onInit(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void    onLoad(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void    onInit(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
 
-    virtual void  onUpdate(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void    onDraw(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void  onUpdate(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void    onDraw(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
 
-    virtual void onDestroy(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void onDestroy(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
 
-    virtual void   onEnter(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void   onLeave(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void   onEnter(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void   onLeave(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
 };
 
 class DynamicAgent : public Agent

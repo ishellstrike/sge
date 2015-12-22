@@ -91,7 +91,8 @@ SOURCES += \
     core/agents/simpleinteract.cpp \
     core/agents/transparent.cpp \
     core/agents/passsound.cpp \
-    core/agents/sound.cpp
+    core/agents/sound.cpp \
+    core/agents/script.cpp
 
 VERSION = 0.1.0
 
@@ -101,10 +102,10 @@ win32:LIBS += \
 -lopengl32 -lglew32 -lglfw3dll -lfreetype
 
 CONFIG(debug, debug|release) {
-    LIBS += -llibboost_log-vc120-mt-gd-1_59
+    LIBS += -llibboost_log-vc120-mt-gd-1_59 -lsquirreld -lsqstdlibd
 }
 else {
-    LIBS += -llibboost_log-vc120-mt-1_59
+    LIBS += -llibboost_log-vc120-mt-1_59 -lsquirrel -lsqstdlib
 }
 
 unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
@@ -223,7 +224,8 @@ HEADERS += \
     core/agents/simpleinteract.h \
     core/agents/transparent.h \
     core/agents/passsound.h \
-    core/agents/sound.h
+    core/agents/sound.h \
+    core/agents/script.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

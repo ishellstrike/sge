@@ -7,24 +7,7 @@
 
 typedef std::vector<std::shared_ptr<Agent>> AgentContainer;
 
-enum ObjectType
-{
-    ObjectError,
-    ObjectItem,
-    ObjectBlock,
-    ObjectCreature,
-    ObjectSpecial
-};
-
-class ObjectStaticHelper
-{
-public:
-    Id id;
-    std::vector<Tex> tex;
-    ObjectType type;
-};
-
-class ObjectHelper
+class ObjectBase
 {
 public:
     std::unique_ptr<AgentContainer> agents;

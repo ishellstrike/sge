@@ -19,7 +19,7 @@ public:
     *   }
     */
     void Deserialize(rapidjson::Value &val) override;
-    void onLoad(ObjectHelper *par, const glm::vec3 &pos, const GameTimer &gt) override;
+    void onLoad(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt) override;
 
     std::string ref;
 };
