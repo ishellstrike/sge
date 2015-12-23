@@ -21,10 +21,8 @@ typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
 SpriteBatch::SpriteBatch()
 {
-    index = new GLushort[SIZE*6];
-    uv = new glm::vec2[SIZE*4];
-    pos = new glm::vec3[SIZE*4];
-    col = new glm::vec4[SIZE*4];
+    vertices.resize(SIZE*4);
+    index.resize(SIZE*6);
 
     basic_program = Resources::instance()->Get<BasicJargShader>("basic");
     color_program = Resources::instance()->Get<BasicJargShader>("color");
@@ -34,7 +32,25 @@ SpriteBatch::SpriteBatch()
 
     glUseProgram(0);
 
-    glGenBuffers(4, m_vbo);
+    glGenBuffers(2, m_vbo);
+    //glGenVertexArrays(1, &m_vao);
+    //glBindVertexArray(m_vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vtpc)*SIZE*4, nullptr, GL_STREAM_DRAW);
+
+    glEnableVertexAttribArray(p_loc);
+    glEnableVertexAttribArray(c_loc);
+    glEnableVertexAttribArray(uv_loc);
+
+    glVertexAttribPointer(p_loc, 3, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, pos)));
+    glVertexAttribPointer(uv_loc, 2, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, uv)));
+    glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*SIZE*6, nullptr, GL_STREAM_DRAW);
+
+    //glBindVertexArray(0);
 
     p_loc = 0;
 
@@ -47,12 +63,7 @@ SpriteBatch::SpriteBatch()
 
 SpriteBatch::~SpriteBatch()
 {
-    delete[] index;
-    delete[] uv;
-    delete[] pos;
-    delete[] col;
-
-    glDeleteBuffers(4, m_vbo);
+    glDeleteBuffers(2, m_vbo);
 }
 
 void SpriteBatch::setUniform(const glm::mat4 &uni)
@@ -182,22 +193,22 @@ void SpriteBatch::drawRect(const glm::vec2 &loc, const glm::vec2 &size, const gl
         current_program = color_program;
         current_program->Use();
     }
-    pos[cur*4]     = glm::vec3(loc.x,          loc.y,          0);
-    pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y,          0);
-    pos[cur*4 + 2] = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
-    pos[cur*4 + 3] = glm::vec3(loc.x,          loc.y + size.y, 0);
+    vertices[cur*4    ].pos = glm::vec3(loc.x,          loc.y,          0);
+    vertices[cur*4 + 1].pos = glm::vec3(loc.x + size.x, loc.y,          0);
+    vertices[cur*4 + 2].pos = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
+    vertices[cur*4 + 3].pos = glm::vec3(loc.x,          loc.y + size.y, 0);
 
-    col[cur*4]     = _col;
-    col[cur*4 + 1] = _col;
-    col[cur*4 + 2] = _col;
-    col[cur*4 + 3] = _col;
+    vertices[cur*4    ].col = _col;
+    vertices[cur*4 + 1].col = _col;
+    vertices[cur*4 + 2].col = _col;
+    vertices[cur*4 + 3].col = _col;
 
-    uv[cur*4]     = glm::vec2(0, 0);
-    uv[cur*4 + 1] = glm::vec2(1, 0);
-    uv[cur*4 + 2] = glm::vec2(1, 1);
-    uv[cur*4 + 3] = glm::vec2(0, 1);
+    vertices[cur*4    ].uv = glm::vec2(0, 0);
+    vertices[cur*4 + 1].uv = glm::vec2(1, 0);
+    vertices[cur*4 + 2].uv = glm::vec2(1, 1);
+    vertices[cur*4 + 3].uv = glm::vec2(0, 1);
 
-    index[cur*6]     = cur*4;
+    index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
     index[cur*6 + 2] = cur*4 + 3;
     index[cur*6 + 3] = cur*4 + 1;
@@ -224,22 +235,22 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, 
     if(cur >= SIZE - 1)
         render();
 
-    pos[cur*4]     = glm::vec3(loc.x + inf.bearing.x,                   loc.y - inf.bearing.y, 0);
-    pos[cur*4 + 1] = glm::vec3(loc.x + inf.bearing.x + inf.size.x*FDIM, loc.y - inf.bearing.y, 0);
-    pos[cur*4 + 2] = glm::vec3(loc.x + inf.bearing.x + inf.size.x*FDIM, loc.y - inf.bearing.y + inf.size.y*FDIM, 0);
-    pos[cur*4 + 3] = glm::vec3(loc.x + inf.bearing.x,                   loc.y - inf.bearing.y + inf.size.y*FDIM, 0);
+    vertices[cur*4    ].pos = glm::vec3(loc.x + inf.bearing.x,                   loc.y - inf.bearing.y, 0);
+    vertices[cur*4 + 1].pos = glm::vec3(loc.x + inf.bearing.x + inf.size.x*FDIM, loc.y - inf.bearing.y, 0);
+    vertices[cur*4 + 2].pos = glm::vec3(loc.x + inf.bearing.x + inf.size.x*FDIM, loc.y - inf.bearing.y + inf.size.y*FDIM, 0);
+    vertices[cur*4 + 3].pos = glm::vec3(loc.x + inf.bearing.x,                   loc.y - inf.bearing.y + inf.size.y*FDIM, 0);
 
-    col[cur*4]     = color;
-    col[cur*4 + 1] = color;
-    col[cur*4 + 2] = color;
-    col[cur*4 + 3] = color;
+    vertices[cur*4    ].col = color;
+    vertices[cur*4 + 1].col = color;
+    vertices[cur*4 + 2].col = color;
+    vertices[cur*4 + 3].col = color;
 
-    uv[cur*4 + 0]  = glm::vec2(inf.pos.x,              inf.pos.y);
-    uv[cur*4 + 1]  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y);
-    uv[cur*4 + 2]  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y + inf.size.y);
-    uv[cur*4 + 3]  = glm::vec2(inf.pos.x,              inf.pos.y + inf.size.y);
+    vertices[cur*4 + 0].uv  = glm::vec2(inf.pos.x,              inf.pos.y);
+    vertices[cur*4 + 1].uv  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y);
+    vertices[cur*4 + 2].uv  = glm::vec2(inf.pos.x + inf.size.x, inf.pos.y + inf.size.y);
+    vertices[cur*4 + 3].uv  = glm::vec2(inf.pos.x,              inf.pos.y + inf.size.y);
 
-    index[cur*6]     = cur*4;
+    index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
     index[cur*6 + 2] = cur*4 + 3;
     index[cur*6 + 3] = cur*4 + 1;
@@ -265,22 +276,22 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint t
     if(cur >= SIZE - 1)
         render();
 
-    pos[cur*4]     = glm::vec3(loc.x,          loc.y,          0);
-    pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y,          0);
-    pos[cur*4 + 2] = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
-    pos[cur*4 + 3] = glm::vec3(loc.x,          loc.y + size.y, 0);
+    vertices[cur*4    ].pos = glm::vec3(loc.x,          loc.y,          0);
+    vertices[cur*4 + 1].pos = glm::vec3(loc.x + size.x, loc.y,          0);
+    vertices[cur*4 + 2].pos = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
+    vertices[cur*4 + 3].pos = glm::vec3(loc.x,          loc.y + size.y, 0);
 
-    col[cur*4]     = col_;
-    col[cur*4 + 1] = col_;
-    col[cur*4 + 2] = col_;
-    col[cur*4 + 3] = col_;
+    vertices[cur*4    ].col = col_;
+    vertices[cur*4 + 1].col = col_;
+    vertices[cur*4 + 2].col = col_;
+    vertices[cur*4 + 3].col = col_;
 
-    uv[cur*4]      = double_uv.xy();
-    uv[cur*4 + 1]  = double_uv.zy();
-    uv[cur*4 + 2]  = double_uv.zw();
-    uv[cur*4 + 3]  = double_uv.xw();
+    vertices[cur*4    ].uv  = double_uv.xy();
+    vertices[cur*4 + 1].uv  = double_uv.zy();
+    vertices[cur*4 + 2].uv  = double_uv.zw();
+    vertices[cur*4 + 3].uv  = double_uv.xw();
 
-    index[cur*6]     = cur*4;
+    index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
     index[cur*6 + 2] = cur*4 + 3;
     index[cur*6 + 3] = cur*4 + 1;
@@ -301,15 +312,15 @@ void SpriteBatch::drawTriangle(const glm::vec2 &loc, const glm::vec2 &loc2, cons
     if(cur >= SIZE - 1)
         render();
 
-    pos[cur*4]     = glm::vec3(loc.x,  loc.y, 0);
-    pos[cur*4 + 1] = glm::vec3(loc2.x, loc2.y, 0);
-    pos[cur*4 + 2] = glm::vec3(loc3.x, loc3.y, 0);
+    vertices[cur*4    ].pos = glm::vec3(loc.x,  loc.y, 0);
+    vertices[cur*4 + 1].pos = glm::vec3(loc2.x, loc2.y, 0);
+    vertices[cur*4 + 2].pos = glm::vec3(loc3.x, loc3.y, 0);
 
-    col[cur*4]     = col_;
-    col[cur*4 + 1] = col_;
-    col[cur*4 + 2] = col_;
+    vertices[cur*4    ].col = col_;
+    vertices[cur*4 + 1].col = col_;
+    vertices[cur*4 + 2].col = col_;
 
-    index[cur*6]     = cur*4;
+    index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
     index[cur*6 + 2] = cur*4 + 2;
     index[cur*6 + 3] = cur*4 + 2;
@@ -340,15 +351,15 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
     if(cur >= SIZE - 1)
         render();
 
-    pos[cur*4]     = glm::vec3(loc.x,          loc.y,          0);
-    pos[cur*4 + 1] = glm::vec3(loc.x + size.x, loc.y,          0);
-    pos[cur*4 + 2] = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
-    pos[cur*4 + 3] = glm::vec3(loc.x,          loc.y + size.y, 0);
+    vertices[cur*4    ].pos = glm::vec3(loc.x,          loc.y,          0);
+    vertices[cur*4 + 1].pos = glm::vec3(loc.x + size.x, loc.y,          0);
+    vertices[cur*4 + 2].pos = glm::vec3(loc.x + size.x, loc.y + size.y, 0);
+    vertices[cur*4 + 3].pos = glm::vec3(loc.x,          loc.y + size.y, 0);
 
-    col[cur*4]     = col_;
-    col[cur*4 + 1] = col_;
-    col[cur*4 + 2] = col_;
-    col[cur*4 + 3] = col_;
+    vertices[cur*4    ].col = col_;
+    vertices[cur*4 + 1].col = col_;
+    vertices[cur*4 + 2].col = col_;
+    vertices[cur*4 + 3].col = col_;
 
     float sx = 32 / (float) tex.tex->width;
     float sy = 32 / (float) tex.tex->height;
@@ -356,12 +367,12 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
     float x = (apos % inrow) * sx;
     float y = (apos / inrow) * sy;
 
-    uv[cur*4]      = glm::vec2(x,      y);
-    uv[cur*4 + 1]  = glm::vec2(x + sx, y);
-    uv[cur*4 + 2]  = glm::vec2(x + sx, y + sy);
-    uv[cur*4 + 3]  = glm::vec2(x,      y + sy);
+    vertices[cur*4    ].uv = glm::vec2(x,      y);
+    vertices[cur*4 + 1].uv  = glm::vec2(x + sx, y);
+    vertices[cur*4 + 2].uv  = glm::vec2(x + sx, y + sy);
+    vertices[cur*4 + 3].uv  = glm::vec2(x,      y + sy);
 
-    index[cur*6]     = cur*4;
+    index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
     index[cur*6 + 2] = cur*4 + 3;
     index[cur*6 + 3] = cur*4 + 1;
@@ -399,22 +410,22 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
         p[i] = p[i] * rot + s;
 
 
-    pos[cur*4]     = glm::vec3(p[0].x, p[0].y, 0);
-    pos[cur*4 + 1] = glm::vec3(p[1].x, p[1].y, 0);
-    pos[cur*4 + 2] = glm::vec3(p[2].x, p[2].y, 0);
-    pos[cur*4 + 3] = glm::vec3(p[3].x, p[3].y, 0);
+    vertices[cur*4    ].pos = glm::vec3(p[0].x, p[0].y, 0);
+    vertices[cur*4 + 1].pos = glm::vec3(p[1].x, p[1].y, 0);
+    vertices[cur*4 + 2].pos = glm::vec3(p[2].x, p[2].y, 0);
+    vertices[cur*4 + 3].pos = glm::vec3(p[3].x, p[3].y, 0);
 
-    col[cur*4]     = color;
-    col[cur*4 + 1] = color;
-    col[cur*4 + 2] = color;
-    col[cur*4 + 3] = color;
+    vertices[cur*4    ].col = color;
+    vertices[cur*4 + 1].col = color;
+    vertices[cur*4 + 2].col = color;
+    vertices[cur*4 + 3].col = color;
 
-    uv[cur*4]      = glm::vec2(0, 0);
-    uv[cur*4 + 1]  = glm::vec2(1, 0);
-    uv[cur*4 + 2]  = glm::vec2(1, 1);
-    uv[cur*4 + 3]  = glm::vec2(0, 1);
+    vertices[cur*4    ].uv  = glm::vec2(0, 0);
+    vertices[cur*4 + 1].uv  = glm::vec2(1, 0);
+    vertices[cur*4 + 2].uv  = glm::vec2(1, 1);
+    vertices[cur*4 + 3].uv  = glm::vec2(0, 1);
 
-    index[cur*6]     = cur*4;
+    index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
     index[cur*6 + 2] = cur*4 + 2;
     index[cur*6 + 3] = cur*4 + 1;
@@ -463,60 +474,60 @@ void SpriteBatch::drawAALine(const glm::vec2 &start, const glm::vec2 &end, float
     glm::vec4 tr = Color::Clear;
 
 
-    pos[cur*4]     = glm::vec3(p_left[0].x, p_left[0].y, 0);
-    pos[cur*4 + 1] = glm::vec3(p_left[1].x, p_left[1].y, 0);
-    pos[cur*4 + 2] = glm::vec3(p_left[2].x, p_left[2].y, 0);
-    pos[cur*4 + 3] = glm::vec3(p_left[3].x, p_left[3].y, 0);
+    vertices[cur*4     ].pos = glm::vec3(p_left[0].x, p_left[0].y, 0);
+    vertices[cur*4 + 1 ].pos = glm::vec3(p_left[1].x, p_left[1].y, 0);
+    vertices[cur*4 + 2 ].pos = glm::vec3(p_left[2].x, p_left[2].y, 0);
+    vertices[cur*4 + 3 ].pos = glm::vec3(p_left[3].x, p_left[3].y, 0);
 
-    pos[cur*4 + 4] = glm::vec3(p_center[0].x, p_center[0].y, 0);
-    pos[cur*4 + 5] = glm::vec3(p_center[1].x, p_center[1].y, 0);
-    pos[cur*4 + 6] = glm::vec3(p_center[2].x, p_center[2].y, 0);
-    pos[cur*4 + 7] = glm::vec3(p_center[3].x, p_center[3].y, 0);
+    vertices[cur*4 + 4 ].pos = glm::vec3(p_center[0].x, p_center[0].y, 0);
+    vertices[cur*4 + 5 ].pos = glm::vec3(p_center[1].x, p_center[1].y, 0);
+    vertices[cur*4 + 6 ].pos = glm::vec3(p_center[2].x, p_center[2].y, 0);
+    vertices[cur*4 + 7 ].pos = glm::vec3(p_center[3].x, p_center[3].y, 0);
 
-    pos[cur*4 + 8]  = glm::vec3(p_right[0].x, p_right[0].y, 0);
-    pos[cur*4 + 9]  = glm::vec3(p_right[1].x, p_right[1].y, 0);
-    pos[cur*4 + 10] = glm::vec3(p_right[2].x, p_right[2].y, 0);
-    pos[cur*4 + 11] = glm::vec3(p_right[3].x, p_right[3].y, 0);
+    vertices[cur*4 + 8 ].pos = glm::vec3(p_right[0].x, p_right[0].y, 0);
+    vertices[cur*4 + 9 ].pos = glm::vec3(p_right[1].x, p_right[1].y, 0);
+    vertices[cur*4 + 10].pos = glm::vec3(p_right[2].x, p_right[2].y, 0);
+    vertices[cur*4 + 11].pos = glm::vec3(p_right[3].x, p_right[3].y, 0);
 
-    col[cur*4 + 0] = tr;
-    col[cur*4 + 1] = tr;
-    col[cur*4 + 2] = color;
-    col[cur*4 + 3] = color;
+    vertices[cur*4 + 0 ].col = tr;
+    vertices[cur*4 + 1 ].col = tr;
+    vertices[cur*4 + 2 ].col = color;
+    vertices[cur*4 + 3 ].col = color;
 
-    col[cur*4 + 4] = color;
-    col[cur*4 + 5] = color;
-    col[cur*4 + 6] = color;
-    col[cur*4 + 7] = color;
+    vertices[cur*4 + 4 ].col = color;
+    vertices[cur*4 + 5 ].col = color;
+    vertices[cur*4 + 6 ].col = color;
+    vertices[cur*4 + 7 ].col = color;
 
-    col[cur*4 + 8]  = color;
-    col[cur*4 + 9]  = color;
-    col[cur*4 + 10] = tr;
-    col[cur*4 + 11] = tr;
+    vertices[cur*4 + 8 ].col = color;
+    vertices[cur*4 + 9 ].col = color;
+    vertices[cur*4 + 10].col = tr;
+    vertices[cur*4 + 11].col = tr;
 
-    uv[cur*4]      = glm::vec2(0, 0);
-    uv[cur*4 + 1]  = glm::vec2(1, 0);
-    uv[cur*4 + 2]  = glm::vec2(1, 1);
-    uv[cur*4 + 3]  = glm::vec2(0, 1);
-    uv[cur*4 + 4]  = glm::vec2(0, 0);
-    uv[cur*4 + 5]  = glm::vec2(1, 0);
-    uv[cur*4 + 6]  = glm::vec2(1, 1);
-    uv[cur*4 + 7]  = glm::vec2(0, 1);
-    uv[cur*4 + 8]  = glm::vec2(0, 0);
-    uv[cur*4 + 9]  = glm::vec2(1, 0);
-    uv[cur*4 + 10]  = glm::vec2(1, 1);
-    uv[cur*4 + 11]  = glm::vec2(0, 1);
+    vertices[cur*4     ].uv  = glm::vec2(0, 0);
+    vertices[cur*4 + 1 ].uv  = glm::vec2(1, 0);
+    vertices[cur*4 + 2 ].uv  = glm::vec2(1, 1);
+    vertices[cur*4 + 3 ].uv  = glm::vec2(0, 1);
+    vertices[cur*4 + 4 ].uv  = glm::vec2(0, 0);
+    vertices[cur*4 + 5 ].uv  = glm::vec2(1, 0);
+    vertices[cur*4 + 6 ].uv  = glm::vec2(1, 1);
+    vertices[cur*4 + 7 ].uv  = glm::vec2(0, 1);
+    vertices[cur*4 + 8 ].uv  = glm::vec2(0, 0);
+    vertices[cur*4 + 9 ].uv  = glm::vec2(1, 0);
+    vertices[cur*4 + 10].uv  = glm::vec2(1, 1);
+    vertices[cur*4 + 11].uv  = glm::vec2(0, 1);
 
-    index[cur*6]     = cur*4;
+    index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;
     index[cur*6 + 2] = cur*4 + 2;
     index[cur*6 + 3] = cur*4 + 1;
     index[cur*6 + 4] = cur*4 + 3;
     index[cur*6 + 5] = cur*4 + 2;
 
-    index[cur*6 + 6] = cur*4     + 4;
-    index[cur*6 + 7] = cur*4 + 1 + 4;
-    index[cur*6 + 8] = cur*4 + 2 + 4;
-    index[cur*6 + 9] = cur*4 + 1 + 4;
+    index[cur*6 + 6 ] = cur*4     + 4;
+    index[cur*6 + 7 ] = cur*4 + 1 + 4;
+    index[cur*6 + 8 ] = cur*4 + 2 + 4;
+    index[cur*6 + 9 ] = cur*4 + 1 + 4;
     index[cur*6 + 10] = cur*4 + 3 + 4;
     index[cur*6 + 11] = cur*4 + 2 + 4;
 
@@ -543,26 +554,23 @@ void SpriteBatch::render()
     glBindTexture(GL_TEXTURE_2D, current);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*cur*4, &pos[0], GL_STREAM_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vtpc)*cur*4, &vertices[0]);
+
     glEnableVertexAttribArray(p_loc);
-    glVertexAttribPointer(p_loc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*cur*4, &uv[0], GL_STREAM_DRAW);
-    glEnableVertexAttribArray(uv_loc);
-    glVertexAttribPointer(uv_loc, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo[2]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4)*cur*4, &col[0], GL_STREAM_DRAW);
     glEnableVertexAttribArray(c_loc);
-    glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(uv_loc);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*cur*6, &index[0], GL_STREAM_DRAW);
+    glVertexAttribPointer(p_loc, 3, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, pos)));
+    glVertexAttribPointer(uv_loc, 2, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, uv)));
+    glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(GLuint)*cur*6, &index[0]);
+
+    //glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, cur*6, GL_UNSIGNED_SHORT, NULL);
-    glBindTexture(GL_TEXTURE_2D, 0);
     glEnable(GL_CULL_FACE);
+    //glBindVertexArray(0);
 
     dc++;
     cur = 0;

@@ -18,6 +18,13 @@
 #include "textureatlas.h"
 
 #define SIZE 32000
+struct Vtpc
+{
+    glm::vec3 pos;
+    glm::vec2 uv;
+    glm::vec4 col;
+};
+
 class SpriteBatch
 {
 public:
@@ -63,16 +70,15 @@ private:
                                      current_program,
                                      defered_jarg_program;
     glm::vec2 scis_min, scis_size;
-    glm::vec3 *pos = nullptr;
-    glm::vec2 *uv = nullptr;
-    glm::vec4 *col = nullptr;
+    std::vector<Vtpc> vertices;
 
-    GLushort *index = nullptr;
+    std::vector<GLushort> index;
     unsigned int cur = 0;
 
     GLuint current = 0;
     GLuint normals = 0, outlines = 0;
-    GLuint m_vbo[4];
+    GLuint m_vbo[1];
+    GLuint m_vao;
 
     glm::mat4 uniform;
 

@@ -88,7 +88,7 @@ bool GameWindow::BaseInit()
         LOG(error) << "glfwInit error " << glfwErrorCode;
         return false;
     }
-    glfwWindowHint( GLFW_SAMPLES, 16 );
+    //glfwWindowHint( GLFW_SAMPLES, 16 );
     glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, MAJOR );
     glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, MINOR );
     glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE );
@@ -181,6 +181,7 @@ bool GameWindow::BaseInit()
 
     perf = new sge_perfomance(ws.get());
     linfo = new sge_level_debug_info(ws.get());
+    settings = new sge_settings_main(ws.get());
 
     Resize(RESX, RESY);
 
@@ -255,7 +256,7 @@ void GameWindow::BaseDraw()
 
     level.Draw(*batch, offset, hero->GetAgent<Entity>()->pos);
 
-    if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/32.f ) )
+    if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale ) )
     {
         //auto oo = DB::Create("foodpolka");
         //o = oo.get();
@@ -334,17 +335,17 @@ void GameWindow::BaseUpdate()
         level.DeltaEntity(*hero, {0.1f, 0, 0});
 
     level.Update();
-    offset = glm::vec2(hero->GetAgent<Entity>()->pos)*32.f - glm::vec2(Prefecences::Instance()->resolution)/2.f;
+    offset = glm::vec2(hero->GetAgent<Entity>()->pos)*sscale - glm::vec2(Prefecences::Instance()->resolution)/2.f;
     for(int i = -2; i < 3; i++)
         for(int j = -2; j < 3; j++)
             level.GetSectorByPos(hero->GetAgent<Entity>()->pos + glm::vec3(i*RX,j*RY,0));
 
     if(Mouse::isLeftJustPressed())
-        if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/32.f ) )
+        if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale ) )
         {
             if(SimpleInteract *si = o->base->GetAgent<SimpleInteract>())
             {
-                level.SetObjectAtPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/32.f, DB::Create(si->afterid));
+                level.SetObjectAtPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale, DB::Create(si->afterid));
             }
         }
 

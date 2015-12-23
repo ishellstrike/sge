@@ -72,7 +72,8 @@ void TextureAtlas::LoadAll()
 
     LOG(trace) << "texatlas load " << count << " pixmaps";
 
-    ap.tex->Load(atlas, false, false);
+    ap.tex->Load(atlas, true, true);
+    ap.tex->GenMipmap();
 
     LOG(trace) << "texatlas load texture";
 }

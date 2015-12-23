@@ -156,10 +156,10 @@ void Level::Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const
 {
     for(const auto &i : map)
     {
-        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(max.x < 0 || max.y < 0)
             continue;
-        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(min.x > RESX || min.y > RESY)
             continue;
         i.second->Draw(sb, off, hpos);
@@ -167,10 +167,10 @@ void Level::Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const
 
     for(const auto &i : map)
     {
-        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(max.x < 0 || max.y < 0)
             continue;
-        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(min.x > RESX || min.y > RESY)
             continue;
         i.second->DrawShadow(sb, off, hpos);
@@ -178,10 +178,10 @@ void Level::Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const
 
     for(const auto &i : map)
     {
-        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(max.x < 0 || max.y < 0)
             continue;
-        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(min.x > RESX || min.y > RESY)
             continue;
         i.second->DrawBlock(sb, off, hpos);
@@ -189,10 +189,10 @@ void Level::Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const
 
     for(const auto &i : map)
     {
-        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto max = (glm::vec2(i.second->offset) + glm::vec2(1.f, 1.f)) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(max.x < 0 || max.y < 0)
             continue;
-        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*32.f, RY*32.f) - off;
+        auto min = glm::vec2(i.second->offset) * glm::vec2(RX*sscale, RY*sscale) - off;
         if(min.x > RESX || min.y > RESY)
             continue;
         i.second->DrawEntities(sb, off, hpos);

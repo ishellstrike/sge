@@ -51,13 +51,6 @@ SOURCES += \
     random.cpp \
     sge_ui/image_box.cpp \
     sge_ui/dragnumbox.cpp \
-    sge_ui/connector.cpp \
-    sge_renderbox.cpp \
-    sge_texlab_rgb_to_luminance.cpp \
-    sge_texlab.cpp \
-    sge_texlab_float_selector.cpp \
-    sge_texlab_toolbox.cpp \
-    sge_texlab_lerp_by_map.cpp \
     helper.cpp \
     resources/umaterial.cpp \
     light.cpp \
@@ -92,7 +85,8 @@ SOURCES += \
     core/agents/transparent.cpp \
     core/agents/passsound.cpp \
     core/agents/sound.cpp \
-    core/agents/script.cpp
+    core/agents/script.cpp \
+    sge_settings_main.cpp
 
 VERSION = 0.1.0
 
@@ -169,14 +163,7 @@ HEADERS += \
     resources/random_noise.h \
     random.h \
     sge_ui/image_box.h \
-    sge_texture_lab.h \
     sge_ui/dragnumbox.h \
-    sge_ui/connector.h \
-    sge_texture_lab_float_selector.h \
-    sge_renderbox.h \
-    sge_texlab_rgb_to_luminance.h \
-    sge_texlab_toolbox.h \
-    sge_texlab_lerp_by_map.h \
     resources/umaterial.h \
     light.h \
     core/uniqueid.h \
@@ -225,7 +212,8 @@ HEADERS += \
     core/agents/transparent.h \
     core/agents/passsound.h \
     core/agents/sound.h \
-    core/agents/script.h
+    core/agents/script.h \
+    sge_settings_main.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

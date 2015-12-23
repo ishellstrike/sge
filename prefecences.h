@@ -15,6 +15,7 @@
 #define RESY Prefecences::Instance()->resolution.y
 #define RESX_float static_cast<float>(RESX)
 #define RESY_float static_cast<float>(RESY)
+#define sscale Prefecences::Instance()->scale_sprite
 
 class Prefecences
 {
@@ -23,6 +24,8 @@ protected:
     Prefecences() {}
 
 public:
+    float scale_sprite = 128;
+
     static Prefecences* Instance()
     {
         static auto m_instance = std::unique_ptr<Prefecences>(new Prefecences());

@@ -22,7 +22,7 @@
 #include "resources/resourcecontroller.h"
 #include "sge_perfomance.h"
 #include "sge_level_debug_info.h"
-#include "sge_texlab_toolbox.h"
+#include "sge_settings_main.h"
 #include "sge_ui/wins.h"
 #include "shader.h"
 #include "shader.h"
@@ -113,6 +113,7 @@ public:
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
     sge_level_debug_info *linfo;
+    sge_settings_main *settings;
     Level level;
     std::shared_ptr<Object> hero;
 

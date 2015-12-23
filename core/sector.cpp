@@ -22,8 +22,8 @@ void Sector::Update()
 
 std::array<glm::vec3, 4> GetAtBlockPoints(float xpos, float ypos, int resx, int resy)
 {
-   float vix = (32 - resx) / 2.0f;
-   float viy = (32 - resy) / 2.0f;
+   float vix = (sscale - resx) / 2.0f;
+   float viy = (sscale - resy) / 2.0f;
 
    auto p1 = glm::vec3(xpos + vix, ypos + vix, 0);
    auto p2 = glm::vec3(xpos + resx + vix, ypos + viy, 0);
@@ -35,9 +35,9 @@ std::array<glm::vec3, 4> GetAtBlockPoints(float xpos, float ypos, int resx, int 
 
 void DrawShadowForBlock(SpriteBatch &sb, const glm::vec3 &per, const glm::vec2 &off, float xpos, float ypos)
 {
-    std::array<glm::vec3, 4> po = GetAtBlockPoints(xpos, ypos, 32, 32);
+    std::array<glm::vec3, 4> po = GetAtBlockPoints(xpos, ypos, sscale, sscale);
 
-    auto car = glm::vec3(per.x * 32 - off.x, per.y * 32 - off.y, 0);
+    auto car = glm::vec3(per.x * sscale - off.x, per.y * sscale - off.y, 0);
 
     //лучи ко всем вершинам блока
     sge::ray r1(car, po[0] - car);
@@ -56,22 +56,22 @@ void DrawShadowForBlock(SpriteBatch &sb, const glm::vec3 &per, const glm::vec2 &
     {
         //left column
         spoints = car.y <= ypos ? std::array<int, 2>{1, 3}
-                                : car.y <= ypos + 32 ? std::array<int, 2>{0, 3}
-                                                     : std::array<int, 2>{0, 2};
+                                : car.y <= ypos + sscale ? std::array<int, 2>{0, 3}
+                                                         : std::array<int, 2>{0, 2};
     }
-    else if (car.x <= xpos + 32)
+    else if (car.x <= xpos + sscale)
     {
         //middle column
         spoints = car.y <= ypos ? std::array<int, 2>{1, 0}
-                                : car.y <= ypos + 32 ? std::array<int, 2>{0, 0}
-                                                     : std::array<int, 2>{3, 2};
+                                : car.y <= ypos + sscale ? std::array<int, 2>{0, 0}
+                                                         : std::array<int, 2>{3, 2};
     }
     else
     {
         //right column
         spoints = car.y <= ypos ? std::array<int, 2>{2, 0}
-                                : car.y <= ypos + 32 ? std::array<int, 2>{2, 1}
-                                                     : std::array<int, 2>{3, 1};
+                                : car.y <= ypos + sscale ? std::array<int, 2>{2, 1}
+                                                         : std::array<int, 2>{3, 1};
     }
 
     //Making shadow polys
@@ -87,7 +87,7 @@ auto atlas_draw = [&](int x, int y, const Object &b, SpriteBatch &sb){
     auto btex = b.otex;
     auto otex = o.tex[btex];
     auto t = TextureAtlas::refs[otex];
-    sb.drawQuadAtlas({x, y}, {32,32}, TextureAtlas::tex[t.x], t.y, Color::White);
+    sb.drawQuadAtlas({x, y}, {sscale, sscale}, TextureAtlas::tex[t.x], t.y, Color::White);
 };
 
 void Sector::DrawBlock(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const
@@ -95,11 +95,11 @@ void Sector::DrawBlock(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &
     for(int i = 0; i < RX; i++)
         for(int j = 0; j < RY; j++)
         {
-            int x = (i + offset.x*RX)*32 - off.x;
-            int y = (j + offset.y*RY)*32 - off.y;
+            int x = (i + offset.x*RX)*sscale - off.x;
+            int y = (j + offset.y*RY)*sscale - off.y;
             if(x > RESX || y > RESY)
                 continue;
-            if(x + 32 < 0 || y + 32 < 0)
+            if(x + sscale < 0 || y + sscale < 0)
                 continue;
             for(int k = 0; k < 1; k++)
             {
@@ -114,11 +114,11 @@ void Sector::DrawShadow(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 
     for(int i = 0; i < RX; i++)
         for(int j = 0; j < RY; j++)
         {
-            int x = (i + offset.x*RX)*32 - off.x;
-            int y = (j + offset.y*RY)*32 - off.y;
+            int x = (i + offset.x*RX)*sscale - off.x;
+            int y = (j + offset.y*RY)*sscale - off.y;
             if(x > RESX || y > RESY)
                 continue;
-            if(x + 32 < 0 || y + 32 < 0)
+            if(x + sscale < 0 || y + sscale < 0)
                 continue;
 
             for(int k = 0; k < 1; k++)
@@ -137,11 +137,11 @@ void Sector::Draw(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos)
     for(int i = 0; i < RX; i++)
         for(int j = 0; j < RY; j++)
         {
-            int x = (i + offset.x*RX)*32 - off.x;
-            int y = (j + offset.y*RY)*32 - off.y;
+            int x = (i + offset.x*RX)*sscale - off.x;
+            int y = (j + offset.y*RY)*sscale - off.y;
             if(x > RESX || y > RESY)
                 continue;
-            if(x + 32 < 0 || y + 32 < 0)
+            if(x + sscale < 0 || y + sscale < 0)
                 continue;
             for(int k = 0; k < 1; k++)
             {
@@ -157,7 +157,7 @@ void Sector::DrawEntities(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec
     {
         if(const Entity *e = a->GetAgent<Entity>())
         {
-            atlas_draw(e->pos.x*32.f - off.x - 16, e->pos.y*32.f - off.y -32, *a, sb);
+            atlas_draw(e->pos.x*sscale - off.x - 16, e->pos.y*sscale - off.y - sscale, *a, sb);
         }
     }
 }
