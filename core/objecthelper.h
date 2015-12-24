@@ -26,6 +26,19 @@ public:
     }
 
     template <typename T>
+    const T *GetAgent() const
+    {
+        if(agents)
+            for(const auto &a : *agents)
+            {
+                Agent &agent = *a;
+                if(agent.id == Agent::TidFor<T>())
+                    return static_cast<T*>(&agent);
+            }
+        return nullptr;
+    }
+
+    template <typename T>
     bool HasAgent()
     {
         if(agents)

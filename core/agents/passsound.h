@@ -27,9 +27,10 @@ public:
     */
     void Deserialize(rapidjson::Value &val) override;
     void onEnter(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt) override;
+    void onLoad(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
 
-    std::string ref;
-    Sound *low, *middle, *pass;
+    std::string ref_l, ref_m, ref_p;
+    const Sound *low, *middle, *pass;
 };
 
 REGISTER_AGENT(PassSound)

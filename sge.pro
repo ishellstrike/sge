@@ -86,7 +86,8 @@ SOURCES += \
     core/agents/passsound.cpp \
     core/agents/sound.cpp \
     core/agents/script.cpp \
-    sge_settings_main.cpp
+    sge_settings_main.cpp \
+    core/agents/pressureplate.cpp
 
 VERSION = 0.1.0
 
@@ -213,7 +214,8 @@ HEADERS += \
     core/agents/passsound.h \
     core/agents/sound.h \
     core/agents/script.h \
-    sge_settings_main.h
+    sge_settings_main.h \
+    core/agents/pressureplate.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

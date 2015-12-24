@@ -11,7 +11,7 @@ public:
 public:
     void Deserialize(rapidjson::Value &val) override;
 
-    std::string ref;
+    std::string name;
 };
 
 REGISTER_AGENT(Sound)

@@ -1,13 +1,40 @@
 #include "passsound.h"
-
+#include "core/db.h"
 
 void PassSound::Deserialize(rapidjson::Value &val)
 {
-
+    if(val.HasMember("sound"))
+    {
+        const rapidjson::Value &arr = val["sound"];
+        if(!arr.IsArray())
+            throw;
+        ref_l = arr.Begin()->GetString();
+        ref_m = arr[1].GetString();
+        ref_p = arr[2].GetString();
+    }
 }
 
 void PassSound::onEnter(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt)
 {
-    LOG(info) << "bush rustle";
+    if(low)
+        LOG(info) << low->name;
+    else
+        LOG(info) << "sound";
+}
+
+void PassSound::onLoad(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt)
+{
+    auto check = [&](const std::string &s)->const Sound*{
+        if(const ObjectStatic *os = DB::Get(s))
+        {
+            if(const Sound *o = os->GetAgent<Sound>())
+                return o;
+            return nullptr;
+        }
+    };
+
+    low = check(ref_l);
+    middle = check(ref_m);
+    pass = check(ref_m);
 }
 

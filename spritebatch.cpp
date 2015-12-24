@@ -48,7 +48,7 @@ SpriteBatch::SpriteBatch()
     glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*SIZE*6, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)*SIZE*6, nullptr, GL_STREAM_DRAW);
 
     //glBindVertexArray(0);
 
@@ -565,7 +565,7 @@ void SpriteBatch::render()
     glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(GLuint)*cur*6, &index[0]);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(GLshort)*cur*6, &index[0]);
 
     //glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, cur*6, GL_UNSIGNED_SHORT, NULL);

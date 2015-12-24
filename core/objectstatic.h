@@ -16,6 +16,7 @@ public:
 
     std::unique_ptr<Object> Instantiate(const glm::vec3 &pos, const GameTimer &gt);
 
+    void    onLoad();
     void    onInit(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
     void  onUpdate(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
     void    onDraw(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);

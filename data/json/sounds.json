@@ -6,7 +6,7 @@
         {
             "type":"Sound",
             "range":8,
-            "name":"шелест"
+            "name":"sound_rustle"
         }
 
     ]
@@ -18,7 +18,7 @@
         {
             "type":"Sound",
             "range":16,
-            "name":"треск"
+            "name":"sound_crackle"
         }
 
     ]

@@ -24,7 +24,7 @@ protected:
     Prefecences() {}
 
 public:
-    float scale_sprite = 128;
+    float scale_sprite = 32;
 
     static Prefecences* Instance()
     {

@@ -29,6 +29,13 @@ std::unique_ptr<Object> ObjectStatic::Instantiate(const glm::vec3 &pos, const Ga
     return std::unique_ptr<Object>(o);
 }
 
+void ObjectStatic::onLoad()
+{
+    if(agents)
+        for(const auto &a : *agents)
+                a->onLoad(this, {0,0,0}, GameTimer());
+}
+
 void ObjectStatic::onInit(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)

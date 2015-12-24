@@ -155,7 +155,6 @@ void DB::Load()
                                         }
 
                                         b->PushAgent(c);
-                                        c->onLoad( b.get(), {0,0,0}, GameTimer() );
                                     }
                                     else
                                         LOG(error) << "record \"" << id << "\" agent #" << a + 1 << " has no type";
@@ -174,7 +173,14 @@ void DB::Load()
             }
         }
     }
-    LOG(info) << loaded << " loaded";
+    LOG(info) << loaded << " loaded. Init all of them.";
+
+    for( auto &a : data )
+    {
+        a.second->onLoad();
+    }
+
+    LOG(info) << "Done.";
 }
 
 std::unordered_map<Id, std::unique_ptr<ObjectStatic>> DB::data;
