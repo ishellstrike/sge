@@ -1,0 +1,17 @@
+[
+{
+    "type":"zombie",
+    "tex":["hdzombie"],
+    "id":"zombie",
+    "agents": [
+        {
+            "type":"CreatureBase"
+        },
+        {
+            "type":"Tags",
+            "tags":["tag_basic_creature"]
+        }
+
+    ]
+}
+]

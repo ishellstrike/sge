@@ -48,7 +48,9 @@ void ItemSpawner::onInit(ObjectBase *par, const glm::vec3 &, const GameTimer &)
             {
                 if(prob < spawn_group_part.probability)
                 {
-                    int count = rand()%(spawn_group_part.high_quantity - spawn_group_part.low_quantity) + spawn_group_part.low_quantity;
+                    int count = spawn_group_part.high_quantity;
+                    if( spawn_group_part.high_quantity != spawn_group_part.low_quantity )
+                        count = rand()%(spawn_group_part.high_quantity - spawn_group_part.low_quantity) + spawn_group_part.low_quantity;
                     if(count == 0)
                         continue;
 
@@ -92,5 +94,6 @@ void ItemSpawner::onInit(ObjectBase *par, const glm::vec3 &, const GameTimer &)
                 prob += spawn_group_part.probability; //если не выпало, то увеличиваем шенс на значение вероятности предыдущего предмета
             }
         }
+        ch->Combine();
     }
 }

@@ -11,3 +11,8 @@ std::shared_ptr<Agent> Stacked::Instantiate() const
     return std::make_unique<Stacked>();
 }
 
+bool Stacked::Equals(Agent *o)
+{
+    return true;
+}
+

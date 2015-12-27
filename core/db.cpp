@@ -154,6 +154,16 @@ void DB::Load()
                                             }
                                         }
 
+                                        if( agenttype == "ItemBase" )
+                                        {
+                                            b->PushAgent(AgentFactory::instance().Create("Stacked"));
+                                        }
+
+                                        if( agenttype == "CreatureBase" )
+                                        {
+                                            b->PushAgent(AgentFactory::instance().Create("Entity"));
+                                        }
+
                                         b->PushAgent(c);
                                     }
                                     else

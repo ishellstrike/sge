@@ -14,6 +14,8 @@ public:
     ObjectStatic *base;
     int otex = 0;
 
+    bool Equals( Object *o );
+
     bool  isStatic();
 
     void    onInit(const glm::vec3 &pos, const GameTimer &gt);

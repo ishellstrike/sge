@@ -25,6 +25,18 @@ public:
         return nullptr;
     }
 
+    Agent *GetAgent(Tid type)
+    {
+        if(agents)
+            for(const auto &a : *agents)
+            {
+                Agent &agent = *a;
+                if(agent.id == type)
+                    return &agent;
+            }
+        return nullptr;
+    }
+
     template <typename T>
     const T *GetAgent() const
     {

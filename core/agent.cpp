@@ -6,6 +6,17 @@ Agent::Agent(int __id) :
 
 }
 
+bool Agent::Equals(Agent *o)
+{
+    if( o == this )
+        return true;
+    if(o)
+    {
+        return o->id == id;
+    }
+    return false;
+}
+
 Tid Agent::GetTid()
 {
     return id;

@@ -267,7 +267,10 @@ void GameWindow::BaseDraw()
             ss << "some" << std::endl;
             for( const std::shared_ptr<Object> &o : c->items )
             {
-                ss << o->base->id << std::endl;
+                ss << o->base->id;
+                if(auto st = o->GetAgent<Stacked>())
+                    ss << " x" << st->count;
+                ss << std::endl;
             }
 
             batch->drawText(ss.str(), {100,100}, f12.get(), Color::Red);

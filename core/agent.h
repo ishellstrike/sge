@@ -40,8 +40,11 @@ namespace                                                                   \
 RegisterElement<ctype> RegisterElement##ctype(AgentFactory::instance(), #ctype); \
 }
 
+class Object;
+
 class Agent
 {
+    friend class Object;
     friend class ObjectBase;
     Tid id;
 
@@ -62,6 +65,7 @@ public:
     }
 
     virtual bool IsStatic() const = 0;
+    virtual bool Equals( Agent *o );
 
     Tid GetTid();
     virtual std::string Typename() = 0;

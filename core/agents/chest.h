@@ -15,6 +15,8 @@ public:
 public:
     void Deserialize(rapidjson::Value &val) override;
     std::shared_ptr<Agent> Instantiate() const override;
+
+    void Combine();
 };
 
 REGISTER_AGENT(Chest)

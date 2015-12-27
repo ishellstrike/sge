@@ -12,6 +12,26 @@ std::unique_ptr<Object> Object::Instantiate()
     return nullptr;
 }
 
+bool Object::Equals(Object *o)
+{
+    if( o == this )
+        return true;
+
+    if(o && agents)
+    {
+        for( const std::shared_ptr<Agent> &a : *agents )
+        {
+            Agent *a2 = o->GetAgent( a->id );
+            if( !a2 || !a2->Equals( a.get() ) )
+                return false;
+        }
+    }
+    else
+        return false;
+
+    return true;
+}
+
 bool Object::isStatic()
 {
     return agents == nullptr;

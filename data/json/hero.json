@@ -5,7 +5,7 @@
   "id":"hero",
   "agents": [
     {
-      "type":"Entity"
+      "type":"CreatureBase"
     }
   ]
 }

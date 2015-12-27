@@ -12,7 +12,10 @@ public:
     void Deserialize(rapidjson::Value &val) override;
     std::shared_ptr<Agent> Instantiate() const override;
 
-    int count;
+    //not affect to equals (for correct item stacking)
+    virtual bool Equals( Agent *o ) override;
+
+    int count = 1;
 };
 
 REGISTER_AGENT(Stacked)

@@ -87,7 +87,9 @@ SOURCES += \
     core/agents/sound.cpp \
     core/agents/script.cpp \
     sge_settings_main.cpp \
-    core/agents/pressureplate.cpp
+    core/agents/pressureplate.cpp \
+    core/agents/onenter.cpp \
+    core/agents/creaturebase.cpp
 
 VERSION = 0.1.0
 
@@ -215,7 +217,9 @@ HEADERS += \
     core/agents/sound.h \
     core/agents/script.h \
     sge_settings_main.h \
-    core/agents/pressureplate.h
+    core/agents/pressureplate.h \
+    core/agents/onenter.h \
+    core/agents/creaturebase.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -453,4 +457,5 @@ DISTFILES += \
     data/textures/atlas/zombie.png \
     data/textures/atlas/zombie_corp.png \
     data/json/hero.json \
-    data/json/sounds.json
+    data/json/sounds.json \
+    data/json/creatures.json
