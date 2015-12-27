@@ -5,8 +5,37 @@
     "agents":[
         {
             "type":"Sound",
-            "range":8,
-            "name":"sound_rustle"
+            "near":3,
+            "far":8,
+            "name":"sound_rustle",
+            "filename":"rustle"
+        }
+
+    ]
+},
+{
+    "type":"sound",
+    "id":"sound_door",
+    "agents":[
+        {
+            "type":"Sound",
+            "near":5,
+            "far":12,
+            "name":"sound_door",
+            "filename":"door"
+        }
+
+    ]
+},{
+    "type":"sound",
+    "id":"sound_door_open",
+    "agents":[
+        {
+            "type":"Sound",
+            "near":3,
+            "far":8,
+            "name":"sound_door open",
+            "filename":"door_open"
         }
 
     ]
@@ -17,7 +46,8 @@
     "agents":[
         {
             "type":"Sound",
-            "range":16,
+            "near":3,
+            "far":16,
             "name":"sound_crackle"
         }
 

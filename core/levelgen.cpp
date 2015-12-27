@@ -1,5 +1,6 @@
 #include "levelgen.h"
-
+#include "core/agents/entity.h"
+#include "random.h"
 
 void Generate(Sector &s)
 {
@@ -22,6 +23,15 @@ void Generate(Sector &s)
         }
 
     s.PlaceScheme(DB::scheme_db["house1_room"][0], {0,0,0});
+
+    for(int i=0; i<3; ++i)
+    {
+        std::shared_ptr<Object> o = DB::Create("zombie");
+        o->GetAgent<Entity>()->pos = glm::vec3(s.offset.x*RX + random::next()*(RX-1),
+                                               s.offset.y*RY + random::next()*(RY-1),
+                                               0);
+        s.entities.push_back(o);
+    }
 
     s.RebuildMax();
 }

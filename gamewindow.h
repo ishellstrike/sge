@@ -42,7 +42,6 @@
 #include <thread>
 #include "core/level.h"
 
-
 #define MAJOR 2
 #define MINOR 1
 //#define NO_SCATT
@@ -116,6 +115,7 @@ public:
     sge_settings_main *settings;
     Level level;
     std::shared_ptr<Object> hero;
+    float update_pass = 0;
 
     static void Swap();
     void BlitGBuffer();

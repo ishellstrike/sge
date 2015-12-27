@@ -1,12 +1,13 @@
 [
 {
   "type":"hero",
-  "tex":["hdzombie"],
+  "tex":["car"],
   "id":"hero",
   "agents": [
     {
       "type":"CreatureBase"
     }
+
   ]
 }
 ]

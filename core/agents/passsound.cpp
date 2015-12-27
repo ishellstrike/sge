@@ -14,15 +14,16 @@ void PassSound::Deserialize(rapidjson::Value &val)
     }
 }
 
-void PassSound::onEnter(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt)
+void PassSound::onEnter(Object *par, Level *, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(low)
-        LOG(info) << low->name;
-    else
-        LOG(info) << "sound";
+    {
+        low->Move(pos);
+        low->Play();
+    }
 }
 
-void PassSound::onLoad(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt)
+void PassSound::onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer& gt)
 {
     auto check = [&](const std::string &s)->const Sound*{
         if(const ObjectStatic *os = DB::Get(s))

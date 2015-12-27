@@ -57,7 +57,8 @@
     "agents":[
       {
         "type":"SimpleInteract",
-        "afterid":"opened_door"
+        "afterid":"opened_door",
+        "sound":"sound_door_open"
       }
     ]
   },
@@ -104,7 +105,8 @@
     "agents":[
       {
         "type":"SimpleInteract",
-        "afterid":"door"
+        "afterid":"door",
+        "sound":"sound_door"
       },
       {
         "type":"Walkable"

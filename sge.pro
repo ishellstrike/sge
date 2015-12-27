@@ -89,14 +89,16 @@ SOURCES += \
     sge_settings_main.cpp \
     core/agents/pressureplate.cpp \
     core/agents/onenter.cpp \
-    core/agents/creaturebase.cpp
+    core/agents/creaturebase.cpp \
+    core/agents/wander.cpp \
+    remsnd.cpp
 
 VERSION = 0.1.0
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
 -L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype
+-lopengl32 -lglew32 -lglfw3dll -lfreetype -lOpenAL32 -llibogg -llibvorbisfile
 
 CONFIG(debug, debug|release) {
     LIBS += -llibboost_log-vc120-mt-gd-1_59 -lsquirreld -lsqstdlibd
@@ -219,7 +221,9 @@ HEADERS += \
     sge_settings_main.h \
     core/agents/pressureplate.h \
     core/agents/onenter.h \
-    core/agents/creaturebase.h
+    core/agents/creaturebase.h \
+    core/agents/wander.h \
+    remsnd.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

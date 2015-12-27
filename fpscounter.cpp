@@ -19,7 +19,7 @@ FPSCounter::~FPSCounter(void)
 {
 }
 
-void FPSCounter::Update(const GameTimer &gt)
+void FPSCounter::Update(const GameTimer& gt)
 {
     float frameTime = gt.elapsed;
 

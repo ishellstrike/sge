@@ -41,6 +41,7 @@ RegisterElement<ctype> RegisterElement##ctype(AgentFactory::instance(), #ctype);
 }
 
 class Object;
+class Level;
 
 class Agent
 {
@@ -70,19 +71,21 @@ public:
     Tid GetTid();
     virtual std::string Typename() = 0;
 
-    virtual void Deserialize(rapidjson::Value &val) = 0;
+    virtual void Deserialize(rapidjson::Value &val);
     virtual std::shared_ptr<Agent> Instantiate() const = 0;
 
-    virtual void    onLoad(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void    onInit(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void     onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void     onInit(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
-    virtual void  onUpdate(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void    onDraw(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void   onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void     onDraw(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
-    virtual void onDestroy(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void onInteract(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
-    virtual void   onEnter(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void   onLeave(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void  onDestroy(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+
+    virtual void    onEnter(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void    onLeave(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 };
 
 class DynamicAgent : public Agent

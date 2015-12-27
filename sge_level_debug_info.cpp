@@ -16,7 +16,7 @@ void sge_level_debug_info::Draw() const
     Win::Draw();
 }
 
-void sge_level_debug_info::Update(const GameTimer &gt, const MouseState &ms)
+void sge_level_debug_info::Update(const GameTimer& gt, const MouseState &ms)
 {
     Win::Update(gt, ms);
 }

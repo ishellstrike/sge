@@ -15,6 +15,8 @@
 #include "sound.h"
 #include "passsound.h"
 #include "script.h"
+#include "creaturebase.h"
+#include "wander.h"
 
 #endif // AGENTS_HPP
 

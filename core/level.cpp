@@ -36,6 +36,20 @@ bool Level::SetObjectAtPos(const glm::vec3 &pos, std::shared_ptr<Object> o)
     return nullptr;
 }
 
+void Level::KillFar(const glm::vec3 &pos, float dist)
+{
+    SectorMap::iterator iter = map.begin();
+    for(; iter != map.end(); ) {
+        glm::ivec2 off = iter->first;
+        glm::vec3 spos = glm::vec3(glm::vec2(off) * glm::vec2(RX, RY), 0);
+        if ( glm::distance(pos, spos) >= dist ) {
+                map.erase(iter++);
+        } else {
+                ++iter;
+        }
+    }
+}
+
 Sector *Level::GetSectorByPos(const glm::vec3 &p)
 {
     int x = p.x < 0 ? (int(p.x) + 1) / RX - 1 : int(p.x) / RX;
@@ -93,11 +107,11 @@ bool Level::DeltaEntity(Object &o, const glm::vec3 &delta, bool wait )
     {
         if(Object *o = GetObjectByPos(pos))
         {
-            o->onLeave(pos, GameTimer());
+            o->onLeave(this, pos, GameTimer());
         }
         if(Object *o = GetObjectByPos(new_pos))
         {
-            o->onEnter(new_pos, GameTimer());
+            o->onEnter(this, new_pos, GameTimer());
         }
     }
 
@@ -117,20 +131,23 @@ bool Level::DeltaEntity(Object &o, const glm::vec3 &delta, bool wait )
     return false;
 }
 
-void Level::Update()
+void Level::Update(GameTimer& gt)
 {
+    for(const auto &i : DB::sounds)
+    {
+        i->onUpdate(nullptr, this, {0,0,0}, gt);
+    }
+
     for(const auto &i : map)
     {
         Sector &cur = *i.second;
-        for(const std::shared_ptr<Object> &a : cur.entities)
-        {
-
-        }
+        cur.Update(this, gt);
 
         for(auto c_iter = std::begin(cur.entities); c_iter != std::end(cur.entities);)
         {
             Object &c = **c_iter;
             glm::vec3 pos = c.GetAgent<Entity>()->pos;
+            c.onUpdate(this, pos, gt);
 
             // если находится за границей сектора -- переносим в новый сектор, если он существует
             if(pos.x >= (cur.offset.x + 1) * RX ||

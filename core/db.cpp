@@ -164,6 +164,11 @@ void DB::Load()
                                             b->PushAgent(AgentFactory::instance().Create("Entity"));
                                         }
 
+                                        if( agenttype == "Sound" )
+                                        {
+                                            sounds.push_back(std::static_pointer_cast<Sound>(c).get());
+                                        }
+
                                         b->PushAgent(c);
                                     }
                                     else
@@ -194,5 +199,6 @@ void DB::Load()
 }
 
 std::unordered_map<Id, std::unique_ptr<ObjectStatic>> DB::data;
+std::list<Sound *> DB::sounds;
 std::unordered_map<std::string, std::vector<ObjectStatic *>> DB::tags_ref;
 std::unordered_map<SchemeType, std::vector<Scheme>> DB::scheme_db;

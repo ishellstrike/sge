@@ -26,8 +26,8 @@ public:
     *   }
     */
     void Deserialize(rapidjson::Value &val) override;
-    void onEnter(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt) override;
-    void onLoad(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt);
+    void onEnter(Object *par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
+    void onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
 
     std::string ref_l, ref_m, ref_p;
     const Sound *low, *middle, *pass;

@@ -14,11 +14,13 @@ void GameTimer::Update(float wglTime)
     elapsed = current - last;
 }
 
-GameTimer::GameTimer()
+GameTimer::GameTimer() : last(0), current(0), elapsed(0)
 {
-    last = 0;
-    current = 0;
-    elapsed = 0;
+}
+
+
+GameTimer::GameTimer(float f) : last(f), current(f), elapsed(f)
+{
 }
 
 GameTimer::~GameTimer()

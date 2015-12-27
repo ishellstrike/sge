@@ -55,6 +55,12 @@ public:
         return data_dir + texture_data_subdir;
     }
 
+    std::string sounds_data_subdir = "sounds/";
+    const std::string getSoundsDir() const
+    {
+        return data_dir + sounds_data_subdir;
+    }
+
     /*!
      * \brief shaders data subdir
      */

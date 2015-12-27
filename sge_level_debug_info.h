@@ -14,7 +14,7 @@ public:
     sge_level_debug_info(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt, const MouseState &ms) override;
+    void Update(const GameTimer& gt, const MouseState &ms) override;
     void UpdateLevelInfo(const Level &fps);
     Graph *gfps, *ggt, *gfps_fast, *ggt_fast;
     Label *fps1, *fps2, *time1, *time2;

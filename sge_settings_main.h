@@ -10,7 +10,7 @@ public:
     sge_settings_main(WContainer *par);
 
     void Draw() const;
-    void Update(const GameTimer &gt, const MouseState &ms) override;
+    void Update(const GameTimer& gt, const MouseState &ms) override;
 
     Button *sc_plus, *sc_minus;
     Label *sc_anounce;

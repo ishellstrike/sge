@@ -37,57 +37,57 @@ bool Object::isStatic()
     return agents == nullptr;
 }
 
-void Object::onInit(const glm::vec3 &pos, const GameTimer &gt)
+void Object::onInit(Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onInit(this, pos, gt);
+            a->onInit(this, l, pos, gt);
 
-    base->onInit(this, pos, gt);
+    base->onInit(this, l, pos, gt);
 }
 
-void Object::onUpdate(const glm::vec3 &pos, const GameTimer &gt)
+void Object::onUpdate(Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onUpdate(this, pos, gt);
+            a->onUpdate(this, l, pos, gt);
 
-    base->onUpdate(this, pos, gt);
+    base->onUpdate(this, l, pos, gt);
 }
 
-void Object::onDraw(const glm::vec3 &pos, const GameTimer &gt)
+void Object::onDraw(Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onDraw(this, pos, gt);
+            a->onDraw(this, l, pos, gt);
 
-    base->onDraw(this, pos, gt);
+    base->onDraw(this, l, pos, gt);
 }
 
-void Object::onDestroy(const glm::vec3 &pos, const GameTimer &gt)
+void Object::onDestroy(Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onDestroy(this, pos, gt);
+            a->onDestroy(this, l, pos, gt);
 
-    base->onDestroy(this, pos, gt);
+    base->onDestroy(this, l, pos, gt);
 }
 
-void Object::onEnter(const glm::vec3 &pos, const GameTimer &gt)
+void Object::onEnter(Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onEnter(this, pos, gt);
+            a->onEnter(this, l, pos, gt);
 
-    base->onEnter(this, pos, gt);
+    base->onEnter(this, l, pos, gt);
 }
 
-void Object::onLeave(const glm::vec3 &pos, const GameTimer &gt)
+void Object::onLeave(Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onLeave(this, pos, gt);
+            a->onLeave(this, l, pos, gt);
 
-    base->onLeave(this, pos, gt);
+    base->onLeave(this, l, pos, gt);
 }
 

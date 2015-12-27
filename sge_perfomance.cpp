@@ -61,7 +61,7 @@ void sge_perfomance::Update(const GameTimer &gt, const MouseState &ms)
     Win::Update(gt, ms);
 }
 
-void sge_perfomance::UpdateTimer(const FPSCounter &fps, const GameTimer &gt)
+void sge_perfomance::UpdateTimer(const FPSCounter &fps, const GameTimer& gt)
 {
     fastsec += gt.elapsed;
 

@@ -19,7 +19,7 @@ class random
 public:
     random() = delete;
 
-    template<typename T>
+    template<typename T = float>
     static T next()
     {
         static_assert(0, "Not implemented");
@@ -38,7 +38,7 @@ public:
         return ddist(generator);
     }
 
-    template<typename T>
+    template<typename T = float>
     static T norm()
     {
         static_assert(0, "Not implemented");

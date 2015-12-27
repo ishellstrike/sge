@@ -5,12 +5,15 @@
 #include <memory>
 #include "scheme.h"
 
+class Sound;
+
 class DB
 {
 public:
     DB();
     static std::unordered_map<std::string, std::unique_ptr<ObjectStatic>> data;
     static std::unordered_map<std::string, std::vector<ObjectStatic *>> tags_ref;
+    static std::list<Sound *> sounds;
 
     static std::unordered_map<SchemeType, std::vector<Scheme>> scheme_db;
     static std::shared_ptr<Object> Create(const std::string &id);

@@ -10,8 +10,10 @@
         {
             "type":"Tags",
             "tags":["tag_basic_creature"]
+        },
+        {
+            "type":"Wander"
         }
-
     ]
 }
 ]

@@ -11,6 +11,7 @@
 #include "core/db.h"
 #include "core/remoteclient.h"
 #include "core/agents/agents.hpp"
+#include "remsnd.h"
 
 #define GLM_SWIZZLE
 
@@ -19,11 +20,17 @@ GameWindow *GameWindow::wi = nullptr;
 
 void GameWindow::Mainloop()
 {
+    AL::InitializeOpenAL();
     BaseInit();
 
     while(!glfwWindowShouldClose(window))
     {
-        update();
+        update_pass += gt.elapsed;
+        if(update_pass >= 0.03)
+        {
+            update();
+            update_pass = 0;
+        }
 
         if(main_is_debug == spartial_rendering)
         {
@@ -44,7 +51,9 @@ void GameWindow::Mainloop()
         perf->UpdateTimer(fps, gt);
         // std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
+
     Resources::drop();
+    AL::DestroyOpenAL();
 }
 
 void GameWindow::make_release()
@@ -329,28 +338,34 @@ void GameWindow::BaseUpdate()
         no_ui = !no_ui;
 
     if(Keyboard::isKeyDown(GLFW_KEY_DOWN))
-        level.DeltaEntity(*hero, {0, 0.1f, 0});
+        level.DeltaEntity(*hero, {0, 0.4f, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_UP))
-        level.DeltaEntity(*hero, {0, -0.1f, 0});
+        level.DeltaEntity(*hero, {0, -0.4f, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_LEFT))
-        level.DeltaEntity(*hero, {-0.1f, 0, 0});
+        level.DeltaEntity(*hero, {-0.4f, 0, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_RIGHT))
-        level.DeltaEntity(*hero, {0.1f, 0, 0});
+        level.DeltaEntity(*hero, {0.4f, 0, 0});
 
-    level.Update();
+    AL::listener = hero->GetAgent<Entity>()->pos;
+    level.Update(GameTimer(update_pass));
     offset = glm::vec2(hero->GetAgent<Entity>()->pos)*sscale - glm::vec2(Prefecences::Instance()->resolution)/2.f;
     for(int i = -2; i < 3; i++)
         for(int j = -2; j < 3; j++)
             level.GetSectorByPos(hero->GetAgent<Entity>()->pos + glm::vec3(i*RX,j*RY,0));
+    level.KillFar(hero->GetAgent<Entity>()->pos, RX*4);
 
     if(Mouse::isLeftJustPressed())
-        if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale ) )
+    {
+        auto selpos = glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale;
+        if( Object *o = level.GetObjectByPos(selpos) )
         {
             if(SimpleInteract *si = o->base->GetAgent<SimpleInteract>())
             {
-                level.SetObjectAtPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale, DB::Create(si->afterid));
+                si->onInteract(o, &level, selpos, gt);
+                level.SetObjectAtPos(selpos, DB::Create(si->afterid));
             }
         }
+    }
 
     linfo->UpdateLevelInfo(level);
 

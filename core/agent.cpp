@@ -22,37 +22,47 @@ Tid Agent::GetTid()
     return id;
 }
 
-void Agent::onLoad(ObjectBase *, const glm::vec3 &, const GameTimer &)
+void Agent::Deserialize(rapidjson::Value &val)
 {
 
 }
 
-void Agent::onInit(ObjectBase *, const glm::vec3 &, const GameTimer &)
+void Agent::onLoad(Object *, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onUpdate(ObjectBase *, const glm::vec3 &, const GameTimer &)
+void Agent::onInit(Object *, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onDraw(ObjectBase *, const glm::vec3 &, const GameTimer &)
+void Agent::onUpdate(Object *, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onDestroy(ObjectBase *, const glm::vec3 &, const GameTimer &)
+void Agent::onDraw(Object *, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onEnter(ObjectBase *, const glm::vec3 &, const GameTimer &)
+void Agent::onInteract(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
 
 }
 
-void Agent::onLeave(ObjectBase *, const glm::vec3 &, const GameTimer &)
+void Agent::onDestroy(Object *, Level *, const glm::vec3 &, const GameTimer&)
+{
+
+}
+
+void Agent::onEnter(Object *, Level *, const glm::vec3 &, const GameTimer&)
+{
+
+}
+
+void Agent::onLeave(Object *, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }

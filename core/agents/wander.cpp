@@ -1,0 +1,15 @@
+#include "wander.h"
+#include "entity.h"
+#include "random.h"
+
+void Wander::onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+{
+    Entity *e = par->GetAgent<Entity>();
+    if( e && e->current_order.type == Order::Nothing )
+    {
+        e->current_order = Order(pos + glm::vec3((random::next()-0.5f)*5,
+                                            (random::next()-0.5f)*5,
+                                            pos.z),
+                                 Order::Walk);
+    }
+}

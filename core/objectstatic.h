@@ -17,12 +17,12 @@ public:
     std::unique_ptr<Object> Instantiate(const glm::vec3 &pos, const GameTimer &gt);
 
     void    onLoad();
-    void    onInit(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
-    void  onUpdate(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
-    void    onDraw(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
-    void onDestroy(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
-    void   onEnter(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
-    void   onLeave(ObjectBase *o, const glm::vec3 &pos, const GameTimer &gt);
+    void    onInit(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void  onUpdate(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void    onDraw(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void onDestroy(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void   onEnter(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void   onLeave(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 };
 
 #endif // OBJECTSTATIC_H

@@ -40,7 +40,7 @@ public:
     */
     void Deserialize(rapidjson::Value &val) override;
 
-    void onInit(ObjectBase *par, const glm::vec3 &pos, const GameTimer &gt) override;
+    void onInit(Object *par, Level *, const glm::vec3 &pos, const GameTimer &gt) override;
 };
 
 REGISTER_AGENT(ItemSpawner)

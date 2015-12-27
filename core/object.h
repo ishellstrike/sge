@@ -18,12 +18,12 @@ public:
 
     bool  isStatic();
 
-    void    onInit(const glm::vec3 &pos, const GameTimer &gt);
-    void  onUpdate(const glm::vec3 &pos, const GameTimer &gt);
-    void    onDraw(const glm::vec3 &pos, const GameTimer &gt);
-    void onDestroy(const glm::vec3 &pos, const GameTimer &gt);
-    void   onEnter(const glm::vec3 &pos, const GameTimer &gt);
-    void   onLeave(const glm::vec3 &pos, const GameTimer &gt);
+    void    onInit(Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void  onUpdate(Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void    onDraw(Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void onDestroy(Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void   onEnter(Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void   onLeave(Level *l, const glm::vec3 &pos, const GameTimer &gt);
 };
 
 template<typename _Ty>

@@ -36,7 +36,7 @@ void ItemSpawner::Deserialize(rapidjson::Value &val)
     else throw;
 }
 
-void ItemSpawner::onInit(ObjectBase *par, const glm::vec3 &, const GameTimer &)
+void ItemSpawner::onInit(Object *par, Level *, const glm::vec3 &, const GameTimer &)
 {
     auto ch = par->GetAgent<Chest>();
     if(ch)

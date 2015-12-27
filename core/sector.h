@@ -28,7 +28,7 @@ public:
     Sector(const glm::ivec2 &o);
 
     std::array<const Object*, 6> Neighbours(const glm::ivec3 &pos);
-    void Update();
+    void Update(Level *l, GameTimer &gt);
     void Draw(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
     void SetObject(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
 

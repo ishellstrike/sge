@@ -16,8 +16,17 @@ Sector::Sector(const glm::ivec2 &o) : offset(o)
 //            }
 }
 
-void Sector::Update()
+void Sector::Update(Level *l, GameTimer& gt)
 {
+    for(int i = 0; i < RX; i++)
+        for(int j = 0; j < RY; j++)
+            for(int k = 0; k < maxlevel + 1; k++)
+            {
+                Object *o = block[ONEDIM(i,j,k)].get();
+                static const ObjectStatic *air = DB::Get("air");
+                if(o->base->id != air->id)
+                    o->onUpdate(l, {i,j,k}, gt);
+            }
 }
 
 std::array<glm::vec3, 4> GetAtBlockPoints(float xpos, float ypos, int resx, int resy)
@@ -101,7 +110,7 @@ void Sector::DrawBlock(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &
                 continue;
             if(x + sscale < 0 || y + sscale < 0)
                 continue;
-            for(int k = 0; k < 1; k++)
+            for(int k = 0; k < maxlevel + 1; k++)
             {
                 const Object &b2 = *block[ONEDIM(i,j,k)];
                 atlas_draw(x, y, b2, sb);
