@@ -469,4 +469,10 @@ DISTFILES += \
     data/json/hero.json \
     data/json/sounds.json \
     data/json/creatures.json \
-    data/json/material.json
+    data/json/material.json \
+    data/sounds/zombie_agro.ogg \
+    data/sounds/wood_destroy.ogg \
+    data/sounds/wood_smash.ogg \
+    data/sounds/door_open.ogg \
+    data/sounds/door.ogg \
+    data/sounds/rustle.ogg
