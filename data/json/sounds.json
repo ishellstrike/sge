@@ -80,6 +80,20 @@
         }
 
     ]
+},
+{
+    "type":"dummy",
+    "id":"sound_zombie_agro",
+    "agents":[
+        {
+            "type":"Sound",
+            "near":3,
+            "far":8,
+            "name":"zombie agro",
+            "filename":"zombie_agro"
+        }
+
+    ]
 }
 
 ]

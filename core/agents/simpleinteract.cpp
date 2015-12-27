@@ -23,7 +23,7 @@ void SimpleInteract::onLoad(Object *par, Level *, const glm::vec3 &pos, const Ga
     {
         if(const Sound *o = os->GetAgent<Sound>())
         {
-            LOG(trace) << "sound " << sound << " linked";
+            LOG(trace) << "interact sound " << sound << " linked";
             activate = o;
         }
     }

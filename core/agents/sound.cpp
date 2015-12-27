@@ -30,6 +30,11 @@ void Sound::Move(const glm::vec3 &p) const
     snd.Move(p);
 }
 
+void Sound::Pitch(float p) const
+{
+    snd.Pitch(p);
+}
+
 void Sound::Play() const
 {
     snd.Play();

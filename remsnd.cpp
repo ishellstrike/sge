@@ -51,6 +51,11 @@ void RemSnd::Stop()
     alSourceStop(mSourceID);
 }
 
+void RemSnd::Pitch(float t) const
+{
+    alSourcef(mSourceID, AL_PITCH, t);
+}
+
 void RemSnd::NearFar(int n, int f)
 {
     alSourcei(mSourceID, AL_REFERENCE_DISTANCE, n);

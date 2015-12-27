@@ -9,10 +9,15 @@
         },
         {
             "type":"Tags",
-            "tags":["tag_basic_creature"]
+            "tags":["tag_basic_creature", "tag_zombie"]
         },
         {
             "type":"Wander"
+        },
+        {
+            "type":"Aggressive",
+            "sound":"sound_zombie_agro",
+            "allies":["tag_zombie"]
         }
     ]
 }

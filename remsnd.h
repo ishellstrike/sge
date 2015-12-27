@@ -51,6 +51,7 @@ public:
   void Update();
   void Move(const glm::vec3 &pos);
   void Stop();
+  void Pitch(float t) const;
   void NearFar(int n, int f);
 
   RemSnd();

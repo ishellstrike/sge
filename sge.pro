@@ -93,7 +93,8 @@ SOURCES += \
     remsnd.cpp \
     core/agents/blockbase.cpp \
     core/agents/block.cpp \
-    core/agents/material.cpp
+    core/agents/material.cpp \
+    core/agents/aggressive.cpp
 
 VERSION = 0.1.0
 
@@ -227,7 +228,8 @@ HEADERS += \
     remsnd.h \
     core/agents/blockbase.h \
     core/agents/block.h \
-    core/agents/material.h
+    core/agents/material.h \
+    core/agents/aggressive.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

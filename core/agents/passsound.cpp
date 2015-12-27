@@ -30,7 +30,7 @@ void PassSound::onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTim
         {
             if(const Sound *o = os->GetAgent<Sound>())
             {
-                LOG(trace) << "sound " << s << " linked";
+                LOG(trace) << "pass sound " << s << " linked";
                 return o;
             }
             return nullptr;

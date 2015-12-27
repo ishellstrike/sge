@@ -19,6 +19,7 @@
 #include "transparent.h"
 #include "walkable.h"
 #include "wander.h"
+#include "aggressive.h"
 
 #endif // AGENTS_HPP
 

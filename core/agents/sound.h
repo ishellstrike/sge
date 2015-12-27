@@ -19,6 +19,7 @@ public:
     int near = 1, far = 8;
     mutable RemSnd snd;
     void Move(const glm::vec3 &p) const;
+    void Pitch(float p) const;
 };
 
 REGISTER_AGENT(Sound)
