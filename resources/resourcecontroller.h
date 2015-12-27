@@ -10,7 +10,6 @@
 #include <unordered_map>
 #include "logger.h"
 #include <mutex>
-#include "resources/material.h"
 #include "resources/texture.h"
 #include "basicjargshader.h"
 
@@ -93,12 +92,6 @@ public:
         u_shaders.Push(name, res);
     }
     template<>
-    void Push(const std::string &name, Material *res)
-    {
-        LOG(trace) << "pushing \"" << name << "\" Material resource";
-        materials.Push(name, res);
-    }
-    template<>
     void Push(const std::string &name, Texture *res)
     {
         LOG(trace) << "pushing \"" << name << "\" Texture resource";
@@ -127,11 +120,6 @@ public:
         return shaders[name];
     }
     template<>
-    std::shared_ptr<Material>& Get(const std::string &name)
-    {
-        return materials[name];
-    }
-    template<>
     std::shared_ptr<Texture>& Get(const std::string &name)
     {
         return textures[name];
@@ -146,7 +134,6 @@ private:
 
     ResourceDictionary<BasicJargShader> shaders;
     ResourceDictionary<Shader> u_shaders;
-    ResourceDictionary<Material> materials;
     ResourceDictionary<Texture> textures;
 };
 

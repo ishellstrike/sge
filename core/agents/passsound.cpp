@@ -29,7 +29,10 @@ void PassSound::onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTim
         if(const ObjectStatic *os = DB::Get(s))
         {
             if(const Sound *o = os->GetAgent<Sound>())
+            {
+                LOG(trace) << "sound " << s << " linked";
                 return o;
+            }
             return nullptr;
         }
     };

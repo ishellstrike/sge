@@ -27,7 +27,7 @@ void Generate(Sector &s)
     for(int i=0; i<3; ++i)
     {
         std::shared_ptr<Object> o = DB::Create("zombie");
-        o->GetAgent<Entity>()->pos = glm::vec3(s.offset.x*RX + random::next()*(RX-1),
+        o->GetAgent<Creature>()->pos = glm::vec3(s.offset.x*RX + random::next()*(RX-1),
                                                s.offset.y*RY + random::next()*(RY-1),
                                                0);
         s.entities.push_back(o);

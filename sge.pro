@@ -42,7 +42,6 @@ SOURCES += \
     colorscheme.cpp \
     gbuffer.cpp \
     resources/resourcecontroller.cpp \
-    resources/material.cpp \
     resources/texture.cpp \
     resources/pixmap.cpp \
     sge_perfomance.cpp \
@@ -91,7 +90,10 @@ SOURCES += \
     core/agents/onenter.cpp \
     core/agents/creaturebase.cpp \
     core/agents/wander.cpp \
-    remsnd.cpp
+    remsnd.cpp \
+    core/agents/blockbase.cpp \
+    core/agents/block.cpp \
+    core/agents/material.cpp
 
 VERSION = 0.1.0
 
@@ -158,7 +160,6 @@ HEADERS += \
     colorscheme.h \
     gbuffer.h \
     resources/resourcecontroller.h \
-    resources/material.h \
     resources/pixmap.h \
     resources/texture.h \
     sge_perfomance.h \
@@ -223,7 +224,10 @@ HEADERS += \
     core/agents/onenter.h \
     core/agents/creaturebase.h \
     core/agents/wander.h \
-    remsnd.h
+    remsnd.h \
+    core/agents/blockbase.h \
+    core/agents/block.h \
+    core/agents/material.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -462,4 +466,5 @@ DISTFILES += \
     data/textures/atlas/zombie_corp.png \
     data/json/hero.json \
     data/json/sounds.json \
-    data/json/creatures.json
+    data/json/creatures.json \
+    data/json/material.json

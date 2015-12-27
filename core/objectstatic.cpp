@@ -76,6 +76,14 @@ void ObjectStatic::onEnter(Object *o, Level *l, const glm::vec3 &pos, const Game
                 a->onEnter(o, l, pos, gt);
 }
 
+void ObjectStatic::onDamage(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+{
+    if(agents)
+        for(const auto &a : *agents)
+            if(a->IsStatic())
+                a->onDamage(o, l, pos, gt);
+}
+
 void ObjectStatic::onLeave(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)

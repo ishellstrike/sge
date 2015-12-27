@@ -156,12 +156,20 @@ void DB::Load()
 
                                         if( agenttype == "ItemBase" )
                                         {
-                                            b->PushAgent(AgentFactory::instance().Create("Stacked"));
+                                            b->PushAgent(AgentFactory::instance().Create("Item"));
                                         }
 
                                         if( agenttype == "CreatureBase" )
                                         {
-                                            b->PushAgent(AgentFactory::instance().Create("Entity"));
+                                            b->PushAgent(AgentFactory::instance().Create("Creature"));
+                                        }
+
+                                        if( agenttype == "BlockBase" )
+                                        {
+                                            auto a = AgentFactory::instance().Create("Block");
+                                            int maxh = std::static_pointer_cast<BlockBase>(c)->health;
+                                            std::static_pointer_cast<Block>(a)->health = maxh;
+                                            b->PushAgent(a);
                                         }
 
                                         if( agenttype == "Sound" )

@@ -59,7 +59,12 @@
         "type":"SimpleInteract",
         "afterid":"opened_door",
         "sound":"sound_door_open"
+      },{
+        "type":"BlockBase",
+        "material":"material_wood",
+        "health":100
       }
+
     ]
   },
   {
@@ -73,8 +78,12 @@
       {
         "type":"Walkable",
         "cost":2
+      },
+      {
+        "type":"BlockBase",
+        "health":100,
+        "material":"wood"
       }
-
     ]
   },
   {

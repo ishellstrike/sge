@@ -1,5 +1,5 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef Creature_H
+#define Creature_H
 #include <vector>
 #include "core/agent.h"
 #include "core/object.h"
@@ -11,22 +11,24 @@ public:
         Nothing,
         Wander,
         Walk,
-        Attack
+        Attack,
+        Follow,
+        Delay
     };
 
     Order() {}
     Order(const glm::vec3 &p, Type t) : pos(p), type(t) {}
 
     glm::vec3 pos;
+    std::weak_ptr<Object> target; //stores therefore must be weak_ptr
     Type type = Nothing;
+    float time;
 };
 
-class Entity : public DynamicAgent
+class Creature : public DynamicAgent
 {
 public:
-    DAGENT(Entity)
-
-    std::vector<std::unique_ptr<Object>> items;
+    DAGENT(Creature)
 
     // Agent interface
 public:
@@ -38,6 +40,6 @@ public:
     Order current_order;
 };
 
-REGISTER_AGENT(Entity)
+REGISTER_AGENT(Creature)
 
-#endif // ENTITY_H
+#endif // Creature_H

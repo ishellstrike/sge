@@ -12,6 +12,10 @@ void Chest::Deserialize(rapidjson::Value &val)
 std::shared_ptr<Agent> Chest::Instantiate() const
 {
     Chest *c = new Chest();
+    for(const auto &i : items)
+    {
+        c->items.push_back(i->Instantiate());
+    }
     return std::unique_ptr<Chest>(c);
 }
 
@@ -23,8 +27,8 @@ void Chest::Combine()
             {
                 if(items[i] && items[i]->Equals(items[j].get()))
                 {
-                    Stacked *s1 = items[i]->GetAgent<Stacked>();
-                    Stacked *s2 = items[j]->GetAgent<Stacked>();
+                    Item *s1 = items[i]->GetAgent<Item>();
+                    Item *s2 = items[j]->GetAgent<Item>();
                     if(!s1)
                     {
                         LOG(error) << "item " << items[i]->base->id << " has no ItemBase! All items must have it";

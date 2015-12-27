@@ -22,6 +22,9 @@ void SimpleInteract::onLoad(Object *par, Level *, const glm::vec3 &pos, const Ga
     if(const ObjectStatic *os = DB::Get(sound))
     {
         if(const Sound *o = os->GetAgent<Sound>())
+        {
+            LOG(trace) << "sound " << sound << " linked";
             activate = o;
+        }
     }
 }

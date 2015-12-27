@@ -164,7 +164,7 @@ void Sector::DrawEntities(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec
 {
     for(const std::shared_ptr<Object> &a : entities)
     {
-        if(const Entity *e = a->GetAgent<Entity>())
+        if(const Creature *e = a->GetAgent<Creature>())
         {
             atlas_draw(e->pos.x*sscale - off.x - 16, e->pos.y*sscale - off.y - sscale, *a, sb);
         }
@@ -194,7 +194,7 @@ std::pair<Object *, Object *>Sector::GetCell( const glm::ivec3 &pos )
     return std::make_pair(block[ ONEDIM( pos.x, pos.y, pos.z ) ].get(), ground[ ONEDIM( pos.x, pos.y, pos.z ) ].get());
 }
 
-Object *Sector::GetObject( const glm::ivec3 &pos )
+Object *Sector::GetBlock( const glm::ivec3 &pos )
 {
     if( pos.x >= RX || pos.y >= RY || pos.x < 0 || pos.y < 0)
         return nullptr;

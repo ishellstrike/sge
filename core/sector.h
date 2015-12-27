@@ -35,7 +35,7 @@ public:
     void PlaceScheme(const Scheme &s, const glm::ivec3 &pos);
 
     glm::ivec2 offset;
-    Object *GetObject(const glm::ivec3 &pos);
+    Object *GetBlock(const glm::ivec3 &pos);
     std::pair<Object *, Object *> GetCell(const glm::ivec3 &pos);
     Object *GetGround(const glm::ivec3 &pos);
     void SetGround(const glm::ivec3 &pos, std::shared_ptr<Object> obj);

@@ -1,0 +1,13 @@
+[
+{
+    "type":"dummy",
+    "id":"material_wood",
+    "agents":[
+        {
+            "type":"Material",
+            "hitsound":"sound_wood_smash",
+            "breaksound":"sound_wood_destroy"
+        }
+    ]
+}
+]

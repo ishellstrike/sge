@@ -47,7 +47,12 @@ void Agent::onDraw(Object *, Level *, const glm::vec3 &, const GameTimer&)
 
 }
 
-void Agent::onInteract(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Agent::onInteract(Object *, Level *, const glm::vec3 &, const GameTimer &)
+{
+
+}
+
+void Agent::onDamage(Object *, Level *, const glm::vec3 &, const GameTimer &)
 {
 
 }

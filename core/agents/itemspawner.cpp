@@ -80,7 +80,7 @@ void ItemSpawner::onInit(Object *par, Level *, const glm::vec3 &, const GameTime
 
                         if(count > 1)
                         {
-                            Stacked *stack = item->GetAgent<Stacked>();
+                            Item *stack = item->GetAgent<Item>();
                             if(stack)
                                 stack->count = count;
                             else

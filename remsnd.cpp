@@ -113,7 +113,7 @@ RemSnd::RemSnd()
 
 RemSnd::~RemSnd()
 {
-
+    Close();
 }
 
 bool RemSnd::ReadOggBlock(ALuint BufID, size_t Size)

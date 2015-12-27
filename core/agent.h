@@ -81,6 +81,7 @@ public:
     virtual void     onDraw(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
     virtual void onInteract(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void   onDamage(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
     virtual void  onDestroy(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 

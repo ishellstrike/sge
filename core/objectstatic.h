@@ -21,6 +21,7 @@ public:
     void  onUpdate(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void    onDraw(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void onDestroy(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void  onDamage(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void   onEnter(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void   onLeave(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 };

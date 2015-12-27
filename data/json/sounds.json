@@ -1,47 +1,47 @@
 [
 {
-    "type":"sound",
+    "type":"dummy",
     "id":"sound_rustle",
     "agents":[
         {
             "type":"Sound",
-            "near":3,
-            "far":8,
-            "name":"sound_rustle",
+            "near":1,
+            "far":3,
+            "name":"rustle",
             "filename":"rustle"
         }
 
     ]
 },
 {
-    "type":"sound",
+    "type":"dummy",
     "id":"sound_door",
     "agents":[
         {
             "type":"Sound",
             "near":5,
             "far":12,
-            "name":"sound_door",
+            "name":"door closed",
             "filename":"door"
         }
 
     ]
 },{
-    "type":"sound",
+    "type":"dummy",
     "id":"sound_door_open",
     "agents":[
         {
             "type":"Sound",
             "near":3,
             "far":8,
-            "name":"sound_door open",
+            "name":"door open",
             "filename":"door_open"
         }
 
     ]
 },
 {
-    "type":"sound",
+    "type":"dummy",
     "id":"sound_crackle",
     "agents":[
         {
@@ -49,6 +49,34 @@
             "near":3,
             "far":16,
             "name":"sound_crackle"
+        }
+
+    ]
+},
+{
+    "type":"dummy",
+    "id":"sound_wood_smash",
+    "agents":[
+        {
+            "type":"Sound",
+            "near":3,
+            "far":16,
+            "name":"wood smash",
+            "filename":"wood_smash"
+        }
+
+    ]
+},
+{
+    "type":"dummy",
+    "id":"sound_wood_destroy",
+    "agents":[
+        {
+            "type":"Sound",
+            "near":3,
+            "far":16,
+            "name":"wood destroy",
+            "filename":"wood_destroy"
         }
 
     ]

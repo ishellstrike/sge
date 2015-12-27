@@ -73,6 +73,15 @@ void Object::onDestroy(Level *l, const glm::vec3 &pos, const GameTimer& gt)
     base->onDestroy(this, l, pos, gt);
 }
 
+void Object::onDamage(Level *l, const glm::vec3 &pos, const GameTimer& gt)
+{
+    if(agents)
+        for(const auto &a : *agents)
+            a->onDamage(this, l, pos, gt);
+
+    base->onDamage(this, l, pos, gt);
+}
+
 void Object::onEnter(Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)

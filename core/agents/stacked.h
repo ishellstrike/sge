@@ -1,11 +1,11 @@
-#ifndef STACKED_H
-#define STACKED_H
+#ifndef Item_H
+#define Item_H
 #include "core/agent.h"
 
-class Stacked : public DynamicAgent
+class Item : public DynamicAgent
 {
 public:   
-    DAGENT(Stacked)
+    DAGENT(Item)
 
     // Agent interface
 public:
@@ -18,6 +18,6 @@ public:
     int count = 1;
 };
 
-REGISTER_AGENT(Stacked)
+REGISTER_AGENT(Item)
 
-#endif // STACKED_H
+#endif // Item_H

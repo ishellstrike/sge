@@ -18,14 +18,18 @@ public:
     void Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const;
 
     Sector *GetSectorByPos(const glm::vec3 &coord);
-    Sector *GetSector(const glm::ivec2 &off);
+    Sector *GetSector(const glm::ivec2 &off, bool request = true);
     Object *GetObjectByPos(const glm::vec3 &p);
+    std::list<Sector *> GetSectorsInRange(const glm::vec3 &coord, float r);
+    std::list<std::weak_ptr<Object>> GetObjectsInRange(const glm::vec3 &coord, float r);
     bool SetObjectAtPos(const glm::vec3 &p, std::shared_ptr<Object> o);
     void KillFar(const glm::vec3 &pos, float dist);
 
-    bool AddEntity(std::shared_ptr<Object> o, bool wait = false);
-    bool TpEntity(Object &o, const glm::vec3 &pos, bool wait = false);
-    bool DeltaEntity(Object &o, const glm::vec3 &delta, bool wait = false);
+    void DamageBlock(const glm::vec3 &pos, int count, GameTimer &gt);
+
+    bool AddCreature(std::shared_ptr<Object> o, bool wait = false);
+    bool TpCreature(Object &o, const glm::vec3 &pos, bool wait = false);
+    bool DeltaCreature(Object &o, const glm::vec3 &delta, bool wait = false);
 };
 
 #endif // LEVEL_H

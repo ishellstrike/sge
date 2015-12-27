@@ -215,7 +215,7 @@ bool GameWindow::BaseInit()
     Sqvm::instance();
 
     hero = DB::Create( "hero" );
-    level.AddEntity( hero, true );
+    level.AddCreature( hero, true );
 
     return true;
 }
@@ -263,7 +263,7 @@ void GameWindow::BaseDraw()
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0,0,0,1);
 
-    level.Draw(*batch, offset, hero->GetAgent<Entity>()->pos);
+    level.Draw(*batch, offset, hero->GetAgent<Creature>()->pos);
 
     if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale ) )
     {
@@ -277,12 +277,22 @@ void GameWindow::BaseDraw()
             for( const std::shared_ptr<Object> &o : c->items )
             {
                 ss << o->base->id;
-                if(auto st = o->GetAgent<Stacked>())
+                if(auto st = o->GetAgent<Item>())
                     ss << " x" << st->count;
                 ss << std::endl;
             }
 
             batch->drawText(ss.str(), {100,100}, f12.get(), Color::Red);
+        }
+    }
+
+    if(hero->GetAgent<Creature>()->current_order.type == Order::Follow)
+    {
+        std::shared_ptr<Object> o = hero->GetAgent<Creature>()->current_order.target.lock();
+        if(o)
+        {
+            glm::vec3 p = o->GetAgent<Creature>()->pos;
+            batch->drawQuadAtlas( glm::vec2(p.x, p.y)*sscale - offset, {32,32}, TextureAtlas::tex[0], 1, Color::White);
         }
     }
 
@@ -338,21 +348,21 @@ void GameWindow::BaseUpdate()
         no_ui = !no_ui;
 
     if(Keyboard::isKeyDown(GLFW_KEY_DOWN))
-        level.DeltaEntity(*hero, {0, 0.4f, 0});
+        level.DeltaCreature(*hero, {0, 0.4f, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_UP))
-        level.DeltaEntity(*hero, {0, -0.4f, 0});
+        level.DeltaCreature(*hero, {0, -0.4f, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_LEFT))
-        level.DeltaEntity(*hero, {-0.4f, 0, 0});
+        level.DeltaCreature(*hero, {-0.4f, 0, 0});
     if(Keyboard::isKeyDown(GLFW_KEY_RIGHT))
-        level.DeltaEntity(*hero, {0.4f, 0, 0});
+        level.DeltaCreature(*hero, {0.4f, 0, 0});
 
-    AL::listener = hero->GetAgent<Entity>()->pos;
+    AL::listener = hero->GetAgent<Creature>()->pos;
     level.Update(GameTimer(update_pass));
-    offset = glm::vec2(hero->GetAgent<Entity>()->pos)*sscale - glm::vec2(Prefecences::Instance()->resolution)/2.f;
+    offset = glm::vec2(hero->GetAgent<Creature>()->pos)*sscale - glm::vec2(Prefecences::Instance()->resolution)/2.f;
     for(int i = -2; i < 3; i++)
         for(int j = -2; j < 3; j++)
-            level.GetSectorByPos(hero->GetAgent<Entity>()->pos + glm::vec3(i*RX,j*RY,0));
-    level.KillFar(hero->GetAgent<Entity>()->pos, RX*4);
+            level.GetSectorByPos(hero->GetAgent<Creature>()->pos + glm::vec3(i*RX,j*RY,0));
+    level.KillFar(hero->GetAgent<Creature>()->pos, RX*4);
 
     if(Mouse::isLeftJustPressed())
     {
@@ -367,12 +377,19 @@ void GameWindow::BaseUpdate()
         }
     }
 
-    linfo->UpdateLevelInfo(level);
+    if(Mouse::isRightJustPressed())
+    {
+        auto selpos = glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale;
+        level.DamageBlock(selpos, 30, gt);
+        std::list<std::weak_ptr<Object>> o = level.GetObjectsInRange(selpos, 1.1);
+        if(!o.empty())
+        {
+            hero->GetAgent<Creature>()->current_order.target = o.begin()->lock();
+            hero->GetAgent<Creature>()->current_order.type = Order::Follow;
+        }
+    }
 
-    if(Mouse::isRightDown())
-        Mouse::SetFixedPosState(true);
-    else
-        Mouse::SetFixedPosState(false);
+    linfo->UpdateLevelInfo(level);
 
     static MouseState s;
     ws->Update(gt, s);

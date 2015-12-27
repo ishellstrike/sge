@@ -1,17 +1,19 @@
 #include "stacked.h"
 
 
-void Stacked::Deserialize(rapidjson::Value &val)
+void Item::Deserialize(rapidjson::Value &val)
 {
 
 }
 
-std::shared_ptr<Agent> Stacked::Instantiate() const
+std::shared_ptr<Agent> Item::Instantiate() const
 {
-    return std::make_unique<Stacked>();
+    auto s = std::make_unique<Item>();
+    s->count = count;
+    return std::move(s);
 }
 
-bool Stacked::Equals(Agent *o)
+bool Item::Equals(Agent *o)
 {
     return true;
 }
