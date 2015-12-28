@@ -2,7 +2,7 @@
 
 
 
-void Script::Deserialize(rapidjson::Value &val)
+void Script::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(source), NVP(path));
 }

@@ -2,7 +2,7 @@
 #include "core/objectstatic.h"
 #include "core/db.h"
 
-void SimpleInteract::Deserialize(rapidjson::Value &val)
+void SimpleInteract::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(afterid), NVP(sound));
 }

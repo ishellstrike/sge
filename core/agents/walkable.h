@@ -9,7 +9,7 @@ public:
 
     // Agent interface
 public:
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
 
     float cost = 1;
 };

@@ -20,6 +20,7 @@
 #include "walkable.h"
 #include "wander.h"
 #include "aggressive.h"
+#include "structure.h"
 
 #endif // AGENTS_HPP
 

@@ -1,7 +1,7 @@
 #include "entity.h"
 #include "core\level.h"
 
-void Creature::Deserialize(rapidjson::Value &val)
+void Creature::Deserialize(const rapidjson::Value &val)
 {
 
 }

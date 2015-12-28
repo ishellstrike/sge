@@ -31,6 +31,30 @@ struct DeserializeHelper {
     }
 
 private:
+
+    template<typename _Ty>
+    static void __deserialize(const rapidjson::Value &val, const char *, _Ty &target)
+    {
+        target.Deserialize(val);
+    }
+
+    template<typename _Ty>
+    static void __deserialize(const rapidjson::Value &val, const char *s, std::vector<_Ty> &target)
+    {
+
+        if(val.HasMember(s) && val[s].IsArray())
+        {
+            const rapidjson::Value &arr = val[s];
+            for(decltype(arr.Size()) i = 0; i < arr.Size(); i++)
+            {
+                _Ty part;
+                __deserialize(arr[i], "", part);
+                target.push_back(std::move(part));
+            }
+        }
+    }
+
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, int &target)
     {
         if(val.HasMember(s))
@@ -41,6 +65,7 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, std::string &target)
     {
         if(val.HasMember(s))
@@ -51,6 +76,7 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, float &target)
     {
         if(val.HasMember(s))
@@ -61,6 +87,7 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, bool &target)
     {
         if(val.HasMember(s))
@@ -71,6 +98,7 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, glm::vec2 &target)
     {
         if(val.HasMember(s) && val[s].IsArray())
@@ -85,6 +113,7 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, glm::vec3 &target)
     {
         if(val.HasMember(s) && val[s].IsArray())
@@ -101,6 +130,7 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, glm::vec4 &target)
     {
         if(val.HasMember(s) && val[s].IsArray())
@@ -119,13 +149,12 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, std::vector<int> &target)
     {
         if(val.HasMember(s))
         {
             const rapidjson::Value &arr = val[s];
-            if(!arr.IsArray())
-                throw std::invalid_argument("target variable is not array");
             for(decltype(arr.Size()) i = 0; i < arr.Size(); i++)
             {
                 if(!arr[i].IsInt())
@@ -135,13 +164,12 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, std::vector<std::string> &target)
     {
         if(val.HasMember(s) && val[s].IsArray())
         {
             const rapidjson::Value &arr = val[s];
-            if(!arr.IsArray())
-                throw std::invalid_argument("target variable is not array");
             for(decltype(arr.Size()) i = 0; i < arr.Size(); i++)
             {
                 if(!arr[i].IsString())
@@ -151,13 +179,12 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, std::vector<bool> &target)
     {
         if(val.HasMember(s) && val[s].IsArray())
         {
             const rapidjson::Value &arr = val[s];
-            if(!arr.IsArray())
-                throw std::invalid_argument("target variable is not array");
             for(decltype(arr.Size()) i = 0; i < arr.Size(); i++)
             {
                 if(!arr[i].IsBool_())
@@ -167,12 +194,12 @@ private:
         }
     }
 
+    template<>
     static void __deserialize(const rapidjson::Value &val, const char *s, std::vector<float> &target)
     {
         if(val.HasMember(s) && val[s].IsArray())
         {
             const rapidjson::Value &arr = val[s];
-            if(!arr.IsArray()) throw std::invalid_argument("target variable is not array");
             for(decltype(arr.Size()) i = 0; i < arr.Size(); i++)
             {
                 if(!arr[i].IsDouble())

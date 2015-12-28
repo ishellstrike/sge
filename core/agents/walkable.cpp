@@ -1,6 +1,6 @@
 #include "walkable.h"
 
-void Walkable::Deserialize(rapidjson::Value &val)
+void Walkable::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(cost));
 }

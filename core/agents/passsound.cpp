@@ -1,7 +1,7 @@
 #include "passsound.h"
 #include "core/db.h"
 
-void PassSound::Deserialize(rapidjson::Value &val)
+void PassSound::Deserialize(const rapidjson::Value &val)
 {
     if(val.HasMember("sound"))
     {

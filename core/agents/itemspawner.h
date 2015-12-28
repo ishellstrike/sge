@@ -38,7 +38,7 @@ public:
     *       ]
     *   }
     */
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
 
     void onInit(Object *par, Level *, const glm::vec3 &pos, const GameTimer &gt) override;
 };

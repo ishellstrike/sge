@@ -6,19 +6,19 @@
 #include "core/agents/stacked.h"
 #include "core/db.h"
 
-void ItemSpawner::Deserialize(rapidjson::Value &val)
+void ItemSpawner::Deserialize(const rapidjson::Value &val)
 {
     if(val.HasMember("items") && val["items"].IsArray())
     {
-        rapidjson::Value &spawn_iteration = val["items"];
+        const rapidjson::Value &spawn_iteration = val["items"];
         if(spawn_iteration.IsArray())
             for(decltype(spawn_iteration.Size()) i=0; i < spawn_iteration.Size(); i++)
             {
                 std::vector<SpawnInfo> group;
-                rapidjson::Value &spawn_group = spawn_iteration[i];
+                const rapidjson::Value &spawn_group = spawn_iteration[i];
                 for(decltype(spawn_group.Size()) i=0; i < spawn_group.Size(); i++)
                 {
-                    rapidjson::Value &spawn_group_part = spawn_group[i];
+                    const rapidjson::Value &spawn_group_part = spawn_group[i];
 
                     SpawnInfo si;
 

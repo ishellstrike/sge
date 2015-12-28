@@ -2,7 +2,7 @@
 
 
 
-void Tags::Deserialize(rapidjson::Value &val)
+void Tags::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(tags));
 }

@@ -23,7 +23,7 @@ public:
     *       "sort":<string sort type>
     *   }
     */
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
 
     int volume, weight;
     std::string sort;

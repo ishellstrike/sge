@@ -32,7 +32,7 @@ public:
 
     // Agent interface
 public:
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
     std::shared_ptr<Agent> Instantiate() const override;
     virtual void onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
 

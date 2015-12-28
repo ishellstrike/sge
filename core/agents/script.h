@@ -148,7 +148,7 @@ public:
 
     // Agent interface
 public:
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
 
     std::string source;
     std::string path;

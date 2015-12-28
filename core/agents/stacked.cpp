@@ -1,7 +1,7 @@
 #include "stacked.h"
 
 
-void Item::Deserialize(rapidjson::Value &val)
+void Item::Deserialize(const rapidjson::Value &val)
 {
 
 }

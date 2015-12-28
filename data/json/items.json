@@ -9,9 +9,9 @@
                 "sort":"meele",
                 "name":"заостренная палка"
             },{
-                "type":"Disassemble",
-                "components":[
-                    [["stick", 1, 1, 1.0]]
+                "type":"Structure",
+                "parts":[
+                    ["stick", 1]
                 ]
             }
         ]
@@ -58,10 +58,10 @@
                 "name":"доска с гвоздями",
                 "sort":"meele"
             },{
-                "type":"Disassemble",
-                "components":[
-                    [["nail", 4, 8, 1.0]],
-                    [["board", 1, 1, 1.0]]
+                "type":"Structure",
+                "parts":[
+                    ["nail", 8],
+                    ["board", 1]
                 ]
             }
         ]
@@ -76,10 +76,10 @@
                 "name":"палка с гвоздями",
                 "sort":"meele"
             },{
-                "type":"Disassemble",
-                "components":[
-                    [["nail", 4, 8, 1.0]],
-                    [["stick", 1, 1, 1.0]]
+                "type":"Structure",
+                "parts":[
+                    ["nail", 8],
+                    ["stick", 1]
                 ]
             }
         ]
@@ -332,10 +332,10 @@
                     ["hammer", 3]
                 ]
             },{
-                "type":"Disassemble",
-                "components":[
-                    [["hammer_head", 1, 1, 1.0]],
-                    [["stick", 1, 1, 1.0]]
+                "type":"Structure",
+                "parts":[
+                    ["hammer_head", 1],
+                    ["stick", 1]
                 ]
             }
         ]
@@ -357,10 +357,10 @@
                     ["knife", 2]
                 ]
             },{
-                "type":"Disassemble",
-                "components":[
-                    [["steel_rod", 1, 1, 1.0]],
-                    [["plastic_chunk", 1, 1, 1.0]]
+                "type":"Structure",
+                "parts":[
+                    ["steel_rod", 1],
+                    ["plastic_chunk", 1]
                 ]
             }
         ]
@@ -410,11 +410,11 @@
                     ["knife", 3]
                 ]
             },{
-                "type":"Disassemble",
-                "components":[
-                    [["small_steel_blade", 1, 1, 1.0]],
-                    [["plastic_chunk", 1, 1, 1.0]],
-                    [["small_screw", 1, 1, 1.0]]
+                "type":"Structure",
+                "parts":[
+                    ["small_steel_blade", 1],
+                    ["plastic_chunk", 1],
+                    ["small_screw", 1]
                 ]
             }
         ]
@@ -437,10 +437,10 @@
                     ["knife", 3]
                 ]
             },{
-                "type":"Disassemble",
-                "components":[
-                    [["small_steel_blade", 1, 1, 1.0]],
-                    [["plastic_chunk", 1, 1, 1.0]]
+                "type":"Structure",
+                "parts":[
+                    ["small_steel_blade", 1],
+                    ["plastic_chunk", 1]
                 ]
             },{
                 "type":"Tags",

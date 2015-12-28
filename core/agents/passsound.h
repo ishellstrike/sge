@@ -25,7 +25,7 @@ public:
     *           "difficulty":5
     *   }
     */
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
     void onEnter(Object *par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
     void onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
 

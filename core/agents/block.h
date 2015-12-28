@@ -9,7 +9,7 @@ public:
 
     // Agent interface
 public:
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
     std::shared_ptr<Agent> Instantiate() const override;
 
     int health = 1;

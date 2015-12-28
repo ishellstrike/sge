@@ -22,7 +22,7 @@ Tid Agent::GetTid()
     return id;
 }
 
-void Agent::Deserialize(rapidjson::Value &val)
+void Agent::Deserialize(const rapidjson::Value &val)
 {
 
 }

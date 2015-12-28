@@ -2,7 +2,7 @@
 #include "core/db.h"
 #include "material.h"
 
-void BlockBase::Deserialize(rapidjson::Value &val)
+void BlockBase::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(health), NVP(material));
 }

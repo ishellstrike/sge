@@ -1,7 +1,7 @@
 #include "sound.h"
 #include "prefecences.h"
 
-void Sound::Deserialize(rapidjson::Value &val)
+void Sound::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(name), NVP(filename), NVP(near), NVP(far));
 }

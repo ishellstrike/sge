@@ -1,7 +1,7 @@
 #include "referencer.h"
 #include "core/db.h"
 
-void Referencer::Deserialize(rapidjson::Value &val)
+void Referencer::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(ref));
 }

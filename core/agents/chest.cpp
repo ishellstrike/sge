@@ -4,7 +4,7 @@
 #include "core/db.h"
 #include "functional"
 
-void Chest::Deserialize(rapidjson::Value &val)
+void Chest::Deserialize(const rapidjson::Value &val)
 {
 
 }

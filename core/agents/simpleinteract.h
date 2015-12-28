@@ -10,7 +10,7 @@ public:
 
     // Agent interface
 public:
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
 
     void onInteract(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt) override;
     void onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer &gt) override;

@@ -94,7 +94,8 @@ SOURCES += \
     core/agents/blockbase.cpp \
     core/agents/block.cpp \
     core/agents/material.cpp \
-    core/agents/aggressive.cpp
+    core/agents/aggressive.cpp \
+    core/agents/structure.cpp
 
 VERSION = 0.1.0
 
@@ -229,7 +230,8 @@ HEADERS += \
     core/agents/blockbase.h \
     core/agents/block.h \
     core/agents/material.h \
-    core/agents/aggressive.h
+    core/agents/aggressive.h \
+    core/agents/structure.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

@@ -2,7 +2,7 @@
 #include "core/db.h"
 #include "core/objectstatic.h"
 
-void Material::Deserialize(rapidjson::Value &val)
+void Material::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(hitsound), NVP(breaksound));
 }

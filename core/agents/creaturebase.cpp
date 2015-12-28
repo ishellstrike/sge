@@ -1,6 +1,6 @@
 #include "creaturebase.h"
 
-void CreatureBase::Deserialize(rapidjson::Value &val)
+void CreatureBase::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(name), NVP(description));
 }

@@ -22,7 +22,7 @@ public:
     *       "sort":<string sort type>
     *   }
     */
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
 
     std::string name, description;
 };

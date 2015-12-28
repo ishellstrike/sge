@@ -71,7 +71,7 @@ public:
     Tid GetTid();
     virtual std::string Typename() = 0;
 
-    virtual void Deserialize(rapidjson::Value &val);
+    virtual void Deserialize(const rapidjson::Value &val);
     virtual std::shared_ptr<Agent> Instantiate() const = 0;
 
     virtual void     onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);

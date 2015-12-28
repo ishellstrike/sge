@@ -1,11 +1,19 @@
-#ifndef Item_H
-#define Item_H
+#ifndef STRUCTURE_H
+#define STRUCTURE_H
 #include "core/agent.h"
 
-class Item : public DynamicAgent
+struct StructuralPart
 {
-public:   
-    DAGENT(Item)
+    Id id;
+    int count;
+
+    void Deserialize(const rapidjson::Value &val);
+};
+
+class Structure : public DynamicAgent
+{
+public:
+    DAGENT(Structure)
 
     // Agent interface
 public:
@@ -16,8 +24,9 @@ public:
     virtual bool Equals( Agent *o ) override;
 
     int count = 1;
+    std::vector<StructuralPart> parts;
 };
 
-REGISTER_AGENT(Item)
+REGISTER_AGENT(Structure)
 
-#endif // Item_H
+#endif // STRUCTURE_H

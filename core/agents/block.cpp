@@ -1,6 +1,6 @@
 #include "block.h"
 
-void Block::Deserialize(rapidjson::Value &val)
+void Block::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(health));
 }

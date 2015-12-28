@@ -18,7 +18,7 @@ public:
     *       "ref":<string id>
     *   }
     */
-    void Deserialize(rapidjson::Value &val) override;
+    void Deserialize(const rapidjson::Value &val) override;
     void onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
 
     std::string ref;

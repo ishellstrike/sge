@@ -5,7 +5,7 @@
 #include "core/agents/entity.h"
 #include "core/level.h"
 
-void Aggressive::Deserialize(rapidjson::Value &val)
+void Aggressive::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(sound), NVP(allies));
 }
