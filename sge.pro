@@ -95,7 +95,8 @@ SOURCES += \
     core/agents/block.cpp \
     core/agents/material.cpp \
     core/agents/aggressive.cpp \
-    core/agents/structure.cpp
+    core/agents/structure.cpp \
+    sge_chest_window.cpp
 
 VERSION = 0.1.0
 
@@ -231,7 +232,8 @@ HEADERS += \
     core/agents/block.h \
     core/agents/material.h \
     core/agents/aggressive.h \
-    core/agents/structure.h
+    core/agents/structure.h \
+    sge_chest_window.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -477,4 +479,6 @@ DISTFILES += \
     data/sounds/wood_smash.ogg \
     data/sounds/door_open.ogg \
     data/sounds/door.ogg \
-    data/sounds/rustle.ogg
+    data/sounds/rustle.ogg \
+    data/json/scheme.json \
+    data/json/creature_parts.json

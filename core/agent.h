@@ -42,6 +42,7 @@ RegisterElement<ctype> RegisterElement##ctype(AgentFactory::instance(), #ctype);
 
 class Object;
 class Level;
+class Win;
 
 class Agent
 {

@@ -191,7 +191,7 @@ bool Scheme::Deserialize(rapidjson::Value &__val)
     }
     else
     {
-        LOG(error) << "scheme has broken \"data\" (must be [\"   abcd   \", ...])";
+        LOG(error) << "scheme has broken \"data\" (must be [\"abcd\", ...])";
         return false;
     }
 

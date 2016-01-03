@@ -3,6 +3,7 @@
 #include "stacked.h"
 #include "core/db.h"
 #include "functional"
+#include "sge_chest_window.h"
 
 void Chest::Deserialize(const rapidjson::Value &val)
 {
@@ -17,6 +18,12 @@ std::shared_ptr<Agent> Chest::Instantiate() const
         c->items.push_back(i->Instantiate());
     }
     return std::unique_ptr<Chest>(c);
+}
+
+void Chest::onInteract(Object *par, Level *, const glm::vec3 &, const GameTimer &)
+{
+   sge_chest_window &w = new sge_chest_window(WinS::ws);
+   w.Link(par);
 }
 
 void Chest::Combine()

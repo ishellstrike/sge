@@ -15,6 +15,7 @@ public:
 public:
     void Deserialize(const rapidjson::Value &val) override;
     std::shared_ptr<Agent> Instantiate() const override;
+    void onInteract(Object *par, Level *, const glm::vec3 &, const GameTimer&) override;
 
     void Combine();
 };

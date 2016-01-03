@@ -63,8 +63,7 @@ SQInteger squirrel_runtime_error(HSQUIRRELVM sqvm)
     return 0;
 }
 
-void squirrel_compile_error(HSQUIRRELVM sqvm, const SQChar* description,
-                                   const SQChar* file, SQInteger line, SQInteger column)
+void squirrel_compile_error(HSQUIRRELVM, const SQChar* description, const SQChar* file, SQInteger line, SQInteger column)
 {
    LOG(error) << "SQVM: Compile error: " << sge::string_format("sqvm: '%s' (Ln:%d Col:%d) : %s.",
                                                                file,
@@ -73,7 +72,7 @@ void squirrel_compile_error(HSQUIRRELVM sqvm, const SQChar* description,
                                                                description);
 }
 
-void squirrel_error_function(HSQUIRRELVM sqvm, const SQChar *s, ...)
+void squirrel_error_function(HSQUIRRELVM, const SQChar *s, ...)
 {
     va_list arglist;
     int final_n, n = 64;
