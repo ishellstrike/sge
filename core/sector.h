@@ -27,17 +27,17 @@ class Sector
 public:
     Sector(const glm::ivec2 &o);
 
-    std::array<const Object*, 6> Neighbours(const glm::ivec3 &pos);
+    std::array<std::shared_ptr<Object>, 6> Neighbours(const glm::ivec3 &pos);
     void Update(Level *l, GameTimer &gt);
     void Draw(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
-    void SetObject(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
+    void SetBlock(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
 
     void PlaceScheme(const Scheme &s, const glm::ivec3 &pos);
 
     glm::ivec2 offset;
-    Object *GetBlock(const glm::ivec3 &pos);
-    std::pair<Object *, Object *> GetCell(const glm::ivec3 &pos);
-    Object *GetGround(const glm::ivec3 &pos);
+    std::shared_ptr<Object> GetBlock(const glm::ivec3 &pos);
+    std::pair<std::shared_ptr<Object>, std::shared_ptr<Object> > GetCell(const glm::ivec3 &pos);
+    std::shared_ptr<Object> GetGround(const glm::ivec3 &pos);
     void SetGround(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
     void DrawEntities(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
     void DrawShadow(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;

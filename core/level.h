@@ -11,18 +11,21 @@ class Level
 public:
     Level();
 
-    typedef std::unordered_map<glm::ivec2, std::unique_ptr<Sector>> SectorMap;
+    typedef std::unordered_map<glm::ivec2, std::shared_ptr<Sector>> SectorMap;
     SectorMap map;
 
     void Update(GameTimer &gt);
     void Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const;
 
-    Sector *GetSectorByPos(const glm::vec3 &coord);
+    Sector *GetSectorByPos(const glm::vec3 &coord, bool request = true);
     Sector *GetSector(const glm::ivec2 &off, bool request = true);
-    Object *GetObjectByPos(const glm::vec3 &p);
+    std::shared_ptr<Object> GetObjectByPos(const glm::vec3 &p);
     std::list<Sector *> GetSectorsInRange(const glm::vec3 &coord, float r);
     std::list<std::weak_ptr<Object>> GetObjectsInRange(const glm::vec3 &coord, float r);
-    bool SetObjectAtPos(const glm::vec3 &p, std::shared_ptr<Object> o);
+
+    bool SetBlockAtPos(const glm::vec3 &p, std::shared_ptr<Object> o);
+    bool SetGroundAtPos(const glm::vec3 &pos, std::shared_ptr<Object> o);
+
     void KillFar(const glm::vec3 &pos, float dist);
 
     void DamageBlock(const glm::vec3 &pos, int count, GameTimer &gt);

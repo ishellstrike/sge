@@ -34,7 +34,7 @@ public:
 public:
     void Deserialize(const rapidjson::Value &val) override;
     std::shared_ptr<Agent> Instantiate() const override;
-    virtual void onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
 
     glm::vec3 pos;
     Order current_order;

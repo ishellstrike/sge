@@ -12,9 +12,9 @@ std::unique_ptr<Object> Object::Instantiate()
     return nullptr;
 }
 
-bool Object::Equals(Object *o)
+bool Object::Equals(std::shared_ptr<Object> &o)
 {
-    if( o == this )
+    if( o.get() == this )
         return true;
 
     if(o && agents)
@@ -37,66 +37,75 @@ bool Object::isStatic()
     return agents == nullptr;
 }
 
-void Object::onInit(Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Object::onInit(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onInit(this, l, pos, gt);
+            a->onInit(o, l, pos, gt);
 
-    base->onInit(this, l, pos, gt);
+    base->onInit(o, l, pos, gt);
 }
 
-void Object::onUpdate(Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Object::onUpdate(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onUpdate(this, l, pos, gt);
+            a->onUpdate(o, l, pos, gt);
 
-    base->onUpdate(this, l, pos, gt);
+    base->onUpdate(o, l, pos, gt);
 }
 
-void Object::onDraw(Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Object::onDraw(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onDraw(this, l, pos, gt);
+            a->onDraw(o, l, pos, gt);
 
-    base->onDraw(this, l, pos, gt);
+    base->onDraw(o, l, pos, gt);
 }
 
-void Object::onDestroy(Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Object::onDestroy(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onDestroy(this, l, pos, gt);
+            a->onDestroy(o, l, pos, gt);
 
-    base->onDestroy(this, l, pos, gt);
+    base->onDestroy(o, l, pos, gt);
 }
 
-void Object::onDamage(Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Object::onDamage(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onDamage(this, l, pos, gt);
+            a->onDamage(o, l, pos, gt);
 
-    base->onDamage(this, l, pos, gt);
+    base->onDamage(o, l, pos, gt);
 }
 
-void Object::onEnter(Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Object::onEnter(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onEnter(this, l, pos, gt);
+            a->onEnter(o, l, pos, gt);
 
-    base->onEnter(this, l, pos, gt);
+    base->onEnter(o, l, pos, gt);
 }
 
-void Object::onLeave(Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Object::onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
-            a->onLeave(this, l, pos, gt);
+            a->onLeave(o, l, pos, gt);
 
-    base->onLeave(this, l, pos, gt);
+    base->onLeave(o, l, pos, gt);
+}
+
+void Object::onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+{
+    if(agents)
+        for(const auto &a : *agents)
+            a->onInteract(o, l, pos, gt);
+
+    base->onInteract(o, l, pos, gt);
 }
 

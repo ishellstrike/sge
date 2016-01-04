@@ -12,8 +12,8 @@ public:
 public:
     void Deserialize(const rapidjson::Value &val) override;
 
-    void onInteract(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt) override;
-    void onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer &gt) override;
+    void onInteract(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt) override;
+    void onLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer &gt) override;
 
     std::string afterid, sound;
     const Sound *activate;

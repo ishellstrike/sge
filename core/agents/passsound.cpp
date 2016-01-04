@@ -14,7 +14,7 @@ void PassSound::Deserialize(const rapidjson::Value &val)
     }
 }
 
-void PassSound::onEnter(Object *par, Level *, const glm::vec3 &pos, const GameTimer &gt)
+void PassSound::onEnter(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(low)
     {
@@ -23,7 +23,7 @@ void PassSound::onEnter(Object *par, Level *, const glm::vec3 &pos, const GameTi
     }
 }
 
-void PassSound::onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer& gt)
+void PassSound::onLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt)
 {
     auto check = [&](const std::string &s)->const Sound*{
         if(const ObjectStatic *os = DB::Get(s))

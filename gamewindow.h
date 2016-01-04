@@ -13,7 +13,6 @@
 #include "fpscounter.h"
 #include "FrameBuffer.h"
 #include "gametimer.h"
-#include "gbuffer.h"
 #include "glm/gtx/transform.hpp"
 #include "keyboard.h"
 #include "logger.h"
@@ -90,7 +89,6 @@ public:
 
     GLFWmonitor *monitor = nullptr;
     GLFWwindow *window = nullptr;
-    std::shared_ptr<GBuffer> gb;
 
     glm::mat4 view = glm::mat4(1), proj = glm::mat4(1), proj_per = glm::mat4(1), model = glm::mat4(1);
     static GameWindow *wi;

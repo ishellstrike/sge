@@ -176,7 +176,7 @@
       {
         "type":"ItemSpawner",
         "items":[
-          [["tag_buffet", 1, 25, 0.1],["tag_buffet", 1, 10, 0.2],["tag_buffet", 1, 5, 0.3],["tag_buffet", 1, 1, 0.3]]
+          [["tag_buffet", 1, 25, 0.1],["tag_buffet", 1, 10, 0.2],["tag_buffet", 1, 5, 0.3],["tag_buffet", 1, 1, 0.5]]
         ]
       }
     ]

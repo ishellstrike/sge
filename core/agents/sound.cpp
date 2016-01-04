@@ -6,7 +6,7 @@ void Sound::Deserialize(const rapidjson::Value &val)
     DESERIALIZE(NVP(name), NVP(filename), NVP(near), NVP(far));
 }
 
-void Sound::onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Sound::onLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(!filename.empty())
     {
@@ -20,7 +20,7 @@ void Sound::onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer&
     }
 }
 
-void Sound::onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Sound::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     snd.Update();
 }

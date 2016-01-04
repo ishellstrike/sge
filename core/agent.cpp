@@ -27,47 +27,47 @@ void Agent::Deserialize(const rapidjson::Value &val)
 
 }
 
-void Agent::onLoad(Object *, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onLoad(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onInit(Object *, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onInit(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onUpdate(Object *, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onUpdate(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onDraw(Object *, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onDraw(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onInteract(Object *, Level *, const glm::vec3 &, const GameTimer &)
+void Agent::onInteract(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onDamage(Object *, Level *, const glm::vec3 &, const GameTimer &)
+void Agent::onDamage(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer &)
 {
 
 }
 
-void Agent::onDestroy(Object *, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onDestroy(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onEnter(Object *, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onEnter(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }
 
-void Agent::onLeave(Object *, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onLeave(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }

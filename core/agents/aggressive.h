@@ -11,9 +11,9 @@ public:
     SAGENT(Aggressive)
 
     void Deserialize(const rapidjson::Value &val) override;
-    virtual void onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void onInit(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    virtual void onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void onInit(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void onLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
     Creature *owner;
     Sound *agro;

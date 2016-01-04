@@ -8,6 +8,7 @@
 #include "font.h"
 #include "logger.h"
 #include "utfcpp/utf8.h"
+#include <fstream>
 
 Font::Font() :
     font(std::make_shared<Texture>())
@@ -52,8 +53,21 @@ void Font::renderAtlas()
     float x_start = x;
     const char32_t *p;
     FT_GlyphSlot ftGlyph = m_ftFace->glyph;
-    const std::string  text8(R"xxx( `1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,
-                       ./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?\|123@)xxx");
+    std::string text8;
+
+    {
+        std::ifstream fs("data/fonts/glyphs.txt");
+        if(!fs.good())
+            LOG(fatal) << "data/fonts/glyphs.txt missed";
+        text8 = std::string((std::istreambuf_iterator<char>(fs)),
+                             std::istreambuf_iterator<char>());
+    }
+
+    std::string::iterator end_it = utf8::find_invalid(text8.begin(), text8.end());
+    if (end_it != text8.end())
+    {
+        LOG(fatal) << "Invalid utf-8 encoding in data/fonts/glyphs.txt";
+    }
 
     std::u32string text;
 
@@ -71,12 +85,6 @@ void Font::renderAtlas()
 
     for(p = &text[0]; *p; p++)
     {
-        if(*p == '\n')
-        {
-            y+=ftGlyph->bitmap.pitch;
-            x=x_start;
-            continue;
-        }
         if(FT_Load_Char(m_ftFace, *p, FT_LOAD_RENDER))
         {
             LOG(error) << "Could not load character" << *p;

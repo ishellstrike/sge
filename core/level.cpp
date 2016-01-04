@@ -9,7 +9,7 @@ Level::Level()
 
 }
 
-Object *Level::GetObjectByPos(const glm::vec3 &pos)
+std::shared_ptr<Object> Level::GetObjectByPos(const glm::vec3 &pos)
 {
     int sec_x = pos.x < 0 ? (int(pos.x) + 1) / RX - 1 : int(pos.x) / RX;
     int sec_y = pos.y < 0 ? (int(pos.y) + 1) / RY - 1 : int(pos.y) / RY;
@@ -66,7 +66,7 @@ std::list<std::weak_ptr<Object>> Level::GetObjectsInRange(const glm::vec3 &coord
     return ob;
 }
 
-bool Level::SetObjectAtPos(const glm::vec3 &pos, std::shared_ptr<Object> o)
+bool Level::SetBlockAtPos(const glm::vec3 &pos, std::shared_ptr<Object> o)
 {
     int sec_x = pos.x < 0 ? (int(pos.x) + 1) / RX - 1 : int(pos.x) / RX;
     int sec_y = pos.y < 0 ? (int(pos.y) + 1) / RY - 1 : int(pos.y) / RY;
@@ -74,7 +74,21 @@ bool Level::SetObjectAtPos(const glm::vec3 &pos, std::shared_ptr<Object> o)
 
     if( Sector* s = GetSector({sec_x,sec_y}) )
     {
-        s->SetObject(sec_pos, o);
+        s->SetBlock(sec_pos, o);
+        return true;
+    }
+    return nullptr;
+}
+
+bool Level::SetGroundAtPos(const glm::vec3 &pos, std::shared_ptr<Object> o)
+{
+    int sec_x = pos.x < 0 ? (int(pos.x) + 1) / RX - 1 : int(pos.x) / RX;
+    int sec_y = pos.y < 0 ? (int(pos.y) + 1) / RY - 1 : int(pos.y) / RY;
+    auto sec_pos = pos - glm::vec3(sec_x*RX, sec_y*RY, 0);
+
+    if( Sector* s = GetSector({sec_x,sec_y}) )
+    {
+        s->SetGround(sec_pos, o);
         return true;
     }
     return nullptr;
@@ -96,26 +110,26 @@ void Level::KillFar(const glm::vec3 &pos, float dist)
 
 void Level::DamageBlock(const glm::vec3 &pos, int count, GameTimer &gt)
 {
-    Object *o = GetObjectByPos(pos);
+    std::shared_ptr<Object> &o = GetObjectByPos(pos);
     if(Block *b = o->GetAgent<Block>())
     {
         b->health -= count;
         if(b->health <= 0)
         {
-            o->onDestroy(this, pos, gt);
-            SetObjectAtPos(pos, DB::Create("air"));
+            o->onDestroy(o, this, pos, gt);
+            SetBlockAtPos(pos, DB::Create("air"));
             return;
         }
     }
-    o->onDamage(this, pos, gt);
+    o->onDamage(o, this, pos, gt);
 }
 
-Sector *Level::GetSectorByPos(const glm::vec3 &p)
+Sector *Level::GetSectorByPos(const glm::vec3 &p, bool request)
 {
     int x = p.x < 0 ? (int(p.x) + 1) / RX - 1 : int(p.x) / RX;
     int y = p.y < 0 ? (int(p.y) + 1) / RY - 1 : int(p.y) / RY;
 
-    return GetSector({x,y});
+    return GetSector({x,y}, request);
 }
 
 Sector *Level::GetSector(const glm::ivec2 &off, bool request)
@@ -146,7 +160,7 @@ bool Level::TpCreature( Object &o, const glm::vec3 &pos, bool wait )
     int sec_x = pos.x < 0 ? (int(pos.x) + 1) / RX - 1 : int(pos.x) / RX;
     int sec_y = pos.y < 0 ? (int(pos.y) + 1) / RY - 1 : int(pos.y) / RY;
     auto sec_pos = pos - glm::vec3(sec_x*RX, sec_y*RY, 0);
-    if(Object *targ = s->GetBlock( sec_pos ))
+    if(std::shared_ptr<Object> &targ = s->GetBlock( sec_pos ))
     {
         if( auto w = static_cast<ObjectStatic*>(targ->base)->GetAgent<Walkable>() )
             o.GetAgent<Creature>()->pos = pos;
@@ -169,20 +183,20 @@ bool Level::DeltaCreature(Object &o, const glm::vec3 &delta, bool wait )
        int(pos.y) != int(new_pos.y) ||
        int(pos.z) != int(new_pos.z))
     {
-        if(Object *o = GetObjectByPos(pos))
+        if(std::shared_ptr<Object> &o = GetObjectByPos(pos))
         {
-            o->onLeave(this, pos, GameTimer());
+            o->onLeave(o, this, pos, GameTimer());
         }
-        if(Object *o = GetObjectByPos(new_pos))
+        if(std::shared_ptr<Object> &o = GetObjectByPos(new_pos))
         {
-            o->onEnter(this, new_pos, GameTimer());
+            o->onEnter(o, this, new_pos, GameTimer());
         }
     }
 
     int sec_x = new_pos.x < 0 ? (int(new_pos.x) + 1) / RX - 1 : int(new_pos.x) / RX;
     int sec_y = new_pos.y < 0 ? (int(new_pos.y) + 1) / RY - 1 : int(new_pos.y) / RY;
     auto sec_pos = new_pos - glm::vec3( sec_x*RX, sec_y*RY, 0 );
-    std::pair<Object *, Object *> targ = s->GetCell( sec_pos );
+    std::pair<std::shared_ptr<Object>, std::shared_ptr<Object>> targ = s->GetCell( sec_pos );
     if( targ.first )
     {
         static const ObjectStatic *air = DB::Get("air");
@@ -199,7 +213,7 @@ void Level::Update(GameTimer& gt)
 {
     for(const auto &i : DB::sounds)
     {
-        i->onUpdate(nullptr, this, {0,0,0}, gt);
+        i->onUpdate(std::shared_ptr<Object>(), this, {0,0,0}, gt);
     }
 
     for(const auto &i : map)
@@ -211,7 +225,7 @@ void Level::Update(GameTimer& gt)
         {
             Object &c = **c_iter;
             glm::vec3 pos = c.GetAgent<Creature>()->pos;
-            c.onUpdate(this, pos, gt);
+            c.onUpdate(*c_iter, this, pos, gt);
 
             // если находится за границей сектора -- переносим в новый сектор, если он существует
             if(pos.x >= (cur.offset.x + 1) * RX ||

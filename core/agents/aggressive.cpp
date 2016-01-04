@@ -10,7 +10,7 @@ void Aggressive::Deserialize(const rapidjson::Value &val)
     DESERIALIZE(NVP(sound), NVP(allies));
 }
 
-void Aggressive::onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Aggressive::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(owner)
     {
@@ -37,7 +37,7 @@ void Aggressive::onUpdate(Object *par, Level *l, const glm::vec3 &pos, const Gam
     }
 }
 
-void Aggressive::onInit(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Aggressive::onInit(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     owner = par->GetAgent<Creature>();
     if(!owner)
@@ -46,7 +46,7 @@ void Aggressive::onInit(Object *par, Level *l, const glm::vec3 &pos, const GameT
     }
 }
 
-void Aggressive::onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Aggressive::onLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     agro = nullptr;
     if(const ObjectStatic *os = DB::Get(sound))

@@ -7,7 +7,7 @@
             {
                 "type":"ItemBase",
                 "sort":"meele",
-                "name":"заостренная палка"
+                "name":"Заостренная палка"
             },{
                 "type":"Structure",
                 "parts":[
@@ -19,7 +19,7 @@
     {
         "type":"Item",
         "id":"board",
-        "name":"деревянная доска",
+        "name":"Деревянная доска",
         "agents":[
             {
                 "type":"ItemBase"
@@ -29,7 +29,7 @@
     {
         "type":"Item",
         "id":"bigblade",
-        "name":"большое лезвие",
+        "name":"Большое лезвие",
         "agents":[
             {
                 "type":"ItemBase"
@@ -43,7 +43,7 @@
         "agents":[
             {
                 "type":"ItemBase",
-                "name":"самодельный большой нож",
+                "name":"Самодельный большой нож",
                 "sort":"meele"
             }
         ]
@@ -55,7 +55,7 @@
         "agents":[
             {
                 "type":"ItemBase",
-                "name":"доска с гвоздями",
+                "name":"Доска с гвоздями",
                 "sort":"meele"
             },{
                 "type":"Structure",
@@ -73,7 +73,7 @@
         "agents":[
             {
                 "type":"ItemBase",
-                "name":"палка с гвоздями",
+                "name":"Палка с гвоздями",
                 "sort":"meele"
             },{
                 "type":"Structure",
@@ -174,7 +174,7 @@
         "agents":[
             {
                 "type":"ItemBase",
-                "name":"стальная пластина",
+                "name":"Стальная пластина",
                 "sort":"craft",
                 "weight":4000
             }
@@ -187,7 +187,7 @@
         "agents":[
             {
                 "type":"ItemBase",
-                "name":"моток медной проволоки",
+                "name":"Моток медной проволоки",
                 "sort":"craft",
                 "weight":100
             }
@@ -199,7 +199,7 @@
         "agents":[
             {
                 "type":"ItemBase",
-                "name":"стальной прут",
+                "name":"Стальной прут",
                 "sort":"craft",
                 "weight":4000
             }
@@ -213,7 +213,7 @@
         "agents":[
             {
                 "type":"ItemBase",
-                "name":"доска",
+                "name":"Доска",
                 "sort":"craft",
                 "weight":2000
             }
@@ -237,38 +237,38 @@
     {
         "type":"Item",
         "id":"skotch",
-        "name":"Клейкая лента",
         "doses":100,
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":100
+                "weight":100,
+                "name":"Клейкая лента"
             }
         ]
     },
     {
         "type":"Item",
         "id":"izolenta",
-        "name":"Изолента",
         "doses":250,
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":70
+                "weight":70,
+                "name":"Изолента"
             }
         ]
     },
     {
         "type":"Item",
         "id":"wooden_pulp",
-        "name":"Древесные опилки",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":100
+                "weight":100,
+                "name":"Древесные опилки"
             },{
                 "type":"Flammable",
                 "time":5
@@ -278,24 +278,24 @@
     {
         "type":"Item",
         "id":"nail",
-        "name":"Гвоздь",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":10
+                "weight":10,
+                "name":"Гвоздь"
             }
         ]
     },
     {
         "type":"Item",
         "id":"coal",
-        "name":"Пакет угля",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":1000
+                "weight":1000,
+                "name":"Пакет угля"
             },{
                 "type":"Flammable",
                 "time":2000
@@ -305,12 +305,12 @@
     {
         "type":"Item",
         "id":"log",
-        "name":"Бревно",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":1000
+                "weight":1000,
+                "name":"Бревно"
             },{
                 "type":"Flammable",
                 "time":500
@@ -320,12 +320,12 @@
     {
         "type":"Item",
         "id":"hammer",
-        "name":"Молоток",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":700
+                "weight":700,
+                "name":"Молоток"
             },{
                 "type":"Tool",
                 "data":[
@@ -343,12 +343,12 @@
     {
         "type":"Item",
         "id":"screwdriver",
-        "name":"Отвертка",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":150
+                "weight":150,
+                "name":"Отвертка"
             },{
                 "type":"Tool",
                 "data":[
@@ -367,23 +367,23 @@
     },{
         "type":"Item",
         "id":"plastic_chunk",
-        "name":"Кусок пластика",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"meele",
-                "weight":50
+                "weight":50,
+                "name":"Кусок пластика"
             }
         ]
     },{
         "type":"Item",
         "id":"small_steel_blade",
-        "name":"Небольшое лезвие ножа",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"craft",
-                "weight":150
+                "weight":150,
+                "name":"Небольшое лезвие ножа"
             },{
                 "type":"Tool",
                 "data":[
@@ -396,12 +396,12 @@
     {
         "type":"Item",
         "id":"flick_knife",
-        "name":"Выкидной нож",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"meele",
-                "weight":200
+                "weight":200,
+                "name":"Выкидной нож"
             },{
                 "type":"Tool",
                 "data":[
@@ -423,12 +423,12 @@
     {
         "type":"Item",
         "id":"small_knife",
-        "name":"Кухонный нож",
         "agents":[
             {
                 "type":"ItemBase",
                 "sort":"meele",
-                "weight":200
+                "weight":200,
+                "name":"Кухонный нож"
             },{
                 "type":"Tool",
                 "data":[
@@ -452,62 +452,62 @@
     {
         "type":"Item",
         "id":"spearknife",
-        "name":"Самодельное копье с ножом",
         "agents":[
             {
                 "type":"ItemBase",
-                "sort":"meele"
+                "sort":"meele",
+                "name":"Самодельное копье с ножом",
+                "weight":650
             }
         ],
-        "weight":650,
         "Damage":5
     },
     {
         "type":"Item",
         "id":"chipset",
-        "name":"Печатная плата",
         "sort":"Craft",
-        "weight":20,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Печатная плата",
+                "weight":20
             }
         ]
     },
     {
         "type":"Item",
         "id":"batery",
-        "name":"Аккумулятор",
         "sort":"Craft",
-        "weight":20,
-        "Description":"Небольшой Li-ion аккумулятор. Похоже еще сохранил немного заряда. Может быть использован в электротехнике или как источник тепла.",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "weight":20,
+                "description":"Небольшой Li-ion аккумулятор. Похоже еще сохранил немного заряда. Может быть использован в электротехнике или как источник тепла.",
+                "name":"Аккумулятор"
             }
         ]
     },
     {
         "type":"Item",
         "id":"tinymonitor",
-        "name":"маленький ЖК экран",
         "sort":"Craft",
-        "weight":20,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "weight":20,
+                "name":"маленький ЖК экран"
             }
         ]
     },
     {
         "type":"Item",
         "id":"small_screw",
-        "name":"Маленькие винты",
         "sort":"Craft",
-        "weight":1,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Маленькие винты",
+                "weight":1
             }
         ]
     },
@@ -516,7 +516,7 @@
         "id":"cola_can",
         "nameret":"Банка",
         "spawn_group":"spawn_shopfood",
-        "Description":"Полная банка популярного газированного напитка.",
+        "description":"Полная банка популярного газированного напитка.",
         "agents": [
             {
                 "type":"Tags",
@@ -539,20 +539,20 @@
     {
         "type":"Item",
         "id":"fishcan1",
-        "name":"Банка сардин",
         "nameret":"Банка с едой",
         "AfteruseId":"emptycan",
         "sort":"Food",
-        "weight":100,
         "NutCal":500,
         "doses":2,
-        "Description":"Полная банка недорогих рыбных консервов.",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Банка сардин",
+                "description":"Полная банка недорогих рыбных консервов.",
+                "weight":100
             }
 
         ]
@@ -560,8 +560,6 @@
     {
         "type":"Item",
         "id":"lapsha1",
-        "name":"Пакет лапши",
-        "weight":100,
         "NutCal":400,
         "nameret":"Пакет с едой",
         "sort":"Food",
@@ -569,42 +567,42 @@
         "Buff":[
             "foodbad1"
         ],
-        "Description":"Пакет дешевой лапши быстрого приготовления с приправами.",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet", "tag_cola"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пакет лапши",
+                "weight":100,
+                "description":"Пакет дешевой лапши быстрого приготовления с приправами."
             }
         ]
     },
     {
         "type":"Item",
         "id":"cookie1",
-        "name":"Коробка галет",
-        "weight":300,
         "NutCal":700,
         "nameret":"Коробка с едой",
         "doses":20,
         "sort":"Food",
-        "Description":"Коробка практически непортящегося, но безвкусного печенья",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Коробка галет",
+                "weight":300,
+                "description":"Коробка практически непортящегося, но безвкусного печенья"
             }
         ]
     },
     {
         "type":"Item",
         "id":"meatcan1",
-        "name":"Открытая банка тушеной говядины",
         "nameret":"Банка с едой",
         "Using":"мясо из банки",
-        "weight":300,
         "NutCal":800,
         "doses":2,
         "AfteruseId":"emptycan",
@@ -613,14 +611,15 @@
         "Type":"ItemCookableFood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Открытая банка тушеной говядины",
+                "weight":300
             }
         ]
     },
     {
         "type":"Item",
         "id":"meatcan1cl",
-        "name":"Банка тушеной говядины",
         "nameret":"Банка с едой",
         "AfteruseId":"meatcan1",
         "Type":"ItemCan",
@@ -629,17 +628,16 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Банка тушеной говядины"
             }
         ]
     },
     {
         "type":"Item",
         "id":"meatcan2",
-        "name":"Открытая банка паштета",
         "nameret":"Банка с едой",
         "Using":"паштет из банки",
-        "weight":300,
         "NutCal":600,
         "doses":2,
         "AfteruseId":"emptycan",
@@ -648,14 +646,15 @@
         "Type":"ItemCookableFood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "weight":300,
+                "name":"Открытая банка паштета"
             }
         ]
     },
     {
         "type":"Item",
         "id":"meatcan2cl",
-        "name":"Банка паштета",
         "nameret":"Банка с едой",
         "AfteruseId":"meatcan2",
         "Type":"ItemCan",
@@ -664,195 +663,194 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Банка паштета"
             }
         ]
     },
     {
         "type":"Item",
         "id":"milk1",
-        "name":"Пакет молока",
-        "weight":1000,
         "NutCal":250,
         "NutH2O":1000,
         "AfteruseId":13,
         "doses":10,
         "sort":"Food",
         "spawn_group":"spawn_shopfood",
-        "Description":"Выглядит подозрительно.",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пакет молока",
+                "weight":1000,
+                "description":"Выглядит подозрительно."
             }
         ]
     },
     {
         "type":"Item",
         "id":"emptycan",
-        "name":"Пустая банка",
-        "weight":30,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пустая банка",
+                "weight":30
             }
         ]
     },
     {
         "type":"Item",
-        "id":"9",
-        "name":"Фляга армейская (полная)",
-        "weight":600,
+        "id":"armycan_full",
         "NutH2O":500,
         "AfteruseId":14,
         "sort":"Food",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Фляга армейская (полная)",
+                "weight":600
             }
         ]
     },
     {
         "type":"Item",
-        "id":"10",
-        "name":"Аварийный рацион питания",
+        "id":"foodration",
         "nameret":"Странная коробка",
-        "weight":500,
         "NutCal":1000,
         "AfteruseId":13,
         "sort":"Food",
-        "Description":"Cредство поддержания жизнедеятельности в аварийных условиях. Очень вовремя",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Аварийный рацион питания",
+                "description":"Cредство поддержания жизнедеятельности в аварийных условиях. Очень вовремя",
+                "weight":500
             }
         ]
     },
     {
         "type":"Item",
         "id":"watercons",
-        "name":"Вода консервированая",
         "nameret":"Странный пакет",
         "NutH2O":500,
-        "weight":500,
         "AfteruseId":12,
         "sort":"Food",
-        "Description":"Cредство поддержания жизнедеятельности в аварийных условиях. Очень вовремя",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Вода консервированая",
+                "description":"Cредство поддержания жизнедеятельности в аварийных условиях. Очень вовремя",
+                "weight":500
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12",
-        "name":"Пустой пакет",
-        "weight":10,
-        "Description":"Целлофановый пакет.",
+        "id":"plastic_bag",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пустой пакет",
+                "weight":10,
+                "description":"Целлофановый пакет."
             }
         ]
     },
     {
         "type":"Item",
-        "id":"13",
-        "name":"Пустая коробка",
-        "weight":20,
-        "Descroption":"Картонная коробка.",
+        "id":"empty_box",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пустая коробка",
+                "weight":20,
+                "Descroption":"Картонная коробка."
             }
         ]
     },
     {
         "type":"Item",
         "id":"matches",
-        "name":"Коробок спичек",
-        "weight":20,
         "doses":40,
         "spawn_group":"spawn_common",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Коробок спичек",
+                "weight":20
             }
         ]
     },
     {
         "type":"Item",
         "id":"matches_hunt",
-        "name":"Коробок охотничьих спичек",
-        "weight":20,
         "doses":15,
         "spawn_group":"spawn_hunter",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Коробок охотничьих спичек",
+                "weight":20
             }
         ]
     },
     {
         "type":"Item",
-        "id":"14",
-        "name":"Фляга армейская (пустая)",
-        "weight":100,
+        "id":"armycan_empty",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Фляга армейская (пустая)",
+                "weight":100
             }
         ]
     },
     {
         "type":"Item",
         "id":"steak",
-        "name":"Стейк",
-        "weight":400,
         "NutCal":600,
         "Buff":[
             "foodjoy1"
         ],
         "sort":"Food",
         "spawn_group":"spawn_cookedfood",
-        "Description":"Приготовленный толстый кусок мяса",
         "Type":"ItemCookableFood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Стейк",
+                "weight":400,
+                "description":"Приготовленный толстый кусок мяса"
             }
         ]
     },
     {
         "type":"Item",
         "id":"goodsteak",
-        "name":"Стейк Солсбери",
-        "weight":400,
         "NutCal":600,
         "Buff":[
             "foodjoy2"
         ],
         "sort":"Food",
         "spawn_group":"spawn_cookedfood",
-        "Description":"Качественно приготовленный толстый кусок мяса",
         "Type":"ItemCookableFood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Стейк Солсбери",
+                "weight":400,
+                "description":"Качественно приготовленный толстый кусок мяса"
             }
         ]
     },
     {
         "type":"Item",
         "id":"chips",
-        "name":"Чипсы",
-        "weight":90,
         "NutCal":150,
         "Buff":[
             "foodjoy1"
@@ -863,7 +861,9 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Чипсы",
+                "weight":90
             }
 
         ]
@@ -871,8 +871,6 @@
     {
         "type":"Item",
         "id":"chips2",
-        "name":"Недорогие чипсы",
-        "weight":90,
         "NutCal":100,
         "sort":"Food",
         "agents": [
@@ -880,15 +878,15 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Недорогие чипсы",
+                "weight":90
             }
         ]
     },
     {
         "type":"Item",
         "id":"chips3",
-        "name":"Отличные чипсы",
-        "weight":90,
         "NutCal":150,
         "sort":"Food",
         "Buff":[
@@ -899,15 +897,15 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Отличные чипсы",
+                "weight":90
             }
         ]
     },
     {
         "type":"Item",
         "id":"fastpure",
-        "name":"Пюре быстрого приготовления",
-        "weight":100,
         "NutCal":100,
         "sort":"Food",
         "Buff":[
@@ -919,15 +917,15 @@
                 "tags":["tag_buffet"]
             },
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пюре быстрого приготовления",
+                "weight":100
             }
         ]
     },
     {
         "type":"Item",
         "id":"apple",
-        "name":"Яблоко",
-        "weight":100,
         "NutCal":100,
         "NutH2O":100,
         "sort":"Food",
@@ -937,15 +935,15 @@
                 "type":"Tags",
                 "tags":["tag_fruit"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Яблоко",
+                "weight":100
             }
         ]
     },
     {
         "type":"Item",
         "id":"banan",
-        "name":"Банан",
-        "weight":100,
         "NutCal":100,
         "NutH2O":100,
         "sort":"Food",
@@ -955,15 +953,15 @@
                 "type":"Tags",
                 "tags":["tag_fruit"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Банан",
+                "weight":100
             }
         ]
     },
     {
         "type":"Item",
         "id":"grusha",
-        "name":"Груша",
-        "weight":150,
         "NutCal":150,
         "NutH2O":150,
         "sort":"Food",
@@ -972,16 +970,15 @@
                 "type":"Tags",
                 "tags":["tag_fruit"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Груша",
+                "weight":150
             }
-        ],
-        "Type":"ItemCookableFood"
+        ]
     },
     {
         "type":"Item",
         "id":"carrot",
-        "name":"Морковь",
-        "weight":70,
         "NutCal":70,
         "NutH2O":70,
         "sort":"Food",
@@ -990,39 +987,39 @@
                 "type":"Tags",
                 "tags":["tag_vegetable"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Морковь",
+                "weight":70
             }
-        ],
-        "Type":"ItemCookableFood"
+        ]
     },
     {
         "type":"Item",
         "id":"raw_meat",
-        "name":"Сырое мясо",
         "sort":"Food",
         "spawn_group":"spawn_cookedfood",
         "doses":5,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Сырое мясо"
             }
         ]
     },
     {
         "type":"Item",
         "id":"salted_raw_meat",
-        "name":"Соленое сырое мясо",
         "sort":"Food",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Соленое сырое мясо"
             }
         ]
     },
     {
         "type":"Item",
         "id":"salt",
-        "name":"Соль",
         "doses":100,
         "sort":"Food",
         "agents": [
@@ -1030,17 +1027,16 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Соль"
             }
         ]
     },
     {
         "type":"Item",
         "id":"beancan1",
-        "name":"Открытая банка бобов",
         "nameret":"Банка с едой",
         "Using":"бобы из банки",
-        "weight":300,
         "NutCal":800,
         "doses":2,
         "AfteruseId":"emptycan",
@@ -1049,14 +1045,15 @@
         "Type":"ItemCookableFood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Открытая банка бобов",
+                "weight":300
             }
         ]
     },
     {
         "type":"Item",
         "id":"beancan1cl",
-        "name":"Банка бобов",
         "nameret":"Банка с едой",
         "AfteruseId":"beancan1",
         "agents": [
@@ -1064,7 +1061,8 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Банка бобов"
             }
         ],
         "Type":"ItemCan"
@@ -1072,10 +1070,8 @@
     {
         "type":"Item",
         "id":"corncan1",
-        "name":"Открытая банка кукурузы",
         "nameret":"Банка с едой",
         "Using":"кукурузу из банки",
-        "weight":300,
         "NutCal":800,
         "doses":2,
         "AfteruseId":"emptycan",
@@ -1084,14 +1080,15 @@
         "Type":"ItemCookableFood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Открытая банка кукурузы",
+                "weight":300
             }
         ]
     },
     {
         "type":"Item",
         "id":"corncan1cl",
-        "name":"Банка кукурузы",
         "nameret":"Банка с едой",
         "AfteruseId":"corncan1",
         "agents": [
@@ -1099,18 +1096,16 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Банка кукурузы"
             }
-        ],
-        "Type":"ItemCan"
+        ]
     },
     {
         "type":"Item",
         "id":"corncan2",
-        "name":"Открытая банка горошка",
         "nameret":"Банка с едой",
         "Using":"горошек из банки",
-        "weight":300,
         "NutCal":800,
         "doses":2,
         "AfteruseId":"emptycan",
@@ -1119,14 +1114,15 @@
         "Type":"ItemCookableFood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Открытая банка горошка",
+                "weight":300
             }
         ]
     },
     {
         "type":"Item",
         "id":"corncan2cl",
-        "name":"Банка горошка",
         "nameret":"Банка с едой",
         "AfteruseId":"corncan2",
         "agents": [
@@ -1134,7 +1130,8 @@
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Банка горошка"
             }
         ],
         "Type":"ItemCan"
@@ -1142,71 +1139,68 @@
     {
         "type":"Item",
         "id":"vinebottlecl",
-        "name":"Бутылка вина",
         "AfteruseId":"vinebottle",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Бутылка вина",
+                "weight":1000
             }
-        ],
-        "Type":"ItemBottle",
-        "weight":1000
+        ]
     },
     {
         "type":"Item",
         "id":"vinebottle",
-        "name":"Открытая бутылка вина",
         "Using":"вино из бутылки",
         "sort":"Food",
         "doses":40,
         "spawn_group":"spawn_cookedfood",
-        "weight":1000,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Открытая бутылка вина",
+                "weight":1000
             }
         ]
     },
     {
         "type":"Item",
         "id":"vodkabottlecl",
-        "name":"Бутылка водки",
         "AfteruseId":"vodkabottle",
         "agents": [
             {
                 "type":"Tags",
                 "tags":["tag_buffet"]
             },{
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Бутылка водки"
             }
         ],
         "Type":"ItemBottle",
         "weight":500,
-        "Description":"Она самая"
+        "description":"Она самая"
     },
     {
         "type":"Item",
         "id":"vodkabottle",
-        "name":"Открытая бутылка водки",
         "Using":"водку из бутылки",
         "sort":"Food",
         "doses":20,
         "spawn_group":"spawn_cookedfood",
-        "weight":500,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Открытая бутылка водки",
+                "weight":500
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12000",
-        "name":"SA80",
-        "Description":"Made in UK",
+        "id":"sa80",
         "sort":"Gun",
         "UpType":"Rifle",
         "some":"some some",
@@ -1214,76 +1208,75 @@
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"SA80",
+                "description":"Made in UK"
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12001",
-        "name":"HK417",
-        "Description":"Made in Germany",
+        "id":"hk417",
         "sort":"Gun",
         "UpType":"AssaultRifle",
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"HK417",
+                "description":"Made in Germany"
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12002",
-        "name":"TAR-21",
-        "Description":"Made in Israel",
+        "id":"tar21",
         "sort":"Gun",
         "UpType":"AssaultRifle",
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"TAR-21",
+                "description":"Made in Israel"
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12003",
-        "name":"СВД",
-        "Description":"Made in Russia",
+        "id":"svd",
         "sort":"Gun",
         "UpType":"SniperRifle",
-        "weight":5000,
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"СВД",
+                "description":"Made in Russia",
+                "weight":5000
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12004",
-        "name":"Винтовка M14",
-        "Description":"Made in USA",
+        "id":"m14",
         "sort":"Gun",
         "UpType":"Rifle",
-        "weight":4000,
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Винтовка M14",
+                "description":"Made in USA",
+                "weight":4000
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12005",
-        "name":"Снайперская винтовка М25",
-        "Description":"Made in USA",
+        "id":"m25",
         "sort":"Gun",
         "UpType":"SniperRifle",
-        "weight":5000,
         "Ammo":"a308",
         "Magazine":20,
         "Damage":80,
@@ -1292,17 +1285,18 @@
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Снайперская винтовка М25",
+                "description":"Made in USA",
+                "weight":5000
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12006",
-        "name":"FAMAS",
+        "id":"famas",
         "sort":"Gun",
         "UpType":"AssaultRifle",
-        "weight":4000,
         "Magazine":25,
         "Damage":19,
         "Accuracy":29,
@@ -1311,17 +1305,17 @@
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"FAMAS",
+                "weight":4000
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12007",
-        "name":"Barrett M82",
+        "id":"m82",
         "sort":"Gun",
         "UpType":"SniperRifle",
-        "weight":14000,
         "Magazine":10,
         "Damage":200,
         "FireRate":2000,
@@ -1330,168 +1324,169 @@
         "spawn_group":"spawn_core_superweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Barrett M82",
+                "weight":14000
             }
         ]
     },
     {
         "type":"Item",
         "id":"coilgun1",
-        "name":"Необычное оружие с проводами",
-        "Description":"Похоже какой-то тестовый образец оружие. Опутано проводами и индикаторами. Вы понятия не имеете как этим пользоваться.",
         "sort":"Gun",
-        "weight":10000,
         "spawn_group":"spawn_core_superweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Необычное оружие с проводами",
+                "weight":10000,
+                "description":"Похоже какой-то тестовый образец оружие. Опутано проводами и индикаторами. Вы понятия не имеете как этим пользоваться."
             }
         ]
     },
     {
         "type":"Item",
-        "id":"12008",
-        "name":"AK-12",
+        "id":"ak12",
         "sort":"Gun",
         "UpType":"AssaultRifle",
-        "weight":3500,
         "Magazine":30,
         "Damage":25,
         "Accuracy":30,
         "FireRate":50,
-        "Description":"Made in Russia",
         "Ammo":"a762",
         "spawn_group":"spawn_core_heavyweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"AK-12",
+                "weight":3500,
+                "description":"Made in Russia"
             }
         ]
     },
     {
         "type":"Item",
         "id":"ak47",
-        "name":"AK-47",
         "sort":"Gun",
         "UpType":"AssaultRifle",
-        "weight":3500,
         "Ammo":"a762",
         "Magazine":30,
         "FireRate":50,
         "Accuracy":50,
         "Damage":20,
-        "Description":"Made in Russia",
         "spawn_group":"spawn_core_heavyweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"AK-47",
+                "description":"Made in Russia",
+                "weight":3500
             }
         ]
     },
     {
         "type":"Item",
         "id":"12009",
-        "name":"AK-12 барабанный магазин",
         "sort":"Gun",
         "UpType":"AssaultRifle",
-        "weight":3800,
         "Magazine":90,
         "Damage":20,
-        "Description":"Made in Russia",
         "Ammo":"a762",
         "spawn_group":"spawn_core_militaryweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"AK-12 барабанный магазин",
+                "weight":3800,
+                "description":"Made in Russia"
             }
         ]
     },
     {
         "type":"Item",
         "id":"samopal",
-        "name":"Пистолет самопал",
         "sort":"Gun",
         "UpType":"Pistol",
-        "weight":800,
         "Magazine":1,
         "Damage":10,
-        "Description":"Самодельный однозарядный пистолет",
         "Ammo":"a762",
         "spawn_group":"spawn_core_lightweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пистолет самопал",
+                "weight":800,
+                "description":"Самодельный однозарядный пистолет"
             }
         ]
     },
     {
         "type":"Item",
         "id":"samopal2",
-        "name":"Ружье самопал",
         "sort":"Gun",
         "UpType":"Rifle",
-        "weight":1500,
         "Magazine":1,
         "Damage":15,
-        "Description":"Самодельное однозарядное ружье",
         "Ammo":"a762",
         "spawn_group":"spawn_core_lightweapon",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Ружье самопал",
+                "description":"Самодельное однозарядное ружье",
+                "weight":1500
             }
         ]
     },
     {
         "type":"Item",
         "id":"bint1",
-        "name":"Бинт",
         "sort":"Medicine",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Бинт"
             }
         ]
     },
     {
         "type":"Item",
         "id":"bint2",
-        "name":"Плотный бинт",
         "sort":"Medicine",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Плотный бинт"
             }
         ]
     },
     {
         "type":"Item",
         "id":"jgut",
-        "name":"Жгут",
         "sort":"Medicine",
-        "Description":"Средство временной остановки кровотечения",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Жгут",
+                "description":"Средство временной остановки кровотечения"
             }
         ]
     },
     {
         "type":"Item",
         "id":"pantocid",
-        "name":"Пантоцид в упаковке",
         "sort":"Medicine",
         "doses":20,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пантоцид в упаковке"
             }
         ]
     },
     {
         "type":"Item",
         "id":"cofein",
-        "name":"Кофеин в упаковке",
         "doses":20,
         "sort":"Medicine",
         "Buffs":[
@@ -1500,228 +1495,228 @@
         "Descroption":"Помогает бороться со сном",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Кофеин в упаковке"
             }
         ]
     },
     {
         "type":"Item",
         "id":"bag1",
-        "name":"Рюкзак походный",
-        "weight":1000,
         "volume":2000,
         "Container":65000,
         "sort":"Bag",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Рюкзак походный",
+                "weight":1000
             }
         ]
     },
     {
         "type":"Item",
         "id":"bag2",
-        "name":"Рюкзак туристический",
-        "weight":600,
         "volume":1200,
         "Container":28000,
         "sort":"Bag",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Рюкзак туристический",
+                "weight":600
             }
         ]
     },
     {
         "type":"Item",
         "id":"phone1",
-        "name":"Мобильный телефон",
-        "weight":100,
-        "Description":"Небльшой телефон, теперь практически бесполезен, может быть разобран или служить как фонарик.",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Мобильный телефон",
+                "weight":100,
+                "description":"Небльшой телефон, теперь практически бесполезен, может быть разобран или служить как фонарик."
             }
         ]
     },
     {
         "type":"Item",
         "id":"radio1",
-        "name":"Небольшое радио",
-        "weight":300,
         "Type":"ItemRadio",
         "ItemScript":[
             "dissass",
             "turnradio"
         ],
-        "Description":"Использует пальчиковые батарейки, похоже еще работает.",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Небольшое радио",
+                "weight":300,
+                "description":"Использует пальчиковые батарейки, похоже еще работает."
             }
         ]
     },
     {
         "type":"Item",
         "id":"nocigarets",
-        "name":"Пачка из-под сигарет",
-        "weight":10,
         "spawn_group":"spawn_trash",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пачка из-под сигарет",
+                "weight":10
             }
         ]
     },
     {
         "type":"Item",
         "id":"cigarets",
-        "name":"Пачка сигарет",
         "doses":20,
-        "weight":20,
         "Type":"ItemCigarets",
         "AfteruseId":"nocigarets",
         "ItemScript":[
             "smoke"
         ],
-        "Description":"Открытая пачка сиграет. Вы нашли ее полной",
         "spawn_group":"spawn_shopfood",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пачка сигарет",
+                "weight":20,
+                "description":"Открытая пачка сиграет. Вы нашли ее полной"
             }
         ]
     },
     {
         "type":"Item",
         "id":"cigarets10",
-        "name":"Пачка сигарет",
         "doses":10,
         "Type":"ItemCigarets",
-        "weight":20,
         "AfteruseId":"nocigarets",
         "ItemScript":[
             "smoke"
         ],
-        "Description":"Давно открытая пачка сигарет. Вы нашли ее наполовину полной",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пачка сигарет",
+                "weight":20,
+                "description":"Давно открытая пачка сигарет. Вы нашли ее наполовину полной"
             }
         ]
     },
     {
         "type":"Item",
         "id":"cigarets4",
-        "name":"Пачка сигарет",
         "doses":4,
-        "weight":20,
         "Type":"ItemCigarets",
         "AfteruseId":"nocigarets",
         "ItemScript":[
             "smoke"
         ],
-        "Description":"Давно открытая пачка сигарет. Вы нашли ее уже практически пустой",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Пачка сигарет",
+                "description":"Давно открытая пачка сигарет. Вы нашли ее уже практически пустой",
+                "weight":20
             }
         ]
     },
     {
         "type":"Item",
         "id":"brpencil",
-        "name":"Сломаный карандаш",
-        "weight":10,
-        "Description":"Переломленый карандаш, неудобно, но им можно писать",
         "spawn_group":"spawn_trash",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Сломаный карандаш",
+                "weight":10,
+                "description":"Переломленый карандаш, неудобно, но им можно писать"
             }
         ]
     },
     {
         "type":"Item",
         "id":"brpen",
-        "name":"Сломаная шариковая ручка",
-        "weight":10,
         "spawn_group":"spawn_trash",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Сломаная шариковая ручка",
+                "weight":10
             }
         ]
     },
     {
         "type":"Item",
         "id":"brpaper",
-        "name":"Скомканая бумага",
-        "weight":10,
         "spawn_group":"spawn_trash",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Скомканая бумага",
+                "weight":10
             }
         ]
     },
     {
         "type":"Item",
         "id":"brcloth",
-        "name":"Обрывки ткани",
-        "Description":"Небольшие куски ткани, мало для чего пригодны",
-        "weight":50,
         "spawn_group":"spawn_trash",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Обрывки ткани",
+                "description":"Небольшие куски ткани, мало для чего пригодны",
+                "weight":50
             }
         ]
     },
     {
         "type":"Item",
         "id":"partcloth",
-        "name":"Ткань",
-        "weight":100,
-        "Description":"Большой кусок крепкой ткани",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "weight":100,
+                "description":"Большой кусок крепкой ткани",
+                "name":"Ткань"
             }
         ]
     },
     {
         "type":"Item",
         "id":"lighter1",
-        "name":"Дешевая зажигалка",
-        "weight":20,
         "doses":100,
         "spawn_group":"spawn_shopfood",
         "Type":"Lighter",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Дешевая зажигалка",
+                "weight":20
             }
         ]
     },
     {
         "type":"Item",
         "id":"lighter2",
-        "name":"Зажигалка",
         "weight":20,
         "doses":200,
         "spawn_group":"spawn_shopfood",
         "Type":"Lighter",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Зажигалка"
             }
         ]
     },
     {
         "type":"Item",
         "id":"testhat",
-        "name":"Тестовая шляпа",
         "Buff":[
             "hpup5",
             "hpup2"
@@ -1732,14 +1727,14 @@
         "Type":"ItemCloth",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Тестовая шляпа"
             }
         ]
     },
     {
         "type":"Item",
         "id":"testhat2",
-        "name":"Тестовая шляпа2",
         "Buff":[
             "hpup5",
             "burn"
@@ -1750,157 +1745,157 @@
         "Type":"ItemCloth",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Тестовая шляпа2"
             }
         ]
     },
     {
         "type":"Item",
         "id":"kitty_collar",
-        "name":"Кошачий ошейник",
         "weight":50,
         "sort":"Wear",
         "Dress":"collar1",
         "spawn_group":"spawn_commonwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Кошачий ошейник"
             }
         ]
     },
     {
         "type":"Item",
         "id":"socks",
-        "name":"Носки",
         "weight":50,
         "sort":"Wear",
         "Type":"ItemCloth",
         "spawn_group":"spawn_commonwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Носки"
             }
         ]
     },
     {
         "type":"Item",
         "id":"wool_socks",
-        "name":"Шерстяные носки",
         "weight":100,
         "sort":"Wear",
         "spawn_group":"spawn_commonwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Шерстяные носки"
             }
         ]
     },
     {
         "type":"Item",
         "id":"sneakers",
-        "name":"Кросовки",
         "sort":"Wear",
         "weight":400,
         "spawn_group":"spawn_commonwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Кросовки"
             }
         ]
     },
     {
         "type":"Item",
         "id":"boots",
-        "name":"Кожаные ботинки",
         "sort":"Wear",
         "spawn_group":"spawn_commonwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Кожаные ботинки"
             }
         ]
     },
     {
         "type":"Item",
         "id":"steeltoed_boots",
-        "name":"Ботинки с металическим носком",
         "weight":1000,
         "sort":"Wear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Ботинки с металическим носком"
             }
         ]
     },
     {
         "type":"Item",
         "id":"military_boots",
-        "name":"Военные ботинки",
         "weight":1300,
         "sort":"Wear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Военные ботинки"
             }
         ]
     },
     {
         "type":"Item",
         "id":"winter_boots",
-        "name":"Зимние ботинки",
         "sort":"Wear",
         "weight":1000,
         "spawn_group":"spawn_commonwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Зимние ботинки"
             }
         ]
     },
     {
         "type":"Item",
         "id":"baseball_hat",
-        "name":"Бейсболка",
         "sort":"Wear",
         "weight":100,
         "spawn_group":"spawn_sportwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Бейсболка"
             }
         ]
     },
     {
         "type":"Item",
         "id":"sun_glasses",
-        "name":"Солнцезащитные очки",
         "sort":"Wear",
         "weight":50,
         "Dress":"glass1",
         "spawn_group":"spawn_commonwear",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Солнцезащитные очки"
             }
         ]
     },
     {
         "type":"Item",
         "id":"resp1",
-        "name":"Респиратор",
         "sort":"Wear",
         "weight":800,
         "Dress":"resp1",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Респиратор"
             }
         ]
     },
     {
         "type":"Item",
         "id":"jeans",
-        "name":"Джинсы",
         "sort":"Wear",
         "weight":500,
         "Dress":"jeans",
@@ -1908,14 +1903,14 @@
         "Type":"ItemCloth",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Джинсы"
             }
         ]
     },
     {
         "type":"Item",
         "id":"t-shirt1",
-        "name":"Футболка",
         "sort":"Wear",
         "weight":200,
         "Dress":"t-shirt1",
@@ -1923,50 +1918,52 @@
         "Type":"ItemCloth",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Футболка"
             }
         ]
     },
     {
         "type":"Item",
         "id":"haer1",
-        "name":"Волосы",
         "sort":"Wear",
         "Dress":"haer1",
         "Hidden":"true",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Волосы"
             }
         ]
     },
     {
         "type":"Item",
         "id":"soap",
-        "name":"Мыло",
         "weight":100,
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Мыло"
             }
         ]
     },
     {
         "type":"Item",
         "id":"glasscup",
-        "name":"Стеклянный стакан",
         "weight":200,
         "agents":[
             {
                 "type":"Tags",
                 "tags":["kitchen"]
+            },{
+                "type":"ItemBase",
+                "name":"Стеклянный стакан"
             }
         ]
     },
     {
         "type":"Item",
         "id":"papercup",
-        "name":"Бумажный стакан",
         "weight":20,
         "agents":[
             {
@@ -1975,100 +1972,109 @@
             },{
                 "type":"Tags",
                 "tags":["kitchen"]
+            },{
+                "type":"ItemBase",
+                "name":"Бумажный стакан"
             }
         ]
     },
     {
         "type":"Item",
         "id":"dollar20",
-        "name":"20 доллоровая банкнота",
         "weight":1,
         "spawn_group":"spawn_money",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"20 доллоровая банкнота"
             }
         ]
     },
     {
         "type":"Item",
         "id":"dollar5",
-        "name":"5 доллоровая банкнота",
         "weight":1,
         "spawn_group":"spawn_money",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"5 доллоровая банкнота"
             }
         ]
     },
     {
         "type":"Item",
         "id":"dollar1",
-        "name":"1 доллоровая банкнота",
         "weight":1,
         "spawn_group":"spawn_money",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"1 доллоровая банкнота"
             }
         ]
     },
     {
         "type":"Item",
         "id":"dollar100",
-        "name":"100 доллоровая банкнота",
         "weight":1,
         "spawn_group":"spawn_money",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"100 доллоровая банкнота"
             }
         ]
     },
     {
         "type":"Item",
         "id":"plate",
-        "name":"Тарелка",
         "weight":200,
         "agents":[
             {
                 "type":"Tags",
                 "tags":["kitchen"]
                 
+            },
+            {
+                "type":"ItemBase",
+                "name":"Тарелка"
             }
         ]
     },
     {
         "type":"Item",
         "id":"cup",
-        "name":"Чашка",
         "weight":200,
         "agents":[
             {
                 "type":"Tags",
                 "tags":["kitchen"]
                 
+            },
+            {
+                "type":"ItemBase",
+                "name":"Чашка"
             }
         ]
     },
     {
         "type":"Item",
         "id":"canifol",
-        "name":"Канифоль",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Канифоль"
             }
         ]
     },
     {
         "type":"Item",
         "id":"canifolpowder",
-        "name":"Измельченная канифоль",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Измельченная канифоль"
             }
         ]
     },
@@ -2078,61 +2084,68 @@
         "name":"",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Воск"
             }
         ]
     },
     {
         "type":"Item",
         "id":"oilbottle",
-        "name":"",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Бутылка растительного масла"
             }
         ]
     },
     {
         "type":"Item",
         "id":"pot",
-        "name":"Кастрюля",
         "agents":[
             {
                 "type":"Tags",
                 "tags":["kitchen"]
                 
+            },
+            {
+                "type":"ItemBase",
+                "name":"Кастрюля"
             }
         ]
     },
     {
         "type":"Item",
         "id":"pan",
-        "name":"Сковорода",
         "agents":[
             {
                 "type":"Tags",
                 "tags":["kitchen"]
                 
+            },
+            {
+                "type":"ItemBase",
+                "name":"Сковорода"
             }
         ]
     },
     {
         "type":"Item",
         "id":"hammer1",
-        "name":"Молоток",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Молоток"
             }
         ]
     },
     {
         "type":"Item",
         "id":"stone",
-        "name":"Камень",
         "agents":[
             {
-                "type":"ItemBase"
+                "type":"ItemBase",
+                "name":"Камень"
             }
         ]
     }

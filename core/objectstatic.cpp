@@ -6,12 +6,12 @@ ObjectStatic::ObjectStatic(const std::string &__id)
     id = __id;
 }
 
-std::unique_ptr<Object> ObjectStatic::Instantiate(const glm::vec3 &pos, const GameTimer& gt)
+std::shared_ptr<Object> ObjectStatic::Instantiate(const glm::vec3 &pos, const GameTimer& gt)
 {
-    Object *o = new Object(this);
+    std::shared_ptr<Object> o = std::make_shared<Object>(this);
 
     if(tex.size() > 0)
-        o->otex = rand()%tex.size();
+        o->otex = random::next() * tex.size();
 
     if(agents)
     {
@@ -21,22 +21,22 @@ std::unique_ptr<Object> ObjectStatic::Instantiate(const glm::vec3 &pos, const Ga
             if( !i->IsStatic() )
                 o->agents->push_back(i->Instantiate());
         }
-        o->onInit(nullptr, pos, gt); // внутри вызывается так же обновление всех статических агентов
+        o->onInit(o, nullptr, pos, gt); // внутри вызывается так же обновление всех статических агентов
     }
 
 
 
-    return std::unique_ptr<Object>(o);
+    return o;
 }
 
 void ObjectStatic::onLoad()
 {
     if(agents)
         for(const auto &a : *agents)
-                a->onLoad(nullptr, nullptr, {0,0,0}, GameTimer());
+                a->onLoad(std::shared_ptr<Object>(), nullptr, {0,0,0}, GameTimer());
 }
 
-void ObjectStatic::onInit(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void ObjectStatic::onInit(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -44,7 +44,7 @@ void ObjectStatic::onInit(Object *o, Level *l, const glm::vec3 &pos, const GameT
                 a->onInit(o, l, pos, gt);
 }
 
-void ObjectStatic::onUpdate(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void ObjectStatic::onUpdate(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -52,7 +52,7 @@ void ObjectStatic::onUpdate(Object *o, Level *l, const glm::vec3 &pos, const Gam
                 a->onUpdate(o, l, pos, gt);
 }
 
-void ObjectStatic::onDraw(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void ObjectStatic::onDraw(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -60,7 +60,7 @@ void ObjectStatic::onDraw(Object *o, Level *l, const glm::vec3 &pos, const GameT
                 a->onDraw(o, l, pos, gt);
 }
 
-void ObjectStatic::onDestroy(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void ObjectStatic::onDestroy(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -68,7 +68,7 @@ void ObjectStatic::onDestroy(Object *o, Level *l, const glm::vec3 &pos, const Ga
                 a->onDestroy(o, l, pos, gt);
 }
 
-void ObjectStatic::onEnter(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void ObjectStatic::onEnter(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -76,7 +76,7 @@ void ObjectStatic::onEnter(Object *o, Level *l, const glm::vec3 &pos, const Game
                 a->onEnter(o, l, pos, gt);
 }
 
-void ObjectStatic::onDamage(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void ObjectStatic::onDamage(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
@@ -84,10 +84,18 @@ void ObjectStatic::onDamage(Object *o, Level *l, const glm::vec3 &pos, const Gam
                 a->onDamage(o, l, pos, gt);
 }
 
-void ObjectStatic::onLeave(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void ObjectStatic::onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(agents)
         for(const auto &a : *agents)
             if(a->IsStatic())
                 a->onLeave(o, l, pos, gt);
+}
+
+void ObjectStatic::onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+{
+    if(agents)
+        for(const auto &a : *agents)
+            if(a->IsStatic())
+                a->onInteract(o, l, pos, gt);
 }

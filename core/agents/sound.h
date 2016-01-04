@@ -11,8 +11,8 @@ public:
     // Agent interface
 public:
     void Deserialize(const rapidjson::Value &val) override;
-    virtual void onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    virtual void onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void onLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void Play() const;
 
     std::string name, filename;

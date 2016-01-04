@@ -104,6 +104,7 @@ public:
     bool defered_debug = false;
     bool starnest_on = true;
     float double_c = 0.3f;
+    bool no_sound = false;
 };
 
 #endif // PREFECENCES_H

@@ -75,19 +75,19 @@ public:
     virtual void Deserialize(const rapidjson::Value &val);
     virtual std::shared_ptr<Agent> Instantiate() const = 0;
 
-    virtual void     onLoad(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    virtual void     onInit(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void     onLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void     onInit(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
-    virtual void   onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    virtual void     onDraw(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void   onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void     onDraw(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
-    virtual void onInteract(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    virtual void   onDamage(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void onInteract(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void   onDamage(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
-    virtual void  onDestroy(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void  onDestroy(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
-    virtual void    onEnter(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    virtual void    onLeave(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void    onEnter(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void    onLeave(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 };
 
 class DynamicAgent : public Agent

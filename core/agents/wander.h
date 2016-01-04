@@ -7,7 +7,7 @@ class Wander : public StaticAgent
 public:
     SAGENT(Wander)
 
-    virtual void onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    virtual void onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
 };
 
 REGISTER_AGENT(Wander)

@@ -3,9 +3,13 @@
 #include <map>
 #include <boost/filesystem.hpp>
 #include "logger.h"
+#include "prefecences.h"
 
 bool RemSnd::Open(const std::string &Filename, bool Looped, bool Streamed)
 {
+    if(Prefecences::Instance()->no_sound)
+        return true;
+
     std::ifstream a((Filename+".ogg").c_str());
     if (!a.is_open())
         return false;
@@ -34,6 +38,9 @@ bool RemSnd::IsStreamed()
 
 void RemSnd::Play() const
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     ALint state;
     alGetSourcei(mSourceID, AL_SOURCE_STATE, &state);
     if(state != AL_PLAYING)
@@ -42,28 +49,43 @@ void RemSnd::Play() const
 
 void RemSnd::Close()
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     alSourceStop(mSourceID);
     if (alIsSource(mSourceID)) alDeleteSources(1, &mSourceID);
 }
 
 void RemSnd::Stop()
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     alSourceStop(mSourceID);
 }
 
 void RemSnd::Pitch(float t) const
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     alSourcef(mSourceID, AL_PITCH, t);
 }
 
 void RemSnd::NearFar(int n, int f)
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     alSourcei(mSourceID, AL_REFERENCE_DISTANCE, n);
     alSourcei(mSourceID, AL_MAX_DISTANCE, f);
 }
 
 void RemSnd::Move(const glm::vec3 &pos)
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     ALint state;
     alGetSourcei(mSourceID, AL_SOURCE_STATE, &state);
     if(state != AL_PLAYING)
@@ -83,6 +105,9 @@ void RemSnd::Move(const glm::vec3 &pos)
 
 void RemSnd::Update()
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     alListenerfv(AL_POSITION, &AL::listener[0]);
     if (!mStreamed) return;
 
@@ -191,6 +216,9 @@ int CloseOgg(void *datasource)
 
 bool RemSnd::LoadOggFile(const std::string &Filename, bool Streamed)
 {
+    if(Prefecences::Instance()->no_sound)
+        return true;
+
     int        i, DynBuffs = 1, BlockSize;
     AL::SndInfo      buffer;
     ALuint      BufID = 0;
@@ -292,6 +320,12 @@ ALboolean AL::CheckALError()
 
 bool AL::InitializeOpenAL()
 {
+    if(Prefecences::Instance()->no_sound)
+    {
+        LOG(info) << "-nosound. OpenAL disabled.";
+        return true;
+    }
+
     ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 };
     ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };
     ALfloat ListenerOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
@@ -317,6 +351,9 @@ bool AL::InitializeOpenAL()
 
 void AL::DestroyOpenAL()
 {
+    if(Prefecences::Instance()->no_sound)
+        return;
+
     alcMakeContextCurrent(nullptr);
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);

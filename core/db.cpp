@@ -46,16 +46,8 @@ void DB::Load()
         if (boost::filesystem::is_regular_file(file) && boost::filesystem::extension(file) == ".json")
         {
             std::ifstream fs(file.string());
-            std::stringstream ss;
-            std::string all;
-            while(!fs.eof())
-            {
-                std::string buf;
-                fs >> buf;
-                ss << buf;
-            }
-            fs.close();
-            all = ss.str();
+            std::string all((std::istreambuf_iterator<char>(fs)),
+                             std::istreambuf_iterator<char>());
 
             LOG(trace) << "---------------";
             LOG(trace) << "parse " << file;

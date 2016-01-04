@@ -36,21 +36,21 @@ void ItemSpawner::Deserialize(const rapidjson::Value &val)
     else throw;
 }
 
-void ItemSpawner::onInit(Object *par, Level *, const glm::vec3 &, const GameTimer &)
+void ItemSpawner::onInit(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer &)
 {
     auto ch = par->GetAgent<Chest>();
     if(ch)
     {
         for(const auto &spawn_iteration : items)
         {
-            auto prob = random::next<float>();
+            auto prob = random::next();
             for(const auto &spawn_group_part : spawn_iteration)
             {
                 if(prob < spawn_group_part.probability)
                 {
                     int count = spawn_group_part.high_quantity;
                     if( spawn_group_part.high_quantity != spawn_group_part.low_quantity )
-                        count = rand()%(spawn_group_part.high_quantity - spawn_group_part.low_quantity) + spawn_group_part.low_quantity;
+                        count = random::next()*(spawn_group_part.high_quantity - spawn_group_part.low_quantity) + spawn_group_part.low_quantity;
                     if(count == 0)
                         continue;
 
@@ -66,7 +66,7 @@ void ItemSpawner::onInit(Object *par, Level *, const glm::vec3 &, const GameTime
                             {
                                 for(int cc = 0; cc < count; cc++)
                                 {
-                                    oid = t_ref[rand() % t_ref.size()]->id;
+                                    oid = t_ref[random::next() * t_ref.size()]->id;
                                     auto item = DB::Create(oid);
                                     ch->items.push_back(item);
                                 }
@@ -89,9 +89,8 @@ void ItemSpawner::onInit(Object *par, Level *, const glm::vec3 &, const GameTime
 
                         ch->items.push_back(item);
                     }
-                    continue;
+                    break;
                 }
-                prob += spawn_group_part.probability; //если не выпало, то увеличиваем шенс на значение вероятности предыдущего предмета
             }
         }
         ch->Combine();

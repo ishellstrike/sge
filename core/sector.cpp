@@ -13,7 +13,7 @@ Sector::Sector(const glm::ivec2 &o) : offset(o)
 //            for(int k = 0; k < RZ; k++)
 //            {
 //                data[ONEDIM(i,j,k)] = DB::Create("air");
-//            }
+    //            }
 }
 
 void Sector::Update(Level *l, GameTimer& gt)
@@ -22,10 +22,10 @@ void Sector::Update(Level *l, GameTimer& gt)
         for(int j = 0; j < RY; j++)
             for(int k = 0; k < maxlevel + 1; k++)
             {
-                Object *o = block[ONEDIM(i,j,k)].get();
+                std::shared_ptr<Object> &o = block[ONEDIM(i,j,k)];
                 static const ObjectStatic *air = DB::Get("air");
                 if(o->base->id != air->id)
-                    o->onUpdate(l, {i,j,k}, gt);
+                    o->onUpdate(o, l, {i,j,k}, gt);
             }
 }
 
@@ -171,7 +171,7 @@ void Sector::DrawEntities(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec
     }
 }
 
-void Sector::SetObject(const glm::ivec3 &pos, std::shared_ptr<Object> obj)
+void Sector::SetBlock(const glm::ivec3 &pos, std::shared_ptr<Object> obj)
 {
     static void *air_ref = DB::data["air"].get();
     if(obj->base != air_ref)
@@ -187,25 +187,25 @@ void Sector::SetGround(const glm::ivec3 &pos, std::shared_ptr<Object> obj)
     ground[ONEDIM( pos.x, pos.y, pos.z )] = obj;
 }
 
-std::pair<Object *, Object *>Sector::GetCell( const glm::ivec3 &pos )
+std::pair<std::shared_ptr<Object>, std::shared_ptr<Object>>Sector::GetCell( const glm::ivec3 &pos )
 {
     if( pos.x >= RX || pos.y >= RY || pos.x < 0 || pos.y < 0)
-        return std::make_pair(nullptr, nullptr);
-    return std::make_pair(block[ ONEDIM( pos.x, pos.y, pos.z ) ].get(), ground[ ONEDIM( pos.x, pos.y, pos.z ) ].get());
+        return std::make_pair(std::shared_ptr<Object>(), std::shared_ptr<Object>());
+    return std::make_pair(block[ ONEDIM( pos.x, pos.y, pos.z ) ], ground[ ONEDIM( pos.x, pos.y, pos.z ) ]);
 }
 
-Object *Sector::GetBlock( const glm::ivec3 &pos )
+std::shared_ptr<Object> Sector::GetBlock( const glm::ivec3 &pos )
 {
     if( pos.x >= RX || pos.y >= RY || pos.x < 0 || pos.y < 0)
-        return nullptr;
-    return block[ ONEDIM( pos.x, pos.y, pos.z ) ].get();
+        return std::shared_ptr<Object>();
+    return block[ ONEDIM( pos.x, pos.y, pos.z ) ];
 }
 
-Object *Sector::GetGround( const glm::ivec3 &pos )
+std::shared_ptr<Object> Sector::GetGround( const glm::ivec3 &pos )
 {
     if( pos.x >= RX || pos.y >= RY || pos.x < 0 || pos.y < 0)
-        return nullptr;
-    return ground[ ONEDIM( pos.x, pos.y, pos.z ) ].get();
+        return std::shared_ptr<Object>();
+    return ground[ ONEDIM( pos.x, pos.y, pos.z ) ];
 }
 
 void Sector::RebuildMax()

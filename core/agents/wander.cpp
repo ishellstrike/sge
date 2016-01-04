@@ -3,7 +3,7 @@
 #include "random.h"
 #include "core/level.h"
 
-void Wander::onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Wander::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     Creature *e = par->GetAgent<Creature>();
     if( e && e->current_order.type == Order::Nothing )

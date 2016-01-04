@@ -1,11 +1,8 @@
 TEMPLATE = app
-CONFIG += console
-CONFIG -= app_bundle
-CONFIG -= qt
-CONFIG += c++11
-#CONFIG += precompile_header
-
-#PRECOMPILED_HEADER  = helper.h
+CONFIG  += console
+CONFIG  -= app_bundle
+CONFIG  -= qt
+CONFIG  += c++11
 
 SOURCES += \
     logger.cpp \
@@ -40,7 +37,6 @@ SOURCES += \
     sge_ui/win.cpp \
     sge_ui/wins.cpp \
     colorscheme.cpp \
-    gbuffer.cpp \
     resources/resourcecontroller.cpp \
     resources/texture.cpp \
     resources/pixmap.cpp \
@@ -106,13 +102,14 @@ win32:LIBS += \
 -lopengl32 -lglew32 -lglfw3dll -lfreetype -lOpenAL32 -llibogg -llibvorbisfile
 
 CONFIG(debug, debug|release) {
-    LIBS += -llibboost_log-vc120-mt-gd-1_59 -lsquirreld -lsqstdlibd
+    LIBS   += -llibboost_log-vc120-mt-gd-1_59 -lsquirreld -lsqstdlibd
 }
 else {
-    LIBS += -llibboost_log-vc120-mt-1_59 -lsquirrel -lsqstdlib
+    LIBS   += -llibboost_log-vc120-mt-1_59 -lsquirrel -lsqstdlib
+    CONFIG -= console
 }
 
-unix:LIBS += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
+unix:LIBS        += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2
 
 win32:INCLUDEPATH += $$PWD/3rdparty/include
@@ -161,7 +158,6 @@ HEADERS += \
     sge_ui/win.h \
     sge_ui/wins.h \
     colorscheme.h \
-    gbuffer.h \
     resources/resourcecontroller.h \
     resources/pixmap.h \
     resources/texture.h \
@@ -481,4 +477,6 @@ DISTFILES += \
     data/sounds/door.ogg \
     data/sounds/rustle.ogg \
     data/json/scheme.json \
-    data/json/creature_parts.json
+    data/json/creature_parts.json \
+    data/glyphs.txt \
+    data/fonts/glyphs.txt

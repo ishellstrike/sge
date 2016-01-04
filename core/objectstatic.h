@@ -14,16 +14,17 @@ public:
     Id id;
     std::vector<Tex> tex;
 
-    std::unique_ptr<Object> Instantiate(const glm::vec3 &pos, const GameTimer &gt);
+    std::shared_ptr<Object> Instantiate(const glm::vec3 &pos, const GameTimer &gt);
 
     void    onLoad();
-    void    onInit(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    void  onUpdate(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    void    onDraw(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    void onDestroy(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    void  onDamage(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    void   onEnter(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
-    void   onLeave(Object *o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void     onInit(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void   onUpdate(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void     onDraw(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void  onDestroy(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void   onDamage(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void    onEnter(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void    onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    void onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 };
 
 #endif // OBJECTSTATIC_H

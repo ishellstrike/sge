@@ -176,9 +176,6 @@ bool GameWindow::BaseInit()
     Resources::instance();
     Resources::instance()->Init();
 
-    gb = std::make_shared<GBuffer>();
-    gb->Init(RESX, RESY);
-
     batch = std::make_shared<SpriteBatch>();
 
     f12 = std::make_shared<Font>();
@@ -230,9 +227,6 @@ void GameWindow::Resize(int w, int h)
     GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     GameWindow::wi->model = glm::mat4(1.f);
-
-    if(GameWindow::wi->gb)
-        GameWindow::wi->gb->Resize(RESX, RESY);
 }
 
 void GameWindow::SetTitle(const std::string &str)
@@ -265,7 +259,7 @@ void GameWindow::BaseDraw()
 
     level.Draw(*batch, offset, hero->GetAgent<Creature>()->pos);
 
-    if( Object *o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale ) )
+    if( std::shared_ptr<Object> &o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale ) )
     {
         //auto oo = DB::Create("foodpolka");
         //o = oo.get();
@@ -295,6 +289,7 @@ void GameWindow::BaseDraw()
             batch->drawQuadAtlas( glm::vec2(p.x, p.y)*sscale - offset, {32,32}, TextureAtlas::tex[0], 1, Color::White);
         }
     }
+
 
     if(is_debug)
     {
@@ -367,13 +362,9 @@ void GameWindow::BaseUpdate()
     if(Mouse::isLeftJustPressed())
     {
         auto selpos = glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale;
-        if( Object *o = level.GetObjectByPos(selpos) )
+        if( std::shared_ptr<Object> &o = level.GetObjectByPos(selpos) )
         {
-            if(SimpleInteract *si = o->base->GetAgent<SimpleInteract>())
-            {
-                si->onInteract(o, &level, selpos, gt);
-                level.SetObjectAtPos(selpos, DB::Create(si->afterid));
-            }
+            o->onInteract(o, &level, selpos, gt);
         }
     }
 

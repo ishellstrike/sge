@@ -14,17 +14,18 @@ public:
     ObjectStatic *base;
     int otex = 0;
 
-    bool Equals( Object *o );
+    bool Equals( std::shared_ptr<Object> &o );
 
     bool  isStatic();
 
-    void    onInit(Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    void  onUpdate(Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    void    onDraw(Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    void onDestroy(Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    void  onDamage(Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    void   onEnter(Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    void   onLeave(Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void     onInit(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void   onUpdate(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void     onDraw(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void  onDestroy(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void   onDamage(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void    onEnter(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void    onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+    void onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 };
 
 template<typename _Ty>

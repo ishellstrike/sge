@@ -38,6 +38,12 @@
 #include <boost/log/support/date_time.hpp>
 #include <boost/format.hpp>
 
+#ifdef _MSC_VER
+#ifndef _DEBUG
+#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+#endif
+#endif
+
 int main(int argc, char** argv)
 {
     boost::log::add_console_log(
@@ -45,9 +51,9 @@ int main(int argc, char** argv)
             boost::log::keywords::format = (
                 boost::log::expressions::stream
                     << boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
-                    << " ["
+                    << " "
                     << boost::log::trivial::severity
-                    << "] "
+                    << " "
                     << boost::log::expressions::message
             )
     );
@@ -60,9 +66,9 @@ int main(int argc, char** argv)
         boost::log::keywords::format = (
             boost::log::expressions::stream
                 << boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%H:%M:%S.%f")
-                << " ["
+                << " "
                 << boost::log::trivial::severity
-                << "] "
+                << " "
                 << boost::log::expressions::message
         )
     );
@@ -74,32 +80,35 @@ int main(int argc, char** argv)
     if(argc >= 2)
         for(int i = 1; i < argc; i++)
         {
-            if(strcmp(argv[i], "-t") == 0)
+            if(strcmp(argv[i], ("-nosound")) == 0)
+                Prefecences::Instance()->no_sound = true;
+
+            if(strcmp(argv[i], ("-t")) == 0)
                 boost::log::core::get()->set_filter
                 (
                     boost::log::trivial::severity >= boost::log::trivial::trace
                 );
-            if(strcmp(argv[i], "-d") == 0)
+            if(strcmp(argv[i], ("-d")) == 0)
                 boost::log::core::get()->set_filter
                 (
                     boost::log::trivial::severity >= boost::log::trivial::debug
                 );
-            if(strcmp(argv[i], "-i") == 0)
+            if(strcmp(argv[i], ("-i")) == 0)
                 boost::log::core::get()->set_filter
                 (
                     boost::log::trivial::severity >= boost::log::trivial::info
                 );
-            if(strcmp(argv[i], "-w") == 0)
+            if(strcmp(argv[i], ("-w")) == 0)
                 boost::log::core::get()->set_filter
                 (
                     boost::log::trivial::severity >= boost::log::trivial::warning
                 );
-            if(strcmp(argv[i], "-e") == 0)
+            if(strcmp(argv[i], ("-e")) == 0)
                 boost::log::core::get()->set_filter
                 (
                     boost::log::trivial::severity >= boost::log::trivial::error
                 );
-            if(strcmp(argv[i], "-f") == 0)
+            if(strcmp(argv[i], ("-f")) == 0)
                 boost::log::core::get()->set_filter
                 (
                     boost::log::trivial::severity >= boost::log::trivial::fatal
@@ -113,14 +122,9 @@ int main(int argc, char** argv)
         gw.Mainloop();
     }
     catch( std::exception& e ) {
-        LOG(error) << "Caught exception: " << e.what() << std::endl;
+        LOG(fatal) << "Caught exception: " << e.what() << std::endl;
     }
 
     return 0;
 }
 //------------------------------------------------------------------------------
-
-
-
-
-

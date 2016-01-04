@@ -14,7 +14,7 @@ std::shared_ptr<Agent> Creature::Instantiate() const
     return std::shared_ptr<Creature>(e);
 }
 
-void Creature::onUpdate(Object *par, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+void Creature::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(current_order.target.expired())
     {

@@ -20,9 +20,9 @@ std::shared_ptr<Agent> Chest::Instantiate() const
     return std::unique_ptr<Chest>(c);
 }
 
-void Chest::onInteract(Object *par, Level *, const glm::vec3 &, const GameTimer &)
+void Chest::onInteract(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer &)
 {
-   sge_chest_window &w = new sge_chest_window(WinS::ws);
+   sge_chest_window &w = * new sge_chest_window(WinS::ws);
    w.Link(par);
 }
 
@@ -32,7 +32,7 @@ void Chest::Combine()
         for( int j = 0; j < items.size() - i; ++j )
             if( i != j )
             {
-                if(items[i] && items[i]->Equals(items[j].get()))
+                if(items[i] && items[i]->Equals(items[j]))
                 {
                     Item *s1 = items[i]->GetAgent<Item>();
                     Item *s2 = items[j]->GetAgent<Item>();

@@ -7,7 +7,7 @@ void Material::Deserialize(const rapidjson::Value &val)
     DESERIALIZE(NVP(hitsound), NVP(breaksound));
 }
 
-void Material::onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTimer &gt)
+void Material::onLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer &gt)
 {
     hitting = nullptr;
     if(const ObjectStatic *os = DB::Get(hitsound))
@@ -30,7 +30,7 @@ void Material::onLoad(Object *par, Level *, const glm::vec3 &pos, const GameTime
     }
 }
 
-void Material::onDamage(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Material::onDamage(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(hitting)
     {
@@ -39,7 +39,7 @@ void Material::onDamage(Object *par, Level *l, const glm::vec3 &pos, const GameT
     }
 }
 
-void Material::onDestroy(Object *par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Material::onDestroy(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(breaking)
     {
