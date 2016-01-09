@@ -12,7 +12,7 @@ sge_settings_main::sge_settings_main(WContainer *par) :
     sc_plus->size = {20,20};
     sc_plus->pos = sc_anounce->pos + glm::vec2(sc_anounce->size.x, 0);
     sc_plus->text = "^";
-    sc_plus->onMouseClick.connect([&](const ClickHandler &mh)->bool{
+    sc_plus->onMouseClick.connect([&](const ClickHandler &)->bool{
         sscale *= 2.f;
         if(sscale > 128)
             sscale = 128;
@@ -22,7 +22,7 @@ sge_settings_main::sge_settings_main(WContainer *par) :
     sc_minus->size = {20,20};
     sc_minus->pos = sc_plus->pos + glm::vec2(sc_plus->size.x, 0);
     sc_minus->text = "v";
-    sc_minus->onMouseClick.connect([&](const ClickHandler &mh)->bool{
+    sc_minus->onMouseClick.connect([&](const ClickHandler &)->bool{
         sscale /= 2.f;
         if(sscale < 1)
             sscale = 1;

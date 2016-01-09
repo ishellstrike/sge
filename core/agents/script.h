@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #ifndef SCRIPT_H
 #define SCRIPT_H
 #include "core/agent.h"
@@ -9,7 +16,7 @@
 #include <boost/noncopyable.hpp>
 
 namespace {
-void squirrel_print_function(HSQUIRRELVM v, const SQChar *s, ...)
+void squirrel_print_function(HSQUIRRELVM, const SQChar *s, ...)
 {
     va_list arglist;
     int final_n, n = 64;

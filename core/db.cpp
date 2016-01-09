@@ -102,18 +102,9 @@ void DB::Load()
                         auto b = std::unique_ptr<ObjectStatic>(new ObjectStatic(id));
                         b->agents = std::unique_ptr<AgentContainer>(new AgentContainer());
 
-                        if(val.HasMember("tex"))
-                        {
-                            rapidjson::Value &ar = val["tex"];
-                            if(!ar.IsArray())
-                            {
-                                LOG(error) << "record #" << i+1 << " from " << file << " tex wrond format. Must be \"tex\":[\"tex1\",\"tex2\"]";
-                                continue;
-                            }
-
-                            for(decltype(ar.Size()) k=0; k < ar.Size(); k++)
-                                b->tex.push_back(ar[k].GetString());
-                        }
+                        std::vector<std::string> tex;
+                        DESERIALIZE( NVP(tex) );
+                        b->tex = std::move( tex );
 
                         if(val.HasMember("agents")) {
                             rapidjson::Value &arr = val["agents"];
@@ -156,14 +147,6 @@ void DB::Load()
                                             b->PushAgent(AgentFactory::instance().Create("Creature"));
                                         }
 
-                                        if( agenttype == "BlockBase" )
-                                        {
-                                            auto a = AgentFactory::instance().Create("Block");
-                                            int maxh = std::static_pointer_cast<BlockBase>(c)->health;
-                                            std::static_pointer_cast<Block>(a)->health = maxh;
-                                            b->PushAgent(a);
-                                        }
-
                                         if( agenttype == "Sound" )
                                         {
                                             sounds.push_back(std::static_pointer_cast<Sound>(c).get());
@@ -192,7 +175,7 @@ void DB::Load()
 
     for( auto &a : data )
     {
-        a.second->onLoad();
+        a.second->onDbLoad();
     }
 
     LOG(info) << "Done.";

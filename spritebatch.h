@@ -55,9 +55,6 @@ public:
     void drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color);
     glm::vec2 drawFormatted(const std::string &, glm::vec2, Font *);
 
-    void resetDc();
-    int getDc();
-
     void drawTriangle(const glm::vec2 &loc, const glm::vec2 &loc2, const glm::vec2 &loc3, const glm::vec4 &col_);
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
@@ -81,8 +78,5 @@ private:
     GLuint m_vao;
 
     glm::mat4 uniform;
-
-    GLuint p_loc, c_loc, uv_loc;
-    int dc = 0, last_dc = 0;
 };
 #endif // SPRITEBATCH_H

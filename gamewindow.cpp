@@ -28,21 +28,11 @@ void GameWindow::Mainloop()
         update_pass += gt.elapsed;
         if(update_pass >= 0.03)
         {
-            update();
+            BaseUpdate();
             update_pass = 0;
         }
 
-        if(main_is_debug == spartial_rendering)
-        {
-            static int ii = 0, jj = 0;
-            ii++;
-            if(ii >= 10) { ii = 0; jj++;}
-            if(jj >= 10) {jj = 0; }
-            glScissor( ii*RESX/10, jj*RESY/10, RESX/10, RESY/10 );
-            glEnable( GL_SCISSOR_TEST );
-        }
-
-        draw();
+        BaseDraw();
 
         Swap();
 
@@ -56,35 +46,8 @@ void GameWindow::Mainloop()
     AL::DestroyOpenAL();
 }
 
-void GameWindow::make_release()
-{
-    update = [=](){
-        BaseUpdate<false>();
-    };
-    draw = [=](){
-        BaseDraw<false>();
-    };
-    main_is_debug = false;
-    //glfwWindowHint(GLFW_SAMPLES, 1);
-}
-
-void GameWindow::make_spartial()
-{
-    update = [=](){BaseUpdate<spartial_rendering>();};
-    draw = [=](){BaseDraw<spartial_rendering>();};
-    main_is_debug = spartial_rendering;
-    //glfwWindowHint(GLFW_SAMPLES, 16);
-}
-
 bool GameWindow::BaseInit()
 {
-    update = [=](){
-        BaseUpdate<false>();
-    };
-    draw = [=](){
-        BaseDraw<false>();
-    };
-
     srand(123);
     LOG(info) << "Jarg initialization start";
     LOG(info) << "User-preferred locale setting is " << std::locale("").name().c_str();
@@ -250,7 +213,6 @@ void GameWindow::Swap()
     glfwSwapBuffers(wi->window);
 }
 
-template<int is_debug>
 void GameWindow::BaseDraw()
 {
     batch->setUniform(proj);
@@ -290,15 +252,6 @@ void GameWindow::BaseDraw()
         }
     }
 
-
-    if(is_debug)
-    {
-        batch->drawText(sge::string_format("%d dc UI\n"
-                                           "fps %d",
-                                           batch->getDc(),
-                                           fps.GetCount()), {RESX-70, 2+20}, f12.get(), Color::White);
-    }
-
     if(!no_ui) ws->Draw();
 
     switch(Mouse::state)
@@ -311,34 +264,13 @@ void GameWindow::BaseDraw()
         break;
     }
     batch->render();
-
-    if(is_debug)
-    {
-        batch->resetDc();
-    }
 }
 
-template<int is_debug>
 void GameWindow::BaseUpdate()
 {
     Mouse::state = Mouse::STATE_MOUSE;
     glfwPollEvents();
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F2))
-        wire = !wire;
-
-    if(Keyboard::isKeyPress(GLFW_KEY_F6))
-        Prefecences::Instance()->defered_debug = !Prefecences::Instance()->defered_debug;
-
-    if(Keyboard::isKeyPress(GLFW_KEY_F9))
-        make_release();
-    if(Keyboard::isKeyPress(GLFW_KEY_F10))
-        make_debug();
-    if(Keyboard::isKeyPress(GLFW_KEY_F11))
-        make_spartial();
-
-    if(Keyboard::isKeyPress(GLFW_KEY_F2))
-        wire = !wire;
     if(Keyboard::isKeyPress(GLFW_KEY_F4))
         no_ui = !no_ui;
 

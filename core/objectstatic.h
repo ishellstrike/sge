@@ -16,7 +16,7 @@ public:
 
     std::shared_ptr<Object> Instantiate(const glm::vec3 &pos, const GameTimer &gt);
 
-    void    onLoad();
+    void   onDbLoad();
     void     onInit(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void   onUpdate(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void     onDraw(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);

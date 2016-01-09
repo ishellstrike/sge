@@ -57,27 +57,10 @@ public:
 
     void Mainloop();
 
-    void make_debug()
-    {
-        update = [=](){BaseUpdate<true>();};
-        draw = [=](){BaseDraw<true>();};
-        main_is_debug = true;
-        glfwWindowHint(GLFW_SAMPLES, 1);
-    }
-
-    void make_release();
-
-    void make_spartial();
-
     bool BaseInit();
 
-    std::function<void()> draw;
-    std::function<void()> update;
-
-    template<int is_debug>
     void BaseUpdate();
 
-    template<int is_debug>
     void BaseDraw();
 
     GameTimer gt;
@@ -99,7 +82,7 @@ public:
     std::shared_ptr<SpriteBatch> batch;
     float speed = 1;
 
-    bool wire = false, no_ui = false;
+    bool no_ui = false;
     glm::vec2 offset;
 
     std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;

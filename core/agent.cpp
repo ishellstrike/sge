@@ -22,12 +22,12 @@ Tid Agent::GetTid()
     return id;
 }
 
-void Agent::Deserialize(const rapidjson::Value &val)
+void Agent::Deserialize(const rapidjson::Value &)
 {
 
 }
 
-void Agent::onLoad(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
+void Agent::onDbLoad(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer&)
 {
 
 }

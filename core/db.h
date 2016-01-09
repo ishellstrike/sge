@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #ifndef DB_H
 #define DB_H
 #include "objectstatic.h"

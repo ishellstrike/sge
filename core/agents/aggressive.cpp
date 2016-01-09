@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #include "aggressive.h"
 #include "core/objectstatic.h"
 #include "core/db.h"
@@ -37,7 +44,7 @@ void Aggressive::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec
     }
 }
 
-void Aggressive::onInit(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Aggressive::onInit(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &, const GameTimer &)
 {
     owner = par->GetAgent<Creature>();
     if(!owner)
@@ -46,7 +53,7 @@ void Aggressive::onInit(std::shared_ptr<Object> &par, Level *l, const glm::vec3 
     }
 }
 
-void Aggressive::onLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void Aggressive::onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &, const GameTimer &)
 {
     agro = nullptr;
     if(const ObjectStatic *os = DB::Get(sound))

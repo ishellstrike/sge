@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #include "simpleinteract.h"
 #include "core/objectstatic.h"
 #include "core/db.h"
@@ -8,7 +15,7 @@ void SimpleInteract::Deserialize(const rapidjson::Value &val)
     DESERIALIZE(NVP(afterid), NVP(sound));
 }
 
-void SimpleInteract::onInteract(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void SimpleInteract::onInteract(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &)
 {
     if(activate)
     {
@@ -18,7 +25,7 @@ void SimpleInteract::onInteract(std::shared_ptr<Object> &par, Level *l, const gl
     l->SetBlockAtPos(pos, DB::Create(afterid));
 }
 
-void SimpleInteract::onLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt)
+void SimpleInteract::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer&)
 {
     activate = nullptr;
     if(const ObjectStatic *os = DB::Get(sound))

@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #include "material.h"
 #include "core/db.h"
 #include "core/objectstatic.h"
@@ -7,7 +14,7 @@ void Material::Deserialize(const rapidjson::Value &val)
     DESERIALIZE(NVP(hitsound), NVP(breaksound));
 }
 
-void Material::onLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer &gt)
+void Material::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer &gt)
 {
     hitting = nullptr;
     if(const ObjectStatic *os = DB::Get(hitsound))

@@ -48,9 +48,7 @@ SOURCES += \
     sge_ui/dragnumbox.cpp \
     helper.cpp \
     resources/umaterial.cpp \
-    light.cpp \
     core/uniqueid.cpp \
-    sql.cpp \
     sge_ui/treeview.cpp \
     core/tree.cpp \
     resources/texturebase.cpp \
@@ -92,7 +90,10 @@ SOURCES += \
     core/agents/material.cpp \
     core/agents/aggressive.cpp \
     core/agents/structure.cpp \
-    sge_chest_window.cpp
+    sge_chest_window.cpp \
+    sge_menu_new_game_global.cpp \
+    core/infrastructure/world.cpp \
+    core/infrastructure/player.cpp
 
 VERSION = 0.1.0
 
@@ -170,9 +171,7 @@ HEADERS += \
     sge_ui/image_box.h \
     sge_ui/dragnumbox.h \
     resources/umaterial.h \
-    light.h \
     core/uniqueid.h \
-    sql.h \
     sge_ui/treeview.h \
     core/tree.h \
     resources/texturebase.h \
@@ -229,7 +228,10 @@ HEADERS += \
     core/agents/material.h \
     core/agents/aggressive.h \
     core/agents/structure.h \
-    sge_chest_window.h
+    sge_chest_window.h \
+    sge_menu_new_game_global.h \
+    core/infrastructure/world.h \
+    core/infrastructure/player.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

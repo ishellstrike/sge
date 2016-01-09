@@ -29,11 +29,11 @@ std::shared_ptr<Object> ObjectStatic::Instantiate(const glm::vec3 &pos, const Ga
     return o;
 }
 
-void ObjectStatic::onLoad()
+void ObjectStatic::onDbLoad()
 {
     if(agents)
         for(const auto &a : *agents)
-                a->onLoad(std::shared_ptr<Object>(), nullptr, {0,0,0}, GameTimer());
+                a->onDbLoad(std::shared_ptr<Object>(), nullptr, {0,0,0}, GameTimer());
 }
 
 void ObjectStatic::onInit(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt)

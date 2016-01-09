@@ -33,30 +33,20 @@ SpriteBatch::SpriteBatch()
     glUseProgram(0);
 
     glGenBuffers(2, m_vbo);
-    //glGenVertexArrays(1, &m_vao);
-    //glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vtpc)*SIZE*4, nullptr, GL_STREAM_DRAW);
 
-    glEnableVertexAttribArray(p_loc);
-    glEnableVertexAttribArray(c_loc);
-    glEnableVertexAttribArray(uv_loc);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(3);
 
-    glVertexAttribPointer(p_loc, 3, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, pos)));
-    glVertexAttribPointer(uv_loc, 2, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, uv)));
-    glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, pos)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, uv)));
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)*SIZE*6, nullptr, GL_STREAM_DRAW);
-
-    //glBindVertexArray(0);
-
-    p_loc = 0;
-
-    uv_loc = 1;
-
-    c_loc = 3;
 
     LOG(info) << "spritebatch ready";
 }
@@ -139,27 +129,33 @@ glm::vec2 SpriteBatch::drawFormatted(const std::string &, glm::vec2 , Font *)
     return {0,0};
 }
 
-void SpriteBatch::resetDc()
+std::string u32_to_ascii(std::u32string const &s)
 {
-    last_dc = dc;
-    dc = 0;
+    std::string out;
+    std::transform(begin(s), end(s), back_inserter(out), [](char32_t c)
+    {
+        return c < 128 ? static_cast<char>(c) : '?';
+    });
+    return "0x"+out;
 }
 
-int SpriteBatch::getDc()
+int u32toi(std::u32string const &s)
 {
-    return last_dc;
+    return stoi(u32_to_ascii(s), 0, 16);
 }
 
 glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
-                                Font *font, const glm::vec4 &col_, bool no_draw)
+                                Font *font, const glm::vec4 &col, bool no_draw)
 {
+    glm::vec4 col_ = col;
     float x_start = x;
     float y_start = y;
     float x_max = 0;
     const char32_t *p;
     bool color_code = false;
 
-    for(p = &text32[0]; *p; p++)
+    int pos = 0;
+    for(p = &text32[0]; *p; p++, pos++)
     {
         Font::CharInfo cc = font->chars[*p];
         switch(*p)
@@ -167,6 +163,31 @@ glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
         case '\n':
             y += font->spacing;
             x = x_start;
+            break;
+        case '|':
+            {
+                if(pos + 6 <= text32.length())
+                {
+                    p++;
+
+                    std::u32string hcol(p, p+6);
+                    uint32_t hexValue;
+                    try
+                    {
+                        hexValue = u32toi(hcol);
+                    }
+                    catch (...)
+                    {
+                        hexValue = 0xff0000;
+                    }
+
+                    float r = ((hexValue >> 16) & 0xff) / 255.f;
+                    float g = ((hexValue >> 8 ) & 0xff) / 255.f;
+                    float b = ((hexValue      ) & 0xff) / 255.f;
+                    col_    = glm::vec4(r, g, b, col.a);
+                    p += 5;
+                }
+            }
             break;
 
         default:
@@ -555,23 +576,20 @@ void SpriteBatch::render()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vtpc)*cur*4, &vertices[0]);
 
-    glEnableVertexAttribArray(p_loc);
-    glEnableVertexAttribArray(c_loc);
-    glEnableVertexAttribArray(uv_loc);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(3);
 
-    glVertexAttribPointer(p_loc, 3, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, pos)));
-    glVertexAttribPointer(uv_loc, 2, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, uv)));
-    glVertexAttribPointer(c_loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, pos)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, uv)));
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(GLshort)*cur*6, &index[0]);
 
-    //glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, cur*6, GL_UNSIGNED_SHORT, NULL);
     glEnable(GL_CULL_FACE);
-    //glBindVertexArray(0);
 
-    dc++;
     cur = 0;
 }
 
@@ -582,7 +600,7 @@ void SpriteBatch::reduceScissor(glm::vec2 loc, glm::vec2 size)
 
     render();
     glEnable(GL_SCISSOR_TEST);
-    glScissor(loc.x, RESY - (loc.y + size.y), GLsizei(size.x), GLsizei(size.y));
+    glScissor(loc.x, RESY - (loc.y + size.y), size.x, size.y);
 }
 
 void SpriteBatch::resetScissor()

@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #pragma once
 #ifndef AGENT_H
 #define AGENT_H
@@ -75,7 +82,7 @@ public:
     virtual void Deserialize(const rapidjson::Value &val);
     virtual std::shared_ptr<Agent> Instantiate() const = 0;
 
-    virtual void     onLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+    virtual void   onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     virtual void     onInit(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
     virtual void   onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);

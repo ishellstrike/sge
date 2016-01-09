@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #include "chest.h"
 #include <map>
 #include "stacked.h"
@@ -28,8 +35,8 @@ void Chest::onInteract(std::shared_ptr<Object> &par, Level *, const glm::vec3 &,
 
 void Chest::Combine()
 {
-    for( int i = 0; i < items.size(); ++i )
-        for( int j = 0; j < items.size() - i; ++j )
+    for( size_t i = 0; i < items.size(); ++i )
+        for( size_t j = 0; j < items.size() - i; ++j )
             if( i != j )
             {
                 if(items[i] && items[i]->Equals(items[j]))
@@ -52,7 +59,7 @@ void Chest::Combine()
             }
 
     std::vector<std::shared_ptr<Object>> updated;
-    for( int i = 0; i < items.size(); ++i )
+    for( size_t i = 0; i < items.size(); ++i )
     {
         if( items[i] != nullptr )
             updated.push_back(std::move(items[i]));

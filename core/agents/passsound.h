@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #ifndef PASSSOUND_H
 #define PASSSOUND_H
 #include "core/agent.h"
@@ -27,7 +34,7 @@ public:
     */
     void Deserialize(const rapidjson::Value &val) override;
     void onEnter(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
-    void onLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
+    void onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
 
     std::string ref_l, ref_m, ref_p;
     const Sound *low, *middle, *pass;

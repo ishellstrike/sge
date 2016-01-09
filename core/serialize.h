@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2015 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #ifndef SERIALIZE_H
 #define SERIALIZE_H
 #include "rapidjson/document.h"
@@ -15,19 +22,41 @@ struct DeserializeHelper {
 #define NVP(T) DeserializeHelper::make_nvp(#T, T)
 #define DESERIALIZE(...) DeserializeHelper::deserialize(val, __VA_ARGS__)
 
-    static void deserialize(const rapidjson::Value &val) {
+    static void deserialize(const rapidjson::Value &val)
+    {
         (void)val;
     }
 
     template <typename Last>
-    static void deserialize(const rapidjson::Value &val, const Last &last) {
+    static void deserialize(const rapidjson::Value &val, const Last &last)
+    {
         __deserialize(val, last.first, last.second);
     }
 
     template <typename First, typename... Rest>
-    static void deserialize(const rapidjson::Value &val, const First &first, const Rest&... rest) {
+    static void deserialize(const rapidjson::Value &val, const First &first, const Rest&... rest)
+    {
         __deserialize(val, first.first, first.second);
         deserialize(val, rest...);
+    }
+
+
+    static void serialize(rapidjson::Document &doc)
+    {
+        (void)doc;
+    }
+
+    template <typename Last>
+    static void serialize(rapidjson::Document &doc)
+    {
+        __serialize(doc, last.first, last.second);
+    }
+
+    template <typename First, typename... Rest>
+    static void serialize(rapidjson::Document &doc)
+    {
+        __serialize(doc, first.first, first.second);
+        serialize(doc, rest...);
     }
 
 private:
@@ -207,6 +236,29 @@ private:
                 target.push_back(static_cast<float>(arr[i].GetDouble()));
             }
         }
+    }
+
+    template<typename _Ty>
+    static void __serialize(rapidjson::Document &doc, const char *, const _Ty &target)
+    {
+        target.Serialize(val);
+    }
+
+    template<typename _Ty>
+    static void __serialize(rapidjson::Document &doc, const char *s, const std::vector<_Ty> &target)
+    {
+        const rapidjson::Value &arr;
+        arr.SetArray();
+
+        for(decltype(target.Size()) i = 0; i < target.Size(); i++)
+        {
+            rapidjson::Value tv;
+            __serialize(tv, "", target[i]);
+
+            arr.PushBack(tv, doc.GetAllocator());
+        }
+
+        doc[s] = arr;
     }
 };
 

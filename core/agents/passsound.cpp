@@ -1,3 +1,10 @@
+/*******************************************************************************
+        Copyright (C) 2016 Samsonov Andrey
+
+        This software is distributed freely under the terms of the MIT LICENSE.
+        See "LICENSE.txt"
+*******************************************************************************/
+
 #include "passsound.h"
 #include "core/db.h"
 
@@ -23,7 +30,7 @@ void PassSound::onEnter(std::shared_ptr<Object> &par, Level *, const glm::vec3 &
     }
 }
 
-void PassSound::onLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt)
+void PassSound::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt)
 {
     auto check = [&](const std::string &s)->const Sound*{
         if(const ObjectStatic *os = DB::Get(s))
