@@ -145,6 +145,7 @@ void DB::Load()
                                         if( agenttype == "CreatureBase" )
                                         {
                                             b->PushAgent(AgentFactory::instance().Create("Creature"));
+                                            b->PushAgent(AgentFactory::instance().Create("Chest"));
                                         }
 
                                         if( agenttype == "Sound" )

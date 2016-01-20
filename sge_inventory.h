@@ -1,13 +1,13 @@
-#ifndef SGE_MENU_NEW_GAME_GLOBAL_H
-#define SGE_MENU_NEW_GAME_GLOBAL_H
+#ifndef SGE_INVENTORY_H
+#define SGE_INVENTORY_H
 #include "sge_ui/wins.h"
 #include "sge_ui/label.h"
 #include "sge_ui/button.h"
 
-class sge_menu_new_game_global : public Win
+class sge_inventory : public Win
 {
 public:
-    sge_menu_new_game_global(WContainer *par);
+    sge_inventory(WContainer *par);
 
     void Draw() const;
     void Update(const GameTimer& gt, const MouseState &ms) override;
@@ -23,4 +23,4 @@ public:
     }
 };
 
-#endif // SGE_MENU_NEW_GAME_GLOBAL_H
+#endif // SGE_INVENTORY_H

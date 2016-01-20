@@ -4,6 +4,7 @@
 #include "gametimer.h"
 #include "sge_ui/label.h"
 #include "sge_ui/list_container.h"
+#include "sge_ui/table.h"
 
 class Object;
 class Chest;
@@ -12,7 +13,7 @@ class sge_chest_window : public Win
 {
 public:
     sge_chest_window(WContainer *par);
-    ListContainer *lc;
+    Table *lc;
 
     void Draw() const;
     void Update(const GameTimer& gt, const MouseState &ms) override;

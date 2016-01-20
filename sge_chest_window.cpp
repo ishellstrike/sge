@@ -7,7 +7,14 @@
 sge_chest_window::sge_chest_window(WContainer *par) :
     Win(par)
 {
-    lc = new ListContainer(this);
+    lc = new Table(this);
+    lc->Init(3);
+    resizable = true;
+    lc->columns[0] = {"name", 1, 0};
+
+    lc->columns[1] = {"count", 0, 50};
+
+    lc->columns[2] = {"rand", 0, 50};
 }
 
 void sge_chest_window::Draw() const
@@ -25,13 +32,13 @@ void sge_chest_window::Unlink()
 {
     c = nullptr;
     linked.reset();
-    lc->ItemsClear();
+    lc->Clear();
 }
 
 void sge_chest_window::Link( std::shared_ptr<Object> &o )
 {
     linked = o;
-    lc->ItemsClear();
+    lc->Clear();
     c = o->GetAgent<Chest>();
     if( c )
     {
@@ -39,8 +46,15 @@ void sge_chest_window::Link( std::shared_ptr<Object> &o )
         {
             ItemBase *ib = i->base->GetAgent<ItemBase>();
             Item     *it = i->GetAgent<Item>();
-            Label    *l  = new Label(lc);
-            l->text(sge::string_format("%s x%d", ib->name.c_str(), it->count));
+            //Label    *l  = new Label(lc);
+            //l->text();
+
+            std::vector<boost::any> t;
+            t.push_back(ib->name.c_str());
+            t.push_back(it->count);
+            t.push_back(rand());
+
+            lc->AddRow(t);
         }
     }
 }

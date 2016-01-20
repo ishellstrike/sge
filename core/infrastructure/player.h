@@ -9,16 +9,16 @@ public:
 
     enum Difficulty
     {
-        casual,
-        normal,
-        roguelike
-    } difficulty = normal;
+        diff_casual,
+        diff_normal,
+        diff_roguelike
+    } difficulty = diff_normal;
 
     enum WeightSettings
     {
-        normal,
-        no_weight
-    } weightSettings = normal;
+        weight_normal,
+        weight_no_weight
+    } weightSettings = weight_normal;
 
     std::string name, surname;
     int age;

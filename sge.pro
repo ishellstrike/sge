@@ -93,7 +93,9 @@ SOURCES += \
     sge_chest_window.cpp \
     sge_menu_new_game_global.cpp \
     core/infrastructure/world.cpp \
-    core/infrastructure/player.cpp
+    core/infrastructure/player.cpp \
+    sge_inventory.cpp \
+    sge_ui/table.cpp
 
 VERSION = 0.1.0
 
@@ -231,7 +233,9 @@ HEADERS += \
     sge_chest_window.h \
     sge_menu_new_game_global.h \
     core/infrastructure/world.h \
-    core/infrastructure/player.h
+    core/infrastructure/player.h \
+    sge_inventory.h \
+    sge_ui/table.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
