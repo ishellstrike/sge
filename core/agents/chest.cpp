@@ -11,6 +11,7 @@
 #include "core/db.h"
 #include "functional"
 #include "sge_chest_window.h"
+#include "gamewindow.h"
 
 void Chest::Deserialize(const rapidjson::Value &val)
 {
@@ -30,7 +31,7 @@ std::shared_ptr<Agent> Chest::Instantiate() const
 void Chest::onInteract(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer &)
 {
    sge_chest_window &w = * new sge_chest_window(WinS::ws);
-   w.Link(par);
+   w.Link(par, GameWindow::Hero);
 }
 
 void Chest::Combine()

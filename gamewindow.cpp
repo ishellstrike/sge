@@ -16,7 +16,7 @@
 #define GLM_SWIZZLE
 
 GameWindow *GameWindow::wi = nullptr;
-
+std::shared_ptr<Object> GameWindow::Hero = nullptr;
 
 void GameWindow::Mainloop()
 {
@@ -175,6 +175,7 @@ bool GameWindow::BaseInit()
     Sqvm::instance();
 
     hero = DB::Create( "hero" );
+    Hero = hero;
     level.AddCreature( hero, true );
 
     return true;

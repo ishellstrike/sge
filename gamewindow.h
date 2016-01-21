@@ -96,6 +96,7 @@ public:
     sge_settings_main *settings;
     Level level;
     std::shared_ptr<Object> hero;
+    static std::shared_ptr<Object> Hero;
     float update_pass = 0;
 
     static void Swap();
