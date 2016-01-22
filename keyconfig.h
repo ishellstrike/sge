@@ -11,17 +11,17 @@ class Keybind
 {
 public:
     enum Actions {
-        ACT_INVENTORY_MENU,
-        ACT_BUILDING_MENU,
-        ACT_CRAFTING_MENU,
-        ACT_OPTIONS_MENU,
-        ACT_MULTIMENU,
-        ACT_MAP,
-        ACT_DEBUG_MENU,
-        ACT_TAKE_ALL
+        ACT_INVENTORY_MENU = 0,
+        ACT_BUILDING_MENU = 1,
+        ACT_CRAFTING_MENU = 2,
+        ACT_OPTIONS_MENU = 3,
+        ACT_MULTIMENU = 4,
+        ACT_MAP = 5,
+        ACT_DEBUG_MENU = 6,
+        ACT_TAKE_ALL = 7
     }
 
-    std::map<int, Actions> binds;
+    std::map<Actions, int> binds;
     
     void Deserialize(const rapidjson::Value &val);
     rapidjson::Document Serialize();
