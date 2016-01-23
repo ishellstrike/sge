@@ -16,6 +16,9 @@ out vec4 out_color;
 void main(void)
 {
     out_color = col * vec4(1, 1, 1, texture(material_texture, fragTexcoord).a);
+
+    if(out_color.a < 0.1)
+        discard;
 }
 
 #endif

@@ -40,6 +40,8 @@
 #include <string>
 #include <thread>
 #include "core/level.h"
+#include "sge_inventory.h"
+#include "sge_chest_window.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -94,15 +96,13 @@ public:
     sge_perfomance *perf;
     sge_level_debug_info *linfo;
     sge_settings_main *settings;
+    sge_inventory *inventory;
+    sge_chest_window *chest;
+
     Level level;
     std::shared_ptr<Object> hero;
     static std::shared_ptr<Object> Hero;
     float update_pass = 0;
-
-    static void Swap();
-    void BlitGBuffer();
-    void ShadingPass();
-    void GeometryPass();
 };
 
 #endif // GAMEWINDOW_H

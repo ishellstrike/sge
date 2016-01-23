@@ -16,6 +16,9 @@ layout (location = 0) out vec4 out_color;
 void main(void)
 {
     out_color = col * vec4(texture(material_texture, fragTexcoord).rgba);
+
+    if(out_color.a < 0.1)
+        discard;
 }
 
 #endif

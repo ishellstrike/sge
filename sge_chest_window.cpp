@@ -3,6 +3,51 @@
 #include "core/agents/itembase.h"
 #include "core/objectstatic.h"
 #include "core/agents/stacked.h"
+#include "keyboard.h"
+#include "keyconfig.h"
+
+bool sge_chest_window::TakeSelected()
+{
+    if(!linked.expired() && !hero.expired())
+    {
+        Chest *h = hero.lock()->GetAgent<Chest>();
+        Chest *c = linked.lock()->GetAgent<Chest>();
+        if(c->items.empty() || c->items.size() <= lc->selected)
+            return false;
+
+        std::shared_ptr<Object> o = boost::any_cast<std::shared_ptr<Object>>(lc->table[lc->selected][2]);
+        h->items.push_back(o);
+
+        for(int i = 0; i < c->items.size(); ++i)
+        {
+            if(c->items[i] == o)
+            {
+                c->items[i] = *(--c->items.end());
+                c->items.pop_back();
+                break;
+            }
+        }
+    }
+
+    Link(linked.lock(), hero.lock());
+    return true;
+}
+
+bool sge_chest_window::TakeAll()
+{
+    if(!linked.expired() && !hero.expired())
+    {
+        Chest *h = hero.lock()->GetAgent<Chest>();
+        Chest *c = linked.lock()->GetAgent<Chest>();
+        for(auto &i : c->items)
+            h->items.push_back(std::move(i));
+
+        c->items.clear();
+    }
+
+    Link(linked.lock(), hero.lock());
+    return true;
+}
 
 sge_chest_window::sge_chest_window(WContainer *par) :
     Win(par)
@@ -22,28 +67,7 @@ sge_chest_window::sge_chest_window(WContainer *par) :
     take->onMouseClick.connect( [&](const ClickHandler &mh)->bool{
         if(mh.button == GLFW_MOUSE_BUTTON_LEFT)
         {
-            if(!linked.expired() && !hero.expired())
-            {
-                Chest *h = hero.lock()->GetAgent<Chest>();
-                Chest *c = linked.lock()->GetAgent<Chest>();
-                if(c->items.empty() || c->items.size() <= lc->selected)
-                    return false;
-
-                std::shared_ptr<Object> o = boost::any_cast<std::shared_ptr<Object>>(lc->table[lc->selected][2]);
-                h->items.push_back(o);
-
-                for(int i = 0; i < c->items.size(); ++i)
-                {
-                    if(c->items[i] == o)
-                    {
-                        c->items[i] = *(--c->items.end());
-                        c->items.pop_back();
-                        break;
-                    }
-                }
-            }
-            Link(linked.lock(), hero.lock());
-            return true;
+            return TakeSelected();
         }
         return false;
     });
@@ -54,18 +78,7 @@ sge_chest_window::sge_chest_window(WContainer *par) :
     takeall->onMouseClick.connect( [&](const ClickHandler &mh)->bool{
         if(mh.button == GLFW_MOUSE_BUTTON_LEFT)
         {
-            if(!linked.expired() && !hero.expired())
-            {
-                Chest *h = hero.lock()->GetAgent<Chest>();
-                Chest *c = linked.lock()->GetAgent<Chest>();
-                for(auto &i : c->items)
-                    h->items.push_back(std::move(i));
-
-                c->items.clear();
-            }
-
-            Link(linked.lock(), hero.lock());
-            return true;
+            return TakeAll();
         }
         return false;
     });
@@ -81,6 +94,10 @@ void sge_chest_window::Update(const GameTimer& gt, const MouseState &ms)
     lc->size = size - glm::vec2(20, 50);
     take->pos = glm::vec2(0, size.y - 50);
     takeall->pos = glm::vec2(80, size.y - 50);
+
+    if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_TAKE_ALL)))
+        TakeAll();
+
     Win::Update(gt, ms);
 }
 

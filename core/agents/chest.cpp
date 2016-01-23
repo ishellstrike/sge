@@ -30,8 +30,8 @@ std::shared_ptr<Agent> Chest::Instantiate() const
 
 void Chest::onInteract(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer &)
 {
-   sge_chest_window &w = * new sge_chest_window(WinS::ws);
-   w.Link(par, GameWindow::Hero);
+    GameWindow::wi->chest->hidden = false;
+    GameWindow::wi->chest->Link(par, GameWindow::Hero);
 }
 
 void Chest::Combine()

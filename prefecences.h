@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <memory>
+#include "keyconfig.h"
 
 #define RESX Prefecences::Instance()->resolution.x
 #define RESY Prefecences::Instance()->resolution.y

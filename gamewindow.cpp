@@ -34,7 +34,7 @@ void GameWindow::Mainloop()
 
         BaseDraw();
 
-        Swap();
+        glfwSwapBuffers(wi->window);
 
         gt.Update(static_cast<float>(glfwGetTime()));
         fps.Update(gt);
@@ -151,6 +151,8 @@ bool GameWindow::BaseInit()
     perf = new sge_perfomance(ws.get());
     linfo = new sge_level_debug_info(ws.get());
     settings = new sge_settings_main(ws.get());
+    inventory = new sge_inventory(ws.get());
+    chest = new sge_chest_window(ws.get());
 
     Resize(RESX, RESY);
 
@@ -177,6 +179,8 @@ bool GameWindow::BaseInit()
     hero = DB::Create( "hero" );
     Hero = hero;
     level.AddCreature( hero, true );
+
+    Keybind::SetDefault();
 
     return true;
 }
@@ -207,11 +211,6 @@ GameWindow::~GameWindow()
 {
     glfwDestroyWindow(window);
     glfwTerminate();
-}
-
-void GameWindow::Swap()
-{
-    glfwSwapBuffers(wi->window);
 }
 
 void GameWindow::BaseDraw()
@@ -275,14 +274,20 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyPress(GLFW_KEY_F4))
         no_ui = !no_ui;
 
-    if(Keyboard::isKeyDown(GLFW_KEY_DOWN))
+    if(Keyboard::isKeyDown(Keybind::GetBind(Keybind::ACT_GO_DOWN)))
         level.DeltaCreature(*hero, {0, 0.4f, 0});
-    if(Keyboard::isKeyDown(GLFW_KEY_UP))
+    if(Keyboard::isKeyDown(Keybind::GetBind(Keybind::ACT_GO_UP)))
         level.DeltaCreature(*hero, {0, -0.4f, 0});
-    if(Keyboard::isKeyDown(GLFW_KEY_LEFT))
+    if(Keyboard::isKeyDown(Keybind::GetBind(Keybind::ACT_GO_LEFT)))
         level.DeltaCreature(*hero, {-0.4f, 0, 0});
-    if(Keyboard::isKeyDown(GLFW_KEY_RIGHT))
+    if(Keyboard::isKeyDown(Keybind::GetBind(Keybind::ACT_GO_RIGHT)))
         level.DeltaCreature(*hero, {0.4f, 0, 0});
+
+    if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_CLOSE_TOP)))
+        ws->CloseTop();
+
+    if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_INVENTORY_MENU)))
+        inventory->hidden = false;
 
     AL::listener = hero->GetAgent<Creature>()->pos;
     level.Update(GameTimer(update_pass));

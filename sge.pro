@@ -95,7 +95,8 @@ SOURCES += \
     core/infrastructure/world.cpp \
     core/infrastructure/player.cpp \
     sge_inventory.cpp \
-    sge_ui/table.cpp
+    sge_ui/table.cpp \
+    keyconfig.cpp
 
 VERSION = 0.1.0
 
@@ -235,7 +236,8 @@ HEADERS += \
     core/infrastructure/world.h \
     core/infrastructure/player.h \
     sge_inventory.h \
-    sge_ui/table.h
+    sge_ui/table.h \
+    keyconfig.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

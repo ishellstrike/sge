@@ -24,6 +24,9 @@ public:
     Chest *c;
     void Link(std::shared_ptr<Object> &o, std::shared_ptr<Object> &hero);
     void Unlink();
+private:
+    bool TakeAll();
+    bool TakeSelected();
 };
 
 #endif // SGE_CHEST_WINDOW_H
