@@ -82,6 +82,15 @@ sge_chest_window::sge_chest_window(WContainer *par) :
         }
         return false;
     });
+
+    closeb->onMouseClick.connect( [&](const ClickHandler &mh)->bool{
+        if(mh.button == GLFW_MOUSE_BUTTON_LEFT)
+        {
+            Unlink();
+            return true;
+        }
+        return false;
+    });
 }
 
 void sge_chest_window::Draw() const
