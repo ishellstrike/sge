@@ -58,8 +58,8 @@ sge_chest_window::sge_chest_window(WContainer *par) :
     size = glm::vec2(200, 200);
 
     lc->columns[0] = {"name", 1, 0};
-
-    lc->columns[1] = {"count", 0, 70};
+    lc->columns[1] = {"count", 0, 50};
+    lc->columns[2].hidden = true;
 
     take = new Button(this);
     take->text = "Take";

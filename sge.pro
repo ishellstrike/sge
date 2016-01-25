@@ -96,7 +96,8 @@ SOURCES += \
     core/infrastructure/player.cpp \
     sge_inventory.cpp \
     sge_ui/table.cpp \
-    keyconfig.cpp
+    keyconfig.cpp \
+    core/recipe.cpp
 
 VERSION = 0.1.0
 
@@ -237,7 +238,8 @@ HEADERS += \
     core/infrastructure/player.h \
     sge_inventory.h \
     sge_ui/table.h \
-    keyconfig.h
+    keyconfig.h \
+    core/recipe.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \
@@ -487,4 +489,5 @@ DISTFILES += \
     data/json/scheme.json \
     data/json/creature_parts.json \
     data/glyphs.txt \
-    data/fonts/glyphs.txt
+    data/fonts/glyphs.txt \
+    data/json/recipes.json

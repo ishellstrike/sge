@@ -8,6 +8,8 @@
 #define RECIPE_H
 #include <string>
 #include <vector>
+#include <map>
+#include "rapidjson/document.h"
 
 class Chest;
 
@@ -22,9 +24,24 @@ public:
       Tool     = 3
     };
     
-    std::string name;
+    std::string value;
     int level = -1;
     int count = -1;
+    Type type;
+
+    void Deserialize(const rapidjson::Value &val);
+
+private:
+    static std::map<std::string, Type> type_caster;
+};
+
+class ResultPart
+{
+public:
+    std::string id;
+    int count = -1;
+
+    void Deserialize(const rapidjson::Value &val);
 };
 
 class Recipe
@@ -32,6 +49,8 @@ class Recipe
 public:
     typedef std::vector<RecipePart> AlterateParts; 
     std::vector<AlterateParts> recipe;
+    std::vector<ResultPart> result;
+    std::string name, descr, subcategory, category;
     
     void Deserialize(const rapidjson::Value &val);
     void IsReady(const Chest &chest) const;

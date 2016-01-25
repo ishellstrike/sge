@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <memory>
 #include "scheme.h"
+#include "recipe.h"
 
 class Sound;
 
@@ -23,6 +24,7 @@ public:
     static std::list<Sound *> sounds;
 
     static std::unordered_map<SchemeType, std::vector<Scheme>> scheme_db;
+    static std::list<Recipe> recipe_db;
     static std::shared_ptr<Object> Create(const std::string &id);
     static const ObjectStatic *Get(const std::string &id);
 

@@ -62,9 +62,29 @@ struct DeserializeHelper {
 private:
 
     template<typename _Ty>
-    static void __deserialize(const rapidjson::Value &val, const char *, _Ty &target)
+    static void __deserialize_array_part(const rapidjson::Value &val, _Ty &target)
     {
         target.Deserialize(val);
+    }
+
+    template<typename _Ty>
+    static void __deserialize_array_part(const rapidjson::Value &arr, std::vector<_Ty> &target)
+    {
+        if(arr.IsArray())
+        {
+            for(decltype(arr.Size()) i = 0; i < arr.Size(); i++)
+            {
+                _Ty part;
+                __deserialize_array_part(arr[i], part);
+                target.push_back(std::move(part));
+            }
+        }
+    }
+
+    template<typename _Ty>
+    static void __deserialize(const rapidjson::Value &val, const char *, _Ty &target)
+    {
+        static_assert(false, "not implemented");
     }
 
     template<typename _Ty>
@@ -77,7 +97,7 @@ private:
             for(decltype(arr.Size()) i = 0; i < arr.Size(); i++)
             {
                 _Ty part;
-                __deserialize(arr[i], "", part);
+                __deserialize_array_part(arr[i], part);
                 target.push_back(std::move(part));
             }
         }
