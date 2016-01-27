@@ -1,6 +1,22 @@
 [
     {
         "type":"Item",
+        "id":"file",
+        "agents":[
+            {
+                "type":"ItemBase",
+                "sort":"meele",
+                "name":"Напильник"
+            },{
+                "type":"Tool",
+                "data":[
+                    ["file", 2]
+                ]
+            }
+        ]
+    },
+    {
+        "type":"Item",
         "id":"sharp_stick",
         "Damage":2,
         "agents":[
@@ -2146,6 +2162,27 @@
             {
                 "type":"ItemBase",
                 "name":"Камень"
+            },{
+                "type":"Tool",
+                "data":[
+                    ["hammer", 1],
+                    ["file",   1]
+                ]
+            }
+        ]
+    },
+    {
+        "type":"Item",
+        "id":"sharp_stone",
+        "agents":[
+            {
+                "type":"ItemBase",
+                "name":"Острый камень"
+            },{
+                "type":"Tool",
+                "data":[
+                    ["knife", 1]
+                ]
             }
         ]
     }
