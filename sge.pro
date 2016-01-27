@@ -97,7 +97,8 @@ SOURCES += \
     sge_inventory.cpp \
     sge_ui/table.cpp \
     keyconfig.cpp \
-    core/recipe.cpp
+    core/recipe.cpp \
+    sge_crafting_window.cpp
 
 VERSION = 0.1.0
 
@@ -239,7 +240,8 @@ HEADERS += \
     sge_inventory.h \
     sge_ui/table.h \
     keyconfig.h \
-    core/recipe.h
+    core/recipe.h \
+    sge_crafting_window.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

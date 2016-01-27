@@ -42,6 +42,7 @@
 #include "core/level.h"
 #include "sge_inventory.h"
 #include "sge_chest_window.h"
+#include "sge_crafting_window.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -98,6 +99,8 @@ public:
     sge_settings_main *settings;
     sge_inventory *inventory;
     sge_chest_window *chest;
+    sge_crafting_window *craft;
+
 
     Level level;
     std::shared_ptr<Object> hero;

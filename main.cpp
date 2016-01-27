@@ -123,6 +123,7 @@ int main(int argc, char** argv)
     }
     catch( std::exception& e ) {
         LOG(fatal) << "Caught exception: " << e.what() << std::endl;
+        throw;
     }
 
     return 0;

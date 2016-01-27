@@ -92,9 +92,9 @@ void DB::Load()
                     }
                     else  if(type == "recipe")
                     {
-                        Recipe r;
+                        std::shared_ptr<Recipe> r = std::make_shared<Recipe>();
                         try {
-                            r.Deserialize(val);
+                            r->Deserialize(val);
                         } catch (std::exception &e) {
                             LOG(error) << e.what();
                             LOG(error) << "record #" << i+1 << " from " << file << " broken, skipped";
@@ -201,4 +201,4 @@ std::unordered_map<Id, std::unique_ptr<ObjectStatic>> DB::data;
 std::list<Sound *> DB::sounds;
 std::unordered_map<std::string, std::vector<ObjectStatic *>> DB::tags_ref;
 std::unordered_map<SchemeType, std::vector<Scheme>> DB::scheme_db;
-std::list<Recipe> DB::recipe_db;
+std::list<std::shared_ptr<Recipe>> DB::recipe_db;

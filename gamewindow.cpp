@@ -148,20 +148,32 @@ bool GameWindow::BaseInit()
     ws = std::make_shared<WinS>(batch.get());
     ws->f = f12.get();
 
-    perf = new sge_perfomance(ws.get());
-    linfo = new sge_level_debug_info(ws.get());
-    settings = new sge_settings_main(ws.get());
-    inventory = new sge_inventory(ws.get());
-    chest = new sge_chest_window(ws.get());
-
-    Resize(RESX, RESY);
-
     //================================
 
     TextureAtlas::LoadAll();
     DB::Load();
 
     //================================
+
+    perf = new sge_perfomance(ws.get());
+    perf->hidden = true;
+
+    linfo = new sge_level_debug_info(ws.get());
+    linfo->hidden = true;
+
+    settings = new sge_settings_main(ws.get());
+    settings->hidden = true;
+
+    inventory = new sge_inventory(ws.get());
+    inventory->hidden = true;
+
+    chest = new sge_chest_window(ws.get());
+    chest->hidden = true;
+
+    craft = new sge_crafting_window(ws.get());
+    craft->hidden = true;
+
+    Resize(RESX, RESY);
 
     RemoteClient::instance();
     auto clie = [](){
@@ -288,6 +300,9 @@ void GameWindow::BaseUpdate()
 
     if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_INVENTORY_MENU)))
         inventory->hidden = false;
+
+    if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_CRAFTING_MENU)))
+        craft->hidden = false;
 
     AL::listener = hero->GetAgent<Creature>()->pos;
     level.Update(GameTimer(update_pass));
