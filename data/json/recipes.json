@@ -10,17 +10,76 @@
         ]
     },
     {
+        "type":"item",
+        "id":"testbook",
+        "name":"Книга о test",
+        "agents":[
+            {
+                "type":"ItemBase"
+            },{
+                "type":"Book",
+                "booktag":["common_tag"]
+            },{
+                "type":"Tags",
+                "tags":["common_book"]
+            }
+        ]
+    },{
+        "type":"item",
+        "id":"testbook2",
+        "name":"Подробная книга о test",
+        "agents":[
+            {
+                "type":"ItemBase"
+            },{
+                "type":"Book",
+                "booktag":["unique_tag"]
+            },{
+                "type":"Tags",
+                "tags":["uncommon_book"]
+            }
+        ]
+    },
+    {
         "type":"recipe",
         "name":"test",
         "description":"descr",
         "category":"test",
         "subcategory":"test2",
         "recipe":[
-            [{"type":"item", "value":"stick", "count":5}],
-            [{"type":"tool", "value":"knife", "level":3}],
-            [{"type":"quality", "value":"thread", "count":5, "level":1}]
+            [["item",    "stick",  5]],
+            [["tool",    "knife",  3]],
+            [["quality", "thread", 1]]
         ],
-        "result":[{"value":"testhat", "count":1}]
+        "result":[["testhat", 1]],
+        "booktag":["unique_tag", "common_tag"]
+    },
+    {
+        "type":"recipe",
+        "name":"Большой самодельный нож",
+        "description":"Большой заточеный кусок металла с самодельной деревянной ручкой",
+        "category":"test",
+        "subcategory":"test2",
+        "recipe":[
+            [["item", "bigblade", 1]],
+            [["item", "stick",    1]],
+            [["item", "thread",   2]],
+            [["tool", "knife",    1]]
+        ],
+        "result":[["bigblade_weapon", :1]],
+        "booktag":["survive_basic", "cold_weapon_basic", "basic_knowledge"]
+    },
+    {
+        "type":"recipe",
+        "name":"Заточить напильник",
+        "category":"test",
+        "subcategory":"test2",
+        "recipe":[
+            [["item", "file", 1]],
+            [["tool", "file", 2]]
+        ],
+        "result":[["bigblade", :1]],
+        "booktag":["survive_basic", "cold_weapon_basic", "basic_knowledge"]
     }
 
 ]
