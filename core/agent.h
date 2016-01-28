@@ -65,6 +65,7 @@ class Agent
 
 public:
     Agent(int __id);
+    ~Agent();
 
     template <typename T_>
     static Tid TidFor()
