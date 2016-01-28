@@ -6,6 +6,11 @@ Agent::Agent(int __id) :
 
 }
 
+Agent::~Agent()
+{
+    
+}
+
 bool Agent::Equals(Agent *o)
 {
     if( o == this )
