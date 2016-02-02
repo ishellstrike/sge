@@ -18,10 +18,10 @@
                 "type":"ItemBase"
             },{
                 "type":"Book",
-                "booktag":["common_tag"]
+                "booktag":["tag_common_tag"]
             },{
                 "type":"Tags",
-                "tags":["common_book"]
+                "tags":["tag_common_book"]
             }
         ]
     },{
@@ -33,10 +33,10 @@
                 "type":"ItemBase"
             },{
                 "type":"Book",
-                "booktag":["unique_tag"]
+                "booktag":["tag_unique_tag"]
             },{
                 "type":"Tags",
-                "tags":["uncommon_book"]
+                "tags":["tag_uncommon_book"]
             }
         ]
     },
@@ -52,7 +52,7 @@
             [["quality", "thread", 1]]
         ],
         "result":[["testhat", 1]],
-        "booktag":["unique_tag", "common_tag"]
+        "booktag":["tag_unique_tag", "tag_common_tag"]
     },
     {
         "type":"recipe",
@@ -67,7 +67,7 @@
             [["tool", "knife",    1]]
         ],
         "result":[["bigblade_weapon", :1]],
-        "booktag":["survive_basic", "cold_weapon_basic", "basic_knowledge"]
+        "booktag":["tag_survive_basic", "tag_cold_weapon_basic", "tag_basic_knowledge"]
     },
     {
         "type":"recipe",
@@ -79,7 +79,7 @@
             [["tool", "file", 2]]
         ],
         "result":[["bigblade", :1]],
-        "booktag":["survive_basic", "cold_weapon_basic", "basic_knowledge"]
+        "booktag":["tag_survive_basic", "tag_cold_weapon_basic", "tag_basic_knowledge"]
     }
 
 ]
