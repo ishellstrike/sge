@@ -5,8 +5,28 @@
     "agents":[
         {
             "type":"Material",
+            "name":"дерево",
+            "matname":"деревянный",
             "hitsound":"sound_wood_smash",
             "breaksound":"sound_wood_destroy"
+        },{
+            "type":"Tags",
+            "tags":["tag_material_solid"]
+        }
+    ]
+},{
+    "type":"dummy",
+    "id":"material_iron",
+    "agents":[
+        {
+            "type":"Material",
+            "name":"железо",
+            "matname":"железный",
+            "hitsound":"sound_iron_smash",
+            "breaksound":"sound_iron_destroy"
+        },{
+            "type":"Tags",
+            "tags":["tag_material_solid", "tag_material_metal"]
         }
     ]
 }
