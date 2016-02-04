@@ -1,6 +1,6 @@
 #ifndef SCHEME_H
 #define SCHEME_H
-#include "agent.h"
+#include "agents/agent.h"
 #include <vector>
 #include <glm/glm.hpp>
 #include <logger.h>

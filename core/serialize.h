@@ -13,15 +13,18 @@
 #include <functional>
 #include "helper.h"
 
-struct DeserializeHelper {
+struct NvpHelper {
     template <class T>
     inline static std::pair<const char *, T> make_nvp(const char *name, T &&value) {
         return{name, std::forward<T>(value)};
     }
+};
 
-#define NVP(T) DeserializeHelper::make_nvp(#T, T)
+#define NVP(T) NvpHelper::make_nvp(#T, T)
 #define DESERIALIZE(...) DeserializeHelper::deserialize(val, __VA_ARGS__)
+#define SERIALIZE(...) SerializeHelper::serialize(doc, v, __VA_ARGS__)
 
+struct DeserializeHelper {
     static void deserialize(const rapidjson::Value &val)
     {
         (void)val;
@@ -38,25 +41,6 @@ struct DeserializeHelper {
     {
         __deserialize(val, first.first, first.second);
         deserialize(val, rest...);
-    }
-
-
-    static void serialize(rapidjson::Document &doc)
-    {
-        (void)doc;
-    }
-
-    template <typename Last>
-    static void serialize(rapidjson::Document &doc)
-    {
-        __serialize(doc, last.first, last.second);
-    }
-
-    template <typename First, typename... Rest>
-    static void serialize(rapidjson::Document &doc)
-    {
-        __serialize(doc, first.first, first.second);
-        serialize(doc, rest...);
     }
 
 private:
@@ -82,9 +66,13 @@ private:
     }
 
     template<typename _Ty>
-    static void __deserialize(const rapidjson::Value &val, const char *, _Ty &target)
+    static void __deserialize(const rapidjson::Value &val, const char *s, _Ty &target)
     {
-        static_assert(false, "not implemented");
+        if(!val.HasMember(s))
+            throw std::invalid_argument(sge::string_format("value has no %s member", s));
+
+        const rapidjson::Value &v = val[s];
+        target.Deserialize(v);
     }
 
     template<typename _Ty>
@@ -256,29 +244,6 @@ private:
                 target.push_back(static_cast<float>(arr[i].GetDouble()));
             }
         }
-    }
-
-    template<typename _Ty>
-    static void __serialize(rapidjson::Document &doc, const char *, const _Ty &target)
-    {
-        target.Serialize(val);
-    }
-
-    template<typename _Ty>
-    static void __serialize(rapidjson::Document &doc, const char *s, const std::vector<_Ty> &target)
-    {
-        const rapidjson::Value &arr;
-        arr.SetArray();
-
-        for(decltype(target.Size()) i = 0; i < target.Size(); i++)
-        {
-            rapidjson::Value tv;
-            __serialize(tv, "", target[i]);
-
-            arr.PushBack(tv, doc.GetAllocator());
-        }
-
-        doc[s] = arr;
     }
 };
 

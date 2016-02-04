@@ -7,7 +7,7 @@
 
 #ifndef STRUCTURE_H
 #define STRUCTURE_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 struct StructuralPart
 {

@@ -43,6 +43,7 @@
 #include "sge_inventory.h"
 #include "sge_chest_window.h"
 #include "sge_crafting_window.h"
+#include "sge_eventbus_log.h"
 
 #define MAJOR 2
 #define MINOR 1
@@ -100,6 +101,7 @@ public:
     sge_inventory *inventory;
     sge_chest_window *chest;
     sge_crafting_window *craft;
+    sge_eventbus_log *eventbus;
 
 
     Level level;

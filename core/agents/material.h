@@ -7,7 +7,7 @@
 
 #ifndef MATERIAL_H
 #define MATERIAL_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 #include "sound.h"
 
 class Material : public StaticAgent

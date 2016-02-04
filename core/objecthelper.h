@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
-#include "agent.h"
+#include "agents/agent.h"
 
 typedef std::vector<std::shared_ptr<Agent>> AgentContainer;
 
@@ -11,6 +11,8 @@ class ObjectBase
 {
 public:
     std::unique_ptr<AgentContainer> agents;
+
+    virtual ~ObjectBase();
 
     template <typename T>
     T *GetAgent()

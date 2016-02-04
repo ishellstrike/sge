@@ -4,6 +4,7 @@
 #include <functional>
 
 class ObjectStatic;
+class Event;
 
 class Object : public ObjectBase
 {
@@ -21,11 +22,16 @@ public:
     void     onInit(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
     void   onUpdate(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
     void     onDraw(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
+
+    void onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+
+    void    onEvent(Event &e);
+
     void  onDestroy(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
     void   onDamage(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
     void    onEnter(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
     void    onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
-    void onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+
 };
 
 template<typename _Ty>

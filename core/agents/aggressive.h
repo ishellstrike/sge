@@ -7,7 +7,7 @@
 
 #ifndef AGGRESSIVE_H
 #define AGGRESSIVE_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Creature;
 class Sound;

@@ -7,7 +7,7 @@
 
 #ifndef ITEMSPAWNER_H
 #define ITEMSPAWNER_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 #include <vector>
 
 struct SpawnInfo

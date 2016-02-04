@@ -27,6 +27,9 @@ public:
         ACT_GO_DOWN = 51,
         ACT_GO_RIGHT = 52,
         ACT_GO_LEFT = 53,
+
+        ACT_EVENTBUS = 100,
+        ACT_PERFMON = 101
     };
 
     static std::map<int, int> binds;

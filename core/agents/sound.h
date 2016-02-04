@@ -7,7 +7,7 @@
 
 #ifndef SOUND_H
 #define SOUND_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 #include "remsnd.h"
 
 class Sound : public StaticAgent

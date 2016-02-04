@@ -12,12 +12,13 @@
 #include <memory>
 #include "rapidjson/document.h"
 #include "boost/signals2.hpp"
-#include "agents/agentfactory.h"
+#include "agentfactory.h"
 #include <string>
 #include "core/serialize.h"
 #include <boost/noncopyable.hpp>
 #include "gametimer.h"
 
+class Event;
 class ObjectBase;
 using namespace boost::signals2;
 
@@ -65,7 +66,7 @@ class Agent
 
 public:
     Agent(int __id);
-    ~Agent();
+    virtual ~Agent();
 
     template <typename T_>
     static Tid TidFor()
@@ -90,6 +91,9 @@ public:
     virtual void     onDraw(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
     virtual void onInteract(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+
+    virtual void    onEvent(Object &par, Event &e);
+
     virtual void   onDamage(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
     virtual void  onDestroy(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);

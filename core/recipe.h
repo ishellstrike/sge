@@ -25,7 +25,6 @@ public:
     };
     
     std::string value;
-    int level = -1;
     int count = -1;
     Type type;
 

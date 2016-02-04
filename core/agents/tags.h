@@ -7,7 +7,7 @@
 
 #ifndef TAGS_H
 #define TAGS_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Tags : public StaticAgent
 {

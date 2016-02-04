@@ -7,7 +7,7 @@
 
 #ifndef Item_H
 #define Item_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Item : public DynamicAgent
 {

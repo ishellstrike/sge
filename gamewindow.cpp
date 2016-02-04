@@ -12,6 +12,8 @@
 #include "core/remoteclient.h"
 #include "core/agents/agents.hpp"
 #include "remsnd.h"
+#include "core/events/eventbus.h"
+#include "core/events/eventdamage.h"
 
 #define GLM_SWIZZLE
 
@@ -173,6 +175,9 @@ bool GameWindow::BaseInit()
     craft = new sge_crafting_window(ws.get());
     craft->hidden = true;
 
+    eventbus = new sge_eventbus_log(ws.get());
+    eventbus->hidden = true;
+
     Resize(RESX, RESY);
 
     RemoteClient::instance();
@@ -295,14 +300,20 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyDown(Keybind::GetBind(Keybind::ACT_GO_RIGHT)))
         level.DeltaCreature(*hero, {0.4f, 0, 0});
 
+    if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_EVENTBUS)))
+        eventbus->hidden = !eventbus->hidden;
+
+    if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_PERFMON)))
+        perf->hidden = !perf->hidden;
+
     if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_CLOSE_TOP)))
         ws->CloseTop();
 
     if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_INVENTORY_MENU)))
-        inventory->hidden = false;
+        inventory->hidden = !inventory->hidden;
 
     if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_CRAFTING_MENU)))
-        craft->hidden = false;
+        craft->hidden = !craft->hidden;
 
     AL::listener = hero->GetAgent<Creature>()->pos;
     level.Update(GameTimer(update_pass));
@@ -324,7 +335,12 @@ void GameWindow::BaseUpdate()
     if(Mouse::isRightJustPressed())
     {
         auto selpos = glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale;
-        level.DamageBlock(selpos, 30, gt);
+        //level.DamageBlock(selpos, 30, gt);
+
+        auto e = std::unique_ptr<Event>(new EventDamage(30));
+        e->Set(selpos);
+        Eventbus::Instance().PushEvent(std::move(e));
+
         std::list<std::weak_ptr<Object>> o = level.GetObjectsInRange(selpos, 1.1);
         if(!o.empty())
         {
@@ -339,4 +355,5 @@ void GameWindow::BaseUpdate()
     ws->Update(gt, s);
 
     Mouse::dropState();
+    Eventbus::Instance().events.clear();
 }

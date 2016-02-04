@@ -57,6 +57,11 @@ void Agent::onInteract(std::shared_ptr<Object> &, Level *, const glm::vec3 &, co
 
 }
 
+void Agent::onEvent(Object &par, Event &e)
+{
+
+}
+
 void Agent::onDamage(std::shared_ptr<Object> &, Level *, const glm::vec3 &, const GameTimer &)
 {
 

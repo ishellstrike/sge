@@ -7,7 +7,7 @@
 
 #ifndef BLOCK_H
 #define BLOCK_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Block : public DynamicAgent
 {

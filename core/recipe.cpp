@@ -19,10 +19,9 @@ void Recipe::Craft(const Chest &chest) const
 
 void RecipePart::Deserialize(const rapidjson::Value &val)
 {
-    DESERIALIZE(NVP(value), NVP(level), NVP(count));
-    if(!val.HasMember("type"))
-        throw std::logic_error("recipe part has no type");
-    type = type_caster[val["type"].GetString()];
+    type = type_caster[(*val.Begin()).GetString()];
+    value = val[1].GetString();
+    count = val[2].GetInt();
 }
 
 std::map<std::string, RecipePart::Type> RecipePart::type_caster = {{"item",     RecipePart::Item},
@@ -33,5 +32,6 @@ std::map<std::string, RecipePart::Type> RecipePart::type_caster = {{"item",     
 
 void ResultPart::Deserialize(const rapidjson::Value &val)
 {
-    DESERIALIZE(NVP(id), NVP(count));
+    id = (*val.Begin()).GetString();
+    count = val[1].GetInt();
 }

@@ -7,7 +7,7 @@
 
 #ifndef REFERENCER_H
 #define REFERENCER_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Referencer : public StaticAgent
 {

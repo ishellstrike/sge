@@ -109,3 +109,12 @@ void Object::onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &p
     base->onInteract(o, l, pos, gt);
 }
 
+void Object::onEvent(Event &e)
+{
+    if(agents)
+        for(const auto &a : *agents)
+            a->onEvent(*this, e);
+
+    //base->onEvent(*this, e);
+}
+

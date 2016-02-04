@@ -7,7 +7,7 @@
 
 #ifndef SCRIPT_H
 #define SCRIPT_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 #include <squirrel.h>
 #include <sqstdio.h>

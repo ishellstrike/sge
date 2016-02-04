@@ -41,7 +41,7 @@ std::string get_recipepart_name(RecipePart &rp)
     if(rp.type == RecipePart::Tool)
     {
         std::stringstream s;
-        s << "tool " << rp.value << " minimum level " << rp.level << "\n";
+        s << "tool " << rp.value << " minimum level " << rp.count << "\n";
         return s.str();
     }
 }

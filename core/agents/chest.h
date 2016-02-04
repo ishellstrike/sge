@@ -8,7 +8,7 @@
 #ifndef CHEST_H
 #define CHEST_H
 #include <vector>
-#include "core/agent.h"
+#include "core/agents/agent.h"
 #include "core/object.h"
 
 class Chest : public DynamicAgent

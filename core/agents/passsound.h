@@ -7,7 +7,7 @@
 
 #ifndef PASSSOUND_H
 #define PASSSOUND_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 #include "sound.h"
 
 class PassSound : public StaticAgent

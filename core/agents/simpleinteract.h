@@ -7,7 +7,7 @@
 
 #ifndef SIMPLEINTERACT_H
 #define SIMPLEINTERACT_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 #include "core/agents/sound.h"
 
 class SimpleInteract : public StaticAgent

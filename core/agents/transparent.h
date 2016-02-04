@@ -7,7 +7,7 @@
 
 #ifndef TRANSPARENT_H
 #define TRANSPARENT_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Transparent : public StaticAgent
 {

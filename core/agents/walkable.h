@@ -7,7 +7,7 @@
 
 #ifndef WALKABLE_H
 #define WALKABLE_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Walkable : public StaticAgent
 {

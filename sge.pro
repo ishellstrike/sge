@@ -55,7 +55,6 @@ SOURCES += \
     core/object.cpp \
     core/dynamicobject.cpp \
     core/objectstatic.cpp \
-    core/agent.cpp \
     core/sector.cpp \
     core/level.cpp \
     core/offset.cpp \
@@ -98,7 +97,13 @@ SOURCES += \
     sge_ui/table.cpp \
     keyconfig.cpp \
     core/recipe.cpp \
-    sge_crafting_window.cpp
+    sge_crafting_window.cpp \
+    core/agents/agent.cpp \
+    core/events/eventbus.cpp \
+    core/events/event.cpp \
+    core/events/eventdamage.cpp \
+    core/events/eventissureorder.cpp \
+    sge_eventbus_log.cpp
 
 VERSION = 0.1.0
 
@@ -183,7 +188,6 @@ HEADERS += \
     core/object.h \
     core/dynamicobject.h \
     core/objectstatic.h \
-    core/agent.h \
     core/sector.h \
     core/level.h \
     core/offset.h \
@@ -241,7 +245,14 @@ HEADERS += \
     sge_ui/table.h \
     keyconfig.h \
     core/recipe.h \
-    sge_crafting_window.h
+    sge_crafting_window.h \
+    core/events/eventbus.h \
+    core/agents/agent.h \
+    core/events/event.h \
+    core/events/eventdamage.h \
+    core/events/eventissureorder.h \
+    sge_eventbus_log.h \
+    core/serializer.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

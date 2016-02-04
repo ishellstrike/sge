@@ -42,7 +42,9 @@ void Keybind::SetDefault()
             {ACT_MULTIMENU,      GLFW_KEY_P},
             {ACT_MAP,            GLFW_KEY_M},
             {ACT_DEBUG_MENU,     GLFW_KEY_GRAVE_ACCENT},
-            {ACT_TAKE_ALL,       GLFW_KEY_R}};
+            {ACT_TAKE_ALL,       GLFW_KEY_R},
+            {ACT_EVENTBUS,       GLFW_KEY_F5},
+            {ACT_PERFMON,        GLFW_KEY_F2}};
 }
 
 std::map<int, int> Keybind::binds;

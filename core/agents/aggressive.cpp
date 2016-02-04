@@ -11,6 +11,8 @@
 #include "core/agents/sound.h"
 #include "core/agents/entity.h"
 #include "core/level.h"
+#include "core/events/eventbus.h"
+#include "core/events/eventissureorder.h"
 
 void Aggressive::Deserialize(const rapidjson::Value &val)
 {
@@ -33,8 +35,12 @@ void Aggressive::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec
             std::list<std::weak_ptr<Object>> o = l->GetObjectsInRange(pos, 10);
             for(std::weak_ptr<Object> &i : o)
             {
-                if(!i.lock()->base->HasAgent<Wander>())
+                const auto &temp = i.lock();
+                if(!temp->base->HasAgent<Wander>())
                 {
+                    auto e = std::unique_ptr<Event>(new EventIssureOrder);
+                    e->Set(123123);
+                    Eventbus::Instance().PushEvent(std::move(e));
                     owner->current_order.type = Order::Follow;
                     owner->current_order.target = i;
                     return;

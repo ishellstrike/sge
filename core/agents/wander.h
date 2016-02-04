@@ -7,7 +7,7 @@
 
 #ifndef WANDER_H
 #define WANDER_H
-#include "core/agent.h"
+#include "core/agents/agent.h"
 
 class Wander : public StaticAgent
 {

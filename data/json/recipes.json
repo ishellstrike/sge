@@ -66,7 +66,7 @@
             [["item", "thread",   2]],
             [["tool", "knife",    1]]
         ],
-        "result":[["bigblade_weapon", :1]],
+        "result":[["bigblade_weapon", 1]],
         "booktag":["tag_survive_basic", "tag_cold_weapon_basic", "tag_basic_knowledge"]
     },
     {
@@ -78,7 +78,7 @@
             [["item", "file", 1]],
             [["tool", "file", 2]]
         ],
-        "result":[["bigblade", :1]],
+        "result":[["bigblade", 1]],
         "booktag":["tag_survive_basic", "tag_cold_weapon_basic", "tag_basic_knowledge"]
     }
 

@@ -9,7 +9,7 @@
 #define ITEMBASE_H
 
 #include <vector>
-#include "core/agent.h"
+#include "core/agents/agent.h"
 #include "core/object.h"
 
 class ItemBase : public StaticAgent
