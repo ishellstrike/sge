@@ -16,13 +16,14 @@
 #include "core/events/eventdamage.h"
 
 #define GLM_SWIZZLE
+#define CLIENT
 
 GameWindow *GameWindow::wi = nullptr;
 std::shared_ptr<Object> GameWindow::Hero = nullptr;
 
 void GameWindow::Mainloop()
 {
-    AL::InitializeOpenAL();
+    OpenAL::InitializeOpenAL();
     BaseInit();
 
     while(!glfwWindowShouldClose(window))
@@ -45,7 +46,7 @@ void GameWindow::Mainloop()
     }
 
     Resources::drop();
-    AL::DestroyOpenAL();
+    OpenAL::DestroyOpenAL();
 }
 
 bool GameWindow::BaseInit()
@@ -315,7 +316,7 @@ void GameWindow::BaseUpdate()
     if(Keyboard::isKeyPress(Keybind::GetBind(Keybind::ACT_CRAFTING_MENU)))
         craft->hidden = !craft->hidden;
 
-    AL::listener = hero->GetAgent<Creature>()->pos;
+    OpenAL::listener = hero->GetAgent<Creature>()->pos;
     level.Update(GameTimer(update_pass));
     offset = glm::vec2(hero->GetAgent<Creature>()->pos)*sscale - glm::vec2(Prefecences::Instance()->resolution)/2.f;
     for(int i = -2; i < 3; i++)

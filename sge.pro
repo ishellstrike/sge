@@ -76,7 +76,7 @@ SOURCES += \
     core/agents/simpleinteract.cpp \
     core/agents/transparent.cpp \
     core/agents/passsound.cpp \
-    core/agents/sound.cpp \
+    core/agents/sge_sound.cpp \
     core/agents/script.cpp \
     sge_settings_main.cpp \
     core/agents/pressureplate.cpp \
@@ -106,6 +106,8 @@ SOURCES += \
     sge_eventbus_log.cpp
 
 VERSION = 0.1.0
+
+DEFINES += CLIENT
 
 win32:LIBS += \
 -L$$PWD/3rdparty/lib/ \
@@ -224,7 +226,7 @@ HEADERS += \
     core/agents/simpleinteract.h \
     core/agents/transparent.h \
     core/agents/passsound.h \
-    core/agents/sound.h \
+    core/agents/sge_sound.h \
     core/agents/script.h \
     sge_settings_main.h \
     core/agents/pressureplate.h \

@@ -1,6 +1,5 @@
 #ifndef REMSND_H
 #define REMSND_H
-#include <windows.h>
 #include <al.h>
 #include <alc.h>
 #include <string>
