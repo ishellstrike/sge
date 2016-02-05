@@ -15,7 +15,10 @@ public:
     SectorMap map;
 
     void Update(GameTimer &gt);
+
+#ifdef CLIENT
     void Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const;
+#endif
 
     Sector *GetSectorByPos(const glm::vec3 &coord, bool request = true);
     Sector *GetSector(const glm::ivec2 &off, bool request = true);

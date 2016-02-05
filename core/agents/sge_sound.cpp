@@ -5,15 +5,16 @@
         See "LICENSE.txt"
 *******************************************************************************/
 
-#include "sound.h"
+#include "sge_sound.h"
 #include "prefecences.h"
 
-void Sound::Deserialize(const rapidjson::Value &val)
+void SgeSound::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(name), NVP(filename), NVP(near), NVP(far));
 }
 
-void Sound::onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt)
+#ifdef CLIENT
+void SgeSound::onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt)
 {
     if(!filename.empty())
     {
@@ -27,22 +28,29 @@ void Sound::onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &po
     }
 }
 
-void Sound::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
+void SgeSound::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     snd.Update();
 }
+#endif
 
-void Sound::Move(const glm::vec3 &p) const
+void SgeSound::Move(const glm::vec3 &p) const
 {
+#ifdef CLIENT
     snd.Move(p);
+#endif
 }
 
-void Sound::Pitch(float p) const
+void SgeSound::Pitch(float p) const
 {
+#ifdef CLIENT
     snd.Pitch(p);
+#endif
 }
 
-void Sound::Play() const
+void SgeSound::Play() const
 {
+#ifdef CLIENT
     snd.Play();
+#endif
 }

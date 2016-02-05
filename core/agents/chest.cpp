@@ -28,11 +28,13 @@ std::shared_ptr<Agent> Chest::Instantiate() const
     return std::unique_ptr<Chest>(c);
 }
 
+#ifdef CLIENT
 void Chest::onInteract(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer &)
 {
     GameWindow::wi->chest->hidden = false;
     GameWindow::wi->chest->Link(par, GameWindow::Hero);
 }
+#endif
 
 void Chest::Combine()
 {

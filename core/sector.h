@@ -29,7 +29,14 @@ public:
 
     std::array<std::shared_ptr<Object>, 6> Neighbours(const glm::ivec3 &pos);
     void Update(Level *l, GameTimer &gt);
+
+#ifdef CLIENT
     void Draw(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
+    void DrawEntities(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
+    void DrawShadow(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
+    void DrawBlock(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
+#endif
+
     void SetBlock(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
 
     void PlaceScheme(const Scheme &s, const glm::ivec3 &pos);
@@ -39,9 +46,6 @@ public:
     std::pair<std::shared_ptr<Object>, std::shared_ptr<Object> > GetCell(const glm::ivec3 &pos);
     std::shared_ptr<Object> GetGround(const glm::ivec3 &pos);
     void SetGround(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
-    void DrawEntities(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
-    void DrawShadow(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
-    void DrawBlock(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec3 &hpos) const;
 private:
 
     void RebuildMax();

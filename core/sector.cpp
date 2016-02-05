@@ -29,6 +29,7 @@ void Sector::Update(Level *l, GameTimer& gt)
             }
 }
 
+#ifdef CLIENT
 std::array<glm::vec3, 4> GetAtBlockPoints(float xpos, float ypos, int resx, int resy)
 {
    float vix = (sscale - resx) / 2.0f;
@@ -170,6 +171,7 @@ void Sector::DrawEntities(SpriteBatch &sb, const glm::ivec2 &off, const glm::vec
         }
     }
 }
+#endif
 
 void Sector::SetBlock(const glm::ivec3 &pos, std::shared_ptr<Object> obj)
 {

@@ -1,6 +1,8 @@
 #include "event.h"
 #include "core/serialize.h"
 #include <functional>
+#include <sstream>
+#include <glm/gtx/string_cast.hpp>
 
 Event::Event(const Event::TargetPoint &p) : type(Event::TARGET_POINT), data(p)
 {
@@ -53,27 +55,7 @@ void Event::Set()
 
 void Event::Serialize(rapidjson::Document &doc, rapidjson::Value &v)
 {
-    SERIALIZE(NVP(type));
-    TargetPoint t1;
-    TargetRange t2;
-    std::string t3;
-    switch(type)
-    {
-        case TARGET_POINT:
-        {
-            const TargetPoint &t1 = boost::any_cast<TargetPoint>(this->data);
-            SERIALIZE(NvpHelper::make_nvp("data", t1));
-        }
-        break;
-        case TARGET_RANGE:
-          t2 = boost::any_cast<TargetRange>(this->data);
-          SERIALIZE(NvpHelper::make_nvp("data", t2));
-        break;
-        case TARGET_OBJECT:
-          t3 = boost::any_cast<std::string>(this->data);
-          SERIALIZE(NvpHelper::make_nvp("data", t3));
-        break;
-    }
+
 }
 
 void Event::Deserialize(const rapidjson::Value &val)
@@ -93,6 +75,29 @@ void Event::Deserialize(const rapidjson::Value &val)
     }
 }
 
+std::string Event::to_string() const
+{
+    std::stringstream ss;
+    switch (type)
+    {
+    case NO_TARGET:
+        ss << "no target";
+        break;
+    case TARGET_POINT:
+        ss << "target point: " << glm::to_string(boost::any_cast<TargetPoint>(data).pos);
+        break;
+    case TARGET_RANGE:
+        ss << "target range: " << glm::to_string(boost::any_cast<TargetRange>(data).pos)
+           << " r: " << boost::any_cast<TargetRange>(data).range;
+        break;
+    case TARGET_OBJECT:
+        ss << "target: " << boost::any_cast<Uid>(data);
+        break;
+    }
+
+    return ss.str();
+}
+
 Event::TargetPoint::TargetPoint(const glm::vec3 &p) : pos(p)
 {
 
@@ -110,7 +115,7 @@ void Event::TargetPoint::Deserialize(const rapidjson::Value &val)
 
 void Event::TargetPoint::Serialize(rapidjson::Document &doc, rapidjson::Value &v)
 {
-    SERIALIZE(NVP(pos));
+
 }
 
 
@@ -121,6 +126,5 @@ void Event::TargetRange::Deserialize(const rapidjson::Value &val)
 
 void Event::TargetRange::Serialize(rapidjson::Document &doc, rapidjson::Value &v)
 {
-    SERIALIZE(NVP(pos));
-    SERIALIZE(NVP(range));
+
 }

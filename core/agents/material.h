@@ -8,7 +8,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 #include "core/agents/agent.h"
-#include "sound.h"
+#include "sge_sound.h"
 
 class Material : public StaticAgent
 {
@@ -24,7 +24,7 @@ public:
     void onDestroy(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt) override;
 
     std::string breaksound, hitsound;
-    const Sound *hitting, *breaking;
+    const SgeSound *hitting, *breaking;
 };
 
 REGISTER_AGENT(Material)

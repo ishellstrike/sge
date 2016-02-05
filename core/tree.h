@@ -1,5 +1,5 @@
-#ifndef TREE_H
-#define TREE_H
+#ifndef TREE_H__
+#define TREE_H__
 #include <memory>
 
 template<typename _Ty>
@@ -67,4 +67,4 @@ public:
     root_type root;
 };
 
-#endif // TREE_H
+#endif // TREE_H__

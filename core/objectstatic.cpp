@@ -92,6 +92,7 @@ void ObjectStatic::onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3
                 a->onLeave(o, l, pos, gt);
 }
 
+#ifdef CLIENT
 void ObjectStatic::onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
@@ -99,3 +100,4 @@ void ObjectStatic::onInteract(std::shared_ptr<Object> &o, Level *l, const glm::v
             if(a->IsStatic())
                 a->onInteract(o, l, pos, gt);
 }
+#endif

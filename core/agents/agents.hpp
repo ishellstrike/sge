@@ -5,8 +5,8 @@
         See "LICENSE.txt"
 *******************************************************************************/
 
-#ifndef AGENTS_HPP
-#define AGENTS_HPP
+#ifndef AGENTS_HPPP
+#define AGENTS_HPPP
 
 #include "block.h"
 #include "blockbase.h"
@@ -20,7 +20,7 @@
 #include "referencer.h"
 #include "script.h"
 #include "simpleinteract.h"
-#include "sound.h"
+#include "sge_sound.h"
 #include "stacked.h"
 #include "tags.h"
 #include "transparent.h"
@@ -29,5 +29,5 @@
 #include "aggressive.h"
 #include "structure.h"
 
-#endif // AGENTS_HPP
+#endif // AGENTS_HPPP
 

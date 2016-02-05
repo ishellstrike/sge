@@ -47,6 +47,7 @@ public:
 
     virtual void Serialize(rapidjson::Document &doc, rapidjson::Value &v);
     virtual void Deserialize(const rapidjson::Value &val);
+    virtual std::string to_string() const;
 
     int type;
     boost::any data;

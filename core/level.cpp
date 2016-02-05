@@ -247,6 +247,7 @@ void Level::Update(GameTimer& gt)
     }
 }
 
+#ifdef CLIENT
 void Level::Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const
 {
     for(const auto &i : map)
@@ -293,6 +294,7 @@ void Level::Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const
         i.second->DrawEntities(sb, off, hpos);
     }
 }
+#endif
 
 bool Level::AddCreature( std::shared_ptr<Object> o, bool wait )
 {

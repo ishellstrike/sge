@@ -22,7 +22,6 @@ struct NvpHelper {
 
 #define NVP(T) NvpHelper::make_nvp(#T, T)
 #define DESERIALIZE(...) DeserializeHelper::deserialize(val, __VA_ARGS__)
-#define SERIALIZE(...) SerializeHelper::serialize(doc, v, __VA_ARGS__)
 
 struct DeserializeHelper {
     static void deserialize(const rapidjson::Value &val)

@@ -1,5 +1,6 @@
 #ifndef REMSND_H
 #define REMSND_H
+#include <windows.h>
 #include <al.h>
 #include <alc.h>
 #include <string>
@@ -12,7 +13,7 @@
 #define NUM_OF_DYNBUF 2
 #define DYNBUF_SIZE 65536
 
-class AL
+class OpenAL
 {
 public:
     static ALboolean CheckALCError();

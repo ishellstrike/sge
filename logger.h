@@ -5,8 +5,8 @@
         See "LICENSE.txt"
 *******************************************************************************/
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef LOGGER_H__
+#define LOGGER_H__
 
 #include <boost/log/trivial.hpp>
 
@@ -15,4 +15,4 @@ using namespace boost::log::trivial;
 #define __SHORT_FILE__ (strrchr(__SHORT_FILE2__, '\\') ? strrchr(__SHORT_FILE2__, '\\') + 1 : __SHORT_FILE2__)
 #define LOG(level) BOOST_LOG_TRIVIAL(level) << __SHORT_FILE__ << ":" << __LINE__ << " "
 
-#endif // LOGGER_H
+#endif // LOGGER_H__

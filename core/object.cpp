@@ -100,6 +100,7 @@ void Object::onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos,
     base->onLeave(o, l, pos, gt);
 }
 
+#ifdef CLIENT
 void Object::onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt)
 {
     if(agents)
@@ -108,6 +109,7 @@ void Object::onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &p
 
     base->onInteract(o, l, pos, gt);
 }
+#endif
 
 void Object::onEvent(Event &e)
 {

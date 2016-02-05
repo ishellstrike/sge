@@ -32,10 +32,10 @@ void PassSound::onEnter(std::shared_ptr<Object> &par, Level *, const glm::vec3 &
 
 void PassSound::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt)
 {
-    auto check = [&](const std::string &s)->const Sound*{
+    auto check = [&](const std::string &s)->const SgeSound*{
         if(const ObjectStatic *os = DB::Get(s))
         {
-            if(const Sound *o = os->GetAgent<Sound>())
+            if(const SgeSound *o = os->GetAgent<SgeSound>())
             {
                 LOG(trace) << "pass sound " << s << " linked";
                 return o;

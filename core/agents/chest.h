@@ -22,7 +22,10 @@ public:
 public:
     void Deserialize(const rapidjson::Value &val) override;
     std::shared_ptr<Agent> Instantiate() const override;
+
+#ifdef CLIENT
     void onInteract(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer&) override;
+#endif
 
     void Combine();
 };

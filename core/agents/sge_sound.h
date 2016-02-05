@@ -8,27 +8,35 @@
 #ifndef SOUND_H
 #define SOUND_H
 #include "core/agents/agent.h"
+#ifdef CLIENT
 #include "remsnd.h"
+#endif
 
-class Sound : public StaticAgent
+class SgeSound : public StaticAgent
 {
 public:
-    SAGENT(Sound)
+    SAGENT(SgeSound)
 
     // Agent interface
 public:
     void Deserialize(const rapidjson::Value &val) override;
+
+#ifdef CLIENT
     virtual void onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &gt);
     virtual void onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+#endif
     void Play() const;
 
     std::string name, filename;
-    int near = 1, far = 8;
+    int near; int far = 8;
+#ifdef CLIENT
     mutable RemSnd snd;
+#endif
     void Move(const glm::vec3 &p) const;
     void Pitch(float p) const;
+
 };
 
-REGISTER_AGENT(Sound)
+REGISTER_AGENT(SgeSound)
 
 #endif // SOUND_H

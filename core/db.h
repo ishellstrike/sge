@@ -13,7 +13,7 @@
 #include "scheme.h"
 #include "recipe.h"
 
-class Sound;
+class SgeSound;
 
 class DB
 {
@@ -21,7 +21,7 @@ public:
     DB();
     static std::unordered_map<std::string, std::unique_ptr<ObjectStatic>> data;
     static std::unordered_map<std::string, std::vector<ObjectStatic *>> tags_ref;
-    static std::list<Sound *> sounds;
+    static std::list<SgeSound *> sounds;
 
     static std::unordered_map<SchemeType, std::vector<Scheme>> scheme_db;
     static std::list<std::shared_ptr<Recipe>> recipe_db;

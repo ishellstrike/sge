@@ -5,8 +5,8 @@
         See "LICENSE.txt"
 *******************************************************************************/
 
-#ifndef RANDOM_H
-#define RANDOM_H
+#ifndef RANDOM_H__
+#define RANDOM_H__
 #include <random>
 
 class random
@@ -58,4 +58,4 @@ public:
     }
 };
 
-#endif // RANDOM_H
+#endif // RANDOM_H__

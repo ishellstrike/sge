@@ -8,7 +8,7 @@
 #ifndef PASSSOUND_H
 #define PASSSOUND_H
 #include "core/agents/agent.h"
-#include "sound.h"
+#include "sge_sound.h"
 
 class PassSound : public StaticAgent
 {
@@ -37,7 +37,7 @@ public:
     void onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer& gt) override;
 
     std::string ref_l, ref_m, ref_p;
-    const Sound *low, *middle, *pass;
+    const SgeSound *low, *middle, *pass;
 };
 
 REGISTER_AGENT(PassSound)

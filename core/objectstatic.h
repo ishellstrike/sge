@@ -24,7 +24,10 @@ public:
     void   onDamage(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void    onEnter(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
     void    onLeave(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+
+#ifdef CLIENT
     void onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+#endif
 };
 
 #endif // OBJECTSTATIC_H

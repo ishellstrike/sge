@@ -251,8 +251,7 @@ HEADERS += \
     core/events/event.h \
     core/events/eventdamage.h \
     core/events/eventissureorder.h \
-    sge_eventbus_log.h \
-    core/serializer.h
+    sge_eventbus_log.h
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

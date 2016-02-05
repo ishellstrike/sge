@@ -165,7 +165,7 @@ void DB::Load()
 
                                         if( agenttype == "Sound" )
                                         {
-                                            sounds.push_back(std::static_pointer_cast<Sound>(c).get());
+                                            sounds.push_back(std::static_pointer_cast<SgeSound>(c).get());
                                         }
 
                                         b->PushAgent(c);
@@ -198,7 +198,7 @@ void DB::Load()
 }
 
 std::unordered_map<Id, std::unique_ptr<ObjectStatic>> DB::data;
-std::list<Sound *> DB::sounds;
+std::list<SgeSound *> DB::sounds;
 std::unordered_map<std::string, std::vector<ObjectStatic *>> DB::tags_ref;
 std::unordered_map<SchemeType, std::vector<Scheme>> DB::scheme_db;
 std::list<std::shared_ptr<Recipe>> DB::recipe_db;

@@ -23,7 +23,9 @@ public:
     void   onUpdate(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
     void     onDraw(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer &gt);
 
+#ifdef CLIENT
     void onInteract(std::shared_ptr<Object> &o, Level *l, const glm::vec3 &pos, const GameTimer& gt);
+#endif
 
     void    onEvent(Event &e);
 
@@ -53,7 +55,7 @@ inline _Ty* agent_cast( Object &ag )
 template<typename _Ty>
 inline _Ty* agent_base_cast( Object &ag )
 {
-    
+
     if(base->agents)
     {
         auto tid = Agent::TidFor<T>()

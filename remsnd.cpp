@@ -18,7 +18,7 @@ bool RemSnd::Open(const std::string &Filename, bool Looped, bool Streamed)
     mLooped    = Looped;
 
     alGenSources(1, &mSourceID);
-    if (!AL::CheckALError())
+    if (!OpenAL::CheckALError())
         return false;
 
     alSourcef (mSourceID, AL_PITCH,    1.0f);
@@ -90,7 +90,7 @@ void RemSnd::Move(const glm::vec3 &pos)
     alGetSourcei(mSourceID, AL_SOURCE_STATE, &state);
     if(state != AL_PLAYING)
     {
-        if(glm::distance(pos, AL::listener) < glm::distance(mPos, AL::listener))
+        if(glm::distance(pos, OpenAL::listener) < glm::distance(mPos, OpenAL::listener))
         {
             mPos = pos;
             Stop();
@@ -108,7 +108,7 @@ void RemSnd::Update()
     if(Prefecences::Instance()->no_sound)
         return;
 
-    alListenerfv(AL_POSITION, &AL::listener[0]);
+    alListenerfv(AL_POSITION, &OpenAL::listener[0]);
     if (!mStreamed) return;
 
     int				Processed = 0;
@@ -119,17 +119,17 @@ void RemSnd::Update()
     while (Processed--)
     {
         alSourceUnqueueBuffers(mSourceID, 1, &BufID);
-        if (!AL::CheckALError()) return;
+        if (!OpenAL::CheckALError()) return;
         if (ReadOggBlock(BufID, DYNBUF_SIZE) != 0)
         {
             alSourceQueueBuffers(mSourceID, 1, &BufID);
-            if (!AL::CheckALError()) return;
+            if (!OpenAL::CheckALError()) return;
         }
         else
         {
             ov_pcm_seek(mVF, 0);
             alSourceQueueBuffers(mSourceID, 1, &BufID);
-            if (!AL::CheckALError()) return;
+            if (!OpenAL::CheckALError()) return;
 
             if (!mLooped) Stop();
         }
@@ -172,9 +172,9 @@ bool RemSnd::ReadOggBlock(ALuint BufID, size_t Size)
     }
     if (TotalRet > 0)
     {
-        alBufferData(BufID, AL::Buffers[BufID].Format, (void *)PCM,
-                     TotalRet, AL::Buffers[BufID].Rate);
-        AL::CheckALError();
+        alBufferData(BufID, OpenAL::Buffers[BufID].Format, (void *)PCM,
+                     TotalRet, OpenAL::Buffers[BufID].Rate);
+        OpenAL::CheckALError();
     }
     delete [] PCM;
     return (ret > 0);
@@ -220,7 +220,7 @@ bool RemSnd::LoadOggFile(const std::string &Filename, bool Streamed)
         return true;
 
     int        i, DynBuffs = 1, BlockSize;
-    AL::SndInfo      buffer;
+    OpenAL::SndInfo      buffer;
     ALuint      BufID = 0;
     ov_callbacks  cb;
 
@@ -240,7 +240,7 @@ bool RemSnd::LoadOggFile(const std::string &Filename, bool Streamed)
 
     if (!Streamed)
     {
-        for (AL::TBuf::iterator i = AL::Buffers.begin(); i != AL::Buffers.end(); i++)
+        for (OpenAL::TBuf::iterator i = OpenAL::Buffers.begin(); i != OpenAL::Buffers.end(); i++)
         {
             if (i->second.Filename == Filename) BufID = i->first;
         }
@@ -266,17 +266,17 @@ bool RemSnd::LoadOggFile(const std::string &Filename, bool Streamed)
         for (i = 0; i < DynBuffs; i++)
         {
             alGenBuffers(1, &buffer.ID);
-            if (!AL::CheckALError())
+            if (!OpenAL::CheckALError())
                 return false;
-            AL::Buffers[buffer.ID] = buffer;
+            OpenAL::Buffers[buffer.ID] = buffer;
             ReadOggBlock(buffer.ID, BlockSize);
-            if (!AL::CheckALError())
+            if (!OpenAL::CheckALError())
                 return false;
 
             if (Streamed)
             {
                 alSourceQueueBuffers(mSourceID, 1, &buffer.ID);
-                if (!AL::CheckALError())
+                if (!OpenAL::CheckALError())
                     return false;
             }
             else
@@ -285,14 +285,14 @@ bool RemSnd::LoadOggFile(const std::string &Filename, bool Streamed)
     }
     else
     {
-        alSourcei(mSourceID, AL_BUFFER, AL::Buffers[BufID].ID);
+        alSourcei(mSourceID, AL_BUFFER, OpenAL::Buffers[BufID].ID);
     }
     LOG(trace) << Filename << " loaded";
 
     return true;
 }
 
-ALboolean AL::CheckALCError()
+ALboolean OpenAL::CheckALCError()
 {
     ALenum ErrCode;
     std::string Err = "ALC error: ";
@@ -305,7 +305,7 @@ ALboolean AL::CheckALCError()
     return AL_TRUE;
 }
 
-ALboolean AL::CheckALError()
+ALboolean OpenAL::CheckALError()
 {
     ALenum ErrCode;
     std::string Err = "OpenAL error: ";
@@ -318,7 +318,7 @@ ALboolean AL::CheckALError()
     return AL_TRUE;
 }
 
-bool AL::InitializeOpenAL()
+bool OpenAL::InitializeOpenAL()
 {
     if(Prefecences::Instance()->no_sound)
     {
@@ -349,7 +349,7 @@ bool AL::InitializeOpenAL()
     return true;
 }
 
-void AL::DestroyOpenAL()
+void OpenAL::DestroyOpenAL()
 {
     if(Prefecences::Instance()->no_sound)
         return;
@@ -360,7 +360,7 @@ void AL::DestroyOpenAL()
     LOG(trace) << "OpenAL destroyed";
 }
 
-ALCdevice *AL::pDevice;
-ALCcontext *AL::pContext;
-AL::TBuf AL::Buffers;
-glm::vec3 AL::listener;
+ALCdevice *OpenAL::pDevice;
+ALCcontext *OpenAL::pContext;
+OpenAL::TBuf OpenAL::Buffers;
+glm::vec3 OpenAL::listener;

@@ -5,9 +5,8 @@
         See "LICENSE.txt"
 *******************************************************************************/
 
-#pragma once
-#ifndef AGENT_H
-#define AGENT_H
+#ifndef AGENT_HPPP
+#define AGENT_HPPP
 #include <core/core_const.h>
 #include <memory>
 #include "rapidjson/document.h"
@@ -128,4 +127,4 @@ struct AgentFactory : public boost::noncopyable
   }
 };
 
-#endif // AGENT_H
+#endif // AGENT_HPPP

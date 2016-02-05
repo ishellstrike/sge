@@ -15,6 +15,7 @@ void SimpleInteract::Deserialize(const rapidjson::Value &val)
     DESERIALIZE(NVP(afterid), NVP(sound));
 }
 
+#ifdef CLIENT
 void SimpleInteract::onInteract(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer &)
 {
     if(activate)
@@ -24,13 +25,14 @@ void SimpleInteract::onInteract(std::shared_ptr<Object> &par, Level *l, const gl
     }
     l->SetBlockAtPos(pos, DB::Create(afterid));
 }
+#endif
 
 void SimpleInteract::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &, const GameTimer&)
 {
     activate = nullptr;
     if(const ObjectStatic *os = DB::Get(sound))
     {
-        if(const Sound *o = os->GetAgent<Sound>())
+        if(const SgeSound *o = os->GetAgent<SgeSound>())
         {
             LOG(trace) << "interact sound " << sound << " linked";
             activate = o;

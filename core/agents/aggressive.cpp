@@ -8,7 +8,7 @@
 #include "aggressive.h"
 #include "core/objectstatic.h"
 #include "core/db.h"
-#include "core/agents/sound.h"
+#include "core/agents/sge_sound.h"
 #include "core/agents/entity.h"
 #include "core/level.h"
 #include "core/events/eventbus.h"
@@ -38,9 +38,6 @@ void Aggressive::onUpdate(std::shared_ptr<Object> &par, Level *l, const glm::vec
                 const auto &temp = i.lock();
                 if(!temp->base->HasAgent<Wander>())
                 {
-                    auto e = std::unique_ptr<Event>(new EventIssureOrder);
-                    e->Set(123123);
-                    Eventbus::Instance().PushEvent(std::move(e));
                     owner->current_order.type = Order::Follow;
                     owner->current_order.target = i;
                     return;
@@ -64,10 +61,10 @@ void Aggressive::onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec
     agro = nullptr;
     if(const ObjectStatic *os = DB::Get(sound))
     {
-        if(const Sound *o = os->GetAgent<Sound>())
+        if(const SgeSound *o = os->GetAgent<SgeSound>())
         {
             LOG(trace) << "aggro sound " << sound << " linked";
-            agro = const_cast<Sound*>(o);
+            agro = const_cast<SgeSound*>(o);
         }
     }
 }

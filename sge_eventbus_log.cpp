@@ -23,15 +23,7 @@ void sge_eventbus_log::Update(const GameTimer &gt, const MouseState &ms)
 {
     for(const auto &e : Eventbus::Instance().events)
     {
-        rapidjson::Document doc;
-        doc.SetObject();
-
-        e->Serialize(doc, doc);
-        rapidjson::StringBuffer buffer;
-        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-        doc.Accept(writer);
-
-        cb.push_back(buffer.GetString());
+        cb.push_back(e->to_string());
     }
     std::stringstream ss;
     for(const auto &s : cb)

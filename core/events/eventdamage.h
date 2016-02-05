@@ -10,6 +10,7 @@ public:
 
     virtual void Serialize(rapidjson::Document &doc, rapidjson::Value &v);
     virtual void Deserialize(const rapidjson::Value &val);
+    std::string to_string() const override;
 };
 
 #endif // EVENTDAMAGE_H
