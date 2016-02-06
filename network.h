@@ -10,6 +10,7 @@
 #include <vector>
 #include <list>
 #include <boost/cstdint.hpp>
+#include "core/network/packetholder.h"
 
 //-----------------------------------------------------------------------------
 
@@ -127,6 +128,7 @@ public:
 
 	// Posts data to be sent to the connection.
 	void Send( const std::vector< uint8_t > & buffer );
+    void Send(const PacketHolder &ph);
 
 	// Posts a recv for the connection to process. If total_bytes is 0, then 
 	// as many bytes as possible up to GetReceiveBufferSize() will be 
@@ -135,7 +137,7 @@ public:
 	void Recv( int32_t total_bytes = 0 );
 
 	// Posts an asynchronous disconnect event for the object to process.
-	void Disconnect();
+    void Disconnect();
 };
 
 //-----------------------------------------------------------------------------

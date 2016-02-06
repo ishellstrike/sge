@@ -1,7 +1,7 @@
 #include "remoteclient.h"
 #include "../levelgen.h"
 #include <thread>
-#include "packetrequestsector.h"
+#include "packetholder.h"
 
 RemoteClient::RemoteClient()
 {
@@ -10,14 +10,13 @@ RemoteClient::RemoteClient()
     conn->Connect("127.0.0.1", 8080);
 }
 
-std::unique_ptr<Sector> RemoteClient::GetSector(const glm::ivec2 &v)
+std::shared_ptr<Sector> RemoteClient::GetSector(const glm::ivec2 &v)
 {
     auto f = ready.find( v );
     if( f != ready.end() )
     {
-        std::pair<glm::ivec2, std::unique_ptr<Sector>> sec = std::move( *f );
-        ready.erase( f );
-        return std::move( sec.second );
+        std::pair<glm::ivec2, std::shared_ptr<Sector>> sec = std::move( *f );
+        return sec.second;
     }
 
     auto r = requested.find( v );
@@ -36,12 +35,10 @@ void RemoteClient::Process()
     if( requested.size() )
     {
         auto r = requested.begin();
-        auto a = std::unique_ptr<Sector>( new Sector( *r ) );
-        Generate( *a );
 
-        std::unique_ptr<Packet> prs( new PacketRequestSector(*r) );
-        conn->Send( Packet::Serealize(*prs) );
-        ready.insert( std::make_pair( *r, std::move( a ) ) );
+        PacketHolder ph;
+        ph.Init<PacketRequestSector>( *r );
+        conn->Send( ph.Serialize() );
 
         requested.erase( r );
     }
@@ -67,12 +64,26 @@ void MyConnection::OnConnect(const std::string &host, uint16_t port)
 
 void MyConnection::OnSend(const std::vector<uint8_t> &buffer)
 {
-    LOG(info) << std::string(buffer.begin(), buffer.end());
 }
 
 void MyConnection::OnRecv(std::vector<uint8_t> &buffer)
 {
-    LOG(info) << std::string(buffer.begin(), buffer.end());
+    PacketHolder ph;
+    static std::vector<uint8_t> ubf;
+    try
+    {
+        ubf.insert(ubf.end(), buffer.begin(), buffer.end());
+        ph.Deserialize(ubf);
+        if(ph.packet && ph.packet->id == Packet::TidFor<PacketResponseSector>())
+        {
+            std::shared_ptr<PacketResponseSector> prs = std::static_pointer_cast<PacketResponseSector>(ph.packet);
+            RemoteClient::instance().ready[prs->s->offset] = prs->s;
+        }
+        ubf.clear();
+    }
+    catch(...)
+    {
+    }
 
     // Start the next receive
     Recv();

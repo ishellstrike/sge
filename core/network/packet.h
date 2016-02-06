@@ -6,9 +6,6 @@
 #include <boost/serialization/export.hpp>
 #include <memory>
 #include <glm/glm.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <sstream>
 
 namespace boost
 {
@@ -27,32 +24,31 @@ class Packet
 {
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive &, const unsigned int)
+    void serialize(Archive &ar, const unsigned int)
     {
+        ar & id;
+    }
+
+    static size_t NextTid()
+    {
+        static size_t next_id(0);
+        return next_id++;
     }
 
 public:
-    inline static std::vector<uint8_t> Serealize(const Packet &p)
+    virtual ~Packet(){}
+    Packet(size_t __id = TidFor<Packet>()) : id(__id)
     {
-        std::stringstream ss;
-        boost::archive::text_oarchive oa(ss);
-        oa << p;
 
-        std::vector< uint8_t > request;
-        std::string s = ss.str();
-        std::copy(s.begin(), s.end(), std::back_inserter(request));
-        return std::move(request);
     }
 
-    inline static std::unique_ptr<Packet> Deserialize(const std::vector<uint8_t> &d)
-    {
-        std::unique_ptr<Packet> p;
-        std::stringstream ss;
-        ss << std::string(d.begin(), d.end());
+    size_t id;
 
-        boost::archive::text_iarchive ia(ss);
-        ia >> *p;
-        return std::move(p);
+    template <typename T_>
+    static size_t TidFor()
+    {
+        static size_t result(NextTid());
+        return result;
     }
 };
 

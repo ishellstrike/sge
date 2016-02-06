@@ -42,7 +42,6 @@ SOURCES += \
     core/infrastructure/world.cpp \
     core/level.cpp \
     core/levelgen.cpp \
-    core/network/packet.cpp \
     core/network/packetrequestsector.cpp \
     core/network/remoteclient.cpp \
     core/object.cpp \
@@ -105,7 +104,9 @@ SOURCES += \
     shader.cpp \
     spritebatch.cpp \
     textureatlas.cpp \
-    TextureGenerator.cpp
+    TextureGenerator.cpp \
+    core/network/packetholder.cpp \
+    core/network/packetresponsesector.cpp
 
 
 VERSION = 0.1.0
@@ -261,7 +262,9 @@ HEADERS += \
     utfcpp/utf8.h \
     utfcpp/utf8/checked.h \
     utfcpp/utf8/core.h \
-    utfcpp/utf8/unchecked.h
+    utfcpp/utf8/unchecked.h \
+    core/network/packetholder.h \
+    core/network/packetresponsesector.h
 
 
 DISTFILES += \

@@ -34,8 +34,15 @@
 #include <memory>
 #include <mutex>
 
-#include <core/network/packet.h>
+#include <core/network/packetholder.h>
 #include <glm/gtx/string_cast.hpp>
+#include "core/network/remoteserver.h"
+
+#include "core/sector.h"
+#include <boost/serialization/serialization.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/shared_ptr.hpp>
+#include <sstream>
 
 class ServerConnection : public Connection
 {
@@ -58,19 +65,35 @@ private:
 
     void OnSend( const std::vector< uint8_t > & buffer )
     {
-        LOG(info) << &buffer[0];
     }
 
     void OnRecv( std::vector< uint8_t > & buffer )
     {
-        LOG(info) << &buffer[0];
-
         // Start the next receive
         Recv();
 
-        std::unique_ptr<Packet> p;
-        p = Packet::Deserialize(buffer);
-        LOG(info) << p.get();
+        PacketHolder ph;
+
+        try {
+            ph.Deserialize(buffer);
+        } catch (...)
+        {
+            return;
+        }
+
+        if(ph.packet->id == Packet::TidFor<PacketRequestSector>())
+        {
+            PacketRequestSector &prs = *std::static_pointer_cast<PacketRequestSector>(ph.packet);
+
+            std::shared_ptr<Sector> s = RemoteServer::instance().GetSector(prs.pos);
+            if(!s)
+                return;
+
+            PacketHolder ph;
+            ph.Init<PacketResponseSector>(s);
+
+            Send(ph);
+        }
     }
 
     void OnTimer( const boost::posix_time::time_duration & delta )
@@ -206,7 +229,19 @@ int main(int argc, char** argv)
 
 
     try {
-        //DB::Load();
+        DB::Load();
+
+        RemoteServer::instance();
+        auto clie = [](){
+            while(true)
+            {
+                RemoteServer::instance().Process();
+                boost::this_thread::sleep_for( boost::chrono::milliseconds(50) );
+            }
+        };
+        boost::thread th(clie);
+        th.detach();
+
         LOG(info) << "Server ready";
 
         std::shared_ptr< Hive > hive( new Hive() );
@@ -215,8 +250,12 @@ int main(int argc, char** argv)
         LOG(info) << "listening on port " << port;
         acceptor->Listen( "127.0.0.1", port );
 
-        std::shared_ptr< ServerConnection > connection( new ServerConnection( hive ) );
-        acceptor->Accept( connection );
+        std::vector<std::shared_ptr< ServerConnection >> connection(10);
+        for(int i = 0; i < 10; i++)
+        {
+            connection[i] = std::shared_ptr<ServerConnection>(new ServerConnection( hive ));
+            acceptor->Accept( connection[i] );
+        }
 
         while( true )
         {

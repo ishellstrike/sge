@@ -99,7 +99,10 @@ HEADERS += \
     network.h \
     core/network/remoteclient.h \
     core/network/packet.h \
-    core/network/packetrequestsector.h
+    core/network/packetrequestsector.h \
+    core/network/packetholder.h \
+    core/network/packetresponsesector.h \
+    core/network/remoteserver.h
 
 SOURCES += \
     helper.cpp \
@@ -155,5 +158,7 @@ SOURCES += \
     core/agents/sge_sound.cpp \
     prefecences.cpp \
     network.cpp \
-    core/network/packet.cpp \
-    core/network/packetrequestsector.cpp
+    core/network/packetrequestsector.cpp \
+    core/network/packetholder.cpp \
+    core/network/packetresponsesector.cpp \
+    core/network/remoteserver.cpp

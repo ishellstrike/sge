@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\3rdparty\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\sge;..\3rdparty\boost;..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\3rdparty\boost\stage;..\3rdparty\lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
     <ExecutablePath>..\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
@@ -62,7 +62,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype.lib;opengl32.lib;assimp-vc120-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype.lib;opengl32.lib;libboost_log-vc120-mt-1_59.lib;boost_system-vc120-mt-1_59.lib;boost_thread-vc120-mt-1_59.lib;squirrel;sqstdlib.lib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,6 +92,7 @@
     <ClCompile Include="..\colorscheme.cpp" />
     <ClCompile Include="..\font.cpp" />
     <ClCompile Include="..\fpscounter.cpp" />
+    <ClCompile Include="..\FrameBuffer.cpp" />
     <ClCompile Include="..\gametimer.cpp" />
     <ClCompile Include="..\gamewindow.cpp" />
     <ClCompile Include="..\gbuffer.cpp" />
@@ -106,13 +107,26 @@
     <ClCompile Include="..\json\json_value.cpp" />
     <ClCompile Include="..\json\json_writer.cpp" />
     <ClCompile Include="..\keyboard.cpp" />
+    <ClCompile Include="..\keyconfig.cpp" />
     <ClCompile Include="..\lodepng\lodepng.cpp" />
     <ClCompile Include="..\logger.cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\material.cpp" />
     <ClCompile Include="..\mouse.cpp" />
+    <ClCompile Include="..\network.cpp" />
     <ClCompile Include="..\pixmap.cpp" />
     <ClCompile Include="..\prefecences.cpp" />
+    <ClCompile Include="..\random.cpp" />
+    <ClCompile Include="..\remsnd.cpp" />
+    <ClCompile Include="..\server_main.cpp" />
+    <ClCompile Include="..\sge_chest_window.cpp" />
+    <ClCompile Include="..\sge_crafting_window.cpp" />
+    <ClCompile Include="..\sge_eventbus_log.cpp" />
+    <ClCompile Include="..\sge_inventory.cpp" />
+    <ClCompile Include="..\sge_level_debug_info.cpp" />
+    <ClCompile Include="..\sge_menu_new_game_global.cpp" />
+    <ClCompile Include="..\sge_perfomance.cpp" />
+    <ClCompile Include="..\sge_settings_main.cpp" />
     <ClCompile Include="..\sge_ui\button.cpp" />
     <ClCompile Include="..\sge_ui\component.cpp" />
     <ClCompile Include="..\sge_ui\graph.cpp" />
@@ -128,10 +142,12 @@
     <ClCompile Include="..\spritebatch.cpp" />
     <ClCompile Include="..\texture.cpp" />
     <ClCompile Include="..\textureatlas.cpp" />
+    <ClCompile Include="..\TextureGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\abstracttexture.h" />
     <ClInclude Include="..\basicjargshader.h" />
+    <ClInclude Include="..\boost_log.hpp" />
     <ClInclude Include="..\camera.h" />
     <ClInclude Include="..\ClassicNoise.h" />
     <ClInclude Include="..\colorextender.h" />
@@ -139,6 +155,7 @@
     <ClInclude Include="..\fielsystem.h" />
     <ClInclude Include="..\font.h" />
     <ClInclude Include="..\fpscounter.h" />
+    <ClInclude Include="..\FrameBuffer.h" />
     <ClInclude Include="..\gametimer.h" />
     <ClInclude Include="..\gamewindow.h" />
     <ClInclude Include="..\gbuffer.h" />
@@ -160,14 +177,26 @@
     <ClInclude Include="..\json\value.h" />
     <ClInclude Include="..\json\writer.h" />
     <ClInclude Include="..\keyboard.h" />
+    <ClInclude Include="..\keyconfig.h" />
     <ClInclude Include="..\lodepng\lodepng.h" />
     <ClInclude Include="..\logger.h" />
     <ClInclude Include="..\material.h" />
     <ClInclude Include="..\mouse.h" />
+    <ClInclude Include="..\network.h" />
     <ClInclude Include="..\pixmap.h" />
     <ClInclude Include="..\prefecences.h" />
+    <ClInclude Include="..\random.h" />
+    <ClInclude Include="..\remsnd.h" />
     <ClInclude Include="..\sge.hpp" />
+    <ClInclude Include="..\sge_chest_window.h" />
+    <ClInclude Include="..\sge_crafting_window.h" />
+    <ClInclude Include="..\sge_eventbus_log.h" />
     <ClInclude Include="..\sge_geometry.h" />
+    <ClInclude Include="..\sge_inventory.h" />
+    <ClInclude Include="..\sge_level_debug_info.h" />
+    <ClInclude Include="..\sge_menu_new_game_global.h" />
+    <ClInclude Include="..\sge_perfomance.h" />
+    <ClInclude Include="..\sge_settings_main.h" />
     <ClInclude Include="..\sge_ui\button.h" />
     <ClInclude Include="..\sge_ui\component.h" />
     <ClInclude Include="..\sge_ui\graph.h" />
@@ -185,6 +214,7 @@
     <ClInclude Include="..\tangentcalc.h" />
     <ClInclude Include="..\texture.h" />
     <ClInclude Include="..\textureatlas.h" />
+    <ClInclude Include="..\TextureGenerator.h" />
     <ClInclude Include="..\utfcpp\utf8.h" />
     <ClInclude Include="..\utfcpp\utf8\checked.h" />
     <ClInclude Include="..\utfcpp\utf8\core.h" />

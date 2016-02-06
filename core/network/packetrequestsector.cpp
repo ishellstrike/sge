@@ -4,12 +4,12 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <sstream>
 
-PacketRequestSector::PacketRequestSector(const glm::ivec2 &p) : pos(p)
+PacketRequestSector::PacketRequestSector(const glm::ivec2 &p) : pos(p), Packet(Packet::TidFor<PacketRequestSector>())
 {
 
 }
 
-PacketRequestSector::PacketRequestSector()
+PacketRequestSector::PacketRequestSector() : Packet(Packet::TidFor<PacketRequestSector>())
 {
 
 }

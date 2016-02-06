@@ -47,10 +47,10 @@ public:
         return *inst;
     }
 
-    std::unordered_map<glm::ivec2, std::unique_ptr<Sector>> ready;
+    std::unordered_map<glm::ivec2, std::shared_ptr<Sector>> ready;
     std::unordered_set<glm::ivec2> requested;
 
-    std::unique_ptr<Sector> GetSector(const glm::ivec2 &v);
+    std::shared_ptr<Sector> GetSector(const glm::ivec2 &v);
     void Process();
     std::shared_ptr<MyConnection> conn;
     std::shared_ptr<Hive> hive;

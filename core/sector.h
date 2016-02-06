@@ -8,9 +8,11 @@
 #include <list>
 #include "scheme.h"
 
-#include <boost/archive/basic_archive.hpp>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/split_member.hpp>
 
 #include "spritebatch.h"
+#include "db.h"
 
 #define RX 16
 #define RY 16
@@ -24,8 +26,10 @@ class Sector
     friend class Level;
     friend class RemoteClient;
     friend void Generate(Sector &s);
+
 public:
     Sector(const glm::ivec2 &o);
+    Sector();
 
     std::array<std::shared_ptr<Object>, 6> Neighbours(const glm::ivec3 &pos);
     void Update(Level *l, GameTimer &gt);
@@ -47,6 +51,37 @@ public:
     std::shared_ptr<Object> GetGround(const glm::ivec3 &pos);
     void SetGround(const glm::ivec3 &pos, std::shared_ptr<Object> obj);
 private:
+
+    friend class boost::serialization::access;
+
+    template<class Archive>
+    void save(Archive &ar, const unsigned int) const
+    {
+        ar << offset;
+        for(int i = 0; i < RXYZ; ++i)
+        {
+            ar << block[i]->base->id;
+            ar << ground[i]->base->id;
+        }
+    }
+
+    template<class Archive>
+    void load(Archive &ar, const unsigned int)
+    {
+        ar >> offset;
+        for(int i = 0; i < RXYZ; ++i)
+        {
+            Id b, d;
+            ar >> b;
+            ar >> d;
+
+            block[i] = DB::Create(b);
+            ground[i] = DB::Create(d);
+        }
+    }
+
+
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     void RebuildMax();
 

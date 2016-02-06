@@ -16,6 +16,11 @@ Sector::Sector(const glm::ivec2 &o) : offset(o)
     //            }
 }
 
+Sector::Sector()
+{
+
+}
+
 void Sector::Update(Level *l, GameTimer& gt)
 {
     for(int i = 0; i < RX; i++)

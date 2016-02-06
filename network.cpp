@@ -56,7 +56,11 @@ void Hive::Reset()
 //-----------------------------------------------------------------------------
 
 Acceptor::Acceptor( std::shared_ptr< Hive > hive )
-: m_hive( hive ), m_acceptor( hive->GetService() ), m_io_strand( hive->GetService() ), m_timer( hive->GetService() ), m_timer_interval( 1000 ), m_error_state( 0 )
+: m_hive( hive ),
+  m_acceptor( hive->GetService() ),
+  m_io_strand( hive->GetService() ),
+  m_timer( hive->GetService() ),
+  m_timer_interval( 1000 ), m_error_state( 0 )
 {
 }
 
@@ -178,7 +182,7 @@ Connection::Connection( std::shared_ptr< Hive > hive )
   m_socket( hive->GetService() ),
   m_io_strand( hive->GetService() ),
   m_timer( hive->GetService() ),
-  m_receive_buffer_size( 4096 ),
+  m_receive_buffer_size( 1000096 ),
   m_timer_interval( 1000 ),
   m_error_state( 0 )
 {
@@ -349,6 +353,11 @@ void Connection::Recv( int32_t total_bytes )
 void Connection::Send( const std::vector< uint8_t > & buffer )
 {
 	m_io_strand.post( boost::bind( &Connection::DispatchSend, shared_from_this(), buffer ) );
+}
+
+void Connection::Send(const PacketHolder &ph )
+{
+    m_io_strand.post( boost::bind( &Connection::DispatchSend, shared_from_this(), ph.Serialize() ) );
 }
 
 boost::asio::ip::tcp::socket & Connection::GetSocket()

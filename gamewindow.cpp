@@ -9,7 +9,7 @@
 #include "helper.h"
 #include <fstream>
 #include "core/db.h"
-#include "core/remoteclient.h"
+#include "core/network/remoteclient.h"
 #include "core/agents/agents.hpp"
 #include "remsnd.h"
 #include "core/events/eventbus.h"

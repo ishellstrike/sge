@@ -1,5 +1,5 @@
 #include "sge_level_debug_info.h"
-#include "core/remoteclient.h"
+#include "core/network/remoteclient.h"
 
 sge_level_debug_info::sge_level_debug_info(WContainer *par) :
     Win(par)
