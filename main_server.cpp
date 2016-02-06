@@ -21,29 +21,9 @@
 #include <string>
 #include <chrono>
 
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/sinks/text_file_backend.hpp>
-#include <boost/log/sinks/sync_frontend.hpp>
-#include <boost/log/sinks/syslog_backend.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/detail/process_id.hpp>
-#include <boost/log/detail/thread_id.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
-#include <boost/log/expressions/formatters/stream.hpp>
-#include <boost/log/expressions/formatters/date_time.hpp>
-#include <boost/log/support/date_time.hpp>
-#include <boost/format.hpp>
+#include "boost_log.hpp"
 
 #include <core/db.h>
-
-#include <boost/asio.hpp>
 #include "network.h"
 
 #include <ctime>
@@ -54,16 +34,11 @@
 #include <memory>
 #include <mutex>
 
-#ifdef _MSC_VER
-#ifndef _DEBUG
-#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
-#endif
-#endif
+#include <core/network/packet.h>
+#include <glm/gtx/string_cast.hpp>
 
-class MyConnection : public Connection
+class ServerConnection : public Connection
 {
-private:
-
 private:
     void OnAccept( const std::string & host, uint16_t port )
     {
@@ -83,40 +58,19 @@ private:
 
     void OnSend( const std::vector< uint8_t > & buffer )
     {
-        std::stringstream ss;
-        ss << "[" << __FUNCTION__ << "] " << buffer.size() << " bytes" << std::endl;
-        for( size_t x = 0; x < buffer.size(); ++x )
-        {
-            ss << std::hex << std::setfill( '0' ) <<
-                std::setw( 2 ) << (int)buffer[ x ] << " ";
-            if( ( x + 1 ) % 16 == 0 )
-            {
-                ss << std::endl;
-            }
-        }
-        LOG(info) << ss.str();
+        LOG(info) << &buffer[0];
     }
 
     void OnRecv( std::vector< uint8_t > & buffer )
     {
-        std::stringstream ss;
-        ss << "[" << __FUNCTION__ << "] " << buffer.size() << " bytes" << std::endl;
-        for( size_t x = 0; x < buffer.size(); ++x )
-        {
-            ss << std::hex << std::setfill( '0' ) <<
-                std::setw( 2 ) << (int)buffer[ x ] << " ";
-            if( ( x + 1 ) % 16 == 0 )
-            {
-                std::cout << std::endl;
-            }
-        }
-        LOG(info) << ss.str();
+        LOG(info) << &buffer[0];
 
         // Start the next receive
         Recv();
 
-        // Echo the data back
-        Send( buffer );
+        std::unique_ptr<Packet> p;
+        p = Packet::Deserialize(buffer);
+        LOG(info) << p.get();
     }
 
     void OnTimer( const boost::posix_time::time_duration & delta )
@@ -130,20 +84,18 @@ private:
     }
 
 public:
-    MyConnection( std::shared_ptr< Hive > hive )
+    ServerConnection( std::shared_ptr< Hive > hive )
         : Connection( hive )
     {
     }
 
-    ~MyConnection()
+    ~ServerConnection()
     {
     }
 };
 
 class MyAcceptor : public Acceptor
 {
-private:
-
 private:
     bool OnAccept( std::shared_ptr< Connection > connection, const std::string & host, uint16_t port )
     {
@@ -263,7 +215,7 @@ int main(int argc, char** argv)
         LOG(info) << "listening on port " << port;
         acceptor->Listen( "127.0.0.1", port );
 
-        std::shared_ptr< MyConnection > connection( new MyConnection( hive ) );
+        std::shared_ptr< ServerConnection > connection( new ServerConnection( hive ) );
         acceptor->Accept( connection );
 
         while( true )

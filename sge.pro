@@ -5,106 +5,108 @@ CONFIG  -= qt
 CONFIG  += c++11
 
 SOURCES += \
-    logger.cpp \
-    shader.cpp \
-    json/json_reader.cpp \
-    json/json_value.cpp \
-    json/json_writer.cpp \
-    lodepng/lodepng.cpp \
-    colorextender.cpp \
-    textureatlas.cpp \
-    spritebatch.cpp \
-    prefecences.cpp \
-    gamewindow.cpp \
-    gametimer.cpp \
-    fpscounter.cpp \
-    keyboard.cpp \
-    mouse.cpp \
-    font.cpp \
-    json/json_internalarray.inl \
-    json/json_internalmap.inl \
-    json/json_valueiterator.inl \
-    main.cpp \
     basicjargshader.cpp \
     ClassicNoise.cpp \
+    colorextender.cpp \
+    colorscheme.cpp \
+    core/agents/agent.cpp \
+    core/agents/aggressive.cpp \
+    core/agents/block.cpp \
+    core/agents/blockbase.cpp \
+    core/agents/chest.cpp \
+    core/agents/creaturebase.cpp \
+    core/agents/entity.cpp \
+    core/agents/itembase.cpp \
+    core/agents/itemspawner.cpp \
+    core/agents/material.cpp \
+    core/agents/onenter.cpp \
+    core/agents/passsound.cpp \
+    core/agents/pressureplate.cpp \
+    core/agents/referencer.cpp \
+    core/agents/script.cpp \
+    core/agents/sge_sound.cpp \
+    core/agents/simpleinteract.cpp \
+    core/agents/stacked.cpp \
+    core/agents/structure.cpp \
+    core/agents/tags.cpp \
+    core/agents/transparent.cpp \
+    core/agents/walkable.cpp \
+    core/agents/wander.cpp \
+    core/db.cpp \
+    core/dynamicobject.cpp \
+    core/events/event.cpp \
+    core/events/eventbus.cpp \
+    core/events/eventdamage.cpp \
+    core/events/eventissureorder.cpp \
+    core/infrastructure/player.cpp \
+    core/infrastructure/world.cpp \
+    core/level.cpp \
+    core/levelgen.cpp \
+    core/network/packet.cpp \
+    core/network/packetrequestsector.cpp \
+    core/network/remoteclient.cpp \
+    core/object.cpp \
+    core/objecthelper.cpp \
+    core/objectstatic.cpp \
+    core/offset.cpp \
+    core/recipe.cpp \
+    core/scheme.cpp \
+    core/sector.cpp \
+    core/tree.cpp \
+    core/uniqueid.cpp \
+    font.cpp \
+    fpscounter.cpp \
+    FrameBuffer.cpp \
+    gametimer.cpp \
+    gamewindow.cpp \
+    helper.cpp \
+    json/json_internalarray.inl \
+    json/json_internalmap.inl \
+    json/json_reader.cpp \
+    json/json_value.cpp \
+    json/json_valueiterator.inl \
+    json/json_writer.cpp \
+    keyboard.cpp \
+    keyconfig.cpp \
+    lodepng/lodepng.cpp \
+    logger.cpp \
+    main.cpp \
+    mouse.cpp \
+    network.cpp \
+    prefecences.cpp \
+    random.cpp \
+    remsnd.cpp \
+    resources/pixmap.cpp \
+    resources/resourcecontroller.cpp \
+    resources/texture.cpp \
+    resources/texturebase.cpp \
+    resources/umaterial.cpp \
+    sge_chest_window.cpp \
+    sge_crafting_window.cpp \
+    sge_eventbus_log.cpp \
+    sge_inventory.cpp \
+    sge_level_debug_info.cpp \
+    sge_menu_new_game_global.cpp \
+    sge_perfomance.cpp \
+    sge_settings_main.cpp \
     sge_ui/button.cpp \
     sge_ui/component.cpp \
+    sge_ui/dragnumbox.cpp \
     sge_ui/graph.cpp \
+    sge_ui/image_box.cpp \
     sge_ui/label.cpp \
     sge_ui/list_container.cpp \
     sge_ui/panel.cpp \
+    sge_ui/table.cpp \
+    sge_ui/treeview.cpp \
     sge_ui/vertical_bar.cpp \
     sge_ui/win.cpp \
     sge_ui/wins.cpp \
-    colorscheme.cpp \
-    resources/resourcecontroller.cpp \
-    resources/texture.cpp \
-    resources/pixmap.cpp \
-    sge_perfomance.cpp \
-    FrameBuffer.cpp \
-    TextureGenerator.cpp \
-    random.cpp \
-    sge_ui/image_box.cpp \
-    sge_ui/dragnumbox.cpp \
-    helper.cpp \
-    resources/umaterial.cpp \
-    core/uniqueid.cpp \
-    sge_ui/treeview.cpp \
-    core/tree.cpp \
-    resources/texturebase.cpp \
-    core/object.cpp \
-    core/dynamicobject.cpp \
-    core/objectstatic.cpp \
-    core/sector.cpp \
-    core/level.cpp \
-    core/offset.cpp \
-    core/db.cpp \
-    core/objecthelper.cpp \
-    core/agents/chest.cpp \
-    core/agents/itemspawner.cpp \
-    core/agents/stacked.cpp \
-    core/scheme.cpp \
-    core/agents/entity.cpp \
-    core/agents/itembase.cpp \
-    core/agents/referencer.cpp \
-    sge_level_debug_info.cpp \
-    core/remoteclient.cpp \
-    core/remoteserver.cpp \
-    core/levelgen.cpp \
-    core/agents/tags.cpp \
-    core/agents/walkable.cpp \
-    core/agents/simpleinteract.cpp \
-    core/agents/transparent.cpp \
-    core/agents/passsound.cpp \
-    core/agents/sge_sound.cpp \
-    core/agents/script.cpp \
-    sge_settings_main.cpp \
-    core/agents/pressureplate.cpp \
-    core/agents/onenter.cpp \
-    core/agents/creaturebase.cpp \
-    core/agents/wander.cpp \
-    remsnd.cpp \
-    core/agents/blockbase.cpp \
-    core/agents/block.cpp \
-    core/agents/material.cpp \
-    core/agents/aggressive.cpp \
-    core/agents/structure.cpp \
-    sge_chest_window.cpp \
-    sge_menu_new_game_global.cpp \
-    core/infrastructure/world.cpp \
-    core/infrastructure/player.cpp \
-    sge_inventory.cpp \
-    sge_ui/table.cpp \
-    keyconfig.cpp \
-    core/recipe.cpp \
-    sge_crafting_window.cpp \
-    core/agents/agent.cpp \
-    core/events/eventbus.cpp \
-    core/events/event.cpp \
-    core/events/eventdamage.cpp \
-    core/events/eventissureorder.cpp \
-    sge_eventbus_log.cpp \
-    network.cpp
+    shader.cpp \
+    spritebatch.cpp \
+    textureatlas.cpp \
+    TextureGenerator.cpp
+
 
 VERSION = 0.1.0
 
@@ -130,9 +132,68 @@ win32:INCLUDEPATH += $$PWD/3rdparty/include
 win32:INCLUDEPATH += $$PWD/3rdparty/boost
 
 HEADERS += \
-    logger.h \
+    basicjargshader.h \
+    boost_log.hpp \
+    ClassicNoise.h \
     colorextender.h \
-    shader.h \
+    colorscheme.h \
+    core/agents/agent.h \
+    core/agents/agentfactory.h \
+    core/agents/agents.hpp \
+    core/agents/aggressive.h \
+    core/agents/block.h \
+    core/agents/blockbase.h \
+    core/agents/chest.h \
+    core/agents/creaturebase.h \
+    core/agents/entity.h \
+    core/agents/itembase.h \
+    core/agents/itemspawner.h \
+    core/agents/material.h \
+    core/agents/onenter.h \
+    core/agents/passsound.h \
+    core/agents/pressureplate.h \
+    core/agents/referencer.h \
+    core/agents/script.h \
+    core/agents/sge_sound.h \
+    core/agents/simpleinteract.h \
+    core/agents/stacked.h \
+    core/agents/structure.h \
+    core/agents/tags.h \
+    core/agents/transparent.h \
+    core/agents/walkable.h \
+    core/agents/wander.h \
+    core/core_const.h \
+    core/db.h \
+    core/dynamicobject.h \
+    core/events/event.h \
+    core/events/eventbus.h \
+    core/events/eventdamage.h \
+    core/events/eventissureorder.h \
+    core/infrastructure/player.h \
+    core/infrastructure/world.h \
+    core/level.h \
+    core/levelgen.h \
+    core/network/packet.h \
+    core/network/packetrequestsector.h \
+    core/network/remoteclient.h \
+    core/object.h \
+    core/objecthelper.h \
+    core/objectstatic.h \
+    core/offset.h \
+    core/recipe.h \
+    core/remoteclient.h \
+    core/network/remoteserver.h \
+    core/scheme.h \
+    core/sector.h \
+    core/serialize.h \
+    core/tree.h \
+    core/uniqueid.h \
+    font.h \
+    fpscounter.h \
+    FrameBuffer.h \
+    gametimer.h \
+    gamewindow.h \
+    helper.h \
     json/autolink.h \
     json/config.h \
     json/features.h \
@@ -142,121 +203,66 @@ HEADERS += \
     json/reader.h \
     json/value.h \
     json/writer.h \
-    lodepng/lodepng.h \
-    textureatlas.h \
-    spritebatch.h \
-    prefecences.h \
-    sge.h \
-    gamewindow.h \
-    gametimer.h \
-    fpscounter.h \
     keyboard.h \
+    keyconfig.h \
+    lodepng/lodepng.h \
+    logger.h \
     mouse.h \
-    font.h \
-    utfcpp/utf8.h \
-    utfcpp/utf8/checked.h \
-    utfcpp/utf8/core.h \
-    utfcpp/utf8/unchecked.h \
-    basicjargshader.h \
-    utfcpp/utf8.h \
-    helper.h \
-    ClassicNoise.h \
-    sge_ui/button.h \
-    sge_ui/component.h \
-    sge_ui/graph.h \
-    sge_ui/label.h \
-    sge_ui/list_container.h \
-    sge_ui/panel.h \
-    sge_ui/vertical_bar.h \
-    sge_ui/wcontainer.h \
-    sge_ui/win.h \
-    sge_ui/wins.h \
-    colorscheme.h \
-    resources/resourcecontroller.h \
-    resources/pixmap.h \
-    resources/texture.h \
-    sge_perfomance.h \
-    resources/error_image.h \
-    FrameBuffer.h \
-    TextureGenerator.h \
-    resources/random_noise.h \
+    network.h \
+    prefecences.h \
     random.h \
-    sge_ui/image_box.h \
-    sge_ui/dragnumbox.h \
-    resources/umaterial.h \
-    core/uniqueid.h \
-    sge_ui/treeview.h \
-    core/tree.h \
-    resources/texturebase.h \
-    core/object.h \
-    core/dynamicobject.h \
-    core/objectstatic.h \
-    core/sector.h \
-    core/level.h \
-    core/offset.h \
-    core/core_const.h \
-    rapidjson/internal/pow10.h \
-    rapidjson/internal/stack.h \
-    rapidjson/internal/strfunc.h \
     rapidjson/document.h \
     rapidjson/filestream.h \
     rapidjson/genericstream.h \
+    rapidjson/internal/pow10.h \
+    rapidjson/internal/stack.h \
+    rapidjson/internal/strfunc.h \
     rapidjson/prettywriter.h \
     rapidjson/rapidjson.h \
     rapidjson/reader.h \
     rapidjson/stringbuffer.h \
     rapidjson/writer.h \
-    core/db.h \
-    core/objecthelper.h \
-    core/agents/chest.h \
-    core/agents/itemspawner.h \
-    core/agents/stacked.h \
-    core/scheme.h \
-    core/agents/entity.h \
-    core/agents/agentfactory.h \
-    core/agents/itembase.h \
-    core/serialize.h \
-    core/agents/referencer.h \
-    core/agents/agents.hpp \
-    sge_level_debug_info.h \
-    core/remoteclient.h \
-    core/remoteserver.h \
-    core/levelgen.h \
-    core/agents/tags.h \
-    core/agents/walkable.h \
-    core/agents/simpleinteract.h \
-    core/agents/transparent.h \
-    core/agents/passsound.h \
-    core/agents/sge_sound.h \
-    core/agents/script.h \
-    sge_settings_main.h \
-    core/agents/pressureplate.h \
-    core/agents/onenter.h \
-    core/agents/creaturebase.h \
-    core/agents/wander.h \
     remsnd.h \
-    core/agents/blockbase.h \
-    core/agents/block.h \
-    core/agents/material.h \
-    core/agents/aggressive.h \
-    core/agents/structure.h \
+    resources/error_image.h \
+    resources/pixmap.h \
+    resources/random_noise.h \
+    resources/resourcecontroller.h \
+    resources/texture.h \
+    resources/texturebase.h \
+    resources/umaterial.h \
+    sge.h \
     sge_chest_window.h \
-    sge_menu_new_game_global.h \
-    core/infrastructure/world.h \
-    core/infrastructure/player.h \
-    sge_inventory.h \
-    sge_ui/table.h \
-    keyconfig.h \
-    core/recipe.h \
     sge_crafting_window.h \
-    core/events/eventbus.h \
-    core/agents/agent.h \
-    core/events/event.h \
-    core/events/eventdamage.h \
-    core/events/eventissureorder.h \
     sge_eventbus_log.h \
-    network.h \
-    boost_log.hpp
+    sge_inventory.h \
+    sge_level_debug_info.h \
+    sge_menu_new_game_global.h \
+    sge_perfomance.h \
+    sge_settings_main.h \
+    sge_ui/button.h \
+    sge_ui/component.h \
+    sge_ui/dragnumbox.h \
+    sge_ui/graph.h \
+    sge_ui/image_box.h \
+    sge_ui/label.h \
+    sge_ui/list_container.h \
+    sge_ui/panel.h \
+    sge_ui/table.h \
+    sge_ui/treeview.h \
+    sge_ui/vertical_bar.h \
+    sge_ui/wcontainer.h \
+    sge_ui/win.h \
+    sge_ui/wins.h \
+    shader.h \
+    spritebatch.h \
+    textureatlas.h \
+    TextureGenerator.h \
+    utfcpp/utf8.h \
+    utfcpp/utf8.h \
+    utfcpp/utf8/checked.h \
+    utfcpp/utf8/core.h \
+    utfcpp/utf8/unchecked.h
+
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

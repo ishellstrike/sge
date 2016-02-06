@@ -9,19 +9,12 @@
 #define _USE_MATH_DEFINES
 #define GLM_SWIZZLE
 
-#ifndef CLIENT
 #define CLIENT
-#endif
-
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "gamewindow.h"
-#undef SPRITE_SIZE
-
-#include <boost/asio.hpp>
-#include "network.h"
 
 #include <iostream>
 #include <sstream>

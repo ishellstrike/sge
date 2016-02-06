@@ -17,7 +17,7 @@
 #include "json/json.h"
 #include "textureatlas.h"
 
-#define SIZE 32000
+#define BUFFER_SIZE 32000
 struct Vtpc
 {
     glm::vec3 pos;

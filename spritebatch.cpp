@@ -21,8 +21,8 @@ typedef std::codecvt<wchar_t, char, mbstate_t> cvt;
 
 SpriteBatch::SpriteBatch()
 {
-    vertices.resize(SIZE*4);
-    index.resize(SIZE*6);
+    vertices.resize(BUFFER_SIZE*4);
+    index.resize(BUFFER_SIZE*6);
 
     basic_program = Resources::instance()->Get<BasicJargShader>("basic");
     color_program = Resources::instance()->Get<BasicJargShader>("color");
@@ -35,7 +35,7 @@ SpriteBatch::SpriteBatch()
     glGenBuffers(2, m_vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vtpc)*SIZE*4, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vtpc)*BUFFER_SIZE*4, nullptr, GL_STREAM_DRAW);
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -46,7 +46,7 @@ SpriteBatch::SpriteBatch()
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vtpc), (void*)(offsetof(Vtpc, col)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)*SIZE*6, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)*BUFFER_SIZE*6, nullptr, GL_STREAM_DRAW);
 
     LOG(info) << "spritebatch ready";
 }
@@ -205,7 +205,7 @@ glm::vec2 SpriteBatch::drawText(const std::u32string &text32, float x, float y,
 
 void SpriteBatch::drawRect(const glm::vec2 &loc, const glm::vec2 &size, const glm::vec4 &_col)
 {
-    if(cur >= SIZE - 1)
+    if(cur >= BUFFER_SIZE - 1)
         render();
     if(current_program != color_program)
     {
@@ -252,7 +252,7 @@ void SpriteBatch::drawQuadText(const glm::vec2 &loc, const Font::CharInfo &inf, 
         current = tex.textureId;
     }
 
-    if(cur >= SIZE - 1)
+    if(cur >= BUFFER_SIZE - 1)
         render();
 
     vertices[cur*4    ].pos = glm::vec3(loc.x + inf.bearing.x,                   loc.y - inf.bearing.y, 0);
@@ -293,7 +293,7 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint t
         render();
         current = tex_id;
     }
-    if(cur >= SIZE - 1)
+    if(cur >= BUFFER_SIZE - 1)
         render();
 
     vertices[cur*4    ].pos = glm::vec3(loc.x,          loc.y,          0);
@@ -329,7 +329,7 @@ void SpriteBatch::drawTriangle(const glm::vec2 &loc, const glm::vec2 &loc2, cons
         current_program = color_program;
         current_program->Use();
     }
-    if(cur >= SIZE - 1)
+    if(cur >= BUFFER_SIZE - 1)
         render();
 
     vertices[cur*4    ].pos = glm::vec3(loc.x,  loc.y, 0);
@@ -368,7 +368,7 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
         render();
         current = tex.tex->textureId;
     }
-    if(cur >= SIZE - 1)
+    if(cur >= BUFFER_SIZE - 1)
         render();
 
     vertices[cur*4    ].pos = glm::vec3(loc.x,          loc.y,          0);
@@ -404,7 +404,7 @@ void SpriteBatch::drawQuadAtlas(const glm::vec2 &loc, const glm::vec2 &size, con
 
 void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color)
 {
-    if(cur >= SIZE - 1)
+    if(cur >= BUFFER_SIZE - 1)
         render();
     if(current_program != color_program)
     {
@@ -457,7 +457,7 @@ void SpriteBatch::drawLine(const glm::vec2 &start, const glm::vec2 &end, float w
 
 void SpriteBatch::drawAALine(const glm::vec2 &start, const glm::vec2 &end, float width, const glm::vec4 &color)
 {
-    if(cur >= SIZE - 4)
+    if(cur >= BUFFER_SIZE - 4)
         render();
     if(current_program != color_program)
     {

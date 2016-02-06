@@ -68,8 +68,6 @@ HEADERS += \
     core/objectstatic.h \
     core/offset.h \
     core/recipe.h \
-    core/remoteclient.h \
-    core/remoteserver.h \
     core/scheme.h \
     core/sector.h \
     core/serialize.h \
@@ -98,7 +96,10 @@ HEADERS += \
     random.h \
     core/agents/sge_sound.h \
     prefecences.h \
-    network.h
+    network.h \
+    core/network/remoteclient.h \
+    core/network/packet.h \
+    core/network/packetrequestsector.h
 
 SOURCES += \
     helper.cpp \
@@ -140,8 +141,7 @@ SOURCES += \
     core/objectstatic.cpp \
     core/offset.cpp \
     core/recipe.cpp \
-    core/remoteclient.cpp \
-    core/remoteserver.cpp \
+    core/network/remoteclient.cpp \
     core/scheme.cpp \
     core/sector.cpp \
     core/tree.cpp \
@@ -154,4 +154,6 @@ SOURCES += \
     random.cpp \
     core/agents/sge_sound.cpp \
     prefecences.cpp \
-    network.cpp
+    network.cpp \
+    core/network/packet.cpp \
+    core/network/packetrequestsector.cpp

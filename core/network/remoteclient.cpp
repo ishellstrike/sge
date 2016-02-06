@@ -1,12 +1,13 @@
 #include "remoteclient.h"
-#include "levelgen.h"
+#include "../levelgen.h"
 #include <thread>
+#include "packetrequestsector.h"
 
 RemoteClient::RemoteClient()
 {
     hive = std::make_shared<Hive>();
     conn = std::make_shared<MyConnection>(hive);
-    conn->Connect("127.0.0.1", 7777);
+    conn->Connect("127.0.0.1", 8080);
 }
 
 std::unique_ptr<Sector> RemoteClient::GetSector(const glm::ivec2 &v)
@@ -31,15 +32,15 @@ std::unique_ptr<Sector> RemoteClient::GetSector(const glm::ivec2 &v)
 
 void RemoteClient::Process()
 {
+    hive->Poll();
     if( requested.size() )
     {
         auto r = requested.begin();
         auto a = std::unique_ptr<Sector>( new Sector( *r ) );
         Generate( *a );
-        std::string str = "12334412341214";
-        std::vector< uint8_t > request;
-        std::copy( str.begin(), str.end(), std::back_inserter( request ) );
-        conn->Send(request);
+
+        std::unique_ptr<Packet> prs( new PacketRequestSector(*r) );
+        conn->Send( Packet::Serealize(*prs) );
         ready.insert( std::make_pair( *r, std::move( a ) ) );
 
         requested.erase( r );
@@ -62,44 +63,16 @@ void MyConnection::OnConnect(const std::string &host, uint16_t port)
 
     // Start the next receive
     Recv();
-
-    std::string str = "GET / HTTP/1.0\r\n\r\n";
-
-    std::vector< uint8_t > request;
-    std::copy( str.begin(), str.end(), std::back_inserter( request ) );
-    Send( request );
 }
 
 void MyConnection::OnSend(const std::vector<uint8_t> &buffer)
 {
-    std::stringstream ss;
-    ss << "[" << __FUNCTION__ << "] " << buffer.size() << " bytes" << std::endl;
-    for( size_t x = 0; x < buffer.size(); ++x )
-    {
-        ss << std::hex << std::setfill( '0' ) <<
-              std::setw( 2 ) << (int)buffer[ x ] << " ";
-        if( ( x + 1 ) % 16 == 0 )
-        {
-            ss << std::endl;
-        }
-    }
-    LOG(info) << ss.str();
+    LOG(info) << std::string(buffer.begin(), buffer.end());
 }
 
 void MyConnection::OnRecv(std::vector<uint8_t> &buffer)
 {
-    std::stringstream ss;
-    ss << "[" << __FUNCTION__ << "] " << buffer.size() << " bytes" << std::endl;
-    for( size_t x = 0; x < buffer.size(); ++x )
-    {
-        ss << std::hex << std::setfill( '0' ) <<
-              std::setw( 2 ) << (int)buffer[ x ] << " ";
-        if( ( x + 1 ) % 16 == 0 )
-        {
-            ss << std::endl;
-        }
-    }
-    LOG(info) << ss.str();
+    LOG(info) << std::string(buffer.begin(), buffer.end());
 
     // Start the next receive
     Recv();

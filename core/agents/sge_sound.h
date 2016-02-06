@@ -8,11 +8,6 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#ifdef CLIENT
-#define C_BAKUP
-#undef CLIENT
-#endif
-
 #include "core/agents/agent.h"
 #ifdef CLIENT
 #include "remsnd.h"
@@ -44,9 +39,5 @@ public:
 };
 
 REGISTER_AGENT(SgeSound)
-
-#ifdef C_BAKUP
-#define CLIENT
-#endif
 
 #endif // SOUND_H
