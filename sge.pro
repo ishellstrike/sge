@@ -103,7 +103,8 @@ SOURCES += \
     core/events/event.cpp \
     core/events/eventdamage.cpp \
     core/events/eventissureorder.cpp \
-    sge_eventbus_log.cpp
+    sge_eventbus_log.cpp \
+    network.cpp
 
 VERSION = 0.1.0
 
@@ -253,7 +254,9 @@ HEADERS += \
     core/events/event.h \
     core/events/eventdamage.h \
     core/events/eventissureorder.h \
-    sge_eventbus_log.h
+    sge_eventbus_log.h \
+    network.h \
+    boost_log.hpp
 
 DISTFILES += \
     data/fonts/DejaVuSansMono.ttf \

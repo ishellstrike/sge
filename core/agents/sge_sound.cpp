@@ -8,6 +8,11 @@
 #include "sge_sound.h"
 #include "prefecences.h"
 
+#ifdef CLIENT
+#define C_BAKUP
+#undef CLIENT
+#endif
+
 void SgeSound::Deserialize(const rapidjson::Value &val)
 {
     DESERIALIZE(NVP(name), NVP(filename), NVP(near), NVP(far));
@@ -54,3 +59,7 @@ void SgeSound::Play() const
     snd.Play();
 #endif
 }
+
+#ifdef C_BAKUP
+#define CLIENT
+#endif

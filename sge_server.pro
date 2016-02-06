@@ -97,7 +97,8 @@ HEADERS += \
     colorextender.h \
     random.h \
     core/agents/sge_sound.h \
-    prefecences.h
+    prefecences.h \
+    network.h
 
 SOURCES += \
     helper.cpp \
@@ -152,4 +153,5 @@ SOURCES += \
     colorextender.cpp \
     random.cpp \
     core/agents/sge_sound.cpp \
-    prefecences.cpp
+    prefecences.cpp \
+    network.cpp

@@ -44,14 +44,15 @@
 #include <core/db.h>
 
 #include <boost/asio.hpp>
-#include <winsock2.h>
-#include <windows.h>
+#include "network.h"
 
 #include <ctime>
 #include <iostream>
 #include <string>
 #include <boost/bind.hpp>
+#include <boost/thread.hpp>
 #include <memory>
+#include <mutex>
 
 #ifdef _MSC_VER
 #ifndef _DEBUG
@@ -59,6 +60,118 @@
 #endif
 #endif
 
+class MyConnection : public Connection
+{
+private:
+
+private:
+    void OnAccept( const std::string & host, uint16_t port )
+    {
+        LOG(info) << "[" << __FUNCTION__ << "] " << host << ":" << port;
+
+        // Start the next receive
+        Recv();
+    }
+
+    void OnConnect( const std::string & host, uint16_t port )
+    {
+        LOG(info) << "[" << __FUNCTION__ << "] " << host << ":" << port;
+
+        // Start the next receive
+        Recv();
+    }
+
+    void OnSend( const std::vector< uint8_t > & buffer )
+    {
+        std::stringstream ss;
+        ss << "[" << __FUNCTION__ << "] " << buffer.size() << " bytes" << std::endl;
+        for( size_t x = 0; x < buffer.size(); ++x )
+        {
+            ss << std::hex << std::setfill( '0' ) <<
+                std::setw( 2 ) << (int)buffer[ x ] << " ";
+            if( ( x + 1 ) % 16 == 0 )
+            {
+                ss << std::endl;
+            }
+        }
+        LOG(info) << ss.str();
+    }
+
+    void OnRecv( std::vector< uint8_t > & buffer )
+    {
+        std::stringstream ss;
+        ss << "[" << __FUNCTION__ << "] " << buffer.size() << " bytes" << std::endl;
+        for( size_t x = 0; x < buffer.size(); ++x )
+        {
+            ss << std::hex << std::setfill( '0' ) <<
+                std::setw( 2 ) << (int)buffer[ x ] << " ";
+            if( ( x + 1 ) % 16 == 0 )
+            {
+                std::cout << std::endl;
+            }
+        }
+        LOG(info) << ss.str();
+
+        // Start the next receive
+        Recv();
+
+        // Echo the data back
+        Send( buffer );
+    }
+
+    void OnTimer( const boost::posix_time::time_duration & delta )
+    {
+        //LOG(info) << "[" << __FUNCTION__ << "] " << delta;
+    }
+
+    void OnError( const boost::system::error_code & error )
+    {
+        LOG(info) << "[" << __FUNCTION__ << "] " << error;
+    }
+
+public:
+    MyConnection( std::shared_ptr< Hive > hive )
+        : Connection( hive )
+    {
+    }
+
+    ~MyConnection()
+    {
+    }
+};
+
+class MyAcceptor : public Acceptor
+{
+private:
+
+private:
+    bool OnAccept( std::shared_ptr< Connection > connection, const std::string & host, uint16_t port )
+    {
+        LOG(info) << "[" << __FUNCTION__ << "] " << host << ":" << port;
+
+        return true;
+    }
+
+    void OnTimer( const boost::posix_time::time_duration & delta )
+    {
+        //LOG(info) << "[" << __FUNCTION__ << "] " << delta;
+    }
+
+    void OnError( const boost::system::error_code & error )
+    {
+        LOG(info) << "[" << __FUNCTION__ << "] " << error;
+    }
+
+public:
+    MyAcceptor( std::shared_ptr< Hive > hive )
+        : Acceptor( hive )
+    {
+    }
+
+    ~MyAcceptor()
+    {
+    }
+};
 int main(int argc, char** argv)
 {
     boost::log::add_console_log(
@@ -92,6 +205,9 @@ int main(int argc, char** argv)
     (
         boost::log::trivial::severity >= boost::log::trivial::info
     );
+
+    int port = 7777;
+
     if(argc >= 2)
         for(int i = 1; i < argc; i++)
         {
@@ -128,25 +244,44 @@ int main(int argc, char** argv)
                 (
                     boost::log::trivial::severity >= boost::log::trivial::fatal
                 );
+            if(strstr(argv[i], ("-p")) != 0)
+            {
+                sscanf(argv[i], "-p%d", &port);
+            }
         }
 
     boost::log::add_common_attributes();
 
 
     try {
-        DB::Load();
-
-        boost::asio::io_service io_service;
-        io_service.run();
-
+        //DB::Load();
         LOG(info) << "Server ready";
-        for(;;)
-        {
 
+        std::shared_ptr< Hive > hive( new Hive() );
+
+        std::shared_ptr< MyAcceptor > acceptor( new MyAcceptor( hive ) );
+        LOG(info) << "listening on port " << port;
+        acceptor->Listen( "127.0.0.1", port );
+
+        std::shared_ptr< MyConnection > connection( new MyConnection( hive ) );
+        acceptor->Accept( connection );
+
+        while( true )
+        {
+            hive->Poll();
+            Sleep( 1 );
         }
+
+        hive->Stop();
     }
-    catch( std::exception& e ) {
-        LOG(fatal) << "Caught exception: " << e.what() << std::endl;
+    catch (boost::exception &e)
+    {
+        LOG(fatal) << boost::diagnostic_information(e);
+        throw;
+    }
+    catch (std::exception &e)
+    {
+        LOG(fatal) << e.what();
         throw;
     }
 
