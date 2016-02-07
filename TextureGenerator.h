@@ -6,7 +6,6 @@
 *******************************************************************************/
 
 #pragma once
-#include "resources/texture.h"
 #include <vector>
 #include "FrameBuffer.h"
 #include "basicjargshader.h"

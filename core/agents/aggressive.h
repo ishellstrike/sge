@@ -10,7 +10,7 @@
 #include "core/agents/agent.h"
 
 class Creature;
-class SgeSound;
+class Sound;
 
 class Aggressive : public StaticAgent
 {
@@ -23,7 +23,7 @@ public:
     virtual void onDbLoad(std::shared_ptr<Object> &par, Level *l, const glm::vec3 &pos, const GameTimer& gt);
 
     Creature *owner;
-    SgeSound *agro;
+    Sound *agro;
     std::string sound;
     std::vector<std::string> allies;
 };

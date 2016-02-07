@@ -3,10 +3,12 @@
 #include "core/network/remoteclient.h"
 #include <thread>
 #include "db.h"
+#include "../gamewindow.h"
+#include "../random.h"
 
 Level::Level()
 {
-
+	this_id = random::next() * std::numeric_limits<size_t>::max();
 }
 
 std::shared_ptr<Object> Level::GetObjectByPos(const glm::vec3 &pos)
@@ -245,6 +247,15 @@ void Level::Update(GameTimer& gt)
             ++c_iter;
         }
     }
+
+	emp.Update(gt);
+	static float sec(0);
+	sec += gt.elapsed;
+	if (sec >= 1)
+	{
+		sec = 0;
+		emp.Sync(RemoteClient::instance().GetPlayerEmplacers(hero->GetAgent<Creature>()->pos, 0, this_id), gt);
+	}
 }
 
 #ifdef CLIENT
@@ -292,6 +303,15 @@ void Level::Draw(SpriteBatch &sb, const glm::vec2 &off, glm::vec3 &hpos) const
         if(min.x > RESX || min.y > RESY)
             continue;
         i.second->DrawEntities(sb, off, hpos);
+    }
+
+    for(size_t i = 0; i < emp.current.size(); ++i)
+    {
+		if (emp.current[i].id != this_id)
+		{
+			auto t = TextureAtlas::refs["car"];
+			sb.drawQuadAtlas({ emp.current[i].pos.x*sscale - off.x - 16, emp.current[i].pos.y*sscale - off.y - sscale }, { sscale, sscale }, TextureAtlas::tex[t.x], t.y, Color::White);
+		}
     }
 }
 #endif

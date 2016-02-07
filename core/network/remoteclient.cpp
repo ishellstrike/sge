@@ -1,8 +1,7 @@
 #include "remoteclient.h"
 #include "../levelgen.h"
 #include <thread>
-#include "packetholder.h"
-#include "../../prefecences.h"
+#include "prefecences.h"
 
 RemoteClient::RemoteClient()
 {
@@ -28,6 +27,15 @@ std::shared_ptr<Sector> RemoteClient::GetSector(const glm::ivec2 &v)
 
     requested.insert( v );
     return nullptr;
+}
+
+std::vector<PlayerEmplacer> RemoteClient::GetPlayerEmplacers(glm::vec3 pos, float phi, size_t id)
+{
+    PacketHolder ph;
+    ph.Init<PacketRequestPlayers>( pos, phi, id);
+    conn->Send( ph.Serialize() );
+
+    return conn->temp_emp;
 }
 
 void RemoteClient::Process()
@@ -113,11 +121,16 @@ void MyConnection::OnRecv(std::vector<uint8_t> &buffer)
 			if (ubf.size() == length_header && length_header != 0) //exact needed packet
 			{
 				ph.Deserialize(ubf);
-				if (ph.packet && ph.packet->id == Packet::TidFor<PacketResponseSector>())
+                if (ph.packet && ph.packet->id == 4)
 				{
 					std::shared_ptr<PacketResponseSector> prs = std::static_pointer_cast<PacketResponseSector>(ph.packet);
 					RemoteClient::instance().ready[prs->s->offset] = prs->s;
 				}
+                if (ph.packet && ph.packet->id == 3)
+                {
+                    std::shared_ptr<PacketResponsePlayers> prp = std::static_pointer_cast<PacketResponsePlayers>(ph.packet);
+                    temp_emp = prp->emp;
+                }
 				ubf.clear();
 
 				if (!tail.empty()) //push tail to next

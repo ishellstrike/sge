@@ -8,10 +8,11 @@
 #ifndef JTEXTURE_H
 #define JTEXTURE_H
 #include <string>
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-#include "pixmap.h"
+
 #include "texturebase.h"
+#include "pixmap.h"
+
+#include <glm/glm.hpp>
 
 struct Texture : public TextureBase {
 public:

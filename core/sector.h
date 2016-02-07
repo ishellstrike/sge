@@ -1,15 +1,13 @@
 #ifndef SECTOR_H
 #define SECTOR_H
-#include "object.h"
-#include "objectstatic.h"
-#include <array>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <memory>
-#include <list>
-#include "scheme.h"
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_member.hpp>
+#include <array>
+#include <memory>
+#include <list>
 
 #include "spritebatch.h"
 #include "db.h"

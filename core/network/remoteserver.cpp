@@ -1,5 +1,4 @@
 #include "remoteserver.h"
-#include "core/sector.h"
 #include "core/levelgen.h"
 
 RemoteServer::RemoteServer()

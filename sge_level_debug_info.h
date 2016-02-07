@@ -2,7 +2,6 @@
 #define SGE_LEVEL_DEBUG_INFO_H
 #include "sge_ui/wins.h"
 #include "fpscounter.h"
-#include "gametimer.h"
 #include <list>
 #include "sge_ui/graph.h"
 #include "sge_ui/label.h"

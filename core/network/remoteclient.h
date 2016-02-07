@@ -1,14 +1,12 @@
 #ifndef REMOTECLIENT_H
 #define REMOTECLIENT_H
-
-#include "logger.h"
-
 #include <boost/noncopyable.hpp>
 #include <glm/glm.hpp>
 #include <unordered_map>
 #include <memory>
 #include <unordered_set>
 #include "../offset.h"
+#include "core/emplacers.h"
 
 #include "network.h"
 
@@ -29,6 +27,7 @@ private:
 
 public:
     MyConnection( std::shared_ptr< Hive > hive );
+    std::vector<PlayerEmplacer> temp_emp;
 
     ~MyConnection();
 };
@@ -50,6 +49,8 @@ public:
     std::unordered_set<glm::ivec2> requested;
 
     std::shared_ptr<Sector> GetSector(const glm::ivec2 &v);
+
+	std::vector<PlayerEmplacer> GetPlayerEmplacers(glm::vec3 pos, float phi, size_t id);
     void Process();
     std::shared_ptr<MyConnection> conn;
     std::shared_ptr<Hive> hive;

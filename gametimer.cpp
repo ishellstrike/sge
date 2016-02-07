@@ -23,6 +23,11 @@ GameTimer::GameTimer(float f) : last(f), current(f), elapsed(f)
 {
 }
 
+GameTimer::GameTimer(float cur, float f) : last(f), current(cur), elapsed(cur - f)
+{
+
+}
+
 GameTimer::~GameTimer()
 {
 

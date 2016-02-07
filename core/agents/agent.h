@@ -9,12 +9,12 @@
 #define AGENT_HPPP
 #include <core/core_const.h>
 #include <memory>
-#include "rapidjson/document.h"
+#include <string>
+#include <boost/noncopyable.hpp>
+
 #include "boost/signals2.hpp"
 #include "agentfactory.h"
-#include <string>
 #include "core/serialize.h"
-#include <boost/noncopyable.hpp>
 #include "gametimer.h"
 
 class Event;

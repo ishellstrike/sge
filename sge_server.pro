@@ -94,7 +94,7 @@ HEADERS += \
     remsnd.h \
     colorextender.h \
     random.h \
-    core/agents/sge_sound.h \
+    core/agents/sound.h \
     prefecences.h \
     network.h \
     core/network/remoteclient.h \
@@ -102,7 +102,11 @@ HEADERS += \
     core/network/packetrequestsector.h \
     core/network/packetholder.h \
     core/network/packetresponsesector.h \
-    core/network/remoteserver.h
+    core/network/remoteserver.h \
+    core/network/packetrequestplayers.h \
+    core/network/packetresponseplayers.h \
+    core/playeremplacer.h \
+    core/emplacers.h
 
 SOURCES += \
     helper.cpp \
@@ -155,10 +159,14 @@ SOURCES += \
     remsnd.cpp \
     colorextender.cpp \
     random.cpp \
-    core/agents/sge_sound.cpp \
+    core/agents/sound.cpp \
     prefecences.cpp \
     network.cpp \
     core/network/packetrequestsector.cpp \
     core/network/packetholder.cpp \
     core/network/packetresponsesector.cpp \
-    core/network/remoteserver.cpp
+    core/network/remoteserver.cpp \
+    core/network/packetrequestplayers.cpp \
+    core/network/packetresponseplayers.cpp \
+    core/playeremplacer.cpp \
+    core/emplacers.cpp

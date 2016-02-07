@@ -1,9 +1,12 @@
 #ifndef PACKETHOLDER_H
 #define PACKETHOLDER_H
-#include "packet.h"
 #include "packetrequestsector.h"
 #include "packetresponsesector.h"
+#include "packetrequestplayers.h"
+#include "packetresponseplayers.h"
 #include <boost/serialization/shared_ptr.hpp>
+
+class Packet;
 
 class PacketHolder
 {
@@ -13,6 +16,8 @@ class PacketHolder
     {
         ar.template register_type<PacketRequestSector>();
         ar.template register_type<PacketResponseSector>();
+        ar.template register_type<PacketRequestPlayers>();
+        ar.template register_type<PacketResponsePlayers>();
         ar.template register_type<Packet>();
 
         ar & packet;

@@ -8,7 +8,6 @@
 #ifndef Creature_H
 #define Creature_H
 #include <vector>
-#include "core/agents/agent.h"
 #include "core/object.h"
 
 class Order

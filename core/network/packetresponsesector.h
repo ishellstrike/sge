@@ -21,6 +21,7 @@ class PacketResponseSector : public Packet
 public:
     PacketResponseSector();
     PacketResponseSector(std::shared_ptr<Sector> &__s);
+    size_t GetId();
 
     std::shared_ptr<Sector> s;
 };

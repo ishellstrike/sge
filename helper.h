@@ -19,14 +19,14 @@
 #include <memory>
 #include <string>
 #include <math.h>
-#include "colorextender.h"
-#include "string.h"
 #include <vector>
 #include <sstream>
 #include <stdarg.h>
 #include <stdio.h>
+
+#include "colorextender.h"
+#include "string.h"
 #include "random.h"
-#include "logger.h"
 #include "resources/resourcecontroller.h"
 
 #ifdef g_DEBUG

@@ -43,6 +43,10 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <sstream>
+#include "core/playeremplacer.h"
+#include <map>
+
+std::map<size_t, PlayerEmplacer> pemp;
 
 class ServerConnection : public Connection
 {
@@ -74,6 +78,9 @@ private:
 
         PacketHolder ph;
 
+        if(buffer.size() <= 6) //not packet
+            return;
+
         try {
             ph.Deserialize(buffer);
         } catch (...)
@@ -81,7 +88,7 @@ private:
             return;
         }
 
-        if(ph.packet->id == Packet::TidFor<PacketRequestSector>())
+        if(ph.packet->id == 2)
         {
             PacketRequestSector &prs = *std::static_pointer_cast<PacketRequestSector>(ph.packet);
 
@@ -92,6 +99,22 @@ private:
             PacketHolder ph;
             ph.Init<PacketResponseSector>(s);
 
+            Send(ph);
+        }
+
+        if(ph.packet->id == 1)
+        {
+            PacketRequestPlayers &prp = *std::static_pointer_cast<PacketRequestPlayers>(ph.packet);
+            pemp[prp.id] = PlayerEmplacer(prp.our_pos, prp.our_phi, prp.id);
+
+            PacketHolder ph;
+            std::vector<PlayerEmplacer> tempp;
+            for(const auto &p : pemp)
+            {
+                tempp.push_back(p.second);
+            }
+
+            ph.Init<PacketResponsePlayers>(tempp);
             Send(ph);
         }
     }
@@ -251,8 +274,8 @@ int main(int argc, char** argv)
         LOG(info) << "listening on port " << port;
         acceptor->Listen( "0.0.0.0", port );
 
-        std::vector<std::shared_ptr< ServerConnection >> connection(10);
-        for(int i = 0; i < 10; i++)
+        std::vector<std::shared_ptr< ServerConnection >> connection(100);
+        for(int i = 0; i < 100; i++)
         {
             connection[i] = std::shared_ptr<ServerConnection>(new ServerConnection( hive ));
             acceptor->Accept( connection[i] );

@@ -2,7 +2,6 @@
 #define SGE_EVENTBUS_LOG_H
 #include "sge_ui/wins.h"
 #include "sge_ui/label.h"
-#include "sge_ui/button.h"
 #include <boost/circular_buffer.hpp>
 
 class sge_eventbus_log : public Win

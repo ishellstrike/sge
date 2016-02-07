@@ -2,7 +2,6 @@
 #define SGE_MENU_NEW_GAME_GLOBAL_H
 #include "sge_ui/wins.h"
 #include "sge_ui/label.h"
-#include "sge_ui/button.h"
 
 class sge_menu_new_game_global : public Win
 {

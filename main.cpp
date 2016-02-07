@@ -23,7 +23,6 @@
 
 #include <boost/exception/diagnostic_information.hpp>
 #include "boost_log.hpp"
-#include "prefecences.h"
 
 #ifdef _MSC_VER
 #ifndef _DEBUG

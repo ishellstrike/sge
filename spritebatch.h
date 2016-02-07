@@ -7,10 +7,11 @@
 
 #ifndef SPRITEBATCH_H
 #define SPRITEBATCH_H
-#define GLM_SWIZZLE
-#include "resources/texture.h"
+#include <GL\glew.h>
+#include <glm\glm.hpp>
 #include <string>
 #include <memory>
+
 #include "basicjargshader.h"
 #include "unordered_map"
 #include "font.h"
@@ -39,8 +40,6 @@ public:
     SpriteBatch();
     ~SpriteBatch();
 
-    void setUniform(const glm::mat4 &uni);
-
     void render();
     void drawRect(const glm::vec2 &loc, const glm::vec2 &size, const glm::vec4 &_col);
     void drawQuad(const glm::vec2 &loc, const glm::vec2 &size, const Texture &tex, const glm::vec4 &col_, const glm::vec4 &double_uv = glm::vec4(0,0,1,1));
@@ -56,6 +55,9 @@ public:
     glm::vec2 drawFormatted(const std::string &, glm::vec2, Font *);
 
     void drawTriangle(const glm::vec2 &loc, const glm::vec2 &loc2, const glm::vec2 &loc3, const glm::vec4 &col_);
+
+	glm::mat4 uniform;
+
 private:
     glm::vec2 drawText(const std::u32string &text32, float x, float y,
                        Font *font, const glm::vec4 &col_, bool no_draw);
@@ -76,7 +78,5 @@ private:
     GLuint normals = 0, outlines = 0;
 	GLuint m_vbo[1];
     GLuint m_vao = 0;
-
-    glm::mat4 uniform = glm::mat4(1);
 };
 #endif // SPRITEBATCH_H

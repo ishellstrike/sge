@@ -14,6 +14,7 @@ class GameTimer
 public:
     GameTimer();
     GameTimer(float f);
+	GameTimer(float cur, float f);
     ~GameTimer();
     float last, current, elapsed; /*< in seconds */
     void Update(float wglTime);

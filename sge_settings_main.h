@@ -2,7 +2,6 @@
 #define SGE_SETTINGS_MAIN_H
 #include "sge_ui/wins.h"
 #include "sge_ui/label.h"
-#include "sge_ui/button.h"
 
 class sge_settings_main : public Win
 {

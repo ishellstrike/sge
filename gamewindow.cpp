@@ -6,26 +6,26 @@
 *******************************************************************************/
 
 #include "gamewindow.h"
-#include "helper.h"
 #include <fstream>
-#include "core/db.h"
 #include "core/network/remoteclient.h"
-#include "core/agents/agents.hpp"
-#include "remsnd.h"
 #include "core/events/eventbus.h"
 #include "core/events/eventdamage.h"
 
 #define GLM_SWIZZLE
-#define CLIENT
 
 GameWindow *GameWindow::wi = nullptr;
 std::shared_ptr<Object> GameWindow::Hero = nullptr;
 
 void GameWindow::Mainloop()
 {
+	LOG(info) << "Jarg initialization start";
+	LOG(info) << "User-preferred locale setting is " << std::locale("").name().c_str();
+
     OpenAL::InitializeOpenAL();
     BaseInit();
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+	BaseUpdate();
+	BaseDraw();
 
     while(!glfwWindowShouldClose(window))
     {
@@ -53,8 +53,6 @@ void GameWindow::Mainloop()
 bool GameWindow::BaseInit()
 {
     srand(123);
-    LOG(info) << "Jarg initialization start";
-    LOG(info) << "User-preferred locale setting is " << std::locale("").name().c_str();
     glfwSetErrorCallback([](int /*a*/,const char* description){
         LOG(error) << description;
     });
@@ -85,6 +83,7 @@ bool GameWindow::BaseInit()
     glfwSwapInterval(0);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
+	glewExperimental = GL_TRUE;
     int err = glewInit();
     if (err != GLEW_OK)
     {
@@ -144,7 +143,6 @@ bool GameWindow::BaseInit()
     Resources::instance()->Init();
 
     batch = std::make_shared<SpriteBatch>();
-	batch->setUniform(proj);
 
     f12 = std::make_shared<Font>();
     f12->initFreeType(12);
@@ -199,6 +197,7 @@ bool GameWindow::BaseInit()
     hero = DB::Create( "hero" );
     Hero = hero;
     level.AddCreature( hero, true );
+	level.hero = hero;
 
     Keybind::SetDefault();
 
@@ -235,11 +234,12 @@ GameWindow::~GameWindow()
 
 void GameWindow::BaseDraw()
 {
-	batch->setUniform(proj);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0,0,0,1);
 
+#ifdef CLIENT
     level.Draw(*batch, offset, hero->GetAgent<Creature>()->pos);
+#endif
 
     if( std::shared_ptr<Object> &o = level.GetObjectByPos(glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale ) )
     {
@@ -283,7 +283,9 @@ void GameWindow::BaseDraw()
         batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_mouse"), Color::White);
         break;
     }
+
     batch->render();
+	batch->uniform = proj;
 }
 
 void GameWindow::BaseUpdate()
@@ -319,7 +321,7 @@ void GameWindow::BaseUpdate()
         craft->hidden = !craft->hidden;
 
     OpenAL::listener = hero->GetAgent<Creature>()->pos;
-    level.Update(GameTimer(update_pass));
+    level.Update(GameTimer(gt.current, update_pass));
     offset = glm::vec2(hero->GetAgent<Creature>()->pos)*sscale - glm::vec2(Prefecences::Instance()->resolution)/2.f;
     for(int i = -2; i < 3; i++)
         for(int j = -2; j < 3; j++)
@@ -331,7 +333,9 @@ void GameWindow::BaseUpdate()
         auto selpos = glm::vec3(offset + Mouse::getCursorPos(), 0)/sscale;
         if( std::shared_ptr<Object> &o = level.GetObjectByPos(selpos) )
         {
+#ifdef CLIENT
             o->onInteract(o, &level, selpos, gt);
+#endif
         }
     }
 

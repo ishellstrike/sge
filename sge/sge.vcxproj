@@ -9,6 +9,10 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="UnityDebug|Win32">
+      <Configuration>UnityDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\abstracttexture.cpp" />
@@ -31,7 +35,7 @@
     <ClCompile Include="..\core\agents\pressureplate.cpp" />
     <ClCompile Include="..\core\agents\referencer.cpp" />
     <ClCompile Include="..\core\agents\script.cpp" />
-    <ClCompile Include="..\core\agents\sge_sound.cpp" />
+    <ClCompile Include="..\core\agents\sound.cpp" />
     <ClCompile Include="..\core\agents\simpleinteract.cpp" />
     <ClCompile Include="..\core\agents\stacked.cpp" />
     <ClCompile Include="..\core\agents\structure.cpp" />
@@ -40,7 +44,7 @@
     <ClCompile Include="..\core\agents\walkable.cpp" />
     <ClCompile Include="..\core\agents\wander.cpp" />
     <ClCompile Include="..\core\db.cpp" />
-    <ClCompile Include="..\core\dynamicobject.cpp" />
+    <ClCompile Include="..\core\emplacers.cpp" />
     <ClCompile Include="..\core\events\event.cpp" />
     <ClCompile Include="..\core\events\eventbus.cpp" />
     <ClCompile Include="..\core\events\eventdamage.cpp" />
@@ -50,7 +54,9 @@
     <ClCompile Include="..\core\level.cpp" />
     <ClCompile Include="..\core\levelgen.cpp" />
     <ClCompile Include="..\core\network\packetholder.cpp" />
+    <ClCompile Include="..\core\network\packetrequestplayers.cpp" />
     <ClCompile Include="..\core\network\packetrequestsector.cpp" />
+    <ClCompile Include="..\core\network\packetresponseplayers.cpp" />
     <ClCompile Include="..\core\network\packetresponsesector.cpp" />
     <ClCompile Include="..\core\network\remoteclient.cpp" />
     <ClCompile Include="..\core\network\remoteserver.cpp" />
@@ -58,6 +64,7 @@
     <ClCompile Include="..\core\objecthelper.cpp" />
     <ClCompile Include="..\core\objectstatic.cpp" />
     <ClCompile Include="..\core\offset.cpp" />
+    <ClCompile Include="..\core\playeremplacer.cpp" />
     <ClCompile Include="..\core\recipe.cpp" />
     <ClCompile Include="..\core\scheme.cpp" />
     <ClCompile Include="..\core\sector.cpp" />
@@ -109,6 +116,10 @@
     <ClCompile Include="..\spritebatch.cpp" />
     <ClCompile Include="..\textureatlas.cpp" />
     <ClCompile Include="..\TextureGenerator.cpp" />
+    <ClCompile Include="unitybuild.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\abstracttexture.h" />
@@ -134,7 +145,7 @@
     <ClInclude Include="..\core\agents\pressureplate.h" />
     <ClInclude Include="..\core\agents\referencer.h" />
     <ClInclude Include="..\core\agents\script.h" />
-    <ClInclude Include="..\core\agents\sge_sound.h" />
+    <ClInclude Include="..\core\agents\sound.h" />
     <ClInclude Include="..\core\agents\simpleinteract.h" />
     <ClInclude Include="..\core\agents\stacked.h" />
     <ClInclude Include="..\core\agents\structure.h" />
@@ -144,7 +155,7 @@
     <ClInclude Include="..\core\agents\wander.h" />
     <ClInclude Include="..\core\core_const.h" />
     <ClInclude Include="..\core\db.h" />
-    <ClInclude Include="..\core\dynamicobject.h" />
+    <ClInclude Include="..\core\emplacers.h" />
     <ClInclude Include="..\core\events\event.h" />
     <ClInclude Include="..\core\events\eventbus.h" />
     <ClInclude Include="..\core\events\eventdamage.h" />
@@ -155,7 +166,9 @@
     <ClInclude Include="..\core\levelgen.h" />
     <ClInclude Include="..\core\network\packet.h" />
     <ClInclude Include="..\core\network\packetholder.h" />
+    <ClInclude Include="..\core\network\packetrequestplayers.h" />
     <ClInclude Include="..\core\network\packetrequestsector.h" />
+    <ClInclude Include="..\core\network\packetresponseplayers.h" />
     <ClInclude Include="..\core\network\packetresponsesector.h" />
     <ClInclude Include="..\core\network\remoteclient.h" />
     <ClInclude Include="..\core\network\remoteserver.h" />
@@ -163,6 +176,7 @@
     <ClInclude Include="..\core\objecthelper.h" />
     <ClInclude Include="..\core\objectstatic.h" />
     <ClInclude Include="..\core\offset.h" />
+    <ClInclude Include="..\core\playeremplacer.h" />
     <ClInclude Include="..\core\recipe.h" />
     <ClInclude Include="..\core\scheme.h" />
     <ClInclude Include="..\core\sector.h" />
@@ -203,7 +217,6 @@
     <ClInclude Include="..\resources\texture.h" />
     <ClInclude Include="..\resources\texturebase.h" />
     <ClInclude Include="..\resources\umaterial.h" />
-    <ClInclude Include="..\sge.hpp" />
     <ClInclude Include="..\sge_chest_window.h" />
     <ClInclude Include="..\sge_crafting_window.h" />
     <ClInclude Include="..\sge_eventbus_log.h" />
@@ -248,6 +261,12 @@
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -261,11 +280,21 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>E:\sge;..\3rdparty\boost;..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\3rdparty\boost\stage\lib;..\3rdparty\lib_debug;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <ExecutablePath>..\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>E:\sge;..\3rdparty\boost;..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\3rdparty\boost\stage\lib;..\3rdparty\lib_debug;$(LibraryPath)</LibraryPath>
@@ -279,6 +308,22 @@
     <LibraryPath>..\3rdparty\boost\stage\lib;..\3rdparty\lib_release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS" /D "_SCL_SECURE_NO_WARNINGS"  /D "CLIENT" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype262d.lib;opengl32.lib;OpenAL32.lib;libogg.lib;libvorbisfile.lib;boost_log-vc120-mt-1_59.lib;boost_system-vc120-mt-1_59.lib;squirrel.lib;sqstdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnityDebug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>

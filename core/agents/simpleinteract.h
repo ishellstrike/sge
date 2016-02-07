@@ -7,8 +7,7 @@
 
 #ifndef SIMPLEINTERACT_H
 #define SIMPLEINTERACT_H
-#include "core/agents/agent.h"
-#include "core/agents/sge_sound.h"
+#include "core/agents/sound.h"
 
 class SimpleInteract : public StaticAgent
 {
@@ -26,7 +25,7 @@ public:
     void onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &pos, const GameTimer &gt) override;
 
     std::string afterid, sound;
-    const SgeSound *activate;
+    const Sound *activate;
 
 };
 

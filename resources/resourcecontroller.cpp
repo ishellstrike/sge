@@ -32,6 +32,9 @@ void Resources::Init()
     grass->Load(t_dir + "grass.png");
     PUSH_NVP(grass);
 
+	const auto &flashlight = new Texture;
+	flashlight->Load(t_dir + "flashlight.png");
+	PUSH_NVP(flashlight);
 
     const auto & basic = new BasicJargShader;
     basic->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "basic.glsl");

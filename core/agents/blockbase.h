@@ -7,7 +7,6 @@
 
 #ifndef BLOCKBASE_H
 #define BLOCKBASE_H
-#include "core/agents/agent.h"
 #include "material.h"
 
 class BlockBase : public StaticAgent

@@ -56,11 +56,6 @@ SpriteBatch::~SpriteBatch()
     glDeleteBuffers(2, m_vbo);
 }
 
-void SpriteBatch::setUniform(const glm::mat4 &uni)
-{
-    uniform = uni;
-}
-
 /*!
  * \brief SpriteBatch::drawText
  * \param text
@@ -306,10 +301,10 @@ void SpriteBatch::drawQuad(const glm::vec2 &loc, const glm::vec2 &size, GLuint t
     vertices[cur*4 + 2].col = col_;
     vertices[cur*4 + 3].col = col_;
 
-    vertices[cur*4    ].uv  = double_uv.xy();
-    vertices[cur*4 + 1].uv  = double_uv.zy();
-    vertices[cur*4 + 2].uv  = double_uv.zw();
-    vertices[cur*4 + 3].uv  = double_uv.xw();
+	vertices[cur * 4].uv = glm::vec2(double_uv.x, double_uv.y);
+	vertices[cur * 4 + 1].uv = glm::vec2(double_uv.z, double_uv.y);
+	vertices[cur * 4 + 2].uv = glm::vec2(double_uv.z, double_uv.w);
+	vertices[cur * 4 + 3].uv = glm::vec2(double_uv.x, double_uv.w);
 
     index[cur*6    ] = cur*4;
     index[cur*6 + 1] = cur*4 + 1;

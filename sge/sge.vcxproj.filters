@@ -2,31 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\lodepng\lodepng.cpp" />
-    <ClCompile Include="..\core\agents\agent.cpp" />
-    <ClCompile Include="..\core\agents\aggressive.cpp" />
-    <ClCompile Include="..\core\agents\block.cpp" />
-    <ClCompile Include="..\core\agents\blockbase.cpp" />
-    <ClCompile Include="..\core\agents\chest.cpp" />
-    <ClCompile Include="..\core\agents\creaturebase.cpp" />
-    <ClCompile Include="..\core\agents\entity.cpp" />
-    <ClCompile Include="..\core\agents\itembase.cpp" />
-    <ClCompile Include="..\core\agents\itemspawner.cpp" />
-    <ClCompile Include="..\core\agents\material.cpp" />
     <ClCompile Include="..\core\agents\onenter.cpp" />
-    <ClCompile Include="..\core\agents\passsound.cpp" />
     <ClCompile Include="..\core\agents\pressureplate.cpp" />
     <ClCompile Include="..\core\agents\referencer.cpp" />
     <ClCompile Include="..\core\agents\script.cpp" />
-    <ClCompile Include="..\core\agents\sge_sound.cpp" />
-    <ClCompile Include="..\core\agents\simpleinteract.cpp" />
-    <ClCompile Include="..\core\agents\stacked.cpp" />
     <ClCompile Include="..\core\agents\structure.cpp" />
-    <ClCompile Include="..\core\agents\tags.cpp" />
-    <ClCompile Include="..\core\agents\transparent.cpp" />
-    <ClCompile Include="..\core\agents\walkable.cpp" />
-    <ClCompile Include="..\core\agents\wander.cpp" />
     <ClCompile Include="..\core\db.cpp" />
-    <ClCompile Include="..\core\dynamicobject.cpp" />
     <ClCompile Include="..\core\events\event.cpp" />
     <ClCompile Include="..\core\events\eventbus.cpp" />
     <ClCompile Include="..\core\events\eventdamage.cpp" />
@@ -35,11 +16,6 @@
     <ClCompile Include="..\core\infrastructure\world.cpp" />
     <ClCompile Include="..\core\level.cpp" />
     <ClCompile Include="..\core\levelgen.cpp" />
-    <ClCompile Include="..\core\network\packetholder.cpp" />
-    <ClCompile Include="..\core\network\packetrequestsector.cpp" />
-    <ClCompile Include="..\core\network\packetresponsesector.cpp" />
-    <ClCompile Include="..\core\network\remoteclient.cpp" />
-    <ClCompile Include="..\core\network\remoteserver.cpp" />
     <ClCompile Include="..\core\object.cpp" />
     <ClCompile Include="..\core\objecthelper.cpp" />
     <ClCompile Include="..\core\objectstatic.cpp" />
@@ -71,12 +47,10 @@
     <ClCompile Include="..\fpscounter.cpp" />
     <ClCompile Include="..\FrameBuffer.cpp" />
     <ClCompile Include="..\gametimer.cpp" />
-    <ClCompile Include="..\gamewindow.cpp" />
     <ClCompile Include="..\helper.cpp" />
     <ClCompile Include="..\keyboard.cpp" />
     <ClCompile Include="..\keyconfig.cpp" />
     <ClCompile Include="..\logger.cpp" />
-    <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\mouse.cpp" />
     <ClCompile Include="..\network.cpp" />
     <ClCompile Include="..\prefecences.cpp" />
@@ -99,37 +73,102 @@
     <ClCompile Include="..\resources\texture.cpp" />
     <ClCompile Include="..\resources\texturebase.cpp" />
     <ClCompile Include="..\resources\umaterial.cpp" />
+    <ClCompile Include="..\core\emplacers.cpp" />
+    <ClCompile Include="..\core\playeremplacer.cpp" />
+    <ClCompile Include="..\core\network\packetholder.cpp">
+      <Filter>core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\network\packetrequestplayers.cpp">
+      <Filter>core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\network\packetrequestsector.cpp">
+      <Filter>core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\network\packetresponseplayers.cpp">
+      <Filter>core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\network\packetresponsesector.cpp">
+      <Filter>core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\agent.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\aggressive.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\chest.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="unitybuild.cpp">
+      <Filter>builder_tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gamewindow.cpp">
+      <Filter>gamewindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>gamewindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\stacked.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\simpleinteract.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\sound.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\tags.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\walkable.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\wander.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\transparent.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\entity.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\itembase.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\itemspawner.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\creaturebase.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\block.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\blockbase.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\passsound.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\agents\material.cpp">
+      <Filter>core\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\network\remoteclient.cpp">
+      <Filter>core\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\network\remoteserver.cpp">
+      <Filter>core\network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\lodepng\lodepng.h" />
-    <ClInclude Include="..\core\agents\agent.h" />
-    <ClInclude Include="..\core\agents\agentfactory.h" />
-    <ClInclude Include="..\core\agents\agents.hpp" />
-    <ClInclude Include="..\core\agents\aggressive.h" />
-    <ClInclude Include="..\core\agents\block.h" />
-    <ClInclude Include="..\core\agents\blockbase.h" />
-    <ClInclude Include="..\core\agents\chest.h" />
-    <ClInclude Include="..\core\agents\creaturebase.h" />
-    <ClInclude Include="..\core\agents\entity.h" />
-    <ClInclude Include="..\core\agents\itembase.h" />
-    <ClInclude Include="..\core\agents\itemspawner.h" />
-    <ClInclude Include="..\core\agents\material.h" />
     <ClInclude Include="..\core\agents\onenter.h" />
-    <ClInclude Include="..\core\agents\passsound.h" />
     <ClInclude Include="..\core\agents\pressureplate.h" />
     <ClInclude Include="..\core\agents\referencer.h" />
     <ClInclude Include="..\core\agents\script.h" />
-    <ClInclude Include="..\core\agents\sge_sound.h" />
-    <ClInclude Include="..\core\agents\simpleinteract.h" />
-    <ClInclude Include="..\core\agents\stacked.h" />
     <ClInclude Include="..\core\agents\structure.h" />
-    <ClInclude Include="..\core\agents\tags.h" />
-    <ClInclude Include="..\core\agents\transparent.h" />
-    <ClInclude Include="..\core\agents\walkable.h" />
-    <ClInclude Include="..\core\agents\wander.h" />
     <ClInclude Include="..\core\core_const.h" />
     <ClInclude Include="..\core\db.h" />
-    <ClInclude Include="..\core\dynamicobject.h" />
     <ClInclude Include="..\core\events\event.h" />
     <ClInclude Include="..\core\events\eventbus.h" />
     <ClInclude Include="..\core\events\eventdamage.h" />
@@ -138,12 +177,6 @@
     <ClInclude Include="..\core\infrastructure\world.h" />
     <ClInclude Include="..\core\level.h" />
     <ClInclude Include="..\core\levelgen.h" />
-    <ClInclude Include="..\core\network\packet.h" />
-    <ClInclude Include="..\core\network\packetholder.h" />
-    <ClInclude Include="..\core\network\packetrequestsector.h" />
-    <ClInclude Include="..\core\network\packetresponsesector.h" />
-    <ClInclude Include="..\core\network\remoteclient.h" />
-    <ClInclude Include="..\core\network\remoteserver.h" />
     <ClInclude Include="..\core\object.h" />
     <ClInclude Include="..\core\objecthelper.h" />
     <ClInclude Include="..\core\objectstatic.h" />
@@ -193,7 +226,6 @@
     <ClInclude Include="..\fpscounter.h" />
     <ClInclude Include="..\FrameBuffer.h" />
     <ClInclude Include="..\gametimer.h" />
-    <ClInclude Include="..\gamewindow.h" />
     <ClInclude Include="..\helper.h" />
     <ClInclude Include="..\keyboard.h" />
     <ClInclude Include="..\keyconfig.h" />
@@ -217,7 +249,6 @@
     <ClInclude Include="..\textureatlas.h" />
     <ClInclude Include="..\TextureGenerator.h" />
     <ClInclude Include="..\boost_log.hpp" />
-    <ClInclude Include="..\sge.hpp" />
     <ClInclude Include="..\resources\error_image.h" />
     <ClInclude Include="..\resources\pixmap.h" />
     <ClInclude Include="..\resources\random_noise.h" />
@@ -225,5 +256,111 @@
     <ClInclude Include="..\resources\texture.h" />
     <ClInclude Include="..\resources\texturebase.h" />
     <ClInclude Include="..\resources\umaterial.h" />
+    <ClInclude Include="..\core\emplacers.h" />
+    <ClInclude Include="..\core\playeremplacer.h" />
+    <ClInclude Include="..\core\network\packetresponsesector.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\network\packet.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\network\packetholder.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\network\packetrequestplayers.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\network\packetrequestsector.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\network\packetresponseplayers.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\agent.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\agentfactory.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\agents.hpp">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\aggressive.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\chest.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gamewindow.h">
+      <Filter>gamewindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\stacked.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\simpleinteract.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\sound.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\tags.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\walkable.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\wander.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\transparent.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\entity.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\itembase.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\itemspawner.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\creaturebase.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\blockbase.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\block.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\passsound.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\agents\material.h">
+      <Filter>core\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\network\remoteclient.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\network\remoteserver.h">
+      <Filter>core\network</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{f0da45c3-e02c-4592-994a-edf31d0292ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\network">
+      <UniqueIdentifier>{d666153c-e451-4ec9-8299-a9c9f9a32041}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\agents">
+      <UniqueIdentifier>{342da61b-0c8f-478b-b7ae-109366043b64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="builder_tools">
+      <UniqueIdentifier>{f886a837-decd-4bd9-95df-d767d98f33a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gamewindow">
+      <UniqueIdentifier>{6b82596d-f52f-4b4c-a510-43e486987f8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

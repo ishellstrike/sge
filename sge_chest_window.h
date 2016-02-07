@@ -1,7 +1,6 @@
 #ifndef SGE_CHEST_WINDOW_H
 #define SGE_CHEST_WINDOW_H
 #include "sge_ui/wins.h"
-#include "gametimer.h"
 #include "sge_ui/label.h"
 #include "sge_ui/list_container.h"
 #include "sge_ui/table.h"

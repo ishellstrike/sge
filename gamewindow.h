@@ -8,28 +8,7 @@
 #ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
-#include "colorextender.h"
-#include "font.h"
-#include "fpscounter.h"
-#include "FrameBuffer.h"
-#include "gametimer.h"
-#include "glm/gtx/transform.hpp"
-#include "keyboard.h"
-#include "logger.h"
-#include "mouse.h"
-#include "prefecences.h"
-#include "resources/resourcecontroller.h"
-#include "sge_perfomance.h"
-#include "sge_level_debug_info.h"
-#include "sge_settings_main.h"
-#include "sge_ui/wins.h"
-#include "shader.h"
-#include "shader.h"
-#include "spritebatch.h"
-#include "spritebatch.h"
-#include "textureatlas.h"
-#include "TextureGenerator.h"
-
+#include <GL/glew.h>
 #include <algorithm>
 #include <chrono>
 #include <GL/glew.h>
@@ -39,7 +18,14 @@
 #include <memory>
 #include <string>
 #include <thread>
-#include "core/level.h"
+
+#include "glm/gtx/transform.hpp"
+#include "keyboard.h"
+#include "prefecences.h"
+
+#include "sge_perfomance.h"
+#include "sge_level_debug_info.h"
+#include "sge_settings_main.h"
 #include "sge_inventory.h"
 #include "sge_chest_window.h"
 #include "sge_crafting_window.h"
@@ -89,10 +75,6 @@ public:
     bool no_ui = false;
     glm::vec2 offset;
 
-    std::shared_ptr<FrameBuffer> fbo_blur, fbo_blur2, fbo_extract, fbo_main;
-    std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
-    std::shared_ptr<Texture> texture_pipeline;
-
     std::shared_ptr<Font> f12;
     std::shared_ptr<WinS> ws;
     sge_perfomance *perf;
@@ -107,7 +89,7 @@ public:
     Level level;
     std::shared_ptr<Object> hero;
     static std::shared_ptr<Object> Hero;
-    float update_pass = 10000;
+    float update_pass = 0;
 };
 
 #endif // GAMEWINDOW_H

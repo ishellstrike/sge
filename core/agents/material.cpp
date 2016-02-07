@@ -19,7 +19,7 @@ void Material::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &
     hitting = nullptr;
     if(const ObjectStatic *os = DB::Get(hitsound))
     {
-        if(const SgeSound *o = os->GetAgent<SgeSound>())
+        if(const Sound *o = os->GetAgent<Sound>())
         {
             LOG(trace) << "sound " << hitsound << " linked";
             hitting = o;
@@ -29,7 +29,7 @@ void Material::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::vec3 &
     breaking = nullptr;
     if(const ObjectStatic *os = DB::Get(breaksound))
     {
-        if(const SgeSound *o = os->GetAgent<SgeSound>())
+        if(const Sound *o = os->GetAgent<Sound>())
         {
             LOG(trace) << "sound " << breaksound << " linked";
             breaking = o;

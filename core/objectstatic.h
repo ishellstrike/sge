@@ -1,6 +1,5 @@
 #ifndef OBJECTSTATIC_H
 #define OBJECTSTATIC_H
-#include "agents/agent.h"
 #include "core_const.h"
 #include <vector>
 #include <memory>

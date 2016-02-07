@@ -1,26 +1,30 @@
-#ifndef PACKETREQUESTSECTOR_H
-#define PACKETREQUESTSECTOR_H
+#ifndef PACKETREQUESTPLAYERS_H
+#define PACKETREQUESTPLAYERS_H
 #include "packet.h"
 #include "glm/glm.hpp"
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/base_object.hpp>
 
-class PacketRequestSector : public Packet
+class PacketRequestPlayers : public Packet
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int)
     {
         ar & boost::serialization::base_object<Packet>(*this);
-        ar & pos;
+        ar & our_pos;
+        ar & our_phi;
+        ar & id;
     }
 
 public:
-    PacketRequestSector(const glm::ivec2 &p);
-    PacketRequestSector();
+    PacketRequestPlayers();
+    PacketRequestPlayers(const glm::vec3 & pos, float phi, size_t i);
     size_t GetId();
 
-    glm::ivec2 pos;
+    glm::vec3 our_pos;
+    float our_phi;
+    size_t id;
 };
 
-#endif // PACKETREQUESTSECTOR_H
+#endif // PACKETREQUESTPLAYERS_H

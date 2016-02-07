@@ -9,6 +9,7 @@
 #include "core/objectstatic.h"
 #include "core/db.h"
 #include "core/level.h"
+#include "core/agents/sound.h"
 
 void SimpleInteract::Deserialize(const rapidjson::Value &val)
 {
@@ -32,7 +33,7 @@ void SimpleInteract::onDbLoad(std::shared_ptr<Object> &par, Level *, const glm::
     activate = nullptr;
     if(const ObjectStatic *os = DB::Get(sound))
     {
-        if(const SgeSound *o = os->GetAgent<SgeSound>())
+        if(const Sound *o = os->GetAgent<Sound>())
         {
             LOG(trace) << "interact sound " << sound << " linked";
             activate = o;

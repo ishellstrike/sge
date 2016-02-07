@@ -8,7 +8,6 @@
 #ifndef CREATUREBASE_H
 #define CREATUREBASE_H
 #include <vector>
-#include "core/agents/agent.h"
 #include "core/object.h"
 
 class CreatureBase : public StaticAgent

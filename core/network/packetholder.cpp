@@ -3,7 +3,6 @@
 #include <boost/exception_ptr.hpp>
 #include <sstream>
 
-#include "logger.h"
 #include "packetholder.h"
 
 std::vector<uint8_t> PacketHolder::Serialize() const
@@ -13,6 +12,8 @@ std::vector<uint8_t> PacketHolder::Serialize() const
 
     oa.register_type<PacketRequestSector>();
     oa.register_type<PacketResponseSector>();
+    oa.register_type<PacketRequestPlayers>();
+    oa.register_type<PacketResponsePlayers>();
     oa.register_type<Packet>();
 
     oa << packet;
@@ -41,6 +42,8 @@ void PacketHolder::Deserialize(const std::vector<uint8_t> &d)
 
     ia.register_type<PacketRequestSector>();
     ia.register_type<PacketResponseSector>();
+    ia.register_type<PacketRequestPlayers>();
+    ia.register_type<PacketResponsePlayers>();
     ia.register_type<Packet>();
 
     try

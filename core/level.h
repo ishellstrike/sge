@@ -4,6 +4,7 @@
 #include "offset.h"
 #include <unordered_map>
 #include "core/agents/agents.hpp"
+#include "emplacers.h"
 
 class Level
 {
@@ -13,6 +14,7 @@ public:
 
     typedef std::unordered_map<glm::ivec2, std::shared_ptr<Sector>> SectorMap;
     SectorMap map;
+    std::shared_ptr<Object> hero;
 
     void Update(GameTimer &gt);
 
@@ -25,6 +27,8 @@ public:
     std::shared_ptr<Object> GetObjectByPos(const glm::vec3 &p);
     std::list<Sector *> GetSectorsInRange(const glm::vec3 &coord, float r);
     std::list<std::weak_ptr<Object>> GetObjectsInRange(const glm::vec3 &coord, float r);
+    Emplacers emp;
+	size_t this_id;
 
     bool SetBlockAtPos(const glm::vec3 &p, std::shared_ptr<Object> o);
     bool SetGroundAtPos(const glm::vec3 &pos, std::shared_ptr<Object> o);

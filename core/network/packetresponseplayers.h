@@ -1,26 +1,28 @@
-#ifndef PACKETREQUESTSECTOR_H
-#define PACKETREQUESTSECTOR_H
+#ifndef PACKETRESPONSEPLAYERS_H
+#define PACKETRESPONSEPLAYERS_H
 #include "packet.h"
 #include "glm/glm.hpp"
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/vector.hpp>
 #include <boost/serialization/base_object.hpp>
+#include "core/playeremplacer.h"
 
-class PacketRequestSector : public Packet
+class PacketResponsePlayers : public Packet
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int)
     {
         ar & boost::serialization::base_object<Packet>(*this);
-        ar & pos;
+        ar & emp;
     }
 
 public:
-    PacketRequestSector(const glm::ivec2 &p);
-    PacketRequestSector();
+    PacketResponsePlayers();
+    PacketResponsePlayers(const std::vector<PlayerEmplacer> &e);
     size_t GetId();
 
-    glm::ivec2 pos;
+    std::vector<PlayerEmplacer> emp;
 };
 
-#endif // PACKETREQUESTSECTOR_H
+#endif // PACKETRESPONSEPLAYERS_H

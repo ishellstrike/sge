@@ -17,6 +17,29 @@ void serialize(Archive & ar, glm::ivec2& vec, const unsigned int)
     ar & boost::serialization::make_nvp("x", vec.x);
     ar & boost::serialization::make_nvp("y", vec.y);
 }
+
+template<class Archive>
+void serialize(Archive & ar, glm::ivec3& vec, const unsigned int)
+{
+    ar & boost::serialization::make_nvp("x", vec.x);
+    ar & boost::serialization::make_nvp("y", vec.y);
+    ar & boost::serialization::make_nvp("z", vec.z);
+}
+
+template<class Archive>
+void serialize(Archive & ar, glm::vec3& vec, const unsigned int)
+{
+    ar & boost::serialization::make_nvp("x", vec.x);
+    ar & boost::serialization::make_nvp("y", vec.y);
+    ar & boost::serialization::make_nvp("z", vec.z);
+}
+
+template<class Archive>
+void serialize(Archive & ar, glm::vec2& vec, const unsigned int)
+{
+    ar & boost::serialization::make_nvp("x", vec.x);
+    ar & boost::serialization::make_nvp("y", vec.y);
+}
 }
 }
 
@@ -29,26 +52,17 @@ class Packet
         ar & id;
     }
 
-    static size_t NextTid()
-    {
-        static size_t next_id(0);
-        return next_id++;
-    }
-
 public:
     virtual ~Packet(){}
-    Packet(size_t __id = TidFor<Packet>()) : id(__id)
+    Packet(size_t __id = 0) : id(__id)
     {
 
     }
 
     size_t id;
-
-    template <typename T_>
-    static size_t TidFor()
+    virtual size_t GetId()
     {
-        static size_t result(NextTid());
-        return result;
+        return 0;
     }
 };
 
