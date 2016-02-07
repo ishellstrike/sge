@@ -23,6 +23,7 @@
 
 #include <boost/exception/diagnostic_information.hpp>
 #include "boost_log.hpp"
+#include "prefecences.h"
 
 #ifdef _MSC_VER
 #ifndef _DEBUG
@@ -99,6 +100,16 @@ int main(int argc, char** argv)
                 (
                     boost::log::trivial::severity >= boost::log::trivial::fatal
                 );
+			if (strstr(argv[i], ("-p")) != 0)
+			{
+				sscanf(argv[i]+2, "%d", &Prefecences::Instance()->server_port);
+			}
+
+			if (strstr(argv[i], ("-a")) != 0)
+			{
+				Prefecences::Instance()->server_adress = "255.255.255.255";
+				sscanf(argv[i]+2, "%s", Prefecences::Instance()->server_adress.c_str());
+			}
         }
 
     boost::log::add_common_attributes();

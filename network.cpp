@@ -140,13 +140,13 @@ void Acceptor::Accept( std::shared_ptr< Connection > connection )
 
 void Acceptor::Listen( const std::string & host, const uint16_t & port )
 {
-	boost::asio::ip::tcp::resolver resolver( m_hive->GetService() );
-	boost::asio::ip::tcp::resolver::query query( host, boost::lexical_cast< std::string >( port ) );
-	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve( query );
+    boost::asio::ip::tcp::resolver resolver( m_hive->GetService() );
+    boost::asio::ip::tcp::resolver::query query( host, boost::lexical_cast< std::string >( port ) );
+    boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve( query );
 	m_acceptor.open( endpoint.protocol() );
-	m_acceptor.set_option( boost::asio::ip::tcp::acceptor::reuse_address( false ) );
-	m_acceptor.bind( endpoint );
-	m_acceptor.listen( boost::asio::socket_base::max_connections );
+    m_acceptor.set_option( boost::asio::ip::tcp::acceptor::reuse_address( true ) );
+    m_acceptor.bind( endpoint );
+    m_acceptor.listen( boost::asio::socket_base::max_connections );
 	StartTimer();
 }
 
@@ -182,7 +182,7 @@ Connection::Connection( std::shared_ptr< Hive > hive )
   m_socket( hive->GetService() ),
   m_io_strand( hive->GetService() ),
   m_timer( hive->GetService() ),
-  m_receive_buffer_size( 1000096 ),
+  m_receive_buffer_size( 4096 ),
   m_timer_interval( 1000 ),
   m_error_state( 0 )
 {

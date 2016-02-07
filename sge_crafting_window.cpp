@@ -44,6 +44,13 @@ std::string get_recipepart_name(RecipePart &rp)
         s << "tool " << rp.value << " minimum level " << rp.count << "\n";
         return s.str();
     }
+
+	if (rp.type == RecipePart::Quality)
+	{
+		std::stringstream s;
+		s << "any " << rp.value << " item x" << rp.count << "\n";
+		return s.str();
+	}
 }
 
 void sge_crafting_window::Select(const std::shared_ptr<Recipe> &r)

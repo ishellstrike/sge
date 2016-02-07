@@ -33,7 +33,6 @@ public:
     ~MyConnection();
 };
 
-
 class Sector;
 
 class RemoteClient : public boost::noncopyable

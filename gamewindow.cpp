@@ -25,10 +25,11 @@ void GameWindow::Mainloop()
 {
     OpenAL::InitializeOpenAL();
     BaseInit();
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     while(!glfwWindowShouldClose(window))
     {
-        update_pass += gt.elapsed;
+		update_pass += gt.elapsed;
         if(update_pass >= 0.03)
         {
             BaseUpdate();
@@ -143,6 +144,7 @@ bool GameWindow::BaseInit()
     Resources::instance()->Init();
 
     batch = std::make_shared<SpriteBatch>();
+	batch->setUniform(proj);
 
     f12 = std::make_shared<Font>();
     f12->initFreeType(12);
@@ -233,7 +235,7 @@ GameWindow::~GameWindow()
 
 void GameWindow::BaseDraw()
 {
-    batch->setUniform(proj);
+	batch->setUniform(proj);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0,0,0,1);
 

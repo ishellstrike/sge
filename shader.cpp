@@ -15,7 +15,7 @@
 #include <map>
 #include <regex>
 
-bool printLog(GLuint id)
+bool printLog(GLuint id, bool compile = true)
 {
     char infoLog[1024];
     int infologLength = 0;
@@ -24,16 +24,18 @@ bool printLog(GLuint id)
     else
         glGetProgramInfoLog(id, 1024, &infologLength, infoLog);
 
+	GLint good = 0;
+	if (compile)
+		glGetProgramiv(id, GL_COMPILE_STATUS, &good);
+	else
+		glGetProgramiv(id, GL_LINK_STATUS, &good);
+
     if (infologLength > 0)
-    {
         LOG(error) << infoLog;
-        return false;
-    }
     else
-    {
         LOG(trace) << "     no errors";
-        return true;
-    }
+
+	return !good;
 }
 
 Shader::Shader()
@@ -261,7 +263,7 @@ void Shader::preprocessIncludes(std::stringstream &ss, const std::string &filena
 bool Shader::Link() const {
     glLinkProgram(program);
     LOG(trace) << "Program " << std::to_string(program) << " linking";
-    if(!printLog(program))
+    if(printLog(program, false))
         throw;
     LOG(trace) << "--------------------";
     return true;

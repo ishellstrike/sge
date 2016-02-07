@@ -74,9 +74,9 @@ private:
 
     GLuint current = 0;
     GLuint normals = 0, outlines = 0;
-    GLuint m_vbo[1];
-    GLuint m_vao;
+	GLuint m_vbo[1];
+    GLuint m_vao = 0;
 
-    glm::mat4 uniform;
+    glm::mat4 uniform = glm::mat4(1);
 };
 #endif // SPRITEBATCH_H

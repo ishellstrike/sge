@@ -103,7 +103,7 @@ private:
 
     void OnError( const boost::system::error_code & error )
     {
-        LOG(info) << "[" << __FUNCTION__ << "] " << error;
+        LOG(info) << "error code " << error << " : " << error.message();
     }
 
 public:
@@ -147,6 +147,7 @@ public:
     {
     }
 };
+
 int main(int argc, char** argv)
 {
     boost::log::add_console_log(
@@ -248,7 +249,7 @@ int main(int argc, char** argv)
 
         std::shared_ptr< MyAcceptor > acceptor( new MyAcceptor( hive ) );
         LOG(info) << "listening on port " << port;
-        acceptor->Listen( "127.0.0.1", port );
+        acceptor->Listen( "0.0.0.0", port );
 
         std::vector<std::shared_ptr< ServerConnection >> connection(10);
         for(int i = 0; i < 10; i++)

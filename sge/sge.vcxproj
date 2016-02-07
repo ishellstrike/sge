@@ -10,6 +10,232 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\abstracttexture.cpp" />
+    <ClCompile Include="..\basicjargshader.cpp" />
+    <ClCompile Include="..\ClassicNoise.cpp" />
+    <ClCompile Include="..\colorextender.cpp" />
+    <ClCompile Include="..\colorscheme.cpp" />
+    <ClCompile Include="..\core\agents\agent.cpp" />
+    <ClCompile Include="..\core\agents\aggressive.cpp" />
+    <ClCompile Include="..\core\agents\block.cpp" />
+    <ClCompile Include="..\core\agents\blockbase.cpp" />
+    <ClCompile Include="..\core\agents\chest.cpp" />
+    <ClCompile Include="..\core\agents\creaturebase.cpp" />
+    <ClCompile Include="..\core\agents\entity.cpp" />
+    <ClCompile Include="..\core\agents\itembase.cpp" />
+    <ClCompile Include="..\core\agents\itemspawner.cpp" />
+    <ClCompile Include="..\core\agents\material.cpp" />
+    <ClCompile Include="..\core\agents\onenter.cpp" />
+    <ClCompile Include="..\core\agents\passsound.cpp" />
+    <ClCompile Include="..\core\agents\pressureplate.cpp" />
+    <ClCompile Include="..\core\agents\referencer.cpp" />
+    <ClCompile Include="..\core\agents\script.cpp" />
+    <ClCompile Include="..\core\agents\sge_sound.cpp" />
+    <ClCompile Include="..\core\agents\simpleinteract.cpp" />
+    <ClCompile Include="..\core\agents\stacked.cpp" />
+    <ClCompile Include="..\core\agents\structure.cpp" />
+    <ClCompile Include="..\core\agents\tags.cpp" />
+    <ClCompile Include="..\core\agents\transparent.cpp" />
+    <ClCompile Include="..\core\agents\walkable.cpp" />
+    <ClCompile Include="..\core\agents\wander.cpp" />
+    <ClCompile Include="..\core\db.cpp" />
+    <ClCompile Include="..\core\dynamicobject.cpp" />
+    <ClCompile Include="..\core\events\event.cpp" />
+    <ClCompile Include="..\core\events\eventbus.cpp" />
+    <ClCompile Include="..\core\events\eventdamage.cpp" />
+    <ClCompile Include="..\core\events\eventissureorder.cpp" />
+    <ClCompile Include="..\core\infrastructure\player.cpp" />
+    <ClCompile Include="..\core\infrastructure\world.cpp" />
+    <ClCompile Include="..\core\level.cpp" />
+    <ClCompile Include="..\core\levelgen.cpp" />
+    <ClCompile Include="..\core\network\packetholder.cpp" />
+    <ClCompile Include="..\core\network\packetrequestsector.cpp" />
+    <ClCompile Include="..\core\network\packetresponsesector.cpp" />
+    <ClCompile Include="..\core\network\remoteclient.cpp" />
+    <ClCompile Include="..\core\network\remoteserver.cpp" />
+    <ClCompile Include="..\core\object.cpp" />
+    <ClCompile Include="..\core\objecthelper.cpp" />
+    <ClCompile Include="..\core\objectstatic.cpp" />
+    <ClCompile Include="..\core\offset.cpp" />
+    <ClCompile Include="..\core\recipe.cpp" />
+    <ClCompile Include="..\core\scheme.cpp" />
+    <ClCompile Include="..\core\sector.cpp" />
+    <ClCompile Include="..\core\tree.cpp" />
+    <ClCompile Include="..\core\uniqueid.cpp" />
+    <ClCompile Include="..\font.cpp" />
+    <ClCompile Include="..\fpscounter.cpp" />
+    <ClCompile Include="..\FrameBuffer.cpp" />
+    <ClCompile Include="..\gametimer.cpp" />
+    <ClCompile Include="..\gamewindow.cpp" />
+    <ClCompile Include="..\helper.cpp" />
+    <ClCompile Include="..\keyboard.cpp" />
+    <ClCompile Include="..\keyconfig.cpp" />
+    <ClCompile Include="..\lodepng\lodepng.cpp" />
+    <ClCompile Include="..\logger.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\mouse.cpp" />
+    <ClCompile Include="..\network.cpp" />
+    <ClCompile Include="..\prefecences.cpp" />
+    <ClCompile Include="..\random.cpp" />
+    <ClCompile Include="..\remsnd.cpp" />
+    <ClCompile Include="..\resources\pixmap.cpp" />
+    <ClCompile Include="..\resources\resourcecontroller.cpp" />
+    <ClCompile Include="..\resources\texture.cpp" />
+    <ClCompile Include="..\resources\texturebase.cpp" />
+    <ClCompile Include="..\resources\umaterial.cpp" />
+    <ClCompile Include="..\sge_chest_window.cpp" />
+    <ClCompile Include="..\sge_crafting_window.cpp" />
+    <ClCompile Include="..\sge_eventbus_log.cpp" />
+    <ClCompile Include="..\sge_inventory.cpp" />
+    <ClCompile Include="..\sge_level_debug_info.cpp" />
+    <ClCompile Include="..\sge_menu_new_game_global.cpp" />
+    <ClCompile Include="..\sge_perfomance.cpp" />
+    <ClCompile Include="..\sge_settings_main.cpp" />
+    <ClCompile Include="..\sge_ui\button.cpp" />
+    <ClCompile Include="..\sge_ui\component.cpp" />
+    <ClCompile Include="..\sge_ui\dragnumbox.cpp" />
+    <ClCompile Include="..\sge_ui\graph.cpp" />
+    <ClCompile Include="..\sge_ui\image_box.cpp" />
+    <ClCompile Include="..\sge_ui\label.cpp" />
+    <ClCompile Include="..\sge_ui\list_container.cpp" />
+    <ClCompile Include="..\sge_ui\panel.cpp" />
+    <ClCompile Include="..\sge_ui\table.cpp" />
+    <ClCompile Include="..\sge_ui\treeview.cpp" />
+    <ClCompile Include="..\sge_ui\vertical_bar.cpp" />
+    <ClCompile Include="..\sge_ui\win.cpp" />
+    <ClCompile Include="..\sge_ui\wins.cpp" />
+    <ClCompile Include="..\shader.cpp" />
+    <ClCompile Include="..\spritebatch.cpp" />
+    <ClCompile Include="..\textureatlas.cpp" />
+    <ClCompile Include="..\TextureGenerator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\abstracttexture.h" />
+    <ClInclude Include="..\basicjargshader.h" />
+    <ClInclude Include="..\boost_log.hpp" />
+    <ClInclude Include="..\ClassicNoise.h" />
+    <ClInclude Include="..\colorextender.h" />
+    <ClInclude Include="..\colorscheme.h" />
+    <ClInclude Include="..\core\agents\agent.h" />
+    <ClInclude Include="..\core\agents\agentfactory.h" />
+    <ClInclude Include="..\core\agents\agents.hpp" />
+    <ClInclude Include="..\core\agents\aggressive.h" />
+    <ClInclude Include="..\core\agents\block.h" />
+    <ClInclude Include="..\core\agents\blockbase.h" />
+    <ClInclude Include="..\core\agents\chest.h" />
+    <ClInclude Include="..\core\agents\creaturebase.h" />
+    <ClInclude Include="..\core\agents\entity.h" />
+    <ClInclude Include="..\core\agents\itembase.h" />
+    <ClInclude Include="..\core\agents\itemspawner.h" />
+    <ClInclude Include="..\core\agents\material.h" />
+    <ClInclude Include="..\core\agents\onenter.h" />
+    <ClInclude Include="..\core\agents\passsound.h" />
+    <ClInclude Include="..\core\agents\pressureplate.h" />
+    <ClInclude Include="..\core\agents\referencer.h" />
+    <ClInclude Include="..\core\agents\script.h" />
+    <ClInclude Include="..\core\agents\sge_sound.h" />
+    <ClInclude Include="..\core\agents\simpleinteract.h" />
+    <ClInclude Include="..\core\agents\stacked.h" />
+    <ClInclude Include="..\core\agents\structure.h" />
+    <ClInclude Include="..\core\agents\tags.h" />
+    <ClInclude Include="..\core\agents\transparent.h" />
+    <ClInclude Include="..\core\agents\walkable.h" />
+    <ClInclude Include="..\core\agents\wander.h" />
+    <ClInclude Include="..\core\core_const.h" />
+    <ClInclude Include="..\core\db.h" />
+    <ClInclude Include="..\core\dynamicobject.h" />
+    <ClInclude Include="..\core\events\event.h" />
+    <ClInclude Include="..\core\events\eventbus.h" />
+    <ClInclude Include="..\core\events\eventdamage.h" />
+    <ClInclude Include="..\core\events\eventissureorder.h" />
+    <ClInclude Include="..\core\infrastructure\player.h" />
+    <ClInclude Include="..\core\infrastructure\world.h" />
+    <ClInclude Include="..\core\level.h" />
+    <ClInclude Include="..\core\levelgen.h" />
+    <ClInclude Include="..\core\network\packet.h" />
+    <ClInclude Include="..\core\network\packetholder.h" />
+    <ClInclude Include="..\core\network\packetrequestsector.h" />
+    <ClInclude Include="..\core\network\packetresponsesector.h" />
+    <ClInclude Include="..\core\network\remoteclient.h" />
+    <ClInclude Include="..\core\network\remoteserver.h" />
+    <ClInclude Include="..\core\object.h" />
+    <ClInclude Include="..\core\objecthelper.h" />
+    <ClInclude Include="..\core\objectstatic.h" />
+    <ClInclude Include="..\core\offset.h" />
+    <ClInclude Include="..\core\recipe.h" />
+    <ClInclude Include="..\core\scheme.h" />
+    <ClInclude Include="..\core\sector.h" />
+    <ClInclude Include="..\core\serialize.h" />
+    <ClInclude Include="..\core\serializer.h" />
+    <ClInclude Include="..\core\tree.h" />
+    <ClInclude Include="..\core\uniqueid.h" />
+    <ClInclude Include="..\font.h" />
+    <ClInclude Include="..\fpscounter.h" />
+    <ClInclude Include="..\FrameBuffer.h" />
+    <ClInclude Include="..\gametimer.h" />
+    <ClInclude Include="..\gamewindow.h" />
+    <ClInclude Include="..\helper.h" />
+    <ClInclude Include="..\keyboard.h" />
+    <ClInclude Include="..\keyconfig.h" />
+    <ClInclude Include="..\lodepng\lodepng.h" />
+    <ClInclude Include="..\logger.h" />
+    <ClInclude Include="..\mouse.h" />
+    <ClInclude Include="..\network.h" />
+    <ClInclude Include="..\prefecences.h" />
+    <ClInclude Include="..\random.h" />
+    <ClInclude Include="..\rapidjson\document.h" />
+    <ClInclude Include="..\rapidjson\filestream.h" />
+    <ClInclude Include="..\rapidjson\genericstream.h" />
+    <ClInclude Include="..\rapidjson\internal\pow10.h" />
+    <ClInclude Include="..\rapidjson\internal\stack.h" />
+    <ClInclude Include="..\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="..\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\rapidjson\reader.h" />
+    <ClInclude Include="..\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\rapidjson\writer.h" />
+    <ClInclude Include="..\remsnd.h" />
+    <ClInclude Include="..\resources\error_image.h" />
+    <ClInclude Include="..\resources\pixmap.h" />
+    <ClInclude Include="..\resources\random_noise.h" />
+    <ClInclude Include="..\resources\resourcecontroller.h" />
+    <ClInclude Include="..\resources\texture.h" />
+    <ClInclude Include="..\resources\texturebase.h" />
+    <ClInclude Include="..\resources\umaterial.h" />
+    <ClInclude Include="..\sge.hpp" />
+    <ClInclude Include="..\sge_chest_window.h" />
+    <ClInclude Include="..\sge_crafting_window.h" />
+    <ClInclude Include="..\sge_eventbus_log.h" />
+    <ClInclude Include="..\sge_geometry.h" />
+    <ClInclude Include="..\sge_inventory.h" />
+    <ClInclude Include="..\sge_level_debug_info.h" />
+    <ClInclude Include="..\sge_menu_new_game_global.h" />
+    <ClInclude Include="..\sge_perfomance.h" />
+    <ClInclude Include="..\sge_settings_main.h" />
+    <ClInclude Include="..\sge_ui\button.h" />
+    <ClInclude Include="..\sge_ui\component.h" />
+    <ClInclude Include="..\sge_ui\dragnumbox.h" />
+    <ClInclude Include="..\sge_ui\graph.h" />
+    <ClInclude Include="..\sge_ui\image_box.h" />
+    <ClInclude Include="..\sge_ui\label.h" />
+    <ClInclude Include="..\sge_ui\list_container.h" />
+    <ClInclude Include="..\sge_ui\panel.h" />
+    <ClInclude Include="..\sge_ui\table.h" />
+    <ClInclude Include="..\sge_ui\treeview.h" />
+    <ClInclude Include="..\sge_ui\vertical_bar.h" />
+    <ClInclude Include="..\sge_ui\wcontainer.h" />
+    <ClInclude Include="..\sge_ui\win.h" />
+    <ClInclude Include="..\sge_ui\wins.h" />
+    <ClInclude Include="..\shader.h" />
+    <ClInclude Include="..\spritebatch.h" />
+    <ClInclude Include="..\textureatlas.h" />
+    <ClInclude Include="..\TextureGenerator.h" />
+    <ClInclude Include="..\utfcpp\utf8.h" />
+    <ClInclude Include="..\utfcpp\utf8\checked.h" />
+    <ClInclude Include="..\utfcpp\utf8\core.h" />
+    <ClInclude Include="..\utfcpp\utf8\unchecked.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99C0710E-F293-4293-A7D3-03C4D67E0EE4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -20,14 +246,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -42,12 +268,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>E:\sge;..\3rdparty\boost;..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\3rdparty\boost\stage;..\3rdparty\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\3rdparty\boost\stage\lib;..\3rdparty\lib_debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
     <ExecutablePath>..\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>..\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>E:\sge;..\3rdparty\boost;..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\3rdparty\boost\stage\lib;..\3rdparty\lib_release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -57,12 +286,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS" /D "_SCL_SECURE_NO_WARNINGS"  /D "CLIENT" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype.lib;opengl32.lib;libboost_log-vc120-mt-1_59.lib;boost_system-vc120-mt-1_59.lib;boost_thread-vc120-mt-1_59.lib;squirrel;sqstdlib.lib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype262d.lib;opengl32.lib;OpenAL32.lib;libogg.lib;libvorbisfile.lib;boost_log-vc120-mt-1_59.lib;boost_system-vc120-mt-1_59.lib;squirrel.lib;sqstdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,156 +304,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS" /D "_SCL_SECURE_NO_WARNINGS"  /D "CLIENT" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype262.lib;opengl32.lib;OpenAL32.lib;libogg.lib;libvorbisfile.lib;boost_log-vc120-mt-1_59.lib;boost_system-vc120-mt-1_59.lib;squirrel.lib;sqstdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\abstracttexture.cpp" />
-    <ClCompile Include="..\basicjargshader.cpp" />
-    <ClCompile Include="..\camera.cpp" />
-    <ClCompile Include="..\ClassicNoise.cpp" />
-    <ClCompile Include="..\colorextender.cpp" />
-    <ClCompile Include="..\colorscheme.cpp" />
-    <ClCompile Include="..\font.cpp" />
-    <ClCompile Include="..\fpscounter.cpp" />
-    <ClCompile Include="..\FrameBuffer.cpp" />
-    <ClCompile Include="..\gametimer.cpp" />
-    <ClCompile Include="..\gamewindow.cpp" />
-    <ClCompile Include="..\gbuffer.cpp" />
-    <ClCompile Include="..\geometry\cube.cpp" />
-    <ClCompile Include="..\geometry\icosahedron.cpp" />
-    <ClCompile Include="..\geometry\mesh.cpp" />
-    <ClCompile Include="..\geometry\model.cpp" />
-    <ClCompile Include="..\geometry\quad.cpp" />
-    <ClCompile Include="..\geometry\vpnt.cpp" />
-    <ClCompile Include="..\helper.cpp" />
-    <ClCompile Include="..\json\json_reader.cpp" />
-    <ClCompile Include="..\json\json_value.cpp" />
-    <ClCompile Include="..\json\json_writer.cpp" />
-    <ClCompile Include="..\keyboard.cpp" />
-    <ClCompile Include="..\keyconfig.cpp" />
-    <ClCompile Include="..\lodepng\lodepng.cpp" />
-    <ClCompile Include="..\logger.cpp" />
-    <ClCompile Include="..\main.cpp" />
-    <ClCompile Include="..\material.cpp" />
-    <ClCompile Include="..\mouse.cpp" />
-    <ClCompile Include="..\network.cpp" />
-    <ClCompile Include="..\pixmap.cpp" />
-    <ClCompile Include="..\prefecences.cpp" />
-    <ClCompile Include="..\random.cpp" />
-    <ClCompile Include="..\remsnd.cpp" />
-    <ClCompile Include="..\server_main.cpp" />
-    <ClCompile Include="..\sge_chest_window.cpp" />
-    <ClCompile Include="..\sge_crafting_window.cpp" />
-    <ClCompile Include="..\sge_eventbus_log.cpp" />
-    <ClCompile Include="..\sge_inventory.cpp" />
-    <ClCompile Include="..\sge_level_debug_info.cpp" />
-    <ClCompile Include="..\sge_menu_new_game_global.cpp" />
-    <ClCompile Include="..\sge_perfomance.cpp" />
-    <ClCompile Include="..\sge_settings_main.cpp" />
-    <ClCompile Include="..\sge_ui\button.cpp" />
-    <ClCompile Include="..\sge_ui\component.cpp" />
-    <ClCompile Include="..\sge_ui\graph.cpp" />
-    <ClCompile Include="..\sge_ui\label.cpp" />
-    <ClCompile Include="..\sge_ui\list_container.cpp" />
-    <ClCompile Include="..\sge_ui\panel.cpp" />
-    <ClCompile Include="..\sge_ui\vertical_bar.cpp" />
-    <ClCompile Include="..\sge_ui\win.cpp" />
-    <ClCompile Include="..\sge_ui\wins.cpp" />
-    <ClCompile Include="..\shader.cpp" />
-    <ClCompile Include="..\singleton.cpp" />
-    <ClCompile Include="..\spheretesselator.cpp" />
-    <ClCompile Include="..\spritebatch.cpp" />
-    <ClCompile Include="..\texture.cpp" />
-    <ClCompile Include="..\textureatlas.cpp" />
-    <ClCompile Include="..\TextureGenerator.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\abstracttexture.h" />
-    <ClInclude Include="..\basicjargshader.h" />
-    <ClInclude Include="..\boost_log.hpp" />
-    <ClInclude Include="..\camera.h" />
-    <ClInclude Include="..\ClassicNoise.h" />
-    <ClInclude Include="..\colorextender.h" />
-    <ClInclude Include="..\colorscheme.h" />
-    <ClInclude Include="..\fielsystem.h" />
-    <ClInclude Include="..\font.h" />
-    <ClInclude Include="..\fpscounter.h" />
-    <ClInclude Include="..\FrameBuffer.h" />
-    <ClInclude Include="..\gametimer.h" />
-    <ClInclude Include="..\gamewindow.h" />
-    <ClInclude Include="..\gbuffer.h" />
-    <ClInclude Include="..\geometry\cube.h" />
-    <ClInclude Include="..\geometry\geometry.hpp" />
-    <ClInclude Include="..\geometry\icosahedron.h" />
-    <ClInclude Include="..\geometry\mesh.h" />
-    <ClInclude Include="..\geometry\model.h" />
-    <ClInclude Include="..\geometry\quad.h" />
-    <ClInclude Include="..\geometry\vpnt.h" />
-    <ClInclude Include="..\helper.h" />
-    <ClInclude Include="..\json\autolink.h" />
-    <ClInclude Include="..\json\config.h" />
-    <ClInclude Include="..\json\features.h" />
-    <ClInclude Include="..\json\forwards.h" />
-    <ClInclude Include="..\json\json.h" />
-    <ClInclude Include="..\json\json_batchallocator.h" />
-    <ClInclude Include="..\json\reader.h" />
-    <ClInclude Include="..\json\value.h" />
-    <ClInclude Include="..\json\writer.h" />
-    <ClInclude Include="..\keyboard.h" />
-    <ClInclude Include="..\keyconfig.h" />
-    <ClInclude Include="..\lodepng\lodepng.h" />
-    <ClInclude Include="..\logger.h" />
-    <ClInclude Include="..\material.h" />
-    <ClInclude Include="..\mouse.h" />
-    <ClInclude Include="..\network.h" />
-    <ClInclude Include="..\pixmap.h" />
-    <ClInclude Include="..\prefecences.h" />
-    <ClInclude Include="..\random.h" />
-    <ClInclude Include="..\remsnd.h" />
-    <ClInclude Include="..\sge.hpp" />
-    <ClInclude Include="..\sge_chest_window.h" />
-    <ClInclude Include="..\sge_crafting_window.h" />
-    <ClInclude Include="..\sge_eventbus_log.h" />
-    <ClInclude Include="..\sge_geometry.h" />
-    <ClInclude Include="..\sge_inventory.h" />
-    <ClInclude Include="..\sge_level_debug_info.h" />
-    <ClInclude Include="..\sge_menu_new_game_global.h" />
-    <ClInclude Include="..\sge_perfomance.h" />
-    <ClInclude Include="..\sge_settings_main.h" />
-    <ClInclude Include="..\sge_ui\button.h" />
-    <ClInclude Include="..\sge_ui\component.h" />
-    <ClInclude Include="..\sge_ui\graph.h" />
-    <ClInclude Include="..\sge_ui\label.h" />
-    <ClInclude Include="..\sge_ui\list_container.h" />
-    <ClInclude Include="..\sge_ui\panel.h" />
-    <ClInclude Include="..\sge_ui\vertical_bar.h" />
-    <ClInclude Include="..\sge_ui\wcontainer.h" />
-    <ClInclude Include="..\sge_ui\win.h" />
-    <ClInclude Include="..\sge_ui\wins.h" />
-    <ClInclude Include="..\shader.h" />
-    <ClInclude Include="..\singleton.h" />
-    <ClInclude Include="..\spheretesselator.h" />
-    <ClInclude Include="..\spritebatch.h" />
-    <ClInclude Include="..\tangentcalc.h" />
-    <ClInclude Include="..\texture.h" />
-    <ClInclude Include="..\textureatlas.h" />
-    <ClInclude Include="..\TextureGenerator.h" />
-    <ClInclude Include="..\utfcpp\utf8.h" />
-    <ClInclude Include="..\utfcpp\utf8\checked.h" />
-    <ClInclude Include="..\utfcpp\utf8\core.h" />
-    <ClInclude Include="..\utfcpp\utf8\unchecked.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\json\json_internalarray.inl" />
-    <None Include="..\json\json_internalmap.inl" />
-    <None Include="..\json\json_valueiterator.inl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

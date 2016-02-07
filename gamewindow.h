@@ -107,7 +107,7 @@ public:
     Level level;
     std::shared_ptr<Object> hero;
     static std::shared_ptr<Object> Hero;
-    float update_pass = 0;
+    float update_pass = 10000;
 };
 
 #endif // GAMEWINDOW_H

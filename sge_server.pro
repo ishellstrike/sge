@@ -6,18 +6,18 @@ CONFIG  += c++11
 
 VERSION = 0.1.0
 
-win32:LIBS += \
--L$$PWD/3rdparty/lib/ \
--L$$PWD/3rdparty/boost/stage/lib \
--lopengl32 -lglew32 -lglfw3dll -lfreetype -lOpenAL32 -llibogg -llibvorbisfile
-
 CONFIG(debug, debug|release) {
-    LIBS   += -llibboost_log-vc120-mt-gd-1_59 -lsquirreld -lsqstdlibd
+    LIBS   += -L$$PWD/3rdparty/lib_debug/
+    LIBS   += -llibboost_log-vc120-mt-gd-1_59 -lsquirrel -lsqstdlib  -lfreetype262d
 }
 else {
-    LIBS   += -llibboost_log-vc120-mt-1_59 -lboost_system-vc120-mt-1_59 -lboost_thread-vc120-mt-1_59 -lsquirrel -lsqstdlib
-    CONFIG -= console
+    LIBS   += -L$$PWD/3rdparty/lib_release/
+    LIBS   += -llibboost_log-vc120-mt-1_59 -lboost_system-vc120-mt-1_59 -lboost_thread-vc120-mt-1_59 -lsquirrel -lsqstdlib  -lfreetype262
 }
+
+win32:LIBS += \
+-L$$PWD/3rdparty/boost/stage/lib \
+-lopengl32 -lglew32 -lglfw3dll -lOpenAL32 -llibogg -llibvorbisfile
 
 unix:LIBS        += -lGL -lGLEW -lglfw3 -lfreetype -lm -lXrandr -lXi -lX11 -lXxf86vm -lpthread -lXinerama -lXcursor
 unix:INCLUDEPATH += /usr/include/freetype2

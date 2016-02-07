@@ -17,8 +17,17 @@ std::vector<uint8_t> PacketHolder::Serialize() const
 
     oa << packet;
 
-    std::vector< uint8_t > request;
+    std::vector< uint8_t > request(6);
     std::string s = ss.str();
+
+    size_t len = s.size();
+    request[5] = 0x0D;
+    request[4] = 0x0A;
+    request[3] = (len>>24) & 0xFF;
+    request[2] = (len>>16) & 0xFF;
+    request[1] = (len>>8) & 0xFF;
+    request[0] = len & 0xFF;
+
     std::copy(s.begin(), s.end(), std::back_inserter(request));
     return request;
 }
@@ -26,7 +35,7 @@ std::vector<uint8_t> PacketHolder::Serialize() const
 void PacketHolder::Deserialize(const std::vector<uint8_t> &d)
 {
     std::stringstream ss;
-    ss << std::string(d.begin(), d.end());
+    ss << std::string(d.begin()+6, d.end());
 
     boost::archive::text_iarchive ia(ss);
 

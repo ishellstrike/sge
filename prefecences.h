@@ -106,6 +106,8 @@ public:
     bool starnest_on = true;
     float double_c = 0.3f;
     bool no_sound = false;
+	std::string server_adress = "127.0.0.1";
+	unsigned server_port = 7777;
 };
 
 #endif // PREFECENCES_H

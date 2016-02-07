@@ -2,12 +2,13 @@
 #include "../levelgen.h"
 #include <thread>
 #include "packetholder.h"
+#include "../../prefecences.h"
 
 RemoteClient::RemoteClient()
 {
     hive = std::make_shared<Hive>();
     conn = std::make_shared<MyConnection>(hive);
-    conn->Connect("127.0.0.1", 8080);
+	conn->Connect(Prefecences::Instance()->server_adress, Prefecences::Instance()->server_port);
 }
 
 std::shared_ptr<Sector> RemoteClient::GetSector(const glm::ivec2 &v)
@@ -60,29 +61,85 @@ void MyConnection::OnConnect(const std::string &host, uint16_t port)
 
     // Start the next receive
     Recv();
+
+	std::string str = "HELLO";
+
+	std::vector< uint8_t > request;
+	std::copy(str.begin(), str.end(), std::back_inserter(request));
+	Send(request);
 }
 
 void MyConnection::OnSend(const std::vector<uint8_t> &buffer)
 {
 }
 
+size_t getLength(const std::vector<uint8_t> &buffer)
+{
+	size_t l = (buffer[3] << 24) | (buffer[2] << 16) | (buffer[1] << 8) | buffer[0] + 6;
+	if (buffer[4] != 0x0A || buffer[5] != 0x0D)
+		l = 0;
+
+	return l;
+}
+
 void MyConnection::OnRecv(std::vector<uint8_t> &buffer)
 {
     PacketHolder ph;
     static std::vector<uint8_t> ubf;
+	static std::vector<uint8_t> tail;
+	static size_t length_header = 0;
     try
     {
-        ubf.insert(ubf.end(), buffer.begin(), buffer.end());
-        ph.Deserialize(ubf);
-        if(ph.packet && ph.packet->id == Packet::TidFor<PacketResponseSector>())
-        {
-            std::shared_ptr<PacketResponseSector> prs = std::static_pointer_cast<PacketResponseSector>(ph.packet);
-            RemoteClient::instance().ready[prs->s->offset] = prs->s;
-        }
-        ubf.clear();
+		if (ubf.empty())
+		{
+			ubf.insert(ubf.end(), buffer.begin(), buffer.end());
+			length_header = getLength(ubf);
+			if (length_header == 0)
+				LOG(info) << "hz chto, stream skipped";
+		}
+		else
+		{
+			ubf.insert(ubf.end(), buffer.begin(), buffer.end());
+		}
+
+		if (ubf.size() >= length_header) //enough accepted
+		{
+			if (ubf.size() > length_header) //more than one accepted
+			{
+				tail.insert(tail.end(), ubf.begin() + length_header, ubf.end()); //move tail to next
+				ubf.erase(ubf.begin() + length_header, ubf.end());
+			}
+
+			if (ubf.size() == length_header && length_header != 0) //exact needed packet
+			{
+				ph.Deserialize(ubf);
+				if (ph.packet && ph.packet->id == Packet::TidFor<PacketResponseSector>())
+				{
+					std::shared_ptr<PacketResponseSector> prs = std::static_pointer_cast<PacketResponseSector>(ph.packet);
+					RemoteClient::instance().ready[prs->s->offset] = prs->s;
+				}
+				ubf.clear();
+
+				if (!tail.empty()) //push tail to next
+				{
+					ubf.insert(ubf.end(), tail.begin(), tail.end());
+					length_header = getLength(ubf);
+					if (length_header == 0)
+						LOG(info) << "hz chto, stream skipped";
+					tail.clear();
+				}
+			}
+			else
+			{
+				tail.clear();
+				ubf.clear();
+				LOG(error) << "broken stream =(";
+			}
+		}
     }
     catch(...)
     {
+		ubf.clear();
     }
 
     // Start the next receive
