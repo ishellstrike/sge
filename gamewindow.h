@@ -13,53 +13,25 @@
 #include <glm/glm.hpp>
 
 #include <memory>
-#include <string>
-#include "logger.h"
-#include "shader.h"
-#include "spritebatch.h"
+
 #include "fpscounter.h"
 #include "gametimer.h"
 #include "textureatlas.h"
-#include "font.h"
 #include "camera.h"
 #include "gbuffer.h"
-#include "sge_ui/wins.h"
-#include "sge_perfomance.h"
 #include "experimental/quadsphere.h"
 #include "experimental/scattering.h"
 #include "space/spacesystem.h"
 #include "space/solver.h"
 #include "experimental/starfield.h"
 #include "FrameBuffer.h"
-#include "geometry/ubillboard.h"
 
-#include "mouse.h"
-#include "keyboard.h"
-#include "prefecences.h"
-#include "shader.h"
-#include "spritebatch.h"
 #include "glm/gtx/transform.hpp"
-#include "colorextender.h"
-#include "textureatlas.h"
 #include <thread>
-#include <chrono>
-#include <algorithm>
-#include "ClassicNoise.h"
-#include "geometry/model.h"
-#include "resources/resourcecontroller.h"
-#include "TextureGenerator.h"
-#include "resources/random_noise.h"
-#include "space/object.h"
-#include "space/spacesystem.h"
-#include <glm/gtx/compatibility.hpp>
-#include "sge_texlab_toolbox.h"
-#include "geometry/ring.h"
-#include "experimental/marchingcubes.h"
-#include "experimental/voxelstructure.h"
 
 #define MAJOR 2
 #define MINOR 1
-#define NO_SCATT
+//#define NO_SCATT
 #define NO_STARFIELD
 
 class GameWindow {
@@ -114,7 +86,6 @@ public:
 
     SpaceSystem ss;
 
-    std::shared_ptr<SpriteBatch> batch;
     std::shared_ptr<Texture> tex1;
     float speed = 1;
 
@@ -123,7 +94,6 @@ public:
     Camera *cam;
     glm::vec3 moving;
     std::vector<glm::vec3> tail;
-    Scattering scat;
     std::unique_ptr<Starfield> sf;
 
     UMesh<VertPosNormUvUv> bill;
@@ -132,10 +102,7 @@ public:
     std::shared_ptr<Texture> texture_blur, texture_blur2, texture_extract, texture_main;
     std::shared_ptr<Texture> texture_pipeline;
 
-    std::shared_ptr<Font> f12;
-    std::shared_ptr<WinS> ws;
-    sge_perfomance *perf;
-    std::shared_ptr<QuadSphere> qs, qs_w;
+    std::shared_ptr<QuadSphere> qs;
     static void Swap();
     void GeometryPass();
     void BlitGBuffer();

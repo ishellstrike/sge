@@ -7,7 +7,7 @@
 
 #include "spacesystem.h"
 #include <glm/gtx/vector_angle.hpp>
-#include "helper.h"
+#include "..\helper.h"
 
 SpaceSystem::SpaceSystem()
 {

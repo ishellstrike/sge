@@ -8,7 +8,7 @@
 #ifndef SPACE_SOLVER_H
 #define SPACE_SOLVER_H
 #include "objectbase.h"
-#include "helper.h"
+#include "..\helper.h"
 #include <glm/gtx/rotate_vector.hpp>
 
 #ifndef FAST_GLM

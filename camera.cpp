@@ -51,7 +51,7 @@ void Camera::ReCreateViewMatrix(const GameTimer &gt) {
     m_rotation_quaternion = rollq * pitchq * yawq * m_rotation_quaternion;
     m_rotation_quaternion = normalize(m_rotation_quaternion);
 
-    m_position += camera_position_delta * dt;
+    m_position += camera_position_delta * glm::min(dt, 1.f);
     m_camera_look_at = m_position + m_camera_direction;
 
 

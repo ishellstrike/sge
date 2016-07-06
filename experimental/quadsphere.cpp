@@ -7,8 +7,8 @@
 
 #include "quadsphere.h"
 #include "glm/gtx/transform.hpp"
-#include "TextureGenerator.h"
-#include "resources/resourcecontroller.h"
+#include "..\TextureGenerator.h"
+#include "..\resources/resourcecontroller.h"
 
 //Помещается вершины rldr в меш в прямом порядке
 #define PUSH_FORWARD \
@@ -134,12 +134,13 @@ void QuadSphere::Render(const Camera &cam)
 
 void QuadSphere::Update(const Camera &camera)
 {
-    --busy;
+    //--busy;
     if(pow(center.x - camera.Position().x, 2) + pow(center.y - camera.Position().y, 2) + pow(center.z - camera.Position().z, 2) < R*R)
         return;
+
     for(int i = 0; i < 6; i++)
     {
-        plane[i]->Update(camera, R, R * 2, max_divide, this);
+        plane[i]->Update(camera, R, R*2, max_divide, this);
     }
 }
 

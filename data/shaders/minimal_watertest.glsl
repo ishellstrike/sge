@@ -137,7 +137,7 @@ void main(void)
     float exp = pow(base, 5);
     float fresnel = fZero + (1-fZero)*exp;
 
-    out_color = color;
+    out_color = vec4(1,0,0,0);
     out_color.a = deff * 10;
     out_color += material_specular * fresnel * RdotVpow;
     //out_color = textureLod(material_height, texcoordout, 0);

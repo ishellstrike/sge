@@ -1,7 +1,7 @@
 #ifndef MESHBASE_H
 #define MESHBASE_H
 #include <glm/glm.hpp>
-#include "camera.h"
+#include "../camera.h"
 #include "vertexinfo.h"
 
 class MeshBase

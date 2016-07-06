@@ -35,428 +35,430 @@ using namespace glm;
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include "data/shaders/scattering/scatter_params.h"
-#include "prefecences.h"
-#include "random.h"
-#include "geometry/umesh.h"
-#include "geometry/vpnt.h"
-#include "helper.h"
+#include "..\data/shaders/scattering/scatter_params.h"
+#include "..\prefecences.h"
+#include "..\random.h"
+#include "..\geometry/umesh.h"
+#include "..\geometry/vpnt.h"
+#include "..\helper.h"
 
 #define SAVE_INSCATTER
+
+using namespace std;
 
 Scattering::Scattering()
 {
 
 }
 
-string* loadFile(const string &fileName)
+std::string* loadFile(const string &fileName)
 {
-    string* result = new string();
-    ifstream file(fileName.c_str());
-    if (!file) {
-        LOG(error) << "Cannot open file " << fileName;
-        throw exception();
-    }
-    string line;
-    while (getline(file, line)) {
-        *result += line;
-        *result += '\n';
-    }
-    file.close();
-    return result;
+	string* result = new string();
+	ifstream file(fileName.c_str());
+	if (!file) {
+		LOG(error) << "Cannot open file " << fileName;
+		throw exception();
+	}
+	string line;
+	while (getline(file, line)) {
+		*result += line;
+		*result += '\n';
+	}
+	file.close();
+	return result;
 }
 
 void printShaderLog(int shaderId)
 {
-    int logLength;
-    glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        char *log = new char[logLength];
-        glGetShaderInfoLog(shaderId, logLength, &logLength, log);
-        LOG(verbose) << string(log);
-        delete[] log;
-    }
+	int logLength;
+	glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
+	if (logLength > 0) {
+		char *log = new char[logLength];
+		glGetShaderInfoLog(shaderId, logLength, &logLength, log);
+		LOG(verbose) << string(log);
+		delete[] log;
+	}
 }
 
 unsigned int loadProgram(const vector<string> &files)
 {
-    unsigned int programId = glCreateProgram();
-    unsigned int vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-    unsigned int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-    glAttachShader(programId, vertexShaderId);
-    glAttachShader(programId, fragmentShaderId);
+	unsigned int programId = glCreateProgram();
+	unsigned int vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+	unsigned int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+	glAttachShader(programId, vertexShaderId);
+	glAttachShader(programId, fragmentShaderId);
 
-    int n = files.size();
-    string **strs = new string*[n];
-    const char** lines = new const char*[n + 1];
-    LOG(verbose) << "loading program " << files[n - 1] << "...";
-    bool geo = false;
-    for (int i = 0; i < n; ++i) {
-        string* s = loadFile(files[i]);
-        strs[i] = s;
-        lines[i + 1] = s->c_str();
-        if (strstr(lines[i + 1], "_GEOMETRY_") != NULL) {
-            geo = true;
-        }
-    }
+	int n = files.size();
+	string **strs = new string*[n];
+	const char** lines = new const char*[n + 1];
+	LOG(verbose) << "loading program " << files[n - 1] << "...";
+	bool geo = false;
+	for (int i = 0; i < n; ++i) {
+		string* s = loadFile(files[i]);
+		strs[i] = s;
+		lines[i + 1] = s->c_str();
+		if (strstr(lines[i + 1], "_GEOMETRY_") != NULL) {
+			geo = true;
+		}
+	}
 
-    lines[0] = "#version 330 core\n#define _VERTEX_\n";
-    glShaderSource(vertexShaderId, n + 1, lines, NULL);
-    glCompileShader(vertexShaderId);
-    printShaderLog(vertexShaderId);
+	lines[0] = "#version 330 core\n#define _VERTEX_\n";
+	glShaderSource(vertexShaderId, n + 1, lines, NULL);
+	glCompileShader(vertexShaderId);
+	printShaderLog(vertexShaderId);
 
-    if (geo) {
-        unsigned geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER_EXT);
-        glAttachShader(programId, geometryShaderId);
-        lines[0] = "#version 330 core\n#define _GEOMETRY_\n";
-        glShaderSource(geometryShaderId, n + 1, lines, NULL);
-        glCompileShader(geometryShaderId);
-        printShaderLog(geometryShaderId);
-        glProgramParameteriEXT(programId, GL_GEOMETRY_INPUT_TYPE_EXT, GL_TRIANGLES);
-        glProgramParameteriEXT(programId, GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_TRIANGLE_STRIP);
-        glProgramParameteriEXT(programId, GL_GEOMETRY_VERTICES_OUT_EXT, 3);
-        LOG(verbose) << "with geometry shader";
-    }
+	if (geo) {
+		unsigned geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER_EXT);
+		glAttachShader(programId, geometryShaderId);
+		lines[0] = "#version 330 core\n#define _GEOMETRY_\n";
+		glShaderSource(geometryShaderId, n + 1, lines, NULL);
+		glCompileShader(geometryShaderId);
+		printShaderLog(geometryShaderId);
+		glProgramParameteriEXT(programId, GL_GEOMETRY_INPUT_TYPE_EXT, GL_TRIANGLES);
+		glProgramParameteriEXT(programId, GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_TRIANGLE_STRIP);
+		glProgramParameteriEXT(programId, GL_GEOMETRY_VERTICES_OUT_EXT, 3);
+		LOG(verbose) << "with geometry shader";
+	}
 
-    lines[0] = "#version 330 core\n#define _FRAGMENT_\n";
-    glShaderSource(fragmentShaderId, n + 1, lines, NULL);
-    glCompileShader(fragmentShaderId);
-    printShaderLog(fragmentShaderId);
+	lines[0] = "#version 330 core\n#define _FRAGMENT_\n";
+	glShaderSource(fragmentShaderId, n + 1, lines, NULL);
+	glCompileShader(fragmentShaderId);
+	printShaderLog(fragmentShaderId);
 
-    glLinkProgram(programId);
+	glLinkProgram(programId);
 
-    for (int i = 0; i < n; ++i) {
-        delete strs[i];
-    }
-    delete[] strs;
-    delete[] lines;
+	for (int i = 0; i < n; ++i) {
+		delete strs[i];
+	}
+	delete[] strs;
+	delete[] lines;
 
-    return programId;
+	return programId;
 }
 
 void Scattering::setLayer(unsigned int prog, int layer)
 {
-    double r = layer / (RES_R - 1.0);
-    r = r * r;
-    r = sqrt(Rg * Rg + r * (Rt * Rt - Rg * Rg)) + (layer == 0 ? 0.01 : (layer == RES_R - 1 ? -0.001 : 0.0));
-    double dmin = Rt - r;
-    double dmax = sqrt(r * r - Rg * Rg) + sqrt(Rt * Rt - Rg * Rg);
-    double dminp = r - Rg;
-    double dmaxp = sqrt(r * r - Rg * Rg);
-    glUniform1f(glGetUniformLocation(prog, "r"), float(r));
-    glUniform4f(glGetUniformLocation(prog, "dhdH"), float(dmin), float(dmax), float(dminp), float(dmaxp));
-    glUniform1i(glGetUniformLocation(prog, "layer"), layer);
+	double r = layer / (RES_R - 1.0);
+	r = r * r;
+	r = sqrt(Rg * Rg + r * (Rt * Rt - Rg * Rg)) + (layer == 0 ? 0.01 : (layer == RES_R - 1 ? -0.001 : 0.0));
+	double dmin = Rt - r;
+	double dmax = sqrt(r * r - Rg * Rg) + sqrt(Rt * Rt - Rg * Rg);
+	double dminp = r - Rg;
+	double dmaxp = sqrt(r * r - Rg * Rg);
+	glUniform1f(glGetUniformLocation(prog, "r"), float(r));
+	glUniform4f(glGetUniformLocation(prog, "dhdH"), float(dmin), float(dmax), float(dminp), float(dmaxp));
+	glUniform1i(glGetUniformLocation(prog, "layer"), layer);
 }
 
 void Scattering::Precompute()
 {
 
 #ifndef LOAD_INSCATTER
-    LOG(verbose) << "initialization...";
-    glActiveTexture(GL_TEXTURE0 + transmittanceUnit);
-    glGenTextures(1, &transmittanceTexture);
-    glBindTexture(GL_TEXTURE_2D, transmittanceTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, TRANSMITTANCE_W, TRANSMITTANCE_H, 0, GL_RGB, GL_FLOAT, NULL);
+	LOG(verbose) << "initialization...";
+	glActiveTexture(GL_TEXTURE0 + transmittanceUnit);
+	glGenTextures(1, &transmittanceTexture);
+	glBindTexture(GL_TEXTURE_2D, transmittanceTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, TRANSMITTANCE_W, TRANSMITTANCE_H, 0, GL_RGB, GL_FLOAT, NULL);
 
-    glActiveTexture(GL_TEXTURE0 + irradianceUnit);
-    glGenTextures(1, &irradianceTexture);
-    glBindTexture(GL_TEXTURE_2D, irradianceTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, SKY_W, SKY_H, 0, GL_RGB, GL_FLOAT, NULL);
+	glActiveTexture(GL_TEXTURE0 + irradianceUnit);
+	glGenTextures(1, &irradianceTexture);
+	glBindTexture(GL_TEXTURE_2D, irradianceTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, SKY_W, SKY_H, 0, GL_RGB, GL_FLOAT, NULL);
 
-    glActiveTexture(GL_TEXTURE0 + inscatterUnit);
-    glGenTextures(1, &inscatterTexture);
-    glBindTexture(GL_TEXTURE_3D, inscatterTexture);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
+	glActiveTexture(GL_TEXTURE0 + inscatterUnit);
+	glGenTextures(1, &inscatterTexture);
+	glBindTexture(GL_TEXTURE_3D, inscatterTexture);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
 
-    glActiveTexture(GL_TEXTURE0 + deltaEUnit);
-    glGenTextures(1, &deltaETexture);
-    glBindTexture(GL_TEXTURE_2D, deltaETexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, SKY_W, SKY_H, 0, GL_RGB, GL_FLOAT, NULL);
+	glActiveTexture(GL_TEXTURE0 + deltaEUnit);
+	glGenTextures(1, &deltaETexture);
+	glBindTexture(GL_TEXTURE_2D, deltaETexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, SKY_W, SKY_H, 0, GL_RGB, GL_FLOAT, NULL);
 
-    glActiveTexture(GL_TEXTURE0 + deltaSRUnit);
-    glGenTextures(1, &deltaSRTexture);
-    glBindTexture(GL_TEXTURE_3D, deltaSRTexture);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
+	glActiveTexture(GL_TEXTURE0 + deltaSRUnit);
+	glGenTextures(1, &deltaSRTexture);
+	glBindTexture(GL_TEXTURE_3D, deltaSRTexture);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
 
-    glActiveTexture(GL_TEXTURE0 + deltaSMUnit);
-    glGenTextures(1, &deltaSMTexture);
-    glBindTexture(GL_TEXTURE_3D, deltaSMTexture);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
+	glActiveTexture(GL_TEXTURE0 + deltaSMUnit);
+	glGenTextures(1, &deltaSMTexture);
+	glBindTexture(GL_TEXTURE_3D, deltaSMTexture);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
 
-    glActiveTexture(GL_TEXTURE0 + deltaJUnit);
-    glGenTextures(1, &deltaJTexture);
-    glBindTexture(GL_TEXTURE_3D, deltaJTexture);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
+	glActiveTexture(GL_TEXTURE0 + deltaJUnit);
+	glGenTextures(1, &deltaJTexture);
+	glBindTexture(GL_TEXTURE_3D, deltaJTexture);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+	glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB, RES_MU_S * RES_NU, RES_MU, RES_R, 0, GL_RGB, GL_FLOAT, NULL);
 
-    vector<string> files;
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/transmittance.glsl");
-    transmittanceProg = loadProgram(files);
+	vector<string> files;
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/transmittance.glsl");
+	transmittanceProg = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/irradiance1.glsl");
-    irradiance1Prog = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/irradiance1.glsl");
+	irradiance1Prog = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/inscatter1.glsl");
-    inscatter1Prog = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/inscatter1.glsl");
+	inscatter1Prog = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/copyIrradiance.glsl");
-    copyIrradianceProg = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/copyIrradiance.glsl");
+	copyIrradianceProg = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/copyInscatter1.glsl");
-    copyInscatter1Prog = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/copyInscatter1.glsl");
+	copyInscatter1Prog = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/inscatterS.glsl");
-    jProg = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/inscatterS.glsl");
+	jProg = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/irradianceN.glsl");
-    irradianceNProg = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/irradianceN.glsl");
+	irradianceNProg = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/inscatterN.glsl");
-    inscatterNProg = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/inscatterN.glsl");
+	inscatterNProg = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/copyInscatterN.glsl");
-    copyInscatterNProg = loadProgram(files);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/copyInscatterN.glsl");
+	copyInscatterNProg = loadProgram(files);
 
-    files.clear();
-    files.push_back("data/shaders/scattering/scatter_params.h");
-    files.push_back("data/shaders/scattering/common.glsl");
-    files.push_back("data/shaders/scattering/earth.glsl");
-    drawProg = loadProgram(files);
-    glUseProgram(drawProg);
-    glUniform1i(glGetUniformLocation(drawProg, "reflectanceSampler"), reflectanceUnit);
-    glUniform1i(glGetUniformLocation(drawProg, "transmittanceSampler"), transmittanceUnit);
-    glUniform1i(glGetUniformLocation(drawProg, "irradianceSampler"), irradianceUnit);
-    glUniform1i(glGetUniformLocation(drawProg, "inscatterSampler"), inscatterUnit);
+	files.clear();
+	files.push_back("data/shaders/scattering/scatter_params.h");
+	files.push_back("data/shaders/scattering/common.glsl");
+	files.push_back("data/shaders/scattering/earth.glsl");
+	drawProg = loadProgram(files);
+	glUseProgram(drawProg);
+	glUniform1i(glGetUniformLocation(drawProg, "reflectanceSampler"), reflectanceUnit);
+	glUniform1i(glGetUniformLocation(drawProg, "transmittanceSampler"), transmittanceUnit);
+	glUniform1i(glGetUniformLocation(drawProg, "irradianceSampler"), irradianceUnit);
+	glUniform1i(glGetUniformLocation(drawProg, "inscatterSampler"), inscatterUnit);
 
-    LOG(verbose) << glGetUniformLocation(drawProg, "reflectanceSampler") << "; " <<
-                    glGetUniformLocation(drawProg, "transmittanceSampler") << "; " <<
-                    glGetUniformLocation(drawProg, "irradianceSampler") << "; " <<
-                    glGetUniformLocation(drawProg, "inscatterSampler") << "; ";
+	LOG(verbose) << glGetUniformLocation(drawProg, "reflectanceSampler") << "; " <<
+		glGetUniformLocation(drawProg, "transmittanceSampler") << "; " <<
+		glGetUniformLocation(drawProg, "irradianceSampler") << "; " <<
+		glGetUniformLocation(drawProg, "inscatterSampler") << "; ";
 
-    LOG(verbose) << "precomputations...";
+	LOG(verbose) << "precomputations...";
 
-    glGenFramebuffers(1, &fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
-    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
-    // computes transmittance texture T (line 1 in algorithm 4.1)
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, transmittanceTexture, 0);
-    glViewport(0, 0, TRANSMITTANCE_W, TRANSMITTANCE_H);
-    glUseProgram(transmittanceProg);
-    drawScreenQuad();
+	// computes transmittance texture T (line 1 in algorithm 4.1)
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, transmittanceTexture, 0);
+	glViewport(0, 0, TRANSMITTANCE_W, TRANSMITTANCE_H);
+	glUseProgram(transmittanceProg);
+	drawScreenQuad();
 
-    // computes irradiance texture deltaE (line 2 in algorithm 4.1)
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
-    glViewport(0, 0, SKY_W, SKY_H);
-    glUseProgram(irradiance1Prog);
-    glUniform1i(glGetUniformLocation(irradiance1Prog, "transmittanceSampler"), transmittanceUnit);
-    drawScreenQuad();
+	// computes irradiance texture deltaE (line 2 in algorithm 4.1)
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
+	glViewport(0, 0, SKY_W, SKY_H);
+	glUseProgram(irradiance1Prog);
+	glUniform1i(glGetUniformLocation(irradiance1Prog, "transmittanceSampler"), transmittanceUnit);
+	drawScreenQuad();
 
-    // computes single scattering texture deltaS (line 3 in algorithm 4.1)
-    // Rayleigh and Mie separated in deltaSR + deltaSM
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, deltaSMTexture, 0);
-    unsigned int bufs[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-    glDrawBuffers(2, bufs);
-    glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
-    glUseProgram(inscatter1Prog);
-    glUniform1i(glGetUniformLocation(inscatter1Prog, "transmittanceSampler"), transmittanceUnit);
-    for (int layer = 0; layer < RES_R; ++layer) {
-        setLayer(inscatter1Prog, layer);
-        drawScreenQuad();
-    }
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, 0, 0);
-    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	// computes single scattering texture deltaS (line 3 in algorithm 4.1)
+	// Rayleigh and Mie separated in deltaSR + deltaSM
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, deltaSMTexture, 0);
+	unsigned int bufs[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, bufs);
+	glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
+	glUseProgram(inscatter1Prog);
+	glUniform1i(glGetUniformLocation(inscatter1Prog, "transmittanceSampler"), transmittanceUnit);
+	for (int layer = 0; layer < RES_R; ++layer) {
+		setLayer(inscatter1Prog, layer);
+		drawScreenQuad();
+	}
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, 0, 0);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
-    // copies deltaE into irradiance texture E (line 4 in algorithm 4.1)
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, irradianceTexture, 0);
-    glViewport(0, 0, SKY_W, SKY_H);
-    glUseProgram(copyIrradianceProg);
-    glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 0.0);
-    glUniform1i(glGetUniformLocation(copyIrradianceProg, "deltaESampler"), deltaEUnit);
-    drawScreenQuad();
+	// copies deltaE into irradiance texture E (line 4 in algorithm 4.1)
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, irradianceTexture, 0);
+	glViewport(0, 0, SKY_W, SKY_H);
+	glUseProgram(copyIrradianceProg);
+	glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 0.0);
+	glUniform1i(glGetUniformLocation(copyIrradianceProg, "deltaESampler"), deltaEUnit);
+	drawScreenQuad();
 
-    // copies deltaS into inscatter texture S (line 5 in algorithm 4.1)
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
-    glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
-    glUseProgram(copyInscatter1Prog);
-    glUniform1i(glGetUniformLocation(copyInscatter1Prog, "deltaSRSampler"), deltaSRUnit);
-    glUniform1i(glGetUniformLocation(copyInscatter1Prog, "deltaSMSampler"), deltaSMUnit);
-    for (int layer = 0; layer < RES_R; ++layer) {
-        setLayer(copyInscatter1Prog, layer);
-        drawScreenQuad();
-    }
+	// copies deltaS into inscatter texture S (line 5 in algorithm 4.1)
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
+	glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
+	glUseProgram(copyInscatter1Prog);
+	glUniform1i(glGetUniformLocation(copyInscatter1Prog, "deltaSRSampler"), deltaSRUnit);
+	glUniform1i(glGetUniformLocation(copyInscatter1Prog, "deltaSMSampler"), deltaSMUnit);
+	for (int layer = 0; layer < RES_R; ++layer) {
+		setLayer(copyInscatter1Prog, layer);
+		drawScreenQuad();
+	}
 
-    // loop for each scattering order (line 6 in algorithm 4.1)
-    for (int order = 2; order <= 4; ++order) {
+	// loop for each scattering order (line 6 in algorithm 4.1)
+	for (int order = 2; order <= 4; ++order) {
 
-        // computes deltaJ (line 7 in algorithm 4.1)
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaJTexture, 0);
-        glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
-        glUseProgram(jProg);
-        glUniform1f(glGetUniformLocation(jProg, "first"), order == 2 ? 1.0 : 0.0);
-        glUniform1i(glGetUniformLocation(jProg, "transmittanceSampler"), transmittanceUnit);
-        glUniform1i(glGetUniformLocation(jProg, "deltaESampler"), deltaEUnit);
-        glUniform1i(glGetUniformLocation(jProg, "deltaSRSampler"), deltaSRUnit);
-        glUniform1i(glGetUniformLocation(jProg, "deltaSMSampler"), deltaSMUnit);
-        for (int layer = 0; layer < RES_R; ++layer) {
-            setLayer(jProg, layer);
-            drawScreenQuad();
-        }
+		// computes deltaJ (line 7 in algorithm 4.1)
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaJTexture, 0);
+		glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
+		glUseProgram(jProg);
+		glUniform1f(glGetUniformLocation(jProg, "first"), order == 2 ? 1.0 : 0.0);
+		glUniform1i(glGetUniformLocation(jProg, "transmittanceSampler"), transmittanceUnit);
+		glUniform1i(glGetUniformLocation(jProg, "deltaESampler"), deltaEUnit);
+		glUniform1i(glGetUniformLocation(jProg, "deltaSRSampler"), deltaSRUnit);
+		glUniform1i(glGetUniformLocation(jProg, "deltaSMSampler"), deltaSMUnit);
+		for (int layer = 0; layer < RES_R; ++layer) {
+			setLayer(jProg, layer);
+			drawScreenQuad();
+		}
 
-        // computes deltaE (line 8 in algorithm 4.1)
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
-        glViewport(0, 0, SKY_W, SKY_H);
-        glUseProgram(irradianceNProg);
-        glUniform1f(glGetUniformLocation(irradianceNProg, "first"), order == 2 ? 1.0 : 0.0);
-        glUniform1i(glGetUniformLocation(irradianceNProg, "transmittanceSampler"), transmittanceUnit);
-        glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSRSampler"), deltaSRUnit);
-        glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSMSampler"), deltaSMUnit);
-        drawScreenQuad();
+		// computes deltaE (line 8 in algorithm 4.1)
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaETexture, 0);
+		glViewport(0, 0, SKY_W, SKY_H);
+		glUseProgram(irradianceNProg);
+		glUniform1f(glGetUniformLocation(irradianceNProg, "first"), order == 2 ? 1.0 : 0.0);
+		glUniform1i(glGetUniformLocation(irradianceNProg, "transmittanceSampler"), transmittanceUnit);
+		glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSRSampler"), deltaSRUnit);
+		glUniform1i(glGetUniformLocation(irradianceNProg, "deltaSMSampler"), deltaSMUnit);
+		drawScreenQuad();
 
-        // computes deltaS (line 9 in algorithm 4.1)
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
-        glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
-        glUseProgram(inscatterNProg);
-        glUniform1f(glGetUniformLocation(inscatterNProg, "first"), order == 2 ? 1.0 : 0.0);
-        glUniform1i(glGetUniformLocation(inscatterNProg, "transmittanceSampler"), transmittanceUnit);
-        glUniform1i(glGetUniformLocation(inscatterNProg, "deltaJSampler"), deltaJUnit);
-        for (int layer = 0; layer < RES_R; ++layer) {
-            setLayer(inscatterNProg, layer);
-            drawScreenQuad();
-        }
+		// computes deltaS (line 9 in algorithm 4.1)
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, deltaSRTexture, 0);
+		glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
+		glUseProgram(inscatterNProg);
+		glUniform1f(glGetUniformLocation(inscatterNProg, "first"), order == 2 ? 1.0 : 0.0);
+		glUniform1i(glGetUniformLocation(inscatterNProg, "transmittanceSampler"), transmittanceUnit);
+		glUniform1i(glGetUniformLocation(inscatterNProg, "deltaJSampler"), deltaJUnit);
+		for (int layer = 0; layer < RES_R; ++layer) {
+			setLayer(inscatterNProg, layer);
+			drawScreenQuad();
+		}
 
-        glEnable(GL_BLEND);
-        glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-        glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE);
+		glEnable(GL_BLEND);
+		glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+		glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE);
 
-        // adds deltaE into irradiance texture E (line 10 in algorithm 4.1)
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, irradianceTexture, 0);
-        glViewport(0, 0, SKY_W, SKY_H);
-        glUseProgram(copyIrradianceProg);
-        glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 1.0);
-        glUniform1i(glGetUniformLocation(copyIrradianceProg, "deltaESampler"), deltaEUnit);
-        drawScreenQuad();
+		// adds deltaE into irradiance texture E (line 10 in algorithm 4.1)
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, irradianceTexture, 0);
+		glViewport(0, 0, SKY_W, SKY_H);
+		glUseProgram(copyIrradianceProg);
+		glUniform1f(glGetUniformLocation(copyIrradianceProg, "k"), 1.0);
+		glUniform1i(glGetUniformLocation(copyIrradianceProg, "deltaESampler"), deltaEUnit);
+		drawScreenQuad();
 
-        // adds deltaS into inscatter texture S (line 11 in algorithm 4.1)
-        glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
-        glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
-        glUseProgram(copyInscatterNProg);
-        glUniform1i(glGetUniformLocation(copyInscatterNProg, "deltaSSampler"), deltaSRUnit);
-        for (int layer = 0; layer < RES_R; ++layer) {
-            setLayer(copyInscatterNProg, layer);
-            drawScreenQuad();
-        }
+		// adds deltaS into inscatter texture S (line 11 in algorithm 4.1)
+		glFramebufferTexture(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, inscatterTexture, 0);
+		glViewport(0, 0, RES_MU_S * RES_NU, RES_MU);
+		glUseProgram(copyInscatterNProg);
+		glUniform1i(glGetUniformLocation(copyInscatterNProg, "deltaSSampler"), deltaSRUnit);
+		for (int layer = 0; layer < RES_R; ++layer) {
+			setLayer(copyInscatterNProg, layer);
+			drawScreenQuad();
+		}
 
-        glDisable(GL_BLEND);
-    }
+		glDisable(GL_BLEND);
+	}
 
-    //glFinish();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glViewport(0, 0, RESX, RESY);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    LOG(verbose) << "ready.";
+	//glFinish();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, RESX, RESY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	LOG(verbose) << "ready.";
 #endif //LOAD_INSCATTER
 
 #ifdef SAVE_INSCATTER
-    LOG(info) << "Inscatter save enabled. Uploading...";
-    int s = (RES_MU_S * RES_NU) * (RES_MU) * (RES_R) * 4 * 2;
-    unsigned char *data = new unsigned char[ s ];
-    glGetTexImage(inscatterTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data );
-    LOG(info) << "Done. Saving...";
-    FILE *my_file = fopen("inscatter.bin", "wb");
-    fwrite(data, s, 1, my_file);
-    fclose(my_file);
-    delete[] data;
-    LOG(info) << "Done.";
+	LOG(info) << "Inscatter save enabled. Uploading...";
+	int s = (RES_MU_S * RES_NU) * (RES_MU)* (RES_R)* 4 * 2;
+	unsigned char *data = new unsigned char[s];
+	glGetTexImage(inscatterTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data);
+	LOG(info) << "Done. Saving...";
+	FILE *my_file = fopen("inscatter.bin", "wb");
+	fwrite(data, s, 1, my_file);
+	fclose(my_file);
+	delete[] data;
+	LOG(info) << "Done.";
 
-    LOG(info) << "Transmittance save enabled. Uploading...";
-    s = (TRANSMITTANCE_W * TRANSMITTANCE_H) * 4 * 2;
-    data = new unsigned char[ s ];
-    glGetTexImage(transmittanceTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data );
-    LOG(info) << "Done. Saving...";
-    my_file = fopen("transmittance.bin", "wb");
-    fwrite(data, s, 1, my_file);
-    fclose(my_file);
-    delete[] data;
-    LOG(info) << "Done.";
+	LOG(info) << "Transmittance save enabled. Uploading...";
+	s = (TRANSMITTANCE_W * TRANSMITTANCE_H) * 4 * 2;
+	data = new unsigned char[s];
+	glGetTexImage(transmittanceTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data);
+	LOG(info) << "Done. Saving...";
+	my_file = fopen("transmittance.bin", "wb");
+	fwrite(data, s, 1, my_file);
+	fclose(my_file);
+	delete[] data;
+	LOG(info) << "Done.";
 
-    LOG(info) << "Irradiance save enabled. Uploading...";
-    s = (SKY_W * SKY_H) * 4 * 2;
-    data = new unsigned char[ s ];
-    glGetTexImage(irradianceTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data );
-    LOG(info) << "Done. Saving...";
-    my_file = fopen("irradiance.bin", "wb");
-    fwrite(data, s, 1, my_file);
-    fclose(my_file);
-    delete[] data;
-    LOG(info) << "Done.";
+	LOG(info) << "Irradiance save enabled. Uploading...";
+	s = (SKY_W * SKY_H) * 4 * 2;
+	data = new unsigned char[s];
+	glGetTexImage(irradianceTexture, 0, GL_RGBA16F_ARB, GL_UNSIGNED_BYTE, data);
+	LOG(info) << "Done. Saving...";
+	my_file = fopen("irradiance.bin", "wb");
+	fwrite(data, s, 1, my_file);
+	fclose(my_file);
+	delete[] data;
+	LOG(info) << "Done.";
 #endif //SAVE_INSCATTER
 }
 
@@ -465,26 +467,26 @@ float exposure = 0.4f;
 
 void Scattering::redisplayFunc(const Camera & cam)
 {
-   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   // glClearColor(0,0,0,1);
+	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// glClearColor(0,0,0,1);
 
-    glm::mat4 iproj = glm::inverse(cam.Projection());
-    glm::mat4 iview = glm::inverse(cam.View());
+	glm::mat4 iproj = glm::inverse(cam.Projection());
+	glm::mat4 iview = glm::inverse(cam.View());
 
-    //glm::vec4 c = iview * glm::vec4(0.f, 0.f, 0.f, 1.f); //same
-    glm::vec4 c = glm::vec4(cam.Position(), 1);
+	//glm::vec4 c = iview * glm::vec4(0.f, 0.f, 0.f, 1.f); //same
+	glm::vec4 c = glm::vec4(cam.Position(), 1);
 
-    s = glm::vec3(0,1,0);
+	s = glm::vec3(0, 1, 0);
 
-    glUseProgram(drawProg);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glUniform3f(glGetUniformLocation(drawProg, "c"), c.x, c.y, c.z);
-    glUniform3f(glGetUniformLocation(drawProg, "s"), s.x, s.y, s.z);
-    glUniformMatrix4fv(glGetUniformLocation(drawProg, "projInverse"), 1, GL_FALSE, &iproj[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(drawProg, "viewInverse"), 1, GL_FALSE, &iview[0][0]);
-    glUniform1f(glGetUniformLocation(drawProg, "exposure"), exposure);
-    drawScreenQuad();
-    //glFinish();
-    //glFlush();
+	glUseProgram(drawProg);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glUniform3f(glGetUniformLocation(drawProg, "c"), c.x, c.y, c.z);
+	glUniform3f(glGetUniformLocation(drawProg, "s"), s.x, s.y, s.z);
+	glUniformMatrix4fv(glGetUniformLocation(drawProg, "projInverse"), 1, GL_FALSE, &iproj[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(drawProg, "viewInverse"), 1, GL_FALSE, &iview[0][0]);
+	glUniform1f(glGetUniformLocation(drawProg, "exposure"), exposure);
+	drawScreenQuad();
+	//glFinish();
+	//glFlush();
 }

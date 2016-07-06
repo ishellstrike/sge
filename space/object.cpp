@@ -8,8 +8,8 @@
 #include "object.h"
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/fast_square_root.hpp>
-#include "helper.h"
-#include "gametimer.h"
+#include "..\helper.h"
+#include "..\gametimer.h"
 #include <random>
 
 #define ZERO_FIX

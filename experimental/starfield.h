@@ -10,7 +10,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
-#include "geometry/umesh.h"
+#include "..\geometry/umesh.h"
 
 struct VertPosCol
 {

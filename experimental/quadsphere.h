@@ -8,7 +8,7 @@
 #ifndef QUADSPHERE_H
 #define QUADSPHERE_H
 #include "quadplane.h"
-#include "camera.h"
+#include "..\camera.h"
 #include "sphereparamstorage.h"
 
 class QuadSphere : public SphereParamsStorage

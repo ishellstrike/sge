@@ -9,14 +9,15 @@
 #define UMESH_H
 #include <memory>
 #include <vector>
-#include "basicjargshader.h"
-#include "resources/material.h"
+#include "..\basicjargshader.h"
+#include "../resources/material.h"
 #include "vertexinfo.h"
-#include "camera.h"
+#include "../camera.h"
 #include "vpnt.h"
-#include "logger.h"
+#include "../logger.h"
 #include "aabb.h"
 #include "meshbase.h"
+#include "..\prefecences.h"
 
 struct UMeshDc
 {
@@ -176,6 +177,8 @@ public:
         glm::mat4 model = World * mod;
         glUniformMatrix4fv(shader->mat_model_location, 1, GL_FALSE, &model[0][0]);
         glUniformMatrix4fv(shader->mat_viewProjection_location, 1, GL_FALSE, &MVP[0][0]);
+		glUniformMatrix4fv(shader->mat_Projection_location, 1, GL_FALSE, &cam.Projection()[0][0]);
+		glUniform2fv(shader->winpos_location, 1, &glm::vec2(Prefecences::Instance()->resolution)[0]);
 
         glm::mat3 normal = glm::transpose(glm::mat3(glm::inverse(model)));
         glUniformMatrix3fv(shader->mat_normal_location, 1, GL_FALSE, &normal[0][0]);

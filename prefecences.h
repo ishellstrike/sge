@@ -119,7 +119,7 @@ public:
 
     bool hdr_on = true;
     bool defered_debug = false;
-    bool starnest_on = true;
+    bool starnest_on = false;
     float double_c = 0.3;
 };
 

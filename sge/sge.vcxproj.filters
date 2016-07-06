@@ -1,344 +1,349 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="sge_ui">
-      <UniqueIdentifier>{f6c37b0a-690a-427d-8b18-db7e8c80ad23}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\abstracttexture.cpp">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="..\abstracttexture.cpp" />
+    <ClCompile Include="..\basicjargshader.cpp" />
+    <ClCompile Include="..\camera.cpp" />
+    <ClCompile Include="..\ClassicNoise.cpp" />
+    <ClCompile Include="..\colorextender.cpp" />
+    <ClCompile Include="..\colorscheme.cpp" />
+    <ClCompile Include="..\fpscounter.cpp" />
+    <ClCompile Include="..\FrameBuffer.cpp" />
+    <ClCompile Include="..\gametimer.cpp" />
+    <ClCompile Include="..\gamewindow.cpp" />
+    <ClCompile Include="..\gbuffer.cpp" />
+    <ClCompile Include="..\helper.cpp" />
+    <ClCompile Include="..\light.cpp" />
+    <ClCompile Include="..\logger.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\prefecences.cpp" />
+    <ClCompile Include="..\random.cpp" />
+    <ClCompile Include="..\scene.cpp" />
+    <ClCompile Include="..\shader.cpp" />
+    <ClCompile Include="..\singleton.cpp" />
+    <ClCompile Include="..\sql.cpp" />
+    <ClCompile Include="..\textureatlas.cpp" />
+    <ClCompile Include="..\TextureGenerator.cpp" />
+    <ClCompile Include="..\geometry\memorychunkcontroller.cpp">
+      <Filter>geometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\basicjargshader.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\camera.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ClassicNoise.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\colorextender.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\colorscheme.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\font.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\fpscounter.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gametimer.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gamewindow.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gbuffer.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\helper.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\keyboard.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\logger.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\main.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\material.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mouse.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pixmap.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\prefecences.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shader.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\singleton.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\spheretesselator.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\spritebatch.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\texture.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\textureatlas.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\geometry\cube.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\geometry\icosahedron.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\geometry\mesh.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\geometry\meshbase.cpp">
+      <Filter>geometry</Filter>
     </ClCompile>
     <ClCompile Include="..\geometry\model.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>geometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\geometry\quad.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\geometry\multimesh.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\geometry\ring.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\geometry\ubillboard.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\geometry\umesh.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\geometry\vertex.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\geometry\vertexinfo.cpp">
+      <Filter>geometry</Filter>
     </ClCompile>
     <ClCompile Include="..\geometry\vpnt.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>geometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\json\json_reader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\space\logic\item.cpp">
+      <Filter>space</Filter>
     </ClCompile>
-    <ClCompile Include="..\json\json_value.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\space\logic\itemstorage.cpp">
+      <Filter>space</Filter>
     </ClCompile>
-    <ClCompile Include="..\json\json_writer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\space\planet_model\city.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\planet_model\country.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\planet_model\planet_population.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\planet_model\resource.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\ship_model\attachpoint.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\ship_model\hull.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\object.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\objectbase.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\spacesystem.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\space\structure.cpp">
+      <Filter>space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\tree.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\uniqueid.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resources\material.cpp">
+      <Filter>resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resources\pixmap.cpp">
+      <Filter>resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resources\resourcecontroller.cpp">
+      <Filter>resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resources\texture.cpp">
+      <Filter>resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resources\texturebase.cpp">
+      <Filter>resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resources\umaterial.cpp">
+      <Filter>resources</Filter>
     </ClCompile>
     <ClCompile Include="..\lodepng\lodepng.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>geometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\button.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\experimental\marchingcubes.cpp">
+      <Filter>experimental</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\component.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\experimental\quadplane.cpp">
+      <Filter>experimental</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\graph.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\experimental\quadsphere.cpp">
+      <Filter>experimental</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\label.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\experimental\scattering.cpp">
+      <Filter>experimental</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\list_container.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\experimental\starfield.cpp">
+      <Filter>experimental</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\panel.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\experimental\voxelstructure.cpp">
+      <Filter>experimental</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\vertical_bar.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\imgui\imgui_impl_glfw_gl3.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\win.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\sge_ui\wins.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\abstracttexture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\abstracttexture.h" />
+    <ClInclude Include="..\basicjargshader.h" />
+    <ClInclude Include="..\camera.h" />
+    <ClInclude Include="..\ClassicNoise.h" />
+    <ClInclude Include="..\colorextender.h" />
+    <ClInclude Include="..\colorscheme.h" />
+    <ClInclude Include="..\fpscounter.h" />
+    <ClInclude Include="..\FrameBuffer.h" />
+    <ClInclude Include="..\gametimer.h" />
+    <ClInclude Include="..\gamewindow.h" />
+    <ClInclude Include="..\gbuffer.h" />
+    <ClInclude Include="..\helper.h" />
+    <ClInclude Include="..\light.h" />
+    <ClInclude Include="..\logger.h" />
+    <ClInclude Include="..\prefecences.h" />
+    <ClInclude Include="..\random.h" />
+    <ClInclude Include="..\scene.h" />
+    <ClInclude Include="..\sge_fielsystem.h" />
+    <ClInclude Include="..\sge_geometry.h" />
+    <ClInclude Include="..\shader.h" />
+    <ClInclude Include="..\singleton.h" />
+    <ClInclude Include="..\sql.h" />
+    <ClInclude Include="..\tangentcalc.h" />
+    <ClInclude Include="..\textureatlas.h" />
+    <ClInclude Include="..\TextureGenerator.h" />
+    <ClInclude Include="..\sge.hpp" />
+    <ClInclude Include="..\geometry\aabb.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\basicjargshader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\geometry\memorychunkcontroller.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ClassicNoise.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\colorextender.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\colorscheme.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\fielsystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\fpscounter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gametimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gamewindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gbuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\helper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\pixmap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\prefecences.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sge.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sge_geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\singleton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\spheretesselator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\spritebatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\tangentcalc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\textureatlas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\geometry\cube.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\geometry\geometry.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\geometry\icosahedron.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\geometry\mesh.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\geometry\meshbase.h">
+      <Filter>geometry</Filter>
     </ClInclude>
     <ClInclude Include="..\geometry\model.h">
-      <Filter>Source Files</Filter>
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\geometry\quad.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\geometry\multimesh.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geometry\ring.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geometry\ubillboard.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geometry\umesh.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geometry\vertex.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geometry\vertexinfo.h">
+      <Filter>geometry</Filter>
     </ClInclude>
     <ClInclude Include="..\geometry\vpnt.h">
-      <Filter>Source Files</Filter>
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\autolink.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\geometry\geometry.hpp">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\config.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\logic\item.h">
+      <Filter>space</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\features.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\logic\itemstorage.h">
+      <Filter>space</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\forwards.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\planet_model\city.h">
+      <Filter>space</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\json.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\planet_model\country.h">
+      <Filter>space</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\json_batchallocator.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\planet_model\planet_population.h">
+      <Filter>space</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\reader.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\planet_model\resource.h">
+      <Filter>space</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\value.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\ship_model\attachpoint.h">
+      <Filter>space</Filter>
     </ClInclude>
-    <ClInclude Include="..\json\writer.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\space\ship_model\hull.h">
+      <Filter>space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\space\object.h">
+      <Filter>space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\space\objectbase.h">
+      <Filter>space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\space\solver.h">
+      <Filter>space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\space\spacesystem.h">
+      <Filter>space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\space\structure.h">
+      <Filter>space</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\tree.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\uniqueid.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\error_image.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\material.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\pixmap.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\random_noise.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\resourcecontroller.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\texture.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\texturebase.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\umaterial.h">
+      <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="..\lodepng\lodepng.h">
-      <Filter>Source Files</Filter>
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\button.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\marchingcubes.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\component.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\marchingcubeshelper.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\graph.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\quadplane.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\label.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\quadsphere.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\list_container.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\scattering.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\panel.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\sphereparamstorage.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\vertical_bar.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\starfield.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\wcontainer.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\experimental\voxelstructure.h">
+      <Filter>experimental</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\win.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\imgui\imconfig.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\sge_ui\wins.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\imgui\imgui_impl_glfw_gl3.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\utfcpp\utf8\checked.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\utfcpp\utf8\core.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\imgui\imgui.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\utfcpp\utf8\unchecked.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\imgui\stb_truetype.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\utfcpp\utf8.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\imgui\stb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\stb_rect_pack.h">
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\json\json_internalarray.inl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\json\json_internalmap.inl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\json\json_valueiterator.inl">
-      <Filter>Source Files</Filter>
-    </None>
+    <Filter Include="geometry">
+      <UniqueIdentifier>{077fc580-b20c-4974-a1c8-21e0e7a80590}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="space">
+      <UniqueIdentifier>{f7dc3466-9033-4e52-b683-f8a06b309505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{bbe89758-8927-4943-b7dc-51017c0b0f98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{919a5ef7-897c-4e16-b7b2-f9b18586143f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="experimental">
+      <UniqueIdentifier>{160cacff-4566-4e7b-adb2-b792b9270fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{fd12cd40-b6d6-4ceb-a297-de72d7c1b296}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

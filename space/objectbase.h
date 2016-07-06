@@ -21,7 +21,7 @@ public:
     glm::dvec3 pos = glm::dvec3(0), speed = glm::dvec3(0), acc = glm::dvec3(0);
 
     virtual void Update(SpaceSystem &syst, GameTimer &gt, const Camera &cam) = 0;
-    virtual void Render(Camera &camera) const = 0;
+    virtual void Render(Camera &camera) const;
 
 
     void mass(double __mass);

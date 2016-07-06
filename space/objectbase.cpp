@@ -17,6 +17,10 @@ ObjectBase::ObjectBase(float __mass, float __ro, glm::vec3 p0) : m_ro(__ro), pos
 
 }
 
+void ObjectBase::Render(Camera& camera) const
+{
+}
+
 void ObjectBase::mass(double __mass)
 {
     m_mass = __mass;

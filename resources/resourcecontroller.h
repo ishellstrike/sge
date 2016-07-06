@@ -8,11 +8,11 @@
 #ifndef RESOURCECONTROLLER_H
 #define RESOURCECONTROLLER_H
 #include <unordered_map>
-#include "logger.h"
+#include "../logger.h"
 #include <mutex>
-#include "resources/material.h"
-#include "resources/texture.h"
-#include "basicjargshader.h"
+#include "../resources/material.h"
+#include "../resources/texture.h"
+#include "../basicjargshader.h"
 
 #define _STRINGIFY(t) #t
 #define STRINGIFY(t) _STRINGIFY(t)
@@ -137,6 +137,7 @@ public:
         return textures[name];
     }
 
+	void Reset(const std::string & cs, BasicJargShader && basic_jarg_shader);
 private:
     static Resources *m_inst;
     Resources(){}

@@ -10,6 +10,150 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\abstracttexture.cpp" />
+    <ClCompile Include="..\basicjargshader.cpp" />
+    <ClCompile Include="..\camera.cpp" />
+    <ClCompile Include="..\ClassicNoise.cpp" />
+    <ClCompile Include="..\colorextender.cpp" />
+    <ClCompile Include="..\colorscheme.cpp" />
+    <ClCompile Include="..\core\tree.cpp" />
+    <ClCompile Include="..\core\uniqueid.cpp" />
+    <ClCompile Include="..\experimental\marchingcubes.cpp" />
+    <ClCompile Include="..\experimental\quadplane.cpp" />
+    <ClCompile Include="..\experimental\quadsphere.cpp" />
+    <ClCompile Include="..\experimental\scattering.cpp" />
+    <ClCompile Include="..\experimental\starfield.cpp" />
+    <ClCompile Include="..\experimental\voxelstructure.cpp" />
+    <ClCompile Include="..\fpscounter.cpp" />
+    <ClCompile Include="..\FrameBuffer.cpp" />
+    <ClCompile Include="..\gametimer.cpp" />
+    <ClCompile Include="..\gamewindow.cpp" />
+    <ClCompile Include="..\gbuffer.cpp" />
+    <ClCompile Include="..\geometry\memorychunkcontroller.cpp" />
+    <ClCompile Include="..\geometry\meshbase.cpp" />
+    <ClCompile Include="..\geometry\model.cpp" />
+    <ClCompile Include="..\geometry\multimesh.cpp" />
+    <ClCompile Include="..\geometry\ring.cpp" />
+    <ClCompile Include="..\geometry\ubillboard.cpp" />
+    <ClCompile Include="..\geometry\umesh.cpp" />
+    <ClCompile Include="..\geometry\vertex.cpp" />
+    <ClCompile Include="..\geometry\vertexinfo.cpp" />
+    <ClCompile Include="..\geometry\vpnt.cpp" />
+    <ClCompile Include="..\helper.cpp" />
+    <ClCompile Include="..\imgui\imgui.cpp" />
+    <ClCompile Include="..\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\imgui\imgui_impl_glfw_gl3.cpp" />
+    <ClCompile Include="..\light.cpp" />
+    <ClCompile Include="..\lodepng\lodepng.cpp" />
+    <ClCompile Include="..\logger.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\prefecences.cpp" />
+    <ClCompile Include="..\random.cpp" />
+    <ClCompile Include="..\resources\material.cpp" />
+    <ClCompile Include="..\resources\pixmap.cpp" />
+    <ClCompile Include="..\resources\resourcecontroller.cpp" />
+    <ClCompile Include="..\resources\texture.cpp" />
+    <ClCompile Include="..\resources\texturebase.cpp" />
+    <ClCompile Include="..\resources\umaterial.cpp" />
+    <ClCompile Include="..\scene.cpp" />
+    <ClCompile Include="..\shader.cpp" />
+    <ClCompile Include="..\singleton.cpp" />
+    <ClCompile Include="..\space\logic\item.cpp" />
+    <ClCompile Include="..\space\logic\itemstorage.cpp" />
+    <ClCompile Include="..\space\object.cpp" />
+    <ClCompile Include="..\space\objectbase.cpp" />
+    <ClCompile Include="..\space\planet_model\city.cpp" />
+    <ClCompile Include="..\space\planet_model\country.cpp" />
+    <ClCompile Include="..\space\planet_model\planet_population.cpp" />
+    <ClCompile Include="..\space\planet_model\resource.cpp" />
+    <ClCompile Include="..\space\ship_model\attachpoint.cpp" />
+    <ClCompile Include="..\space\ship_model\hull.cpp" />
+    <ClCompile Include="..\space\spacesystem.cpp" />
+    <ClCompile Include="..\space\structure.cpp" />
+    <ClCompile Include="..\sql.cpp" />
+    <ClCompile Include="..\textureatlas.cpp" />
+    <ClCompile Include="..\TextureGenerator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\abstracttexture.h" />
+    <ClInclude Include="..\basicjargshader.h" />
+    <ClInclude Include="..\camera.h" />
+    <ClInclude Include="..\ClassicNoise.h" />
+    <ClInclude Include="..\colorextender.h" />
+    <ClInclude Include="..\colorscheme.h" />
+    <ClInclude Include="..\core\tree.h" />
+    <ClInclude Include="..\core\uniqueid.h" />
+    <ClInclude Include="..\experimental\marchingcubes.h" />
+    <ClInclude Include="..\experimental\marchingcubeshelper.h" />
+    <ClInclude Include="..\experimental\quadplane.h" />
+    <ClInclude Include="..\experimental\quadsphere.h" />
+    <ClInclude Include="..\experimental\scattering.h" />
+    <ClInclude Include="..\experimental\sphereparamstorage.h" />
+    <ClInclude Include="..\experimental\starfield.h" />
+    <ClInclude Include="..\experimental\voxelstructure.h" />
+    <ClInclude Include="..\fpscounter.h" />
+    <ClInclude Include="..\FrameBuffer.h" />
+    <ClInclude Include="..\gametimer.h" />
+    <ClInclude Include="..\gamewindow.h" />
+    <ClInclude Include="..\gbuffer.h" />
+    <ClInclude Include="..\geometry\aabb.h" />
+    <ClInclude Include="..\geometry\geometry.hpp" />
+    <ClInclude Include="..\geometry\memorychunkcontroller.h" />
+    <ClInclude Include="..\geometry\meshbase.h" />
+    <ClInclude Include="..\geometry\model.h" />
+    <ClInclude Include="..\geometry\multimesh.h" />
+    <ClInclude Include="..\geometry\ring.h" />
+    <ClInclude Include="..\geometry\ubillboard.h" />
+    <ClInclude Include="..\geometry\umesh.h" />
+    <ClInclude Include="..\geometry\vertex.h" />
+    <ClInclude Include="..\geometry\vertexinfo.h" />
+    <ClInclude Include="..\geometry\vpnt.h" />
+    <ClInclude Include="..\helper.h" />
+    <ClInclude Include="..\imgui\imconfig.h" />
+    <ClInclude Include="..\imgui\imgui.h" />
+    <ClInclude Include="..\imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="..\imgui\imgui_internal.h" />
+    <ClInclude Include="..\imgui\stb_rect_pack.h" />
+    <ClInclude Include="..\imgui\stb_textedit.h" />
+    <ClInclude Include="..\imgui\stb_truetype.h" />
+    <ClInclude Include="..\light.h" />
+    <ClInclude Include="..\lodepng\lodepng.h" />
+    <ClInclude Include="..\logger.h" />
+    <ClInclude Include="..\prefecences.h" />
+    <ClInclude Include="..\random.h" />
+    <ClInclude Include="..\resources\error_image.h" />
+    <ClInclude Include="..\resources\material.h" />
+    <ClInclude Include="..\resources\pixmap.h" />
+    <ClInclude Include="..\resources\random_noise.h" />
+    <ClInclude Include="..\resources\resourcecontroller.h" />
+    <ClInclude Include="..\resources\texture.h" />
+    <ClInclude Include="..\resources\texturebase.h" />
+    <ClInclude Include="..\resources\umaterial.h" />
+    <ClInclude Include="..\scene.h" />
+    <ClInclude Include="..\sge.hpp" />
+    <ClInclude Include="..\sge_fielsystem.h" />
+    <ClInclude Include="..\sge_geometry.h" />
+    <ClInclude Include="..\shader.h" />
+    <ClInclude Include="..\singleton.h" />
+    <ClInclude Include="..\space\logic\item.h" />
+    <ClInclude Include="..\space\logic\itemstorage.h" />
+    <ClInclude Include="..\space\object.h" />
+    <ClInclude Include="..\space\objectbase.h" />
+    <ClInclude Include="..\space\planet_model\city.h" />
+    <ClInclude Include="..\space\planet_model\country.h" />
+    <ClInclude Include="..\space\planet_model\planet_population.h" />
+    <ClInclude Include="..\space\planet_model\resource.h" />
+    <ClInclude Include="..\space\ship_model\attachpoint.h" />
+    <ClInclude Include="..\space\ship_model\hull.h" />
+    <ClInclude Include="..\space\solver.h" />
+    <ClInclude Include="..\space\spacesystem.h" />
+    <ClInclude Include="..\space\structure.h" />
+    <ClInclude Include="..\sql.h" />
+    <ClInclude Include="..\tangentcalc.h" />
+    <ClInclude Include="..\textureatlas.h" />
+    <ClInclude Include="..\TextureGenerator.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{99C0710E-F293-4293-A7D3-03C4D67E0EE4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -19,13 +163,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -41,13 +185,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\3rdparty\include\freetype2;..\3rdparty\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\3rdparty\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>e:\3rdparty\msvc14_x86\boost;e:\3rdparty\msvc14_x86\glew;e:\3rdparty\msvc14_x86\glfw;e:\3rdparty\msvc14_x86\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\3rdparty\msvc14_x86\boost\stage\lib;$(SolutionDir)\..\3rdparty\msvc14_x86\glew\lib;$(SolutionDir)\..\3rdparty\msvc14_x86\glfw\lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <ExecutablePath>..\3rdparty\bin;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>e:\3rdparty\msvc14_x86\boost;e:\3rdparty\msvc14_x86\glew;e:\3rdparty\msvc14_x86\glfw;e:\3rdparty\msvc14_x86\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\3rdparty\msvc14_x86\boost\stage\lib;$(SolutionDir)\..\3rdparty\msvc14_x86\glew\lib;$(SolutionDir)\..\3rdparty\msvc14_x86\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -62,7 +208,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3dll.lib;glew32.lib;freetype.lib;opengl32.lib;assimp-vc120-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32sd.lib;opengl32.lib;glfw3sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,126 +221,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glew32sd.lib;opengl32.lib;glfw3sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\abstracttexture.cpp" />
-    <ClCompile Include="..\basicjargshader.cpp" />
-    <ClCompile Include="..\camera.cpp" />
-    <ClCompile Include="..\ClassicNoise.cpp" />
-    <ClCompile Include="..\colorextender.cpp" />
-    <ClCompile Include="..\colorscheme.cpp" />
-    <ClCompile Include="..\font.cpp" />
-    <ClCompile Include="..\fpscounter.cpp" />
-    <ClCompile Include="..\gametimer.cpp" />
-    <ClCompile Include="..\gamewindow.cpp" />
-    <ClCompile Include="..\gbuffer.cpp" />
-    <ClCompile Include="..\geometry\cube.cpp" />
-    <ClCompile Include="..\geometry\icosahedron.cpp" />
-    <ClCompile Include="..\geometry\mesh.cpp" />
-    <ClCompile Include="..\geometry\model.cpp" />
-    <ClCompile Include="..\geometry\quad.cpp" />
-    <ClCompile Include="..\geometry\vpnt.cpp" />
-    <ClCompile Include="..\helper.cpp" />
-    <ClCompile Include="..\json\json_reader.cpp" />
-    <ClCompile Include="..\json\json_value.cpp" />
-    <ClCompile Include="..\json\json_writer.cpp" />
-    <ClCompile Include="..\keyboard.cpp" />
-    <ClCompile Include="..\lodepng\lodepng.cpp" />
-    <ClCompile Include="..\logger.cpp" />
-    <ClCompile Include="..\main.cpp" />
-    <ClCompile Include="..\material.cpp" />
-    <ClCompile Include="..\mouse.cpp" />
-    <ClCompile Include="..\pixmap.cpp" />
-    <ClCompile Include="..\prefecences.cpp" />
-    <ClCompile Include="..\sge_ui\button.cpp" />
-    <ClCompile Include="..\sge_ui\component.cpp" />
-    <ClCompile Include="..\sge_ui\graph.cpp" />
-    <ClCompile Include="..\sge_ui\label.cpp" />
-    <ClCompile Include="..\sge_ui\list_container.cpp" />
-    <ClCompile Include="..\sge_ui\panel.cpp" />
-    <ClCompile Include="..\sge_ui\vertical_bar.cpp" />
-    <ClCompile Include="..\sge_ui\win.cpp" />
-    <ClCompile Include="..\sge_ui\wins.cpp" />
-    <ClCompile Include="..\shader.cpp" />
-    <ClCompile Include="..\singleton.cpp" />
-    <ClCompile Include="..\spheretesselator.cpp" />
-    <ClCompile Include="..\spritebatch.cpp" />
-    <ClCompile Include="..\texture.cpp" />
-    <ClCompile Include="..\textureatlas.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\abstracttexture.h" />
-    <ClInclude Include="..\basicjargshader.h" />
-    <ClInclude Include="..\camera.h" />
-    <ClInclude Include="..\ClassicNoise.h" />
-    <ClInclude Include="..\colorextender.h" />
-    <ClInclude Include="..\colorscheme.h" />
-    <ClInclude Include="..\fielsystem.h" />
-    <ClInclude Include="..\font.h" />
-    <ClInclude Include="..\fpscounter.h" />
-    <ClInclude Include="..\gametimer.h" />
-    <ClInclude Include="..\gamewindow.h" />
-    <ClInclude Include="..\gbuffer.h" />
-    <ClInclude Include="..\geometry\cube.h" />
-    <ClInclude Include="..\geometry\geometry.hpp" />
-    <ClInclude Include="..\geometry\icosahedron.h" />
-    <ClInclude Include="..\geometry\mesh.h" />
-    <ClInclude Include="..\geometry\model.h" />
-    <ClInclude Include="..\geometry\quad.h" />
-    <ClInclude Include="..\geometry\vpnt.h" />
-    <ClInclude Include="..\helper.h" />
-    <ClInclude Include="..\json\autolink.h" />
-    <ClInclude Include="..\json\config.h" />
-    <ClInclude Include="..\json\features.h" />
-    <ClInclude Include="..\json\forwards.h" />
-    <ClInclude Include="..\json\json.h" />
-    <ClInclude Include="..\json\json_batchallocator.h" />
-    <ClInclude Include="..\json\reader.h" />
-    <ClInclude Include="..\json\value.h" />
-    <ClInclude Include="..\json\writer.h" />
-    <ClInclude Include="..\keyboard.h" />
-    <ClInclude Include="..\lodepng\lodepng.h" />
-    <ClInclude Include="..\logger.h" />
-    <ClInclude Include="..\material.h" />
-    <ClInclude Include="..\mouse.h" />
-    <ClInclude Include="..\pixmap.h" />
-    <ClInclude Include="..\prefecences.h" />
-    <ClInclude Include="..\sge.hpp" />
-    <ClInclude Include="..\sge_geometry.h" />
-    <ClInclude Include="..\sge_ui\button.h" />
-    <ClInclude Include="..\sge_ui\component.h" />
-    <ClInclude Include="..\sge_ui\graph.h" />
-    <ClInclude Include="..\sge_ui\label.h" />
-    <ClInclude Include="..\sge_ui\list_container.h" />
-    <ClInclude Include="..\sge_ui\panel.h" />
-    <ClInclude Include="..\sge_ui\vertical_bar.h" />
-    <ClInclude Include="..\sge_ui\wcontainer.h" />
-    <ClInclude Include="..\sge_ui\win.h" />
-    <ClInclude Include="..\sge_ui\wins.h" />
-    <ClInclude Include="..\shader.h" />
-    <ClInclude Include="..\singleton.h" />
-    <ClInclude Include="..\spheretesselator.h" />
-    <ClInclude Include="..\spritebatch.h" />
-    <ClInclude Include="..\tangentcalc.h" />
-    <ClInclude Include="..\texture.h" />
-    <ClInclude Include="..\textureatlas.h" />
-    <ClInclude Include="..\utfcpp\utf8.h" />
-    <ClInclude Include="..\utfcpp\utf8\checked.h" />
-    <ClInclude Include="..\utfcpp\utf8\core.h" />
-    <ClInclude Include="..\utfcpp\utf8\unchecked.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\json\json_internalarray.inl" />
-    <None Include="..\json\json_internalmap.inl" />
-    <None Include="..\json\json_valueiterator.inl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

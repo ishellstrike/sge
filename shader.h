@@ -28,7 +28,7 @@ public:
     std::string shaderfile_name;
     void Use() const;
     void loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version = GLSLVER);
-    bool Link() const;
+    bool Link();
     void Clear();
     GLint program;
     std::vector<GLint> shaders_;

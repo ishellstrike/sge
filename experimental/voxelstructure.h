@@ -1,7 +1,7 @@
 #ifndef VOXELSTRUCTURE_H
 #define VOXELSTRUCTURE_H
 #include <vector>
-#include "ClassicNoise.h"
+#include "..\ClassicNoise.h"
 #include <glm/glm.hpp>
 
 class Voxel

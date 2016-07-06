@@ -65,9 +65,11 @@ void BasicJargShader::Afterlink()
 
     mat_model_location = locate("transform_M");
     mat_viewProjection_location = locate("transform_VP");
+	mat_Projection_location = locate("transform_P");
     viewPosition_location = locate("transform_viewPos");
     mat_normal_location = locate("transform_N");
     lightPosition_location = locate("transform_lightPos");
+	winpos_location = locate("WindowSize");
 
     glUniformMatrix4fv(viewPosition_location,  1, GL_FALSE,  &glm::translate(glm::mat4(1), glm::vec3(2.f,2.f,2.f))[0][0]);
 }

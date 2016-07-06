@@ -1,9 +1,9 @@
 #ifndef MARCHINGCUBES_H
 #define MARCHINGCUBES_H
-#include "geometry/umesh.h"
+#include "..\geometry/umesh.h"
 #include "voxelstructure.h"
-#include "logger.h"
-#include "ClassicNoise.h"
+#include "..\logger.h"
+#include "..\ClassicNoise.h"
 
 class MarchingCubes
 {

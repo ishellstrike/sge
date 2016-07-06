@@ -31,8 +31,8 @@
  */
 
 #include <GL/glew.h>
-#include "logger.h"
-#include "camera.h"
+#include "..\logger.h"
+#include "..\camera.h"
 
 class Scattering
 {
@@ -74,6 +74,12 @@ public:
     void Precompute();
     void setLayer(unsigned int prog, int layer);
     void redisplayFunc(const Camera &cam);
+
+	static Scattering & instance()
+	{
+		static Scattering s;
+		return s;
+	}
 };
 
 #endif // SCATTERING_H

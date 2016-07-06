@@ -56,14 +56,6 @@ void Shader::Use() const
     glUseProgram(program);
 }
 
-std::map<int, std::string> shader_defines = {
-         std::make_pair(GL_FRAGMENT_SHADER, "_FRAGMENT_"),
-         std::make_pair(GL_VERTEX_SHADER, "_VERTEX_"),
-         std::make_pair(GL_GEOMETRY_SHADER, "_GEOMETRY_"),
-         std::make_pair(GL_TESS_EVALUATION_SHADER, "_TESSEVAL_"),
-         std::make_pair(GL_TESS_CONTROL_SHADER, "_TESSCONTROL_")
-        };
-
 std::string get_dir(std::string path)
 {
     return path.substr(0, path.find_last_of('/') + 1);
@@ -77,12 +69,21 @@ std::string get_name(std::string path)
 std::string get_filename_headername(std::string path)
 {
     std::replace(path.begin(), path.end(), '.', '_');
+	std::replace(path.begin(), path.end(), '/', '_');
     std::transform(path.begin(), path.end(), path.begin(), toupper);
     return path;
 }
 
 void Shader::LogDumpError(const std::string &filename, GLenum type, const std::string &str, GLuint shader)
 {
+	static std::map<int, std::string> shader_defines = {
+		std::make_pair(GL_FRAGMENT_SHADER, "_FRAGMENT_"),
+		std::make_pair(GL_VERTEX_SHADER, "_VERTEX_"),
+		std::make_pair(GL_GEOMETRY_SHADER, "_GEOMETRY_"),
+		std::make_pair(GL_TESS_EVALUATION_SHADER, "_TESSEVAL_"),
+		std::make_pair(GL_TESS_CONTROL_SHADER, "_TESSCONTROL_")
+	};
+
     std::string f_name;
     if(shader != -1)
     {
@@ -121,6 +122,14 @@ void Shader::LogDumpError(const std::string &filename, GLenum type, const std::s
  */
 void Shader::loadShaderFromSource(GLenum type, const std::string &filename, const std::string &version/* = GLSLVER*/) {
 
+	static std::map<int, std::string> shader_defines = {
+		std::make_pair(GL_FRAGMENT_SHADER, "_FRAGMENT_"),
+		std::make_pair(GL_VERTEX_SHADER, "_VERTEX_"),
+		std::make_pair(GL_GEOMETRY_SHADER, "_GEOMETRY_"),
+		std::make_pair(GL_TESS_EVALUATION_SHADER, "_TESSEVAL_"),
+		std::make_pair(GL_TESS_CONTROL_SHADER, "_TESSCONTROL_")
+	};
+
     std::stringstream ss;
     shaderfile_name = filename;
 
@@ -150,12 +159,15 @@ void Shader::loadShaderFromSource(GLenum type, const std::string &filename, cons
     const char *data = str.c_str();
 
     GLuint id = glCreateShader(type);
-    glShaderSource(id, 1, (const char **)&data, &length);
+    glShaderSource(id, 1, static_cast<const char **>(&data), &length);
     glCompileShader(id);
 
     LOG(verbose) << filename << " file " << shader_defines[type];
-    bool has_error = !printLog(id);
-    if(has_error)
+
+	GLint compiled = GL_FALSE;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &compiled);
+
+	if (compiled != GL_TRUE)
     {
         LogDumpError(filename, type, str, id);
     }
@@ -211,11 +223,10 @@ void Shader::preprocessIncludes(std::stringstream &ss, const std::string &filena
  *
  * link compiled shaders to program
  */
-bool Shader::Link() const {
+bool Shader::Link() {
     glLinkProgram(program);
     LOG(verbose) << "Program " << std::to_string(program) << " linking";
-    if(!printLog(program))
-        throw;
+	printLog(program);
     LOG(verbose) << "--------------------";
     return true;
 }

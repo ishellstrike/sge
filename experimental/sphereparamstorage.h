@@ -7,9 +7,9 @@
 
 #ifndef SPHEREPARAMSTORAGE
 #define SPHEREPARAMSTORAGE
-#include "resources/texture.h"
-#include "basicjargshader.h"
-#include "resources/material.h"
+#include "..\resources/texture.h"
+#include "..\basicjargshader.h"
+#include "..\resources/material.h"
 #include <memory>
 
 class SphereParamsStorage
@@ -27,12 +27,12 @@ public:
           s = 100;  /*< Коэффициент деформации сферы*/
 
     int minimum = 0;
-    int max_divide = 10;
-    int tess_size = 32;
+    int max_divide = 5;
+    int tess_size = 4;
     glm::vec3 center = {0,0,0};
 
     GLuint shader_r, shader_s;
-    int busy = 10;
+    int busy = 0;
 };
 
 #endif // SPHEREPARAMSTORAGE

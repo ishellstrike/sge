@@ -1,8 +1,8 @@
 #include "pixmap.h"
-#include "lodepng/lodepng.h"
-#include "logger.h"
-#include "helper.h"
 #include "error_image.h"
+#include "../lodepng/lodepng.h"
+#include "../logger.h"
+#include "../helper.h"
 
 /*!
  * \brief Pixmap::Pixmap Выполняет загрузку png в битовую карту

@@ -1,8 +1,8 @@
 #ifndef UBILLBOARD_H
 #define UBILLBOARD_H
-#include <geometry/vpnt.h>
-#include <geometry/umesh.h>
-#include "camera.h"
+#include "umesh.h"
+#include "..\camera.h"
+#include "vpnt.h"
 
 template <class _Ty = VertPosNormUvUv>
 class UBillboard : public UMesh<_Ty>

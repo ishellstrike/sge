@@ -10,10 +10,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/common.hpp>
 #include "spacesystem.h"
-#include "gametimer.h"
+#include "..\gametimer.h"
 #include "solver.h"
-#include "experimental/quadsphere.h"
-#include "camera.h"
+#include "..\experimental/quadsphere.h"
+#include "..\camera.h"
 #include "objectbase.h"
 
 class Object : public ObjectBase

@@ -1,5 +1,5 @@
 #include "resourcecontroller.h"
-#include "prefecences.h"
+#include "../prefecences.h"
 
 Resources *Resources::m_inst = nullptr;
 
@@ -12,6 +12,13 @@ void Resources::Init()
 
     auto t_dir = Prefecences::Instance()->getTexturesDir();
     auto s_dir = Prefecences::Instance()->getShadersDir();
+
+	const auto & tex_copy = new BasicJargShader;
+	tex_copy->loadShaderFromSource(GL_VERTEX_SHADER, s_dir + "tex_copy.glsl");
+	tex_copy->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "tex_copy.glsl");
+	tex_copy->Link();
+	tex_copy->Afterlink();
+	PUSH_NVP(tex_copy);
 
     const auto & height_shader = new BasicJargShader;
     height_shader->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "testgen1.glsl");
@@ -36,18 +43,24 @@ void Resources::Init()
 
 
     const auto & default_planet_render_nowire = new BasicJargShader;
+	default_planet_render_nowire->AddExtension("GL_ARB_tessellation_shader");
     default_planet_render_nowire->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "minimal.glsl");
     default_planet_render_nowire->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "minimal.glsl");
     default_planet_render_nowire->loadShaderFromSource(GL_GEOMETRY_SHADER, s_dir + "minimal.glsl");
+	default_planet_render_nowire->loadShaderFromSource(GL_TESS_CONTROL_SHADER, s_dir + "minimal.glsl");
+	default_planet_render_nowire->loadShaderFromSource(GL_TESS_EVALUATION_SHADER, s_dir + "minimal.glsl");
     default_planet_render_nowire->Link();
     default_planet_render_nowire->Afterlink();
     PUSH_NVP(default_planet_render_nowire);
 
     const auto & default_planet_render_wire = new BasicJargShader;
     default_planet_render_wire->AddDefine("WIREFRAME");
+	default_planet_render_wire->AddExtension("GL_ARB_tessellation_shader");
     default_planet_render_wire->loadShaderFromSource(GL_VERTEX_SHADER,   s_dir + "minimal.glsl");
     default_planet_render_wire->loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "minimal.glsl");
     default_planet_render_wire->loadShaderFromSource(GL_GEOMETRY_SHADER, s_dir + "minimal.glsl");
+	default_planet_render_wire->loadShaderFromSource(GL_TESS_CONTROL_SHADER, s_dir + "minimal.glsl");
+	default_planet_render_wire->loadShaderFromSource(GL_TESS_EVALUATION_SHADER, s_dir + "minimal.glsl");
     default_planet_render_wire->Link();
     default_planet_render_wire->Afterlink();
     PUSH_NVP(default_planet_render_wire);
@@ -199,4 +212,9 @@ void Resources::Init()
     planet_ring->Link();
     planet_ring->Afterlink();
     PUSH_NVP(planet_ring);
+}
+
+void Resources::Reset(const std::string& cs, BasicJargShader && basic_jarg_shader)
+{
+	std::swap(*shaders[cs], basic_jarg_shader);
 }

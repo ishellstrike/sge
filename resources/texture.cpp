@@ -1,5 +1,5 @@
 #include "texture.h"
-#include "logger.h"
+#include "../logger.h"
 #include "pixmap.h"
 
 Texture::Texture()

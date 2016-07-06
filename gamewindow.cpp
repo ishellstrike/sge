@@ -6,7 +6,10 @@
 *******************************************************************************/
 
 #include "gamewindow.h"
-
+#include "prefecences.h"
+#include "space/object.h"
+#include "imgui/imgui_impl_glfw_gl3.h"
+#include "sge_fielsystem.h"
 
 GameWindow *GameWindow::wi = nullptr;
 
@@ -16,6 +19,7 @@ void GameWindow::Mainloop()
     BaseInit();
     while(!glfwWindowShouldClose(window))
     {
+		ImGui_ImplGlfwGL3_NewFrame();
         update();
 
         if(main_is_debug == spartial_rendering)
@@ -34,7 +38,6 @@ void GameWindow::Mainloop()
 
         gt.Update(static_cast<float>(glfwGetTime()));
         fps.Update(gt);
-        perf->UpdateTimer(fps, gt);
         // std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
     Resources::drop();
@@ -55,6 +58,8 @@ void GameWindow::make_spartial()
     main_is_debug = spartial_rendering;
     glfwWindowHint(GLFW_SAMPLES, 16);
 }
+
+std::string ground_shader;
 
 bool GameWindow::BaseInit()
 {
@@ -126,42 +131,42 @@ bool GameWindow::BaseInit()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Keyboard::Initialize();
-    glfwSetKeyCallback(window, [](GLFWwindow *, int key, int scancode, int action, int mods){
-        Keyboard::SetKey(key, scancode, action, mods);
-    });
-    Mouse::initialize(window);
-    //Mouse::SetFixedPosState(true);
-    glfwSetCursorPosCallback(window, [](GLFWwindow *, double xpos, double ypos){
-        Mouse::SetCursorPos(xpos, ypos);
-    });
-    glfwSetMouseButtonCallback(window, [](GLFWwindow *, int a, int b, int c){
-        Mouse::SetButton(a, b, c);
-    });
+	ImGui_ImplGlfwGL3_Init(window, false);
+
     glfwSetWindowSizeCallback(window, [](GLFWwindow *, int a, int b){
-        GameWindow::Resize(a, b);
+        Resize(a, b);
     });
-    glfwSetScrollCallback(window, [](GLFWwindow *, double , double b){
-        Mouse::Scroll(b);
-    });
+
+	glfwSetKeyCallback(window, [](GLFWwindow *win, int key, int scancode, int action, int mods)
+	{
+		ImGui_ImplGlfwGL3_KeyCallback(win, key, scancode, action, mods);
+	});
+
+	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods)
+	{
+		ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mods);
+	});
+
+	glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset)
+	{
+		ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
+	});
+
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mods);
+	});
+
+	glfwSetCharCallback(window, [](GLFWwindow* window, unsigned int c)
+	{
+		ImGui_ImplGlfwGL3_CharCallback(window, c);
+	});
 
     Resources::instance();
     Resources::instance()->Init();
 
     gb = std::make_shared<GBuffer>();
     gb->Init(RESX, RESY);
-
-    batch = std::make_shared<SpriteBatch>();
-
-    f12 = std::make_shared<Font>();
-    f12->initFreeType(12);
-    f12->renderAtlas();
-
-    ws = std::make_shared<WinS>(batch.get());
-    ws->f = f12.get();
-
-    perf = new sge_perfomance(ws.get());
-    new sge_texlab_toolbox(ws.get());
 
     cam1 = std::make_shared<Camera>();
     cam2 = std::make_shared<Camera>();
@@ -190,16 +195,15 @@ bool GameWindow::BaseInit()
     auto &wm = std::make_shared<Material>();
 
     qs = std::make_shared<QuadSphere>(mat);
-    qs->max_divide = 4;
-    qs_w = std::make_shared<QuadSphere>(wm);
-    qs_w->max_divide = 4;
-    qs_w->s = 1;
-    qs_w->R = 1010;
+    qs->max_divide = 5;
     wm->diffuse = Color::SeaBlue;
     wm->shininess = 80;
 
+	ground_shader.reserve(10000);
+	ground_shader = LoadTextFile("data/shaders/testgen1.glsl");
+
 #ifndef NO_SCATT
-    scat.Precompute();
+	Scattering::instance().Precompute();
 #endif
 
 #ifndef NO_STARFIELD
@@ -211,7 +215,7 @@ bool GameWindow::BaseInit()
     t->dominant = true;
     t->InitRender(mat);
 
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < 0; i++)
     {
         auto t = std::make_shared<Planet>(random::next<float>()/5.0f,
                                                3200.f,
@@ -232,20 +236,21 @@ void GameWindow::Resize(int w, int h)
     if(h == 0)
         h = 1;
     Prefecences::Instance()->resolution = glm::vec2(w, h);
-    GameWindow::wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
-    GameWindow::wi->proj_per = glm::perspective(45.0f, w /(float) h, 0.1f, 100.f);
-    GameWindow::wi->cam->Viewport(glm::vec4(0,0,w,h));
-    GameWindow::wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    wi->proj = glm::ortho(0.0f, (float)w, (float)h, 0.0f, -1.f, 1.0f);//.perspective(45, (float)w/float(h), 1, 1000);
+    wi->proj_per = glm::perspective(45.0f, w /(float) h, 0.1f, 100.f);
+	glViewport(0, 0, w, h);
+    wi->cam->Viewport(glm::vec4(0,0,w,h));
+    wi->view = glm::lookAt(glm::vec3(2,2,2), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
-    GameWindow::wi->model = glm::mat4(1.f);
+    wi->model = glm::mat4(1.f);
 
-    if(GameWindow::wi->gb)
-        GameWindow::wi->gb->Resize(RESX, RESY);
+    if(wi->gb)
+        wi->gb->Resize(RESX, RESY);
 
     if(Prefecences::Instance()->hdr_on)
     {
-       GameWindow::wi->DropHdr();
-       GameWindow::wi->PreloadHdr();
+       wi->DropHdr();
+       wi->PreloadHdr();
     }
 }
 
@@ -256,11 +261,12 @@ void GameWindow::SetTitle(const std::string &str)
 
 GameWindow::GameWindow()
 {
-    GameWindow::wi = this;
+    wi = this;
 }
 
 GameWindow::~GameWindow()
 {
+	ImGui_ImplGlfwGL3_Shutdown();
     glfwDestroyWindow(window);
     glfwTerminate();
 }
@@ -278,7 +284,7 @@ void GameWindow::GeometryPass()
     gb->BindForWriting();
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0, 0, 0, 0.f);
+    glClearColor(0, 0, 1, 0.f);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
@@ -366,10 +372,10 @@ void GameWindow::ShadingPass()
     drawScreenQuad();
 
 #ifndef NO_SCATT
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    scat.redisplayFunc(*cam);
+    //glDisable(GL_DEPTH_TEST);
+    //glDisable(GL_CULL_FACE);
+    //glEnable(GL_BLEND);
+	//Scattering::instance().redisplayFunc(*cam);
 #endif
 }
 
@@ -446,6 +452,8 @@ void GameWindow::DropHdr()
     texture_extract.reset();
 }
 
+bool reload = false;
+
 template<int is_debug>
 void GameWindow::BaseDraw()
 {
@@ -466,35 +474,55 @@ void GameWindow::BaseDraw()
     glDisable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    batch->setUniform(proj * model);
 
+    //if(is_debug)
+    //{
+    //    batch->drawText(sge::string_format("%d dc UI", batch->getDc()), {RESX-70, 2}, f12.get(), Color::White);
+    //    batch->drawText(sge::string_format("%d dc UM", UMeshDc::getDc()), {RESX-70, 2+20}, f12.get(), Color::White);
+
+    //    batch->drawText(sge::string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
+    //}
+
+    //switch(Mouse::state)
+    //{
+    //case Mouse::STATE_RESIZE:
+    //    batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_resize"), Color::White);
+    //    break;
+    //default:
+    //    batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_mouse"), Color::White);
+    //    break;
+    //}
+
+    {
+		ImGui::Begin("Perfomance");
+		ImGui::Text("%d", fps.GetCount());
+		ImGui::InputTextMultiline("ground shader", &ground_shader[0], ground_shader.capacity());
+		if(ImGui::Button("reload"))
+		{
+			SaveTextFile("data/shaders/testgen1.glsl", ground_shader);
+			reload = true;
+		}
+		if(ImGui::Button("reload planet shader"))
+		{
+			auto s_dir = Prefecences::Instance()->getShadersDir();
+
+			auto default_planet_render_nowire = BasicJargShader();
+			default_planet_render_nowire.AddExtension("GL_ARB_tessellation_shader");
+			default_planet_render_nowire.loadShaderFromSource(GL_VERTEX_SHADER, s_dir + "minimal.glsl");
+			default_planet_render_nowire.loadShaderFromSource(GL_FRAGMENT_SHADER, s_dir + "minimal.glsl");
+			default_planet_render_nowire.loadShaderFromSource(GL_GEOMETRY_SHADER, s_dir + "minimal.glsl");
+			default_planet_render_nowire.loadShaderFromSource(GL_TESS_CONTROL_SHADER, s_dir + "minimal.glsl");
+			default_planet_render_nowire.loadShaderFromSource(GL_TESS_EVALUATION_SHADER, s_dir + "minimal.glsl");
+			default_planet_render_nowire.Link();
+			default_planet_render_nowire.Afterlink();
+			Resources::instance()->Reset("default_planet_render_nowire", std::move(default_planet_render_nowire));
+		}
+		ImGui::End();
+    }
+	ImGui::Render();
 
     if(is_debug)
     {
-        batch->drawText(sge::string_format("%d dc UI", batch->getDc()), {RESX-70, 2}, f12.get(), Color::White);
-        batch->drawText(sge::string_format("%d dc UM", UMeshDc::getDc()), {RESX-70, 2+20}, f12.get(), Color::White);
-
-        batch->drawText(sge::string_format("=%d", UMeshDc::getDc() + batch->getDc()), {RESX-70, 2+40}, f12.get(), Color::White);
-    }
-
-    if(!no_ui) ws->Draw();
-
-    switch(Mouse::state)
-    {
-    case Mouse::STATE_RESIZE:
-        batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_resize"), Color::White);
-        break;
-    default:
-        batch->drawQuad(Mouse::getCursorPos(), {32,32}, *Resources::instance()->Get<Texture>("cur_mouse"), Color::White);
-        break;
-    }
-    //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
-    //batch->drawText(qs->out, {0,0}, f12.get(), {0,0,0,1});
-    batch->render();
-
-    if(is_debug)
-    {
-        batch->resetDc();
         UMeshDc::resetDc();
     }
 }
@@ -502,69 +530,65 @@ void GameWindow::BaseDraw()
 template<int is_debug>
 void GameWindow::BaseUpdate()
 {
-    Mouse::state = Mouse::STATE_MOUSE;
     glfwPollEvents();
 
     //m->World = glm::rotate(m->World, (float)gt.elapsed / 100, glm::vec3(0.f,1.f,0.f));
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F2))
-    {
-        wire = !wire;
-    }
-
-    if(Keyboard::isKeyPress(GLFW_KEY_F5))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F5))
         Prefecences::Instance()->hdr_on = Prefecences::Instance()->hdr_on ? (DropHdr(), false) : (PreloadHdr(), true);
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F6))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F6))
         Prefecences::Instance()->defered_debug = !Prefecences::Instance()->defered_debug;
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F9))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F9))
         make_release();
-    if(Keyboard::isKeyPress(GLFW_KEY_F10))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F10))
         make_debug();
-    if(Keyboard::isKeyPress(GLFW_KEY_F11))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F11))
         make_spartial();
 
     glEnable(GL_CULL_FACE);
 
-    if(Mouse::isWheelUp())
-        speed *= 1.1f;
 
-    if(Mouse::isWheelDown())
-        speed /= 1.1f;
+	if (ImGui::GetIO().MouseWheel > 0)
+		speed *= 1.1f;
+
+	if (ImGui::GetIO().MouseWheel < 0)
+		speed /= 1.1f;
 
     cam->camera_scale = speed;
-    cam->camera_scale *= Keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
+    cam->camera_scale *= ImGui::IsKeyPressed(GLFW_KEY_LEFT_SHIFT) ? 10.f : 1.f;
     cam->camera_scale *= gt.elapsed;
 
-    if(Keyboard::isKeyDown(GLFW_KEY_W))
+    if(ImGui::IsKeyDown(GLFW_KEY_W))
         cam->Move(Camera::FORWARD);
-    if(Keyboard::isKeyDown(GLFW_KEY_A))
+    if(ImGui::IsKeyDown(GLFW_KEY_A))
         cam->Move(Camera::LEFT);
-    if(Keyboard::isKeyDown(GLFW_KEY_S))
+    if(ImGui::IsKeyDown(GLFW_KEY_S))
         cam->Move(Camera::BACKWARD);
-    if(Keyboard::isKeyDown(GLFW_KEY_D))
+    if(ImGui::IsKeyDown(GLFW_KEY_D))
         cam->Move(Camera::RIGHT);
-    if(Keyboard::isKeyDown(GLFW_KEY_Q))
-        cam->Roll(-1);
-    if(Keyboard::isKeyDown(GLFW_KEY_E))
-        cam->Roll(1);
+    if(ImGui::IsKeyDown(GLFW_KEY_Q))
+        cam->Roll(-10*gt.elapsed);
+    if(ImGui::IsKeyDown(GLFW_KEY_E))
+        cam->Roll(10*gt.elapsed);
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F3))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F3))
     {
         cam = cam1.get() == cam ? cam2.get() : cam1.get();
     }
 
-    if(Keyboard::isKeyDown(GLFW_KEY_F1))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F1))
         cam->Position(glm::vec3(1));
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F2))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F2))
         wire = !wire;
-    if(Keyboard::isKeyPress(GLFW_KEY_F4))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F4))
         no_ui = !no_ui;
 
-    if(Keyboard::isKeyPress(GLFW_KEY_F7))
+    if(ImGui::IsKeyPressed(GLFW_KEY_F7) || reload)
     {
+		reload = false;
         std::shared_ptr<Material> mat = std::make_shared<Material>();
         mat->texture = Resources::instance()->Get<Texture>("grass");
         mat->low = Resources::instance()->Get<Texture>("grass");
@@ -581,30 +605,10 @@ void GameWindow::BaseUpdate()
         std::static_pointer_cast<Planet>(ss.system[0])->InitRender(mat);
     }
 
-    if(Mouse::isRightDown())
-        Mouse::SetFixedPosState(true);
-    else
-        Mouse::SetFixedPosState(false);
-
-    if(Mouse::isRightDown())
+    if(ImGui::IsMouseDown(0))
     {
-        cam->Yaw(Mouse::getCursorDelta().x);
-        cam->Pitch(Mouse::getCursorDelta().y);
-    }
-
-    if (Mouse::isMiddleJustPressed())
-    {
-        cam->Reset();
-    }
-
-    if(Mouse::isWheelUp())
-    {
-        cam->Zoom(cam->Zoom() + 1);
-    }
-
-    if(Mouse::isWheelDown())
-    {
-        cam->Zoom(cam->Zoom() - 1);
+        cam->Yaw(ImGui::GetMouseDragDelta(0).x / 1.f * gt.elapsed);
+        cam->Pitch(ImGui::GetMouseDragDelta(0).y / 1.f * gt.elapsed);
     }
 
     for(size_t i = 0; i < ss.system.size(); i++)
@@ -612,14 +616,9 @@ void GameWindow::BaseUpdate()
         ss.system[i]->Update(ss, gt, *cam);
     }
 
-    qs->world = glm::rotate(qs->world, gt.elapsed/100, glm::vec3(1));
-    qs_w->world = glm::rotate(qs_w->world, gt.elapsed/100, glm::vec3(1));
+    qs->world = glm::rotate(qs->world, gt.elapsed/100.f, glm::vec3(1));
     qs->Update(*cam);
-    qs_w->Update(*cam);
+    //qs_w->Update(*cam);
     cam1->Update(gt, true);
     cam2->Update(gt);
-    MouseState s;
-    ws->Update(gt, s);
-
-    Mouse::dropState();
 }

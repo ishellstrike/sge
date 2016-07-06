@@ -1,6 +1,5 @@
 #ifndef MEMORYCHUNKCONTROLLER_H
 #define MEMORYCHUNKCONTROLLER_H
-#include "core/uniqueid.h"
 #include <tuple>
 #include <list>
 #include <boost/multi_index_container.hpp>
@@ -8,6 +7,7 @@
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/random_access_index.hpp>
+#include "../core/uniqueid.h"
 
 class MemoryChunk
 {
